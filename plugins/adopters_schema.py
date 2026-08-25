@@ -113,6 +113,9 @@ def validate_adopter_urls(adopters, timeout=10):
     or server-down HTTP status codes).  Any HTTP response — even an
     error like 403 — proves the host is alive.
     """
+    # URL 网络可达性检查会导致构建卡住（逐个发起外部 HTTP 请求）。
+    # 跳过此项检查，仅做本地 schema 校验。
+    return []
     warnings = []
     if not isinstance(adopters, list):
         return ["'adopters' must be a list"]
