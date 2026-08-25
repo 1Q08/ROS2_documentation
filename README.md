@@ -1,6 +1,6 @@
 # ROS 2 文档（简体中文汉化版）
 
-本项目是 [ROS 2 官方文档](https://github.com/ros2/ros2_documentation) 的**简体中文汉化版本**：将 300+ 个 RST 源文件翻译为中文，并通过 GitHub Actions + GitHub Pages 自动构建、发布为静态网站。
+本项目是 [ROS 2 官方文档](https://github.com/ros2/ros2_documentation) 的**简体中文汉化版本**：使用 AI 将 300+ 个 RST 源文件翻译为中文，并通过 GitHub Actions + GitHub Pages 自动构建、发布为静态网站。
 
 ## 🌐 在线站点
 
@@ -33,4 +33,10 @@ sensible-browser build/html/index.html
 ```
 
 详细构建步骤见 [BUILD.md](./BUILD.md)。
+
+## 📄 许可协议
+
+本项目采用 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh-hans)（知识共享 署名 4.0 国际版）许可，完整许可文本见 [LICENSE](./LICENSE)。
+
+本项目是 [ROS 2 官方文档](https://github.com/ros2/ros2_documentation) 的简体中文翻译衍生作品，上游文档同样采用 CC BY 4.0 许可，版权归原权利人所有。依照该许可条款，您在分享、改编（包括再翻译）本项目的文档内容时，**必须保留对原作者及上游文档的署名**。
 
