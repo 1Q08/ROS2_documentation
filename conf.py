@@ -134,12 +134,12 @@ templates_path = [
 
 # smv_tag_whitelist = None
 
-smv_branch_whitelist = r'^(rolling|jazzy|iron|humble|galactic|foxy|eloquent|dashing|crystal)$'
+smv_branch_whitelist = r'^(jazzy|humble)$'
 
 
-smv_released_pattern = r'^refs/(heads|remotes/[^/]+)/(lyrical|kilted|jazzy|iron|humble|galactic|foxy|eloquent|dashing|crystal).*$'
+smv_released_pattern = r'^refs/(heads|remotes/[^/]+)/(jazzy|humble).*$'
 smv_remote_whitelist = r'^(origin)$'
-smv_latest_version = 'lyrical'
+smv_latest_version = 'jazzy'
 smv_eol_versions = ['crystal', 'dashing', 'eloquent', 'foxy', 'galactic', 'iron']
 
 distro_full_names = {
@@ -181,12 +181,12 @@ html_js_files = ['adopters.js']
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'ros2_docsdoc'
 
-html_baseurl = 'https://docs.ros.org/en'
+html_baseurl = 'https://1Q08.github.io/ROS2_documentation'
 
 # -- Options for Open Graph (sphinxext-opengraph) -------------------------
 
 # Default settings for fallback/local builds
-ogp_site_url = 'https://docs.ros.org/en/humble/'
+ogp_site_url = 'https://1Q08.github.io/ROS2_documentation/'
 ogp_site_name = 'ROS 2 Documentation'
 ogp_image = '_static/humble-small.png'
 
