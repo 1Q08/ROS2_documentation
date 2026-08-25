@@ -1,6 +1,6 @@
 # ROS 2 文档（简体中文汉化版）
 
-本项目是 [ROS 2 官方文档](https://docs.ros.org/en) 的**简体中文汉化版本**：将 300+ 个 RST 源文件翻译为中文，并通过 GitHub Actions + GitHub Pages 自动构建、发布为静态网站。
+本项目是 [ROS 2 官方文档](https://github.com/ros2/ros2_documentation) 的**简体中文汉化版本**：将 300+ 个 RST 源文件翻译为中文，并通过 GitHub Actions + GitHub Pages 自动构建、发布为静态网站。
 
 ## 🌐 在线站点
 
