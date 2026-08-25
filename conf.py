@@ -308,8 +308,9 @@ def smv_rewrite_configs(app, config):
     # conf.py).  Instead, hook into the 'config-inited' event which is late enough
     # to rewrite the various configuration items with the current version.
     if app.config.smv_current_version != '':
-        app.config.html_baseurl = app.config.html_baseurl + '/' + app.config.smv_current_version
-        app.config.ogp_site_url = app.config.html_baseurl + '/'
+        # 单版本部署在 GitHub Pages 根路径，不追加 /<版本> 子路径（否则 sitemap/OGP 会指向不存在的子目录）
+        # app.config.html_baseurl = app.config.html_baseurl + '/' + app.config.smv_current_version
+        # app.config.ogp_site_url = app.config.html_baseurl + '/'
         app.config.project = 'ROS 2 Documentation: ' + app.config.smv_current_version.title()
 
         app.config.html_logo = 'source/Releases/' + app.config.smv_current_version + '-small.png'

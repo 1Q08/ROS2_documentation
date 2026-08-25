@@ -6,7 +6,7 @@
 
 🔗 **https://1Q08.github.io/ROS2_documentation/**
 
-本站由 GitHub Actions 在每次推送到 `main` 分支时自动构建（Sphinx → 静态 HTML）并部署到 GitHub Pages。构建工作流见 [`.github/workflows/pages.yml`](./.github/workflows/pages.yml)。
+本站由 GitHub Actions 在每次推送到 `jazzy` 分支时自动构建（Sphinx → 静态 HTML）并部署到 GitHub Pages。构建工作流见 [`.github/workflows/pages.yml`](./.github/workflows/pages.yml)。
 
 ## 📚 文档导航
 
