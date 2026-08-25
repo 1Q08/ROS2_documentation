@@ -2,11 +2,13 @@
 
 本文档记录如何在本地构建并预览 ROS 2 文档网站，包括环境准备、构建命令、常见问题与踩坑记录。
 
+> **通用化说明**：本文所有命令默认在项目根目录内执行。文中出现的 `<项目目录>` 为占位符，请替换为你本地实际的项目路径（例如克隆本仓库后的目录名 `ROS2_documentation`）。
+
 ## 一、环境准备（首次或环境被清理后）
 
 ```bash
-# 1. 进入项目目录
-cd /home/nvidia/Desktop/ros2_documentation
+# 1. 进入项目目录（将 <项目目录> 替换为你本地实际路径）
+cd <项目目录>
 
 # 2. 创建 Python 虚拟环境（只需一次）
 python3 -m venv ros2doc
@@ -136,8 +138,8 @@ macros = {
 **解决**：用 `make -C` 显式指定目录：
 
 ```bash
-source /home/nvidia/Desktop/ros2_documentation/ros2doc/bin/activate \
-  && make -C /home/nvidia/Desktop/ros2_documentation serve
+source <项目目录>/ros2doc/bin/activate \
+  && make -C <项目目录> serve
 ```
 
 ### 坑 2：`Adopters` 页面构建极慢（卡在 `reading sources`）
@@ -162,7 +164,7 @@ source /home/nvidia/Desktop/ros2_documentation/ros2doc/bin/activate \
 
    ```bash
    source ros2doc/bin/activate
-   make -C /home/nvidia/Desktop/ros2_documentation serve
+   make -C <项目目录> serve
    ```
 
    或一次性构建：

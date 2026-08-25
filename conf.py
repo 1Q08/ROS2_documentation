@@ -134,12 +134,12 @@ templates_path = [
 
 # smv_tag_whitelist = None
 
-smv_branch_whitelist = r'^(rolling|jazzy|iron|humble|galactic|foxy|eloquent|dashing|crystal)$'
+smv_branch_whitelist = r'^(jazzy|humble)$'
 
 
-smv_released_pattern = r'^refs/(heads|remotes/[^/]+)/(lyrical|kilted|jazzy|iron|humble|galactic|foxy|eloquent|dashing|crystal).*$'
+smv_released_pattern = r'^refs/(heads|remotes/[^/]+)/(jazzy|humble).*$'
 smv_remote_whitelist = r'^(origin)$'
-smv_latest_version = 'lyrical'
+smv_latest_version = 'jazzy'
 smv_eol_versions = ['crystal', 'dashing', 'eloquent', 'foxy', 'galactic', 'iron']
 
 distro_full_names = {
@@ -308,9 +308,8 @@ def smv_rewrite_configs(app, config):
     # conf.py).  Instead, hook into the 'config-inited' event which is late enough
     # to rewrite the various configuration items with the current version.
     if app.config.smv_current_version != '':
-        # 单版本部署在 GitHub Pages 根路径，不追加 /<版本> 子路径（否则 sitemap/OGP 会指向不存在的子目录）
-        # app.config.html_baseurl = app.config.html_baseurl + '/' + app.config.smv_current_version
-        # app.config.ogp_site_url = app.config.html_baseurl + '/'
+        app.config.html_baseurl = app.config.html_baseurl + '/' + app.config.smv_current_version
+        app.config.ogp_site_url = app.config.html_baseurl + '/'
         app.config.project = 'ROS 2 Documentation: ' + app.config.smv_current_version.title()
 
         app.config.html_logo = 'source/Releases/' + app.config.smv_current_version + '-small.png'
