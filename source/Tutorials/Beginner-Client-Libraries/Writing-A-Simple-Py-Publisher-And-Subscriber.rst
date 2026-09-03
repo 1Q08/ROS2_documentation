@@ -154,7 +154,7 @@
 这几行代码代表了节点的依赖。
 请记住，依赖必须添加到 ``package.xml`` 中，你将在下一节完成这一步。
 
-接下来，创建 ``MinimalPublisher`` 类，它继承自（或者是子类）`Node <{package_link(rclpy)}api/node.html>`__。
+接下来，创建 ``MinimalPublisher`` 类，它继承自（或者是子类） `Node <{package_link(rclpy)}api/node.html>`__。
 
 .. code-block:: python
 

@@ -308,8 +308,14 @@ def smv_rewrite_configs(app, config):
     # conf.py).  Instead, hook into the 'config-inited' event which is late enough
     # to rewrite the various configuration items with the current version.
     if app.config.smv_current_version != '':
-        app.config.html_baseurl = app.config.html_baseurl + '/' + app.config.smv_current_version
-        app.config.ogp_site_url = app.config.html_baseurl + '/'
+        # For single-version deployments (e.g. GitHub Pages at the site root)
+        # we do NOT append the distribution to the base URL, so canonical URLs
+        # keep pointing at the deployed root. Enable via SINGLE_VERSION=1.
+        if not os.environ.get('SINGLE_VERSION'):
+            app.config.html_baseurl = app.config.html_baseurl + '/' + app.config.smv_current_version
+            app.config.ogp_site_url = app.config.html_baseurl + '/'
+        else:
+            app.config.ogp_site_url = app.config.html_baseurl + '/'
         app.config.project = 'ROS 2 Documentation: ' + app.config.smv_current_version.title()
 
         app.config.html_logo = 'source/Releases/' + app.config.smv_current_version + '-small.png'

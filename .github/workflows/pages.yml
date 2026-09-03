@@ -36,8 +36,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt -c constraints.txt
 
-      - name: Build documentation (multiversion)
-        run: make multiversion OPTS="-c . -W -jauto"
+      - name: Build documentation (single version custom branch using smv_current_version)
+        env:
+          CURRENT_VERSION: ${{ github.ref_name }}
+          SINGLE_VERSION: "1"
+        run: make html OPTS="-c . -W -jauto -D smv_current_version=${CURRENT_VERSION}"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
