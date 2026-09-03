@@ -27,8 +27,8 @@
 `Simple Discovery Protocol <https://fast-dds.docs.eprosima.com/en/v2.1.0/fastdds/discovery/simple.html>`__ 是 `DDS 标准 <https://www.omg.org/omg-dds-portal/>`__ 中定义的标准协议。
 然而，它在某些场景下存在已知的缺点。
 
-* 它不能高效地**扩展**，因为随着新节点的加入，交换的数据包数量会显著增加。
-* 它需要**组播**能力，而这在某些场景（例如 WiFi）下可能无法可靠工作。
+* 它不能高效地\ **扩展**，因为随着新节点的加入，交换的数据包数量会显著增加。
+* 它需要\ **组播**\ 能力，而这在某些场景（例如 WiFi）下可能无法可靠工作。
 
 **Fast DDS Discovery Server** 提供了一种客户端-服务器架构，允许节点通过一个中间服务器相互连接。
 每个节点都充当一个*发现客户端*，将其信息共享给一个或多个*发现服务器*，并从中接收发现信息。
@@ -213,8 +213,8 @@ Fast DDS Discovery Server v2
 
     **理解服务器 ID 映射**
 
-    ``ROS_DISCOVERY_SERVER`` 环境变量使用一个**分号分隔的列表**，其中每个位置对应一个服务器 ID。
-    服务器 ID 由该分号分隔列表中的**索引位置**（从 0 开始）决定，而不是由服务器出现的顺序决定。
+    ``ROS_DISCOVERY_SERVER`` 环境变量使用一个\ **分号分隔的列表**，其中每个位置对应一个服务器 ID。
+    服务器 ID 由该分号分隔列表中的\ **索引位置**\ （从 0 开始）决定，而不是由服务器出现的顺序决定。
 
     * 服务器 ``--server-id 0``：第一个位置（无需前导分号）
     * 服务器 ``--server-id 1``：第二个位置（一个前导分号）
@@ -490,7 +490,7 @@ Fast DDS Discovery Server 允许创建具有备份功能的服务器。
 
     ``mutation_tries`` 的值至少应设置为你在单个主机上打算运行的参与者数量。
     将其增大到超出所需没有任何负面副作用。
-    此配置必须应用于系统中的**所有**参与者，但发现服务器除外，因为发现服务器已在启动时配置了一个特定的单播端口。
+    此配置必须应用于系统中的\ **所有**\ 参与者，但发现服务器除外，因为发现服务器已在启动时配置了一个特定的单播端口。
 
 更多详情，请参阅 `Fast DDS 关于参与者配置的文档 <https://fast-dds.docs.eprosima.com/en/latest/fastdds/xml_configuration/xml_configuration.html>`__。
 
@@ -506,8 +506,8 @@ ROS 2 内省
 这意味着节点只有在拥有某个主题的 writer 或 reader 时，才会收到该主题的发现数据。
 由于大多数 ROS 2 CLI 需要在网络中有一个节点（其中一些依赖一个正在运行的 ROS 2 daemon，而另一些会创建自己的节点），使用 Discovery Server v2 时，这些节点将无法获得所有网络信息，因此它们的功能会受到限制。
 
-Discovery Server v2 功能允许每个参与者作为**超级客户端（Super Client）**运行，这是一种连接到**服务器**的**客户端**，从中接收所有可用的发现信息（而不仅仅是它需要的信息）。
-在这个意义上，ROS 2 内省工具可以被配置为**超级客户端**，从而能够发现网络中所有使用 Discovery Server 协议的实体。
+Discovery Server v2 功能允许每个参与者作为\ **超级客户端（Super Client）**\ 运行，这是一种连接到\ **服务器**\ 的\ **客户端**，从中接收所有可用的发现信息（而不仅仅是它需要的信息）。
+在这个意义上，ROS 2 内省工具可以被配置为\ **超级客户端**，从而能够发现网络中所有使用 Discovery Server 协议的实体。
 
 .. note::
 
@@ -523,13 +523,13 @@ Daemon 相关工具
 
 ROS 2 Daemon 在多个 ROS 2 CLI 内省工具中被使用。
 它创建自己的参与者，以在网络图中添加一个 ROS 2 节点，从而接收所有发送的数据。
-为了让 ROS 2 CLI 在使用 Discovery Server 机制时正常工作，需要将 ROS 2 Daemon 配置为**超级客户端**。
-因此，本节专门解释如何将 ROS 2 Daemon 作为**超级客户端**运行来使用 ROS 2 CLI。
+为了让 ROS 2 CLI 在使用 Discovery Server 机制时正常工作，需要将 ROS 2 Daemon 配置为\ **超级客户端**。
+因此，本节专门解释如何将 ROS 2 Daemon 作为\ **超级客户端**\ 运行来使用 ROS 2 CLI。
 这将使 Daemon 能够发现整个节点图，并接收所有主题和端点信息。
 为此，使用一个 Fast DDS XML 配置文件来配置 ROS 2 Daemon 和 CLI 工具。
 
 下面是一个 XML 配置 profile，在本教程中应将其保存为工作目录中的 ```super_client_configuration_file.xml``` 文件。
-此文件将把每个使用它的新参与者配置为**超级客户端**。
+此文件将把每个使用它的新参与者配置为\ **超级客户端**。
 
 .. code-block:: xml
 
@@ -610,7 +610,7 @@ ROS 2 Daemon 在多个 ROS 2 CLI 内省工具中被使用。
 
     $ ros2 run demo_nodes_cpp talker --ros-args --remap __node:=talker
 
-然后，使用**超级客户端**配置实例化一个 ROS 2 Daemon（请记住在每个新终端中 source ROS 2 安装）。
+然后，使用\ **超级客户端**\ 配置实例化一个 ROS 2 Daemon（请记住在每个新终端中 source ROS 2 安装）。
 
 .. tabs::
 
@@ -660,10 +660,10 @@ ROS 2 Daemon 在多个 ROS 2 CLI 内省工具中被使用。
 ^^^^^^^^^^^^^^
 
 一些 ROS 2 CLI 工具不使用 ROS 2 Daemon。
-为了让这些工具连接到一个 Discovery Server 并接收所有主题信息，它们需要被实例化为连接**服务器**的**超级客户端**。
+为了让这些工具连接到一个 Discovery Server 并接收所有主题信息，它们需要被实例化为连接\ **服务器**\ 的\ **超级客户端**。
 
 按照之前的配置，构建一个包含 talker 和 listener 的简单系统。
-首先，运行一个**服务器**：
+首先，运行一个\ **服务器**：
 
 .. code-block:: console
 

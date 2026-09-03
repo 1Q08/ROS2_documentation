@@ -40,7 +40,7 @@
 
 创建一个 GitHub 账户
 --------------------
-如果你还没有 GitHub 账户，请`创建一个 <https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github>`__。
+如果你还没有 GitHub 账户，请\ `创建一个 <https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github>`__。
 你不必在 GitHub 上托管你的 ROS 包源代码，但你需要一个账户来为包建立索引和发布包。
 
 Fork 并克隆 ros/rosdistro
@@ -90,7 +90,7 @@ Fork 并克隆 ros/rosdistro
 接下来会发生什么
 ----------------
 你现在已经完成了为你的 ROS 包建立索引所需的所有工作。
-其中一位审查者会查看你的拉取请求，并决定它是否`满足审查指南 <https://github.com/ros/rosdistro/blob/master/REVIEW_GUIDELINES.md>`__。
+其中一位审查者会查看你的拉取请求，并决定它是否\ `满足审查指南 <https://github.com/ros/rosdistro/blob/master/REVIEW_GUIDELINES.md>`__。
 审查者可能会原样批准你的更改，也可能给你可行的反馈。
 一旦拉取请求满足审查指南，它将被合并，你的包将出现在 `ROS Index <https://index.ros.org/>`__ 上。
 

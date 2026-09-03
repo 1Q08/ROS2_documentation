@@ -69,7 +69,7 @@ rosdistro 数据库的审查流程将确保你的仓库和包在发布前符合 
 在 ros2-gbp 存在之前发布的包，其发布仓库可能托管在其他地方。
 现在强烈建议将发布仓库放在这个专门的 GitHub 组织中。
 如果你正在将 ROS 1 包移植到 ROS 2，并计划首次将你的包发布到 ROS 2 中，请按照标准流程为你的 ROS 2 发布请求一个新的发布仓库。
-如果你之前已经为 ROS 2 发布过你的包，在发起 `Add New Release Repositories issue <https://github.com/ros2-gbp/ros2-gbp-github-org/issues/new?assignees=&labels=&template=new_release_repository.md&title=Add+new+release+repositories>`_ 时，请**指定你当前的发布仓库 url**，其余部分按照标准流程操作。
+如果你之前已经为 ROS 2 发布过你的包，在发起 `Add New Release Repositories issue <https://github.com/ros2-gbp/ros2-gbp-github-org/issues/new?assignees=&labels=&template=new_release_repository.md&title=Add+new+release+repositories>`_ 时，请\ **指定你当前的发布仓库 url**，其余部分按照标准流程操作。
 
 .. note::
 

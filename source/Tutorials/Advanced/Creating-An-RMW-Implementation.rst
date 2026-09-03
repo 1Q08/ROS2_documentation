@@ -69,7 +69,7 @@ ROS 2 的架构有两个主要的 :doc:`抽象层 <../../Concepts/Advanced/About
 构建时和运行时的 ``rmw`` 实现选择机制
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-对实际 ``rmw`` 实现的依赖是通过 ``rmw_implementation` 包 <https://index.ros.org/p/rmw_implementation/#{DISTRO}>`_ 完成的。
+对实际 ``rmw`` 实现的依赖是通过 ``rmw_implementation`` 包 <https://index.ros.org/p/rmw_implementation/#{DISTRO}>`_ 完成的。
 ``rmw`` 的用户（例如 ``rcl``）依赖 ``rmw`` 包来获取接口（头文件）和一些实用函数。
 它们还依赖 ``rmw_implementation`` 包来获取实际实现。
 
@@ -251,7 +251,7 @@ ROS 图内省
 图缓存属于 ``rmw`` 上下文，因此它在调用 ``rmw_init()`` 时被初始化。
 这个上下文间接属于 ``rclcpp`` 上下文（例如由 ``rclcpp::init()`` 初始化），因此通常每个进程只有一个图缓存。
 
-由于基于 DDS 的 ``rmw`` 实现在这方面非常相似，它们在 ``rmw_dds_common` 包 <https://github.com/ros2/rmw_dds_common>`__ 中共享一个公共的图缓存实现。
+由于基于 DDS 的 ``rmw`` 实现在这方面非常相似，它们在 ``rmw_dds_common`` 包 <https://github.com/ros2/rmw_dds_common>`__ 中共享一个公共的图缓存实现。
 它使用一个内部主题（通常是 ``ros_discovery_info``）来共享关于新实体的信息。
 ``rmw_zenoh_cpp`` `创建一个 Zenoh 活跃性令牌 <https://github.com/ros2/rmw_zenoh/blob/{DISTRO}/docs/design.md#graph-cache>`_，其中包含实体类型和信息，并与其他参与者共享它。
 

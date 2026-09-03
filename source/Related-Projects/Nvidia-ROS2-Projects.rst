@@ -31,4 +31,4 @@ ROS 项目
 
 参考资料
 --------
-关于 NVIDIA Jetson ROS 2 的更多更新，可以`在这里 <https://nvidia-ai-iot.github.io/ros2_jetson/>`__ 找到。
+关于 NVIDIA Jetson ROS 2 的更多更新，可以\ `在这里 <https://nvidia-ai-iot.github.io/ros2_jetson/>`__ 找到。

@@ -152,7 +152,7 @@ Dashing Diademata 根据 `平台支持等级 <../The-ROS2-Project/Platform-Suppo
 * :doc:`进程内通信 <../Tutorials/Demos/Intra-Process-Communication>` （仅 C++）已得到改进——无论是延迟还是减少拷贝方面。
 * Python 客户端库已更新，以匹配大多数 C++ 等价功能，并且一些重要的错误修复和与内存使用及性能相关的改进也已落地。
 * 参数现在是 ROS 1 中 ``dynamic_reconfigure`` 的完整替代品，包括范围或只读等约束。
-* 通过依赖（子集）`IDL 4.2 <https://www.omg.org/spec/IDL/4.2>`__ 进行消息生成流水线，现在可以使用 ``.idl`` 文件（除了 ``.msg`` / ``.srv`` / ``.action`` 文件）。
+* 通过依赖（子集）\ `IDL 4.2 <https://www.omg.org/spec/IDL/4.2>`__ 进行消息生成流水线，现在可以使用 ``.idl`` 文件（除了 ``.msg`` / ``.srv`` / ``.action`` 文件）。
   此更改同时支持普通字符串的可选 UTF-8 编码以及 UTF-16 编码的多字节字符串（见 `宽字符串设计文章 <https://design.ros2.org/articles/wide_strings.html>`__）。
 * 与 ``actions`` 和 ``components`` 相关的命令行工具。
 * 支持 Deadline、Lifespan 和 Liveliness 服务质量设置。
@@ -616,7 +616,7 @@ rclpy
 """""""""""""""""""""""""""""""""""""""
 
 在 Dashing 之前，你可以在创建发布器或订阅器时可选地提供一个 ``QoSProfile`` 对象。
-为了鼓励用户为消息队列指定历史深度，我们现在**要求**在创建发布器或订阅器时提供深度值或 ``QoSProfile`` 对象。
+为了鼓励用户为消息队列指定历史深度，我们现在\ **要求**\ 在创建发布器或订阅器时提供深度值或 ``QoSProfile`` 对象。
 
 要创建发布器，以前你会这样写：
 
@@ -846,7 +846,7 @@ actions
 
   `rclcpp_action::Client::async_send_goal <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L343>`_ 的签名已更改。
   现在用户可以使用新的
-  `SendGoalOptions <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L276>`_ 结构体，为**目标响应**和**结果**可选地提供回调函数。
+  `SendGoalOptions <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L276>`_ 结构体，为\ **目标响应**\ 和\ **结果**\ 可选地提供回调函数。
   当动作服务器接受或拒绝目标时，会调用目标响应回调；当收到目标的结果时，会调用结果回调。
   还为 `rclcpp_action::Client::async_cancel_goal <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L432-L434>`_
   和 `rclcpp_action::Client::async_get_result <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L399-L401>`_ 添加了可选回调。

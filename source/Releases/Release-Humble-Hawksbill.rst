@@ -583,7 +583,7 @@ C++ 头文件安装到子目录中
     │   └── rclcpp
     │       ├── node.hpp
 
-请注意，使用这些头文件的下游软件包*不*需要修改；使用 ``#include <rclcpp/node.hpp>`` 依然像以前一样工作。
+请注意，使用这些头文件的下游软件包\ *不*\ 需要修改；使用 ``#include <rclcpp/node.hpp>`` 依然像以前一样工作。
 但是，当使用正在查找 include 目录的 IDE 时，可能需要将各个 include 目录添加到搜索路径中。
 
 有关更多信息（包括此更改背后的原因），请参阅 https://github.com/ros2/ros2/issues/1150。
@@ -1060,7 +1060,7 @@ pull request `925 <https://github.com/ros2/rosbag2/pull/925>`_ 使 ``rosbag2`` �
 --------
 
 * 在 `Ubuntu 22.04 Jammy 主机上安装 ROS 2 <../../humble/Installation/Ubuntu-Install-Debians.html>`__ 时，务必在安装 ROS 2 软件包之前更新你的系统。
-  特别*重要*的是要确保 ``systemd`` 和 ``udev`` 已更新到可用的最新版本，否则安装依赖 ``libudev1`` 的 ``ros-humble-desktop`` 可能会导致移除系统关键软件包。
+  特别\ *重要*\ 的是要确保 ``systemd`` 和 ``udev`` 已更新到可用的最新版本，否则安装依赖 ``libudev1`` 的 ``ros-humble-desktop`` 可能会导致移除系统关键软件包。
   详细信息可以在 `ros2/ros2#1272 <https://github.com/ros2/ros2/issues/1272>`_ 和 `Launchpad #1974196 <https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/1974196>`_ 中找到
 
 * 当 ROS 2 apt 仓库可用时，Ubuntu 中的 ROS 1 软件包将无法安装。更多信息请参阅 :doc:`Ubuntu Jammy 上的 ros1_bridge <../How-To-Guides/Using-ros1_bridge-Jammy-upstream>` 文档。

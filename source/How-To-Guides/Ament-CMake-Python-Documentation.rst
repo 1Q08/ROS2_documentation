@@ -37,7 +37,7 @@ ament_cmake_python 用户文档
            ├── __init__.py
            └── my_script.py
 
-``__init__.py`` 文件可以为空，但它是必需的，用于`让 Python 将包含它的目录视为一个包 <https://docs.python.org/3/tutorial/modules.html#packages>`__。
+``__init__.py`` 文件可以为空，但它是必需的，用于\ `让 Python 将包含它的目录视为一个包 <https://docs.python.org/3/tutorial/modules.html#packages>`__。
 在 ``CMakeLists.txt`` 旁边也可以有一个 ``src`` 或 ``include`` 目录，用于存放 C/C++ 代码。
 
 使用 ament_cmake_python

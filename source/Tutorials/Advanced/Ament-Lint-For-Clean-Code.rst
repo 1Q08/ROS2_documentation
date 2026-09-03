@@ -272,7 +272,7 @@ Ament Lint CLI 工具
 5 ``ament_uncrustify``
 ^^^^^^^^^^^^^^^^^^^^^^
 
-`Uncrustify <https://github.com/uncrustify/uncrustify>`_ 是一种 C++ lint 工具，与 ``ament_cpplint`` 类似，但它的优点是能够**自动修复**它发现的问题！
+`Uncrustify <https://github.com/uncrustify/uncrustify>`_ 是一种 C++ lint 工具，与 ``ament_cpplint`` 类似，但它的优点是能够\ **自动修复**\ 它发现的问题！
 这个工具将帮助你找出并修复 C++ ROS 程序中的小错误和风格问题，例如行尾空白、过长的代码行、函数参数间距不当等等！
 
 

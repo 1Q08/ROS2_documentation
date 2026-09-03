@@ -189,7 +189,7 @@ RMW 支持
 ~~~~~~
 
 默认情况下，*借用消息*会尝试从底层中间件借用内存，前提是该中间件支持*借用消息*。
-可以使用 ``ROS_DISABLE_LOANED_MESSAGES`` 环境变量来禁用*借用消息*，并回退到普通的发布者行为，而无需任何代码更改或中间件配置。
+可以使用 ``ROS_DISABLE_LOANED_MESSAGES`` 环境变量来禁用\ *借用消息*，并回退到普通的发布者行为，而无需任何代码更改或中间件配置。
 你可以通过以下命令设置该环境变量：
 
 .. tabs::
@@ -234,9 +234,9 @@ RMW 支持
 订阅
 ~~~~
 
-目前，在订阅端使用*借用消息*并不安全，更多详情请参见 `rmw issue <https://github.com/ros2/rmw_cyclonedds/issues/469>`_ 和 `rclcpp issue <https://github.com/ros2/rclcpp/issues/2401>`_。
-因此，即使底层中间件支持，*借用消息*在订阅端默认也是``禁用``的，参见 `Set disable loan to on by default <https://github.com/ros2/rcl/pull/1110>`_。
-要在订阅端启用*借用消息*，你需要将环境变量 ``ROS_DISABLE_LOANED_MESSAGES`` 显式设置为 ``0``。
+目前，在订阅端使用\ *借用消息*\ 并不安全，更多详情请参见 `rmw issue <https://github.com/ros2/rmw_cyclonedds/issues/469>`_ 和 `rclcpp issue <https://github.com/ros2/rclcpp/issues/2401>`_。
+因此，即使底层中间件支持，*借用消息*\ 在订阅端默认也是\ ``禁用``\ 的，参见 `Set disable loan to on by default <https://github.com/ros2/rcl/pull/1110>`_。
+要在订阅端启用\ *借用消息*，你需要将环境变量 ``ROS_DISABLE_LOANED_MESSAGES`` 显式设置为 ``0``。
 
 .. tabs::
 

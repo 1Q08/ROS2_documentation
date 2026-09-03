@@ -244,7 +244,7 @@ For example, given a ``Demo`` message in some ``demo`` package like:
 ^^^^^^^^^^^^^^^^^^^^
 
 现在可以在启动时为节点外部配置 QoS 设置。
-QoS 设置在运行时**不能**配置；它们只能在启动时配置。
+QoS 设置在运行时\ **不能**\ 配置；它们只能在启动时配置。
 节点作者必须选择启用才能在启动时更改 QoS 设置。
 如果在节点上启用了此功能，那么当节点首次启动时，可以通过 ROS 参数设置 QoS 设置。
 
@@ -436,7 +436,7 @@ XML 启动文件也支持此功能。
 支持唯一的网络流
 ^^^^^^^^^^^^^^^^
 
-应用程序现在可以要求基于 UDP/TCP 和 IP 的 RMW 实现为发布者和订阅者提供唯一的*网络流*（即唯一的 `区分服务代码点 <https://tools.ietf.org/html/rfc2474>`_ 和/或唯一的 `IPv6 流标签 <https://tools.ietf.org/html/rfc6437>`_ 和/或 IP 数据包头中的唯一端口），从而在支持此类功能的网络架构（如 5G 网络）中为这些 IP 流启用 QoS 规范。
+应用程序现在可以要求基于 UDP/TCP 和 IP 的 RMW 实现为发布者和订阅者提供唯一的\ *网络流*\ （即唯一的 `区分服务代码点 <https://tools.ietf.org/html/rfc2474>`_ 和/或唯一的 `IPv6 流标签 <https://tools.ietf.org/html/rfc6437>`_ 和/或 IP 数据包头中的唯一端口），从而在支持此类功能的网络架构（如 5G 网络）中为这些 IP 流启用 QoS 规范。
 
 要查看实际效果，你可以运行这些 C++ 示例（可在 `ros2/examples <https://github.com/ros2/examples>`__ 仓库中找到）：
 

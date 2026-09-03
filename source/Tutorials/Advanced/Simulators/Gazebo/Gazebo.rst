@@ -20,7 +20,7 @@
 
 .. note::
 
-   这些说明针对的是当前的 `Gazebo <https://gazebosim.org/>`__（以前称为 Ignition），而不是 `Gazebo Classic <https://classic.gazebosim.org/>`__。
+   这些说明针对的是当前的 `Gazebo <https://gazebosim.org/>`__\ （以前称为 Ignition），而不是 `Gazebo Classic <https://classic.gazebosim.org/>`__。
 
 前置条件
 --------

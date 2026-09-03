@@ -58,7 +58,7 @@ test_pull_requests
 对于你希望进行拉取请求测试的每个 ROS distro，你必须在 `rosdistro <https://github.com/ros/rosdistro/>`_ 的适当部分中启用 ``test_pull_requests`` 标志。
 
  * **选项 1** - 你在运行 `bloom </How-To-Guides/Releasing/Releasing-a-Package>` 时可以选择打开拉取请求测试。
- * **选项 2** - 你可以**小心地**手动编辑 rosdistro 仓库中的适当文件，并创建一个新的拉取请求。
+ * **选项 2** - 你可以\ **小心地**\ 手动编辑 rosdistro 仓库中的适当文件，并创建一个新的拉取请求。
    `示例 <https://github.com/ros/rosdistro/blob/3c295f76b0755989e9ed526c0b5f28a5f6a94da3/rolling/distribution.yaml#L4708>`_。
    `在 REP 143 中记录 <http://docs.ros.org/en/independent/api/rep/html/rep-0143.html#distribution-file>`_。
 

@@ -386,8 +386,8 @@
   例如，假设有一个名为 ``Contact.msg`` 的消息，它属于一个名为 ``rosidl_tutorials_msgs`` 的现有 ROS 2 包。
   假设它的定义与我们之前自定义的 ``AddressBook.msg`` 接口完全相同。
 
-  在这种情况下，你可以把 ``AddressBook.msg``\ （*你的*节点所在包中的一个接口）定义为类型 ``Contact``\ （一个*独立*包中的接口）。
-  你甚至可以将 ``AddressBook.msg`` 定义为类型 ``Contact`` 的*数组*，像这样：
+  在这种情况下，你可以把 ``AddressBook.msg``\ （*你的*\ 节点所在包中的一个接口）定义为类型 ``Contact``\ （一个\ *独立*\ 包中的接口）。
+  你甚至可以将 ``AddressBook.msg`` 定义为类型 ``Contact`` 的\ *数组*，像这样：
 
   ::
 

@@ -9,7 +9,7 @@ ament_cmake 用户文档
 ``ament_cmake`` 是 ROS 2 中基于 CMake 的包的构建系统（特别是，它将用于大多数 C/C++ 项目）。
 它是一组增强 CMake 并为包作者添加便利功能的脚本。
 在使用 ``ament_cmake`` 之前，了解 `CMake <https://cmake.org/cmake/help/v3.8/>`__ 的基础知识会非常有帮助。
-官方教程可以在`这里 <https://cmake.org/cmake/help/latest/guide/tutorial/index.html>`__ 找到。
+官方教程可以在\ `这里 <https://cmake.org/cmake/help/latest/guide/tutorial/index.html>`__ 找到。
 
 .. contents:: 目录
    :depth: 2
@@ -44,8 +44,8 @@ ament_cmake 用户文档
 ``ament_package`` 可以接受额外的参数：
 
 - ``CONFIG_EXTRAS``：一个 CMake 文件列表（``.cmake`` 或由 ``configure_file()`` 展开的 ``.cmake.in`` 模板），这些文件应该可供该包的客户端使用。
-  关于何时使用这些参数的示例，请参见`添加资源`_中的讨论。
-  有关如何使用模板文件的更多信息，请参见`官方文档 <https://cmake.org/cmake/help/v3.8/command/configure_file.html>`__。
+  关于何时使用这些参数的示例，请参见\ `添加资源`_\ 中的讨论。
+  有关如何使用模板文件的更多信息，请参见\ `官方文档 <https://cmake.org/cmake/help/v3.8/command/configure_file.html>`__。
 
 - ``CONFIG_EXTRAS_POST``：与 ``CONFIG_EXTRAS`` 相同，但文件被添加的顺序不同。
   ``CONFIG_EXTRAS`` 文件在针对 ``ament_export_*`` 调用生成的文件之前被包含，而 ``CONFIG_EXTRAS_POST`` 中的文件则在这些文件之后被包含。
@@ -65,7 +65,7 @@ ament_cmake 用户文档
 ^^^^^^^^^^^^^^^^^^
 
 ROS 2 面向符合 C++17 和 C99 标准的编译器。
-未来可能会面向更新的版本，相关引用见`这里 <https://reps.openrobotics.org/rep-2000/>`__。
+未来可能会面向更新的版本，相关引用见\ `这里 <https://reps.openrobotics.org/rep-2000/>`__。
 因此，习惯上会设置相应的 CMake 标志：
 
 .. code-block:: cmake
@@ -472,9 +472,9 @@ Ament 扩展通过定义一个包含扩展点名称的变量，并用要执行�
 ament 索引说明
 ^^^^^^^^^^^^^^
 
-有关设计和意图的详情，请参见`这里 <https://github.com/ament/ament_cmake/blob/{REPOS_FILE_BRANCH}/ament_cmake_core/doc/resource_index.md>`__
+有关设计和意图的详情，请参见\ `这里 <https://github.com/ament/ament_cmake/blob/{REPOS_FILE_BRANCH}/ament_cmake_core/doc/resource_index.md>`__
 
-原则上，ament 索引包含在`安装空间 <https://colcon.readthedocs.io/en/released/user/what-is-a-workspace.html#install-artifacts>`_ 内的一个文件夹中。
+原则上，ament 索引包含在\ `安装空间 <https://colcon.readthedocs.io/en/released/user/what-is-a-workspace.html#install-artifacts>`_ 内的一个文件夹中。
 它包含以不同类型资源命名的浅层子文件夹。
 在子文件夹中，每个提供该资源的包都通过一个"标记文件"按名称被引用。
 该文件可以包含获取资源所需的任何内容，例如资源安装目录的相对路径，也可以简单地为空。

@@ -163,7 +163,7 @@ RTI Connext 调优
 在不配置内核 ``rmem_max`` 的情况下，同样的 Connext QoS 配置文件需要长达 12 秒才能完成数据传递。
 但是，它至少始终能够完成传递。
 
-**解决方案：** 使用 `Connext QoS 配置文件 <https://github.com/jacobperron/pc_pipe/blob/master/etc/ROS2TEST_QOS_PROFILES.xml>`_，但*不*调整 ``rmem_max``。
+**解决方案：** 使用 `Connext QoS 配置文件 <https://github.com/jacobperron/pc_pipe/blob/master/etc/ROS2TEST_QOS_PROFILES.xml>`_，但\ *不*\ 调整 ``rmem_max``。
 
 ROS2TEST_QOS_PROFILES.xml 文件是根据 RTI 关于 `配置流量控制器 <https://community.rti.com/forum-topic/transfering-large-data-over-dds>`_ 的文档配置的。
 它包含慢速、中速和快速流量控制器（见 Connext QoS 配置文件链接）。

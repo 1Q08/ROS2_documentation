@@ -441,7 +441,7 @@ RMW_FASTRTPS_USE_QOS_FROM_XML
 默认情况下，在 ``rmw_fastrtps`` 实现中，这些值被设置为 ``ASYNCHRONOUS`` 和 ``PREALLOCATED_WITH_REALLOC``，而 XML 文件中设置的值会被忽略。
 为了使用 XML 文件中的值，必须将环境变量 ``RMW_FASTRTPS_USE_QOS_FROM_XML`` 设置为 ``1``。
 
-然而，这带来了**另一个注意事项**：如果设置了 ``RMW_FASTRTPS_USE_QOS_FROM_XML``，但 XML 文件没有定义
+然而，这带来了\ **另一个注意事项**：如果设置了 ``RMW_FASTRTPS_USE_QOS_FROM_XML``，但 XML 文件没有定义
 ``publishMode`` 或 ``historyMemoryPolicy``，这些属性将采用 *Fast DDS* 的默认值，而不是 ``rmw_fastrtps`` 的默认值。
 这一点很重要，尤其是对于 ``historyMemoryPolicy``，因为 *Fast DDS* 的默认值是 ``PREALLOCATED``，它不适用于 ROS2 主题数据类型。
 因此，在示例中，已经为这个策略显式设置了一个有效值（``DYNAMIC``）。

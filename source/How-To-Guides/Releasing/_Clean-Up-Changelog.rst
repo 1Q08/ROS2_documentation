@@ -12,5 +12,5 @@
    * you can modify this commit message
    * and this
 
-清理提交消息列表，以简明扼要地传达自上次发布以来对包所做的值得注意的更改，并**提交所有 CHANGELOG.rst 文件。**
+清理提交消息列表，以简明扼要地传达自上次发布以来对包所做的值得注意的更改，并\ **提交所有 CHANGELOG.rst 文件。**
 不要修改 ``Forthcoming`` 标题。

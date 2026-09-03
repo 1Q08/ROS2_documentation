@@ -11,7 +11,16 @@ import io
 import re
 import sys
 
+from docutils import nodes
 from docutils.core import publish_doctree
+from docutils.parsers.rst import roles
+
+# 模拟 Sphinx 的 :term: 角色，避免 global_substitutions.txt 中的
+# 替换定义（|API|、|package| 等）因 role 不识别而失效，
+# 进而把正常引用误报为 "Undefined substitution referenced"。
+def _term_role(name, rawtext, text, lineno, inliner, options=None, content=None):
+    return [nodes.inline(rawtext, text, classes=['xref', 'std', 'std-term'])], []
+roles.register_local_role('term', _term_role)
 
 NOISE = [
     'Unknown directive type',
@@ -40,7 +49,7 @@ def verify(path: str) -> int:
         'report_level': 2,
         'halt_level': 6,
         'warning_stream': stream,
-        'file_insertion_enabled': False,
+        'file_insertion_enabled': True,
     })
     out = stream.getvalue()
     real = []

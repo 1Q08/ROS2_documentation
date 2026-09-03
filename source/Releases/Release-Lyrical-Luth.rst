@@ -572,7 +572,7 @@ URDF 发布了一些新功能：
 
 更多信息请参阅 `ros/urdfdom#235 <https://github.com/ros/urdfdom/pull/235>`_、`ros/urdfdom#238 <https://github.com/ros/urdfdom/pull/238>`_、and `ros/urdfdom#212 <https://github.com/ros/urdfdom/pull/212>`_。
 
-请注意，Robot Model 插件`尚不支持胶囊几何体 <https://github.com/ros2/rviz/issues/1734>`_。
+请注意，Robot Model 插件\ `尚不支持胶囊几何体 <https://github.com/ros2/rviz/issues/1734>`_。
 请考虑为此功能提交一个 pull request！
 
 ``robot_state_publisher`` 可以从话题读取机器人描述
@@ -805,7 +805,7 @@ ROS Lyrical 提供了一个通用的 ``resource_retriever_service``，使任何�
 """"""""""""
 
 默认情况下，跟踪会话会持续将跟踪数据写入磁盘。
-使用 LTTng 的 `快照模式 <https://lttng.org/docs/v2.13/#doc-tracing-session-mode>`_ 的跟踪会话将跟踪数据存储在内存中，仅在`拍摄快照 <https://lttng.org/docs/v2.13/#doc-taking-a-snapshot>`_ 时才写入磁盘。
+使用 LTTng 的 `快照模式 <https://lttng.org/docs/v2.13/#doc-tracing-session-mode>`_ 的跟踪会话将跟踪数据存储在内存中，仅在\ `拍摄快照 <https://lttng.org/docs/v2.13/#doc-taking-a-snapshot>`_ 时才写入磁盘。
 当内存缓冲区填满时，最旧的数据会被丢弃，从而维持一个滚动历史，其大小可以通过配置子缓冲区大小来控制。
 这种“飞行记录器”模式仅在有值得关注的事情发生时才有用地捕获跟踪数据，避免了持续的磁盘写入，从而进一步降低了运行时性能影响。
 
