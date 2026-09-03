@@ -788,8 +788,8 @@ rosidl_generator_py
 在 Crystal 之前，消息中的数组（固定大小）或序列（动态大小，可选带有上限）字段在 Python 中存储为 ``list``。
 从 Dashing 开始，数值类型数组/序列的 Python 类型已更改：
 
-* 数值数组存储为 ``numpy.ndarray``（``dtype`` 的选择与数值类型匹配）
-* 数值序列存储为 ``array.array``（``typename`` 的选择与数值类型匹配）
+* 数值数组存储为 ``numpy.ndarray``\ （``dtype`` 的选择与数值类型匹配）
+* 数值序列存储为 ``array.array``\ （``typename`` 的选择与数值类型匹配）
 
 与之前一样，非数值类型的数组/序列在 Python 中仍然表示为 ``list``。
 

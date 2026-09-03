@@ -93,7 +93,7 @@
 
 以下代码将从 ROS 2 节点以 ``ERROR`` 严重级别输出一条日志消息，但每秒不超过一次。
 
-指定消息间隔毫秒数的 interval 参数应为整数数据类型，以便转换为 ``rcutils_duration_value_t``（一个 ``int64_t``）：
+指定消息间隔毫秒数的 interval 参数应为整数数据类型，以便转换为 ``rcutils_duration_value_t``\ （一个 ``int64_t``）：
 
 .. tabs::
 

@@ -240,7 +240,7 @@ turtle 位姿消息的处理函数广播这只 turtle 的平移和旋转，并�
 ~~~~~~~~~~~~~~
 
 为了让 ``ros2 run`` 命令能运行你的节点，你必须将入口点添加到
-``setup.py``（位于 ``src/learning_tf2_py`` 目录）。
+``setup.py``\ （位于 ``src/learning_tf2_py`` 目录）。
 
 在 ``'console_scripts':`` 括号之间添加以下行：
 

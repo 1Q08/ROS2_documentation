@@ -263,7 +263,7 @@
 1.3 添加入口点
 ~~~~~~~~~~~~~~
 
-要让 ``ros2 run`` 命令能够运行你的节点，你必须将入口点添加到 ``setup.py``（位于 ``src/learning_tf2_py`` 目录中）。
+要让 ``ros2 run`` 命令能够运行你的节点，你必须将入口点添加到 ``setup.py``\ （位于 ``src/learning_tf2_py`` 目录中）。
 
 在 ``'console_scripts':`` 括号之间添加以下行：
 
@@ -274,7 +274,7 @@
 1.4 添加数据文件
 ~~~~~~~~~~~~~~~~
 
-要让 ``ros2 launch`` 命令能够启动你的启动文件，你必须将数据文件添加到 ``setup.py``（位于 ``src/learning_tf2_py`` 目录中）。
+要让 ``ros2 launch`` 命令能够启动你的启动文件，你必须将数据文件添加到 ``setup.py``\ （位于 ``src/learning_tf2_py`` 目录中）。
 
 在 ``setup.py`` 顶部导入以下库：
 

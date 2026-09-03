@@ -124,7 +124,7 @@ ROS 构建农场执行若干种不同的任务。
 * https://github.com/ros-infrastructure/cookbook-ros-buildfarm - 安装和配置 ROS 构建农场机器
 
 
-.. [1] ``{distro}`` 是 ROS 发行版的首字母，``{platform}``（``{platf}``）
+.. [1] ``{distro}`` 是 ROS 发行版的首字母，``{platform}``\ （``{platf}``）
    指定为软件包构建的平台（及其短代码），``{package}`` 是
    正在构建的 ROS 软件包的名称。
 .. [2] *upstream* 仓库是包含相应 ROS 1 / ROS 2 软件包原始源码的仓库。

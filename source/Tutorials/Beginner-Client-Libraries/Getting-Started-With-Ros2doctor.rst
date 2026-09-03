@@ -28,7 +28,7 @@
 --------
 
 ``ros2doctor`` 是 ``ros2cli`` 包的一部分。
-只要安装了 ``ros2cli``（任何正常的安装都应该有），你就能使用 ``ros2doctor``。
+只要安装了 ``ros2cli``\ （任何正常的安装都应该有），你就能使用 ``ros2doctor``。
 
 本教程使用 :doc:`turtlesim <../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>` 来说明一些示例。
 

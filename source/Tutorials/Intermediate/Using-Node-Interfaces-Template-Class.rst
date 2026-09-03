@@ -22,7 +22,7 @@
 以下教程将展示如何使用 ``rclcpp::NodeInterfaces<>`` 作为适用于所有 ROS 节点类型的可靠且紧凑的接口。
 
 ``rclcpp::NodeInterfaces<>`` 模板类提供了一种紧凑高效的方式来管理 ROS 2 中的 Node Interfaces。
-当使用不同类型的 ``Nodes``（例如不共享同一继承树的 ``rclcpp::Node`` 和 ``rclcpp_lifecycle::LifecycleNode``）时，这尤其有用。
+当使用不同类型的 ``Nodes``\ （例如不共享同一继承树的 ``rclcpp::Node`` 和 ``rclcpp_lifecycle::LifecycleNode``）时，这尤其有用。
 
 1 使用 ``SharedPtr`` 访问节点信息
 ---------------------------------

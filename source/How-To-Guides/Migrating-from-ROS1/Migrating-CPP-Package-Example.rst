@@ -116,7 +116,7 @@ ROS 2 C++ 库（称为 ``rclcpp``）提供的 API 与 ``roscpp`` 提供的不同
 包含的头文件
 ~~~~~~~~~~~~
 
-我们需要包含 ``rclcpp/rclcpp.hpp`` 来替代 ``ros/ros.h``（它让我们能够访问 ``roscpp`` 库 API），从而访问 ``rclcpp`` 库 API：
+我们需要包含 ``rclcpp/rclcpp.hpp`` 来替代 ``ros/ros.h``\ （它让我们能够访问 ``roscpp`` 库 API），从而访问 ``rclcpp`` 库 API：
 
 .. code-block:: cpp
 

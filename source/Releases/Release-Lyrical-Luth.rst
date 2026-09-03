@@ -95,7 +95,7 @@ Lyrical 中的新功能
 
 更多信息请参阅 `ros2/rclcpp#2828 <https://github.com/ros2/rclcpp/pull/2828>`_。
 
-``AsyncNode`` 让你可以使用 ``asyncio``（``rclpy``）
+``AsyncNode`` 让你可以使用 ``asyncio``\ （``rclpy``）
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 想要同时使用 ``asyncio`` 和 ``rclpy``？

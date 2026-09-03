@@ -504,7 +504,7 @@ pluginlib 工厂的标记文件包含指向 ``plugins_description.xml`` 文件�
 简而言之，它会安装一个以调用该函数的项目命名的文件到名为 ``rviz_ogre_media_exports`` 的子文件夹中。
 该文件包含宏中列出的目录的安装文件夹相对路径。
 在启动时，RViz 现在可以搜索所有名为 ``rviz_ogre_media_exports`` 的文件夹，并加载所提供所有文件夹中的资源。
-这些搜索使用 ``ament_index_cpp``（或用于 Python 包的 ``ament_index_py``）完成。
+这些搜索使用 ``ament_index_cpp``\ （或用于 Python 包的 ``ament_index_py``）完成。
 
 在接下来的部分中，我们将探讨如何将你自己的资源添加到 ament 索引，并提供这样做的最佳实践。
 

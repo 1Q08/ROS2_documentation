@@ -78,7 +78,7 @@
 希望上述内容已清楚地说明，要让 ``rosdep`` 理解新的 key 需要做什么：添加一个新的自定义源文件！
 
 作为一个简单示例，让我们添加一个新的源文件，告诉 ``rosdep`` 从存储在本地机器上的一个 YAML 文件获取 key。
-打开你最喜欢的文本编辑器，将以下内容写入 ``/etc/ros/rosdep/sources.list.d/30-custom.list``（编辑器需要以 root 权限启动，例如通过 ``sudo``）：
+打开你最喜欢的文本编辑器，将以下内容写入 ``/etc/ros/rosdep/sources.list.d/30-custom.list``\ （编辑器需要以 root 权限启动，例如通过 ``sudo``）：
 
 .. code-block:: yaml
 

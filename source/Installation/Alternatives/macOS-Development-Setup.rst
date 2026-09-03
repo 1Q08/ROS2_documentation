@@ -82,7 +82,7 @@ macOS（源代码）
       $ export PATH=$PATH:$(brew --prefix qt@5)/bin
 
 #.
-   使用 ``python3 -m pip``（仅 ``pip`` 可能安装 Python3 或 Python2）来安装更多内容：
+   使用 ``python3 -m pip``\ （仅 ``pip`` 可能安装 Python3 或 Python2）来安装更多内容：
 
    .. code-block:: console
 

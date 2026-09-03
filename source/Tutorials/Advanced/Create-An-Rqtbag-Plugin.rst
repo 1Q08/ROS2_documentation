@@ -215,7 +215,7 @@ TopicMessageView
 
 .. note::
 
-   不要输入 ``return DiagnosticPanel()``（带 ``()``）。
+   不要输入 ``return DiagnosticPanel()``\ （带 ``()``）。
    只要 ``return DiagnosticPanel`` 才是正确的。
 
 要看到它的效果，用你的 bag 文件运行 ``rqt_bag``，然后在 diagnostic 轨道上右键点击。

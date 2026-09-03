@@ -290,7 +290,7 @@ group
      参见新的 ``push_ros_namespace`` 标签作为替代方案。
    * ``clear_params`` 属性不可用。
    * 它不接受 ``remap`` 或 ``param`` 标签作为子元素。
-   * 它有两个新属性：``scoped`` 和 ``forwarding``（默认均为 true）。
+   * 它有两个新属性：``scoped`` 和 ``forwarding``\ （默认均为 true）。
      如果 ``scoped`` 为 false，则该组不会引入新的变量作用域，因此组内对变量所做的操作也会影响组外的变量。
      如果 ``forwarding`` 为 false，则组内无法使用外部的 launch 配置（ ``arg`` ）。
      这对于隔离被包含的 launch 文件从而防止参数名冲突非常有用。
@@ -458,4 +458,4 @@ executable
    <tag3 attr-expecting-a-str="don't use a separator"/>
 
 有些属性接受不止一种类型，例如 ``param`` 标签的 ``value`` 属性。
-通常，类型为 ``int``（或 ``float``）的参数也接受 ``str``，该字符串稍后会被替换并尝试由动作转换为 ``int``（或 ``float``）。
+通常，类型为 ``int``\ （或 ``float``）的参数也接受 ``str``，该字符串稍后会被替换并尝试由动作转换为 ``int``\ （或 ``float``）。

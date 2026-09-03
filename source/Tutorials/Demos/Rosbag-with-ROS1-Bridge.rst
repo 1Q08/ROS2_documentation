@@ -35,7 +35,7 @@
          $ . ~/ros_catkin_ws/install_isolated/setup.bash
          $ rocore
 
-然后在另一个 shell 中运行带 ``--bridge-all-topics`` 选项的 ROS 1 <=> ROS 2 ``dynamic_bridge``（这样我们就可以运行 ``rostopic list`` 并看到它们）：
+然后在另一个 shell 中运行带 ``--bridge-all-topics`` 选项的 ROS 1 <=> ROS 2 ``dynamic_bridge``\ （这样我们就可以运行 ``rostopic list`` 并看到它们）：
 
 .. note::
 

@@ -162,7 +162,7 @@
 2.2 添加入口点
 ~~~~~~~~~~~~~~
 
-为了让 ``ros2 run`` 命令能够运行你的节点，你必须将入口点添加到 ``setup.py``（位于 ``ros2_ws/src/py_srvcli`` 目录中）。
+为了让 ``ros2 run`` 命令能够运行你的节点，你必须将入口点添加到 ``setup.py``\ （位于 ``ros2_ws/src/py_srvcli`` 目录中）。
 
 在 ``'console_scripts':`` 方括号之间添加以下行：
 

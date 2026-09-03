@@ -105,7 +105,7 @@ rosdep 如何工作？
 好问题，很高兴你问了！
 
 * 如果你想依赖的软件包是基于 ROS 的，并且已发布到 ROS 生态系统中 [1]_，例如 ``nav2_bt_navigator``，你可以直接使用该软件包的名称。
-  你可以在 https://github.com/ros/rosdistro 的 ``<distro>/distribution.yaml``（例如 ``humble/distribution.yaml``）中找到你给定 ROS 发行版的所有已发布 ROS 软件包列表。
+  你可以在 https://github.com/ros/rosdistro 的 ``<distro>/distribution.yaml``\ （例如 ``humble/distribution.yaml``）中找到你给定 ROS 发行版的所有已发布 ROS 软件包列表。
 * 如果你想依赖一个非 ROS 软件包，通常称为“系统依赖”，你需要为特定库找到 keys。
   一般来说，有两个相关的文件：
 

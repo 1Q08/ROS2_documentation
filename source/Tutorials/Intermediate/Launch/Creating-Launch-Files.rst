@@ -93,8 +93,8 @@ ROS 2 中的 launch 系统负责帮助用户描述他们系统的配置，然后
 
 这两个 turtlesim 节点还展示了向节点传递参数的不同方式。
 第一个节点使用 ``args`` 将参数直接传递给可执行文件，对于 ROS 特定参数需要 ``--ros-args`` 标志。
-第二个节点使用 ``ros_args``（Python 中是 ``ros_arguments``），专门用于 ROS 参数。
-在混合使用 ROS 和非 ROS 参数时使用 ``args``（例如 ``my_custom_arg --ros-args --log-level info``），或者使用 ``ros_args`` 以获得更简洁的语法，只包含 remapping、参数或日志级别等 ROS 参数。
+第二个节点使用 ``ros_args``\ （Python 中是 ``ros_arguments``），专门用于 ROS 参数。
+在混合使用 ROS 和非 ROS 参数时使用 ``args``\ （例如 ``my_custom_arg --ros-args --log-level info``），或者使用 ``ros_args`` 以获得更简洁的语法，只包含 remapping、参数或日志级别等 ROS 参数。
 
 最后一个节点也来自 ``turtlesim`` 包，但是一个不同的可执行文件：``mimic``。
 这个节点以 remapping 的形式添加了配置细节。
