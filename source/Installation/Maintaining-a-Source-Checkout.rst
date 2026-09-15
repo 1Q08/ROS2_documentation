@@ -1,32 +1,32 @@
 .. _MaintainingSource:
 
-Maintain source checkout
-========================
+维护源码检出
+============
 
 .. ifconfig:: smv_current_version != '' and smv_current_version != 'rolling'
 
   .. note::
 
-     For instructions on maintaining a source checkout of the **latest development version** of ROS 2, refer to
-     `Maintaining a source checkout of ROS 2 Rolling <../../rolling/Installation/Maintaining-a-Source-Checkout.html>`__
+     有关维护 ROS 2 **最新开发版本** 源码检出的说明，请参阅
+     `维护 ROS 2 Rolling 的源码检出 <../../rolling/Installation/Maintaining-a-Source-Checkout.html>`__
 
 .. contents::
    :depth: 2
    :local:
 
-If you have installed ROS 2 from source, there may have been changes made to the source code since the time that you checked it out.
-To keep your source checkout up to date, you will have to periodically update your ``ros2.repos`` file, download the latest sources, and rebuild your workspace.
+如果你从源码安装了 ROS 2，那么自你检出源码以来，源代码可能已经发生了变化。
+为了让你的源码检出保持最新，你需要定期更新 ``ros2.repos`` 文件、下载最新的源码并重新构建工作空间。
 
-Update your repository list
----------------------------
+更新仓库列表
+------------
 
-Each ROS 2 release includes a ``ros2.repos`` file that contains the list of repositories and their version for that release.
+每个 ROS 2 发行版都包含一个 ``ros2.repos`` 文件，其中列出了该发行版对应的仓库及其版本。
 
 
-Latest ROS 2 {DISTRO_TITLE} branches
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+最新的 ROS 2 {DISTRO_TITLE} 分支
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you wish to checkout the latest code for ROS 2 {DISTRO_TITLE}, you can get the relevant repository list by running:
+如果你希望检出 ROS 2 {DISTRO_TITLE} 的最新代码，可以通过运行以下命令获取相关的仓库列表：
 
 .. tabs::
 
@@ -48,14 +48,14 @@ If you wish to checkout the latest code for ROS 2 {DISTRO_TITLE}, you can get th
 
   .. group-tab:: Windows
 
-    Use a Windows command line interface:
+    使用 Windows 命令行界面：
 
     .. code-block:: console
 
        $ cd \dev\ros2_{DISTRO}
        $ curl -sk https://raw.githubusercontent.com/ros2/ros2/{REPOS_FILE_BRANCH}/ros2.repos -o ros2.repos
 
-    Or a powershell:
+    或者使用 powershell：
 
     .. code-block:: console
 
@@ -63,21 +63,20 @@ If you wish to checkout the latest code for ROS 2 {DISTRO_TITLE}, you can get th
        $ curl https://raw.githubusercontent.com/ros2/ros2/{REPOS_FILE_BRANCH}/ros2.repos -o ros2.repos
 
 
-Update your repositories
-------------------------
+更新你的仓库
+------------
 
-You will notice that in the `ros2.repos <https://raw.githubusercontent.com/ros2/ros2/{REPOS_FILE_BRANCH}/ros2.repos>`__ file, each repository has a ``version`` associated with it that points to a particular commit hash, tag, or branch name.
-It is possible that these versions refer to new tags/branches that your local copy of the repositories will not recognize as they are out-of-date.
-Because of this, you should update the repositories that you have already checked out with the following command:
+你会注意到，在 `ros2.repos <https://raw.githubusercontent.com/ros2/ros2/{REPOS_FILE_BRANCH}/ros2.repos>`__ 文件中，每个仓库都关联了一个 ``version``，它指向特定的提交哈希、标签或分支名。
+由于这些版本可能引用了你本地仓库的旧副本无法识别的新标签/分支，因此你需要先更新已经检出的仓库，运行以下命令：
 
 .. code-block:: console
 
    $ vcs custom --args remote update
 
-Download the new source code
-----------------------------
+下载新的源代码
+--------------
 
-You should now be able to download the sources associated with the new repository list with:
+现在你应该能够通过以下命令下载与新仓库列表相关的源码：
 
 .. tabs::
 
@@ -111,20 +110,20 @@ You should now be able to download the sources associated with the new repositor
        $ vcs import --input ros2.repos src
        $ vcs pull src
 
-Rebuild your workspace
-----------------------
+重新构建你的工作空间
+--------------------
 
-Now that the workspace is up to date with the latest sources, remove your previous install and rebuild your workspace with, for example:
+现在工作空间已更新到最新源码，删除之前的安装并重新构建工作空间，例如：
 
 .. code-block:: console
 
    $ colcon build --symlink-install
 
-Inspect your source checkout
-----------------------------
+检查你的源码检出
+----------------
 
-During your development you may have deviated from the original state of your workspace from when you imported the repository list.
-If you wish to know the versions of the set of repositories in your workspace, you can export the information using the following command:
+在开发过程中，你的工作空间可能与导入仓库列表时的原始状态有所不同。
+如果你想知道工作空间中各仓库的版本，可以使用以下命令导出这些信息：
 
 .. tabs::
 
@@ -149,4 +148,4 @@ If you wish to know the versions of the set of repositories in your workspace, y
        $ cd \dev\ros2_{DISTRO}
        $ vcs export src > my_ros2.repos
 
-This ``my_ros2.repos`` file can then be shared with others so that they can reproduce the state of the repositories in your workspace.
+这个 ``my_ros2.repos`` 文件随后可以分享给他人，以便他们复现你工作空间中仓库的状态。

@@ -4,153 +4,153 @@
 
 .. _Governance:
 
-Project Governance
-==================
+项目治理
+========
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-The Open Source Robotics Alliance (OSRA)
-----------------------------------------
+开放源代码机器人联盟（OSRA）
+----------------------------
 
-Since 2024, the ROS 2 project has been governed by the `Open Source Robotics Alliance (OSRA) <https://osralliance.org/>`__.
-The information below is meant to give a quick overview of the project governance, but for full information please see `the OSRA's website <https://osralliance.org/how-it-works/>`__.
+自 2024 年以来，ROS 2 项目由 `开放源代码机器人联盟（OSRA） <https://osralliance.org/>`__ 负责治理。
+下文旨在提供项目治理的简要概览，如需完整信息，请参见 `OSRA 官网 <https://osralliance.org/how-it-works/>`__.
 
-The Technical Governance Committee (TGC)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+技术治理委员会（TGC）
+^^^^^^^^^^^^^^^^^^^^^
 
-The Technical Governance Committee is responsible for the oversight of all projects within the OSRA.
-The TGC is made up of a combination of paid members, project management leaders, OSRF leaders, and members based on merits.
-For more details about the TGC, please see `the Charter for the OSRA <https://osralliance.org/staging/wp-content/uploads/2024/03/OSRA-Program-Charter.pdf>`__.
-One of the projects that the TGC oversees is ROS 2, which is managed by the ROS Project Management Committee.
+技术治理委员会负责监督 OSRA 内的所有项目。
+TGC 由付费成员、项目管理领导者、OSRF 领导者以及依据贡献评选出的成员组成。
+有关 TGC 的更多细节，请参见 `OSRA 章程 <https://osralliance.org/staging/wp-content/uploads/2024/03/OSRA-Program-Charter.pdf>`__。
+TGC 监督的项目之一是 ROS 2，它由 ROS 项目管理委员会负责管理。
 
-The ROS Project Management Committee (ROS PMC)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ROS 项目管理委员会（ROS PMC）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The ROS Project Management Committee is responsible for the day-to-day operations of the ROS 2 project.
-The ROS PMC consists of the Project Leader, the ROS PMC Members (who have full voting rights), a Supporting Individual Representative, and the Chair of the TGC.
-The project also has Committers, who help manage one or more repositories but are not a part of the PMC.
-The Project Leader, all PMC Members, and all Committers are chosen on a meritocratic basis.
+ROS 项目管理委员会负责 ROS 2 项目的日常运作。
+ROS PMC 由项目负责人、具有完整投票权的 ROS PMC 成员、支持性个人代表以及 TGC 主席组成。
+该项目还设有提交者（Committers），他们负责管理一个或多个仓库，但并非 PMC 成员。
+项目负责人、所有 PMC 成员和所有提交者均通过精英化方式选出。
 
-The day-to-day operations of the ROS PMC include managing the members and committers, managing the repositories that make up ROS 2, reviewing and merging code from the ROS community, maintaining the repositories, and making technical decisions that decide the direction of the project.
+ROS PMC 的日常运作包括管理成员与提交者、管理构成 ROS 2 的仓库、审查并合并来自 ROS 社区的代码、维护仓库，并做出决定项目方向的技术决策。
 
-For more details about the ROS PMC, please see the `Charter for the ROS Project <https://osralliance.org/staging/wp-content/uploads/2024/03/ros_project_charter.pdf>`__.
+有关 ROS PMC 的更多细节，请参见 `ROS 项目章程 <https://osralliance.org/staging/wp-content/uploads/2024/03/ros_project_charter.pdf>`__。
 
-ROS Project Management Committee (PMC) Meetings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ROS 项目管理委员会（PMC）会议
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Community members are encouraged to observe the ROS 2 PMC meetings and submit agenda items via a PMC constituent.
-To add an item to the ROS PMC agenda please contact one of the ROS PMC constituents list below.
-ROS PMC meetings are conducted using Zoom and presently occur every Tuesday at 17:00 UTC (09:00 PST / 12:00 EST / 18:00 CET / +1 02:00 JST).
-To join the ROS PMC meeting please use the `link available in our official OSRA Google calendar <https://calendar.google.com/calendar/u/0/embed?src=agf3kajirket8khktupm9go748@group.calendar.google.com&ctz=Etc%2FUTC>`__.
+社区成员可观察 ROS 2 PMC 会议，并通过 PMC 成员提交议程事项。
+要向 ROS PMC 议程添加事项，请联系下方任一 ROS PMC 成员。
+ROS PMC 会议使用 Zoom 举办，当前每周二 17:00 UTC（09:00 PST / 12:00 EST / 18:00 CET / +1 02:00 JST）举行。
+要加入 ROS PMC 会议，请使用 `OSRA 官方 Google 日历中可用的链接 <https://calendar.google.com/calendar/u/0/embed?src=agf3kajirket8khktupm9go748@group.calendar.google.com&ctz=Etc%2FUTC>`__。
 
-Current ROS PMC Constituents
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+当前 ROS PMC 成员
+^^^^^^^^^^^^^^^^^
 
-The ROS PMC currently consists of the following constituents:
+ROS PMC 当前由以下成员组成：
 
 .. list-table::
    :header-rows: 1
 
-   * - Name
-     - Affiliation
-     - GitHub handle
-     - PMC role
-     - Time Zone (optional)
+   * - 姓名
+     - 所属机构
+     - GitHub 账号
+     - PMC 角色
+     - 时区（可选）
    * - Christophe Bédard
      - `KUKA <https://www.kuka.com/>`_
      - `christophebedard <https://github.com/christophebedard>`_
-     - Member
+     - 成员
      - PST (UTC-8)/PDT (UTC-7)
    * - Michael Carroll
      - `KUKA <https://www.kuka.com/>`_
      - `mjcarroll <https://github.com/mjcarroll>`_
-     - (Interim) Project Leader
+     - （临时）项目负责人
      - CST (UTC-6)/CDT (UTC-5)
    * - Miguel Company
      - `eProsima <https://www.eprosima.com/>`_
      - `MiguelCompany <https://github.com/MiguelCompany>`_
-     - Member
+     - 成员
      - CET (UTC+1)/CEST (UTC+2)
    * - Tomoya Fujita
      - `TriOrb Inc. <https://triorb.co.jp/>`_
      - `fujitatomoya <https://github.com/fujitatomoya>`_
-     - Member
+     - 成员
      - JST (UTC+9)
    * - Marco A. Gutiérrez
      - `Intrinsic <https://www.intrinsic.ai/>`_
      - `marcoag <https://github.com/marcoag>`_
-     - Member
+     - 成员
      - SGT (UTC+8)
    * - Alejandro Hernandez Cordero
      - `Honu Robotics <https://www.honurobotics.com/>`_
      - `ahcorde <https://github.com/ahcorde>`_
-     - Member
+     - 成员
      - CET (UTC+1)/CEST (UTC+2)
    * - Emerson Knapp
      - `Polymath Robotics <https://www.polymathrobotics.com/>`_
      - `emersonknapp <https://github.com/emersonknapp/>`_
-     - Member
+     - 成员
      - PST (UTC-8)/PDT (UTC-7)
    * - Chris Lalancette
-     - Independent
+     - 独立
      - `clalancette <https://github.com/clalancette>`_
-     - Member (former Project Leader)
+     - 成员（前项目负责人）
      - N/A
    * - Scott Logan
      - `Intrinsic <https://www.intrinsic.ai/>`_
      - `cottsay <https://github.com/cottsay>`_
-     - Member
+     - 成员
      - CST (UTC-6)/CDT (UTC-5)
    * - Shane Loretz
      - `Intrinsic <https://www.intrinsic.ai/>`_
      - `sloretz <https://github.com/sloretz>`_
-     - Member
+     - 成员
      - PST (UTC-8)/PDT (UTC-7)
    * - Audrow Nash
      - `Intrinsic <https://www.intrinsic.ai/>`_
      - `Audrow <https://github.com/audrow>`_
-     - Member
+     - 成员
      - CST (UTC-6)/CDT (UTC-5)
    * - Michael Orlov
-     - Independent
+     - 独立
      - `MichaelOrlov <https://github.com/MichaelOrlov>`_
-     - Member
+     - 成员
      - PST (UTC-8)/PDT (UTC-7)
    * - Steven! Ragnarök
      - `Intrinsic <https://www.intrinsic.ai/>`_
      - `nuclearsandwich <https://github.com/nuclearsandwich>`_
-     - Member / Infrastructure Project Lead
+     - 成员 / 基础设施项目负责人
      - PST (UTC-8)/PDT (UTC-7)
    * - Alberto Soragna
      - `Outrider <https://www.outrider.ai/>`_
      - `alsora <https://github.com/alsora>`_
-     - Member
+     - 成员
      - CET (UTC+1)/CEST (UTC+2)
    * - Yadunund Vijay
      - `FieldAI <https://www.fieldai.com/>`_
      - `Yadunund <https://github.com/Yadunund>`_
-     - Member
+     - 成员
      - PST (UTC-8)/PDT (UTC-7)
    * - William Woodall
      - `Intrinsic <https://www.intrinsic.ai/>`_
      - `wjwwood <https://github.com/wjwwood>`_
-     - Member
+     - 成员
      - PST (UTC-8)/PDT (UTC-7)
 
-Current ROS Committers
-^^^^^^^^^^^^^^^^^^^^^^
+当前 ROS 提交者
+^^^^^^^^^^^^^^^
 
-The ROS committers (who are not also part of the ROS PMC) consists of the following constituents:
+ROS 提交者（他们同时也并非 ROS PMC 成员）由以下人员组成：
 
 .. list-table::
    :header-rows: 1
 
-   * - Name
-     - Affiliation
-     - GitHub handle
-     - Time Zone (optional)
+   * - 姓名
+     - 所属机构
+     - GitHub 账号
+     - 时区（可选）
    * - Barry Xu
      - `Sony <https://www.sony.com/>`_
      - `Barry-Xu-2018 <https://github.com/Barry-Xu-2018>`_
@@ -200,30 +200,30 @@ The ROS committers (who are not also part of the ROS PMC) consists of the follow
      - `YuanYuYuan <https://github.com/YuanYuYuan>`_
      - TST (UTC+8)
 
-Past ROS PMC Constituents
-^^^^^^^^^^^^^^^^^^^^^^^^^
+往届 ROS PMC 成员
+^^^^^^^^^^^^^^^^^
 
-The ROS PMC thanks the following past constituents for their service:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Name
-     - PMC role
-     - GitHub handle (optional)
-   * - None yet
-     - None yet
-     - None yet
-
-Repositories managed by the ROS PMC
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The following repositories are managed by the ROS PMC:
+ROS PMC 感谢以下往届成员所做的贡献：
 
 .. list-table::
    :header-rows: 1
 
-   * - Repository URL
+   * - 姓名
+     - PMC 角色
+     - GitHub 账号（可选）
+   * - 暂无
+     - 暂无
+     - 暂无
+
+由 ROS PMC 管理的仓库
+^^^^^^^^^^^^^^^^^^^^^
+
+以下仓库由 ROS PMC 管理：
+
+.. list-table::
+   :header-rows: 1
+
+   * - 仓库 URL
    * - https://github.com/ament/ament_cmake
    * - https://github.com/ament/ament_index
    * - https://github.com/ament/ament_lint
@@ -342,11 +342,11 @@ The following repositories are managed by the ROS PMC:
    * - https://github.com/ros2/urdf
    * - https://github.com/ros2/yaml_cpp_vendor
 
-Upcoming ROS Events
+即将举行的 ROS 活动
 -------------------
 
-Upcoming official Open Source Robotics Foundation events can be found in this `Google Calendar <https://calendar.google.com/calendar/embed?src=agf3kajirket8khktupm9go748%40group.calendar.google.com&ctz=America%2FLos_Angeles>`__.
-It can be accessed via `iCal <https://calendar.google.com/calendar/ical/agf3kajirket8khktupm9go748%40group.calendar.google.com/public/basic.ics>`__.
+即将举行的 Open Source Robotics Foundation 官方活动可在此 `Google 日历 <https://calendar.google.com/calendar/embed?src=agf3kajirket8khktupm9go748%40group.calendar.google.com&ctz=America%2FLos_Angeles>`__ 中找到。
+可通过 `iCal <https://calendar.google.com/calendar/ical/agf3kajirket8khktupm9go748%40group.calendar.google.com/public/basic.ics>`__ 访问。
 
 .. raw:: html
 
@@ -384,9 +384,9 @@ It can be accessed via `iCal <https://calendar.google.com/calendar/ical/agf3kaji
     </div>
     <br>
 
-Upcoming unofficial ROS community events can be found in this `Google Calendar <https://calendar.google.com/calendar/embed?src=c_3fc5c4d6ece9d80d49f136c1dcd54d7f44e1acefdbe87228c92ff268e85e2ea0@group.calendar.google.com>`__.
-It can be accessed via `iCal <https://calendar.google.com/calendar/ical/c_3fc5c4d6ece9d80d49f136c1dcd54d7f44e1acefdbe87228c92ff268e85e2ea0@group.calendar.google.com/public/basic.ics>`__.
-If you have an individual event or series of events that you'd like to post, please `submit it using this form <https://bit.ly/OSRFCalendarForm>`_.
+即将举行的非官方 ROS 社区活动可在此 `Google 日历 <https://calendar.google.com/calendar/embed?src=c_3fc5c4d6ece9d80d49f136c1dcd54d7f44e1acefdbe87228c92ff268e85e2ea0@group.calendar.google.com>`__ 中找到。
+可通过 `iCal <https://calendar.google.com/calendar/ical/c_3fc5c4d6ece9d80d49f136c1dcd54d7f44e1acefdbe87228c92ff268e85e2ea0@group.calendar.google.com/public/basic.ics>`__ 访问。
+如果您想要发布单项活动或系列活动，请填写 `此表单 <https://bit.ly/OSRFCalendarForm>`_ 提交。
 
 .. raw:: html
 

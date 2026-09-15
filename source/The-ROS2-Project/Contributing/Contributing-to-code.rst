@@ -1,5 +1,5 @@
-Contributing to code
-====================
+为代码做贡献
+============
 
 .. toctree::
    :maxdepth: 1

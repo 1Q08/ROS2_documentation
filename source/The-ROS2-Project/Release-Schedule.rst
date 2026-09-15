@@ -1,45 +1,45 @@
-Release Schedule
-================
+发布计划
+========
 
-Frequency
----------
-New ROS 2 releases are produced every **every 12 months**.
-The rationale is that a shorter cycle (like 6 months) results in significant overhead and potentially many active releases at the same time (assuming they have the same support length).
-On the other hand a longer cycle (like 2 years) is too long for users to wait for new features to be available in a ROS 2 release.
+频率
+----
+ROS 2 发布版本会每 **12 个月** 进行一次。
+原因是更短的周期（如 6 个月）会带来更高的协同成本，并可能同时存在许多处于活动状态的发布版本（假设它们具有相同的支持时长）。
+另一方面，更长的周期（如 2 年）会让用户等很久，才能在某个 ROS 2 发布中看到新功能。
 
-Targeted Platforms
-------------------
+目标平台
+--------
 
-Since non-LTS (long term support) Ubuntu releases are only supported for 9 months, ROS 2 will not target those non-LTS Ubuntu releases.
-A single ROS 2 distribution will only have full Tier 1 support for a **single** Ubuntu LTS.
-The rationale is that fully supporting two Ubuntu LTS versions is a tremendous overhead for our maintainers as there may be upstream dependencies that differ by up to two years .
-On a case-by-case basis, a ROS 2 distribution may support an older Ubuntu LTS distribution as a Tier 3, community-supported platform.
+由于非 LTS（长期支持）Ubuntu 版本仅提供 9 个月支持，ROS 2 不会针对这些非 LTS Ubuntu 版本进行发布。
+单个 ROS 2 发行版只会对一个 Ubuntu LTS 平台提供完整的 Tier 1 支持。
+原因是为两个 Ubuntu LTS 版本提供完整支持会产生极大维护成本，因为上游依赖项可能相差最多两年。
+在个案基础上，一个 ROS 2 发行版可以在 Tier 3（社区支持平台）中支持较旧的 Ubuntu LTS 发行版。
 
-Since both macOS (or at least brew) and Windows are rolling platforms, we aim to support the latest version available at the time of a ROS 2 distribution's release.
-For Debian we also aim to target the latest stable version; however, if that version is two years behind the Ubuntu version then it might not be possible.
+由于 macOS（至少通过 brew）和 Windows 都是滚动更新的平台，我们会尽量支持发布 ROS 2 发行版时可用的最新版本。
+对于 Debian，我们也会尽量支持最新稳定版本；然而，如果该版本比 Ubuntu 版本落后两年，可能就无法实现。
 
-Support
--------
+支持
+----
 
-LTS releases
+LTS 发布版本
 ^^^^^^^^^^^^
 
-Since Ubuntu LTS releases come with **5 years** of standard support, we aim for each ROS LTS distribution to have a similar support lifetime.
-In even years new ROS 2 releases will happen one month after the Ubuntu LTS has been released (which usually means a ROS 2 release in May).
-The ROS 2 release will be supported until the end of the standard support window of the Ubuntu LTS release, which is 4 years and 11 months from the ROS 2 release date.
+由于 Ubuntu LTS 版本提供 **5 年** 的标准支持，我们希望每个 ROS LTS 发行版也有相近的支持寿命。
+在偶数年份，新 ROS 2 发布版本会在 Ubuntu LTS 发布后一月推出（通常意味着 5 月发布）。
+ROS 2 发布版本将一直支持到该 Ubuntu LTS 版本的标准支持窗口结束，即从 ROS 2 发布之日起算 4 年 11 个月。
 
-Non-LTS Releases
-^^^^^^^^^^^^^^^^
+非 LTS 发布版本
+^^^^^^^^^^^^^^^
 
-In order to provide frequent releases to the community, in odd years a non-LTS ROS 2 release will be published.
-It will always target the same Ubuntu LTS as the previous ROS 2 LTS release but will only be supported for **1.5 years**.
-This duration ensures that the non-LTS will overlap with the next ROS LTS release by 6 months to provide a long enough transition window.
+为了让社区能够获得更频繁的发布，在奇数年份会发布一次非 LTS ROS 2 版本。
+它始终会针对上一代 ROS 2 LTS 发布版本相同的 Ubuntu LTS，但只支持 **1.5 年**。
+这一时长设计可确保非 LTS 版本与下一次 LTS 发布版本之间有 6 个月的重叠窗口，便于进行平滑过渡。
 
-Releases and support duration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+发布与支持持续时间
+^^^^^^^^^^^^^^^^^^
 
-- May 2025: Kilted Kaiju: non-LTS release, supported for 1.5 years
-- May 2026: Lyrical Luth: LTS release, supported for 5 years
-- May 2027: M Turtle: non-LTS release, supported for 1.5 years
-- May 2028: N Turtle: LTS release, supported for 5 years
-- and so on, alternating annually between LTS and non-LTS releases
+- 2025 年 5 月：Kilted Kaiju：非 LTS 发布版本，支持 1.5 年
+- 2026 年 5 月：Lyrical Luth：LTS 发布版本，支持 5 年
+- 2027 年 5 月：M Turtle：非 LTS 发布版本，支持 1.5 年
+- 2028 年 5 月：N Turtle：LTS 发布版本，支持 5 年
+- 以此类推，每年交替发布 LTS 和非 LTS 版本

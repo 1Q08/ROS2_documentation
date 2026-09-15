@@ -1,14 +1,14 @@
-Actions
-=======
+动作
+====
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
-In ROS 2, an action refers to a long-running remote procedure call with feedback and the ability to cancel or preempt the goal.
-For instance, the high-level state machine running a robot may call an action to tell the navigation subsystem to travel to a waypoint, which may take several seconds (or minutes) to do.
-Along the way, the navigation subsystem can provide feedback on how far along it is, and the high-level state machine has the option to cancel or preempt the travel to that waypoint.
+在 ROS 2 中，动作指的是一种长时间运行的远程过程调用，它带有反馈，并且能够取消或抢占目标。
+例如，运行机器人的高层状态机可能会调用一个动作，让导航子系统前往某个路点，这可能需要几秒（甚至几分钟）。
+在此过程中，导航子系统可以反馈自己的进度，而高层状态机则可以选择取消或抢占前往该路点的任务。
 
-This structure is reflected in how an action message definition looks:
+这种结构体现在动作消息定义的形式上：
 
 .. code::
 
@@ -18,19 +18,19 @@ This structure is reflected in how an action message definition looks:
    ---
    int32 feedback
 
-In ROS 2, actions are expected to be long running procedures, as there is overhead in setting up and monitoring the connection.
-If you need a short running remote procedure call, consider using a :doc:`service <About-Services>` instead.
+在 ROS 2 中，动作预期是长时间运行的过程，因为建立和监控连接本身有开销。
+如果您需要的是短时间的远程过程调用，请考虑改用 :doc:`服务 <About-Services>`。
 
-Actions are identified by an action name, which looks much like a topic name (but is in a different namespace).
+动作由动作名称标识，动作名称看起来很像话题名称（但处于不同的命名空间中）。
 
-An action consists of two parts: the action server and the action client.
+动作由两部分组成：动作服务端和动作客户端。
 
-Action server
--------------
+动作服务端
+----------
 
-The action server is the entity that will accept the remote procedure request and perform some procedure on it.
-It is also responsible for sending out feedback as the action progresses and should react to cancellation/preemption requests.
-For instance, consider an action to calculate the Fibonacci sequence with the following interface:
+动作服务端是接受远程过程请求并对其执行某种过程的实体。
+它还负责在动作推进过程中发出反馈，并应对取消/抢占请求做出反应。
+例如，考虑一个计算斐波那契数列的动作，其接口如下：
 
 .. code::
 
@@ -40,17 +40,17 @@ For instance, consider an action to calculate the Fibonacci sequence with the fo
    ---
    int32[] sequence
 
-The action server is the entity that receives this message, starts calculating the sequence up to ``order`` (providing feedback along the way), and finally returns a full result in ``sequence``.
+动作服务端就是接收这条消息、开始计算到 ``order`` 为止的数列（并在此过程中提供反馈），最后在 ``sequence`` 中返回完整结果的实体。
 
 .. note::
 
-   There should only ever be one action server per action name.
-   It is undefined which action server will receive client requests in the case of multiple action servers on the same action name.
+   每个动作名称只应有一个动作服务端。
+   如果同一动作名称上存在多个动作服务端，则由哪个动作服务端接收客户端请求是未定义的。
 
-Action client
--------------
+动作客户端
+----------
 
-An action client is an entity that will request a remote action server to perform a procedure on its behalf.
-Following the example above, the action client is the entity that creates the initial message containing the ``order``, and waits for the action server to compute the sequence and return it (with feedback along the way).
+动作客户端是会请求远程动作服务端替它执行过程的实体。
+沿用上面的例子，动作客户端就是创建包含 ``order`` 的初始消息，并等待动作服务端计算数列并返回结果（同时一路上提供反馈）的实体。
 
-Unlike the action server, there can be arbitrary numbers of action clients using the same action name.
+与动作服务端不同，使用同一动作名称的动作客户端可以有任意多个。

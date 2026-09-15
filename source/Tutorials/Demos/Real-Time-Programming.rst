@@ -3,58 +3,58 @@
     Real-Time-Programming
     Tutorials/Real-Time-Programming
 
-Understanding real-time programming
-===================================
+理解实时编程
+============
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-Real-time computing is a key feature of many robotics systems, particularly safety- and mission-critical applications such as autonomous vehicles, spacecrafts, and industrial manufacturing.
-We are designing and prototyping ROS 2 with real-time performance constraints in mind, since this is a requirement that was not considered in the early stages of ROS 1 and it is now intractable to refactor ROS 1 to be real-time friendly.
+实时计算是许多机器人系统的关键特性，尤其是安全关键和任务关键型应用，例如自动驾驶汽车、航天器和工业制造。
+我们在设计和原型化 ROS 2 时考虑了实时性能约束，因为这是 ROS 1 早期阶段未考虑的需求，而现在重构 ROS 1 使其对实时友好已经变得难以实现。
 
-`This document <https://design.ros2.org/articles/realtime_background.html>`__ outlines the requirements of real-time computing and best practices for software engineers.
-In short:
+`本文档 <https://design.ros2.org/articles/realtime_background.html>`__ 概述了实时计算的需求以及面向软件工程师的最佳实践。
+简而言之：
 
-To make a real-time computer system, our real-time loop must update periodically to meet deadlines.
-We can only tolerate a small margin of error on these deadlines (our maximum allowable jitter).
-To do this, we must avoid nondeterministic operations in the execution path, things like: pagefault events, dynamic memory allocation/deallocation, and synchronization primitives that block indefinitely.
+要构建实时计算机系统，我们的实时循环必须定期更新以满足截止时间。
+我们只能容忍这些截止时间上的很小误差（我们允许的最大抖动）。
+为此，我们必须避免执行路径中的非确定性操作，例如：缺页事件、动态内存分配/释放，以及无限期阻塞的同步原语。
 
-A classic example of a controls problem commonly solved by real-time computing is balancing an `inverted pendulum <https://en.wikipedia.org/wiki/Inverted_pendulum>`__.
-If the controller blocked for an unexpectedly long amount of time, the pendulum would fall down or go unstable.
-But if the controller reliably updates at a rate faster than the motor controlling the pendulum can operate, the pendulum will successfully adapt react to sensor data to balance the pendulum.
+一个经典的、通常由实时计算解决的控制问题示例是平衡一个 `倒立摆 <https://en.wikipedia.org/wiki/Inverted_pendulum>`__。
+如果控制器阻塞了出乎意料长的时间，摆就会倒下或变得不稳定。
+但如果控制器可靠地以比控制摆的电机运行速度更快的速率更新，摆将成功地根据传感器数据自适应反应以保持平衡。
 
-Now that you know everything about real-time computing, let's try a demo!
+既然你已经了解了关于实时计算的一切，让我们试试演示！
 
-Install and run the demo
-------------------------
+安装并运行演示
+--------------
 
-The real-time demo was written with Linux operating systems in mind, since many members of the ROS community doing real-time computing use Xenomai or RT_PREEMPT as their real-time solutions.
-Since many of the operations done in the demo to optimize performance are OS-specific, the demo only builds and runs on Linux systems.
-**So, if you are an OSX or Windows user, don't try this part!**
+实时演示是面向 Linux 操作系统编写的，因为 ROS 社区中许多做实时计算的成员使用 Xenomai 或 RT_PREEMPT 作为他们的实时解决方案。
+由于演示中为优化性能所做的许多操作都是 OS 特定的，该演示只能在 Linux 系统上构建和运行。
+**所以，如果你是 OSX 或 Windows 用户，不要尝试这一部分！**
 
-Also this must be built from source using a static DDS API.
-**Currently the only supported implementation is ConnextDDS**.
+此外，这必须使用静态 DDS API 从源代码构建。
+**目前唯一支持的实现是 ConnextDDS**。
 
-First, follow the instructions to build ROS 2 :doc:`from source <../../Installation/Alternatives/Ubuntu-Development-Setup>` using Connext DDS as the middleware.
+首先，按照说明使用 Connext DDS 作为中间件从源代码 :doc:`构建 ROS 2 <../../Installation/Alternatives/Ubuntu-Development-Setup>`。
 
-Run the tests
-^^^^^^^^^^^^^
+运行测试
+^^^^^^^^
 
-**Before you run make sure you have at least 8Gb of RAM free.
-With the memory locking, swap will not work anymore.**
+**运行之前请确保你至少有 8Gb 的空闲 RAM。
+一旦锁定了内存，swap 将不再工作。**
 
-Source your ROS 2 ``setup.bash``:
+Source 你的 ROS 2 ``setup.bash``：
 
 .. code-block:: console
 
    $ source ./install/setup.bash
 
-Run the demo binary.
-You may want to use ``sudo`` in case you get permission error:
+运行演示二进制文件。
+如果你遇到权限错误，可能需要使用 ``sudo``：
 
 .. code-block:: console
 
@@ -71,7 +71,7 @@ You may want to use ``sudo`` in case you get permission error:
       - Mean: 14229.182000 ns
       - Standard deviation: 12288.040996
 
-You could see the following error output to the console (from stderr):
+你可能会看到以下错误输出到控制台（来自 stderr）：
 
 .. code-block:: console
 
@@ -79,12 +79,12 @@ You could see the following error output to the console (from stderr):
    Couldn't lock all cached virtual memory.
    Pagefaults from reading pages not yet mapped into RAM will be recorded.
 
-After the initialization stage of the demo program, it will attempt to lock all cached memory into RAM and prevent future dynamic memory allocations using ``mlockall``.
-This is to prevent pagefaults from loading lots of new memory into RAM.
-(See `the realtime design article <https://design.ros2.org/articles/realtime_background.html#memory-management>`__ for more information.)
+在演示程序的初始化阶段之后，它将尝试把所有缓存的内存锁到 RAM 中，并使用 ``mlockall`` 阻止未来的动态内存分配。
+这是为了防止加载大量新内存到 RAM 时产生缺页。
+（更多信息请参阅 `实时设计文章 <https://design.ros2.org/articles/realtime_background.html#memory-management>`__。）
 
-The demo will continue on as usual when this occurs.
-You could also see the output as following, that means the number of pagefaults encountered during execution:
+发生这种情况时，演示会照常继续。
+你还可能看到如下输出，它表示执行期间遇到的缺页次数：
 
 ::
 
@@ -92,48 +92,48 @@ You could also see the output as following, that means the number of pagefaults 
      - Minor pagefaults: 20
      - Major pagefaults: 0
 
-If we want those pagefaults to go away, we'll have to...
+如果我们想让那些缺页消失，我们就必须...
 
-Adjust permissions for memory locking
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+调整内存锁定的权限
+^^^^^^^^^^^^^^^^^^
 
-Add to ``/etc/security/limits.conf`` (as sudo):
+（以 sudo 身份）添加到 ``/etc/security/limits.conf``：
 
 ::
 
-   <your username>    -   memlock   <limit in kB>
+   <你的用户名>    -   memlock   <限制（kB）>
 
-A limit of ``-1`` is unlimited.
-If you choose this, you may need to accompany it with ``ulimit -l unlimited`` after editing the file.
+限制为 ``-1`` 表示无限制。
+如果你选择这个，可能需要在编辑文件后（以 root 身份）配合执行 ``ulimit -l unlimited``。
 
-After saving the file, log out and log back in.
-Then rerun the ``pendulum_demo`` invocation.
+保存文件后，注销并重新登录。
+然后重新运行 ``pendulum_demo`` 调用。
 
-You'll either see zero pagefaults in your output file, or an error saying that a bad_alloc exception was caught.
-If this happened, you didn't have enough free memory available to lock the memory allocated for the process into RAM.
-You'll need to install more RAM in your computer to see zero pagefaults!
+你要么会在输出文件中看到零缺页，要么会看到一个错误，说明捕获到 bad_alloc 异常。
+如果发生这种情况，说明你没有足够的空闲内存来将进程分配的内存锁到 RAM 中。
+你需要为计算机安装更多 RAM 才能看到零缺页！
 
-Output overview
-^^^^^^^^^^^^^^^
+输出概览
+^^^^^^^^
 
-To see more output, we have to run the ``pendulum_logger`` node.
+要看到更多输出，我们必须运行 ``pendulum_logger`` 节点。
 
-In one shell with your ``install/setup.bash`` sourced, invoke:
+在一个已 source 你的 ``install/setup.bash`` 的 shell 中，执行：
 
 .. code-block:: console
 
    $ ros2 run pendulum_control pendulum_logger
 
 
-You should see the output message:
+你应该会看到输出消息：
 
 ::
 
    Logger node initialized.
 
-In another shell with setup.bash sourced, invoke ``pendulum_demo`` again.
+在另一个已 source setup.bash 的 shell 中，再次调用 ``pendulum_demo``。
 
-As soon as this executable starts, you should see the other shell constantly printing output:
+一旦这个可执行文件启动，你应该会看到另一个 shell 不断打印输出：
 
 ::
 
@@ -145,19 +145,19 @@ As soon as this executable starts, you should see the other shell constantly pri
    Minor pagefaults during execution: 0
    Major pagefaults during execution: 0
 
-The demo is controlling a very simple inverted pendulum simulation.
-The pendulum simulation calculates its position in its own thread.
-A ROS node simulates a motor encoder sensor for the pendulum and publishes its position.
-Another ROS node acts as a simple PID controller and calculates the next command message.
+该演示控制着一个非常简单的倒立摆模拟。
+摆模拟在其自己的线程中计算其位置。
+一个 ROS 节点模拟摆的电机编码器传感器并发布其位置。
+另一个 ROS 节点充当简单的 PID 控制器并计算下一条命令消息。
 
-The logger node periodically prints out the pendulum's state and the runtime performance statistics of the demo during its execution phase.
+logger 节点定期打印摆的状态，以及演示在执行阶段的运行时性能统计。
 
-After the ``pendulum_demo`` is finished, you'll have to CTRL-C out of the logger node to exit.
+``pendulum_demo`` 完成后，你必须 CTRL-C 退出 logger 节点。
 
-Latency
-^^^^^^^
+延迟
+^^^^
 
-At the ``pendulum_demo`` execution, you'll see the final statistics collected for the demo:
+在 ``pendulum_demo`` 执行时，你会看到为演示收集的最终统计：
 
 ::
 
@@ -173,64 +173,64 @@ At the ``pendulum_demo`` execution, you'll see the final statistics collected fo
    PendulumMotor received 985 messages
    PendulumController received 987 messages
 
-The latency fields show you the minimum, maximum, and average latency of the update loop in nanoseconds.
-Here, latency means the amount of time after the update was expected to occur.
+延迟字段以纳秒为单位显示更新循环的最小、最大和平均延迟。
+这里，延迟是指更新预期发生之后过去的时间量。
 
-The requirements of a real-time system depend on the application, but let's say in this demo we have a 1kHz (1 millisecond) update loop, and we're aiming for a maximum allowable latency of 5% of our update period.
+实时系统的需求取决于应用，但假设在本演示中我们有一个 1kHz（1 毫秒）的更新循环，我们的目标是允许的最大延迟为更新周期的 5%。
 
-So, our average latency was really good in this run, but the maximum latency was unacceptable because it actually exceeded our update loop!
-What happened?
+所以，这次运行中我们的平均延迟真的很好，但最大延迟是不可接受的，因为它实际上超出了我们的更新循环！
+发生了什么？
 
-We may be suffering from a non-deterministic scheduler.
-If you're running a vanilla Linux system and you don't have the RT_PREEMPT kernel installed, you probably won't be able to meet the real-time goal we set for ourselves, because the Linux scheduler won't allow you to arbitrarily preempt threads at the user level.
+我们可能正受到非确定性调度器的影响。
+如果你运行的是原生 Linux 系统，且没有安装 RT_PREEMPT 内核，你可能无法达到我们为自己设定的实时目标，因为 Linux 调度器不允许你在用户级别任意抢占线程。
 
-See the `realtime design article <https://design.ros2.org/articles/realtime_background.html#multithreaded-programming-and-synchronization>`__ for more information.
+更多信息请参阅 `实时设计文章 <https://design.ros2.org/articles/realtime_background.html#multithreaded-programming-and-synchronization>`__。
 
-The demo attempts to set the scheduler and thread priority of the demo to be suitable for real-time performance.
-If this operation failed, you'll see an error message: "Couldn't set scheduling priority and policy: Operation not permitted".
-You can get slightly better performance by following the instructions in the next section:
+该演示尝试将演示的调度器和线程优先级设置为适合实时性能的值。
+如果此操作失败，你会看到错误消息：“Couldn't set scheduling priority and policy: Operation not permitted”。
+你可以按照下一节的说明获得略好的性能：
 
-Setting permissions for the scheduler
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+设置调度器的权限
+^^^^^^^^^^^^^^^^
 
-Add to ``/etc/security/limits.conf`` (as sudo):
+（以 sudo 身份）添加到 ``/etc/security/limits.conf``：
 
 ::
 
-   <your username>    -   rtprio   98
+   <你的用户名>    -   rtprio   98
 
-The range of the rtprio (real-time priority) field is 0-99.
-However, do NOT set the limit to 99 because then your processes could interfere with important system processes that run at the top priority (e.g. watchdog).
-This demo will attempt to run the control loop at priority 98.
+rtprio（实时优先级）字段的范围是 0-99。
+但是，不要将限制设置为 99，因为那样你的进程可能会干扰以最高优先级运行的重要系统进程（例如 watchdog）。
+本演示将尝试以优先级 98 运行控制循环。
 
-Plotting results
-^^^^^^^^^^^^^^^^
+绘制结果
+^^^^^^^^
 
-You can plot the latency and pagefault statistics that are collected in this demo after the demo runs.
+你可以在演示运行后绘制本演示中收集的延迟和缺页统计。
 
-Because the code has been instrumented with `rttest <https://github.com/ros2/rttest>`__, there are useful command line arguments available:
+由于代码已经用 `rttest <https://github.com/ros2/rttest>`__ 进行了插桩，因此有一些有用的命令行参数可用：
 
 +---------+---------------------------------------------------------------------+---------------+
-| Command | Description                                                         | Default value |
+| 命令    | 描述                                                                | 默认值        |
 +---------+---------------------------------------------------------------------+---------------+
-| -i      | Specify how many iterations to run the real-time loop               | 1000          |
+| -i      | 指定实时循环要运行的迭代次数                                        | 1000          |
 +---------+---------------------------------------------------------------------+---------------+
-| -u      | Specify the update period with the default unit being microseconds  | 1ms           |
+| -u      | 指定更新周期，默认单位为微秒                                        | 1ms           |
 |         |                                                                     |               |
-|         | Use the suffix "s" for seconds, "ms" for milliseconds,              |               |
+|         | 使用后缀 "s" 表示秒，"ms" 表示毫秒，                                |               |
 |         |                                                                     |               |
-|         | "us" for microseconds, and "ns" for nanoseconds                     |               |
+|         | "us" 表示微秒，"ns" 表示纳秒                                        |               |
 +---------+---------------------------------------------------------------------+---------------+
-| -f      | Specify the name of the file for writing the collected data         |               |
+| -f      | 指定写入收集数据的文件名                                            |               |
 +---------+---------------------------------------------------------------------+---------------+
 
-Run the demo again with a filename to save results:
+再次运行演示，并指定保存结果的文件名：
 
 .. code-block:: console
 
    $ ros2 run pendulum_control pendulum_demo -f pendulum_demo_results
 
-Then run the ``rttest_plot`` script on the resulting file:
+然后在生成的文件上运行 ``rttest_plot`` 脚本：
 
 .. code-block:: console
 
@@ -238,12 +238,13 @@ Then run the ``rttest_plot`` script on the resulting file:
    Writing results to file: pendulum_demo_results
    ...
 
-This script will produce three files:
+此脚本将生成许多文件：
 
 ::
 
    pendulum_demo_results_plot_latency.svg
+   pendulum_demo_results_plot_latency_hist.svg
    pendulum_demo_results_plot_majflts.svg
    pendulum_demo_results_plot_minflts.svg
 
-You can view these plots in an image viewer of your choice.
+你可以在你选择的图像查看器中查看这些绘图。

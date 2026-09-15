@@ -1,39 +1,39 @@
-Setting up a Reset Handler
-==========================
+设置重置处理器
+==============
 
-**Goal:** Extend a robot simulation with a reset handler to restart nodes when the reset button of Webots is pressed.
+**目标：** 使用重置处理器扩展机器人仿真，以便在按下 Webots 的重置按钮时重启节点。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 10 minutes
+**用时：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-In this tutorial, you will learn how to implement a reset handler in a robot simulation using Webots.
-The Webots reset button reverts the world to the initial state and restarts controllers.
-It is convenient as it quickly resets the simulation, but in the context of ROS 2, robot controllers are not started again making the simulation stop.
-The reset handler allows you to restart specific nodes or perform additional actions when the reset button in Webots is pressed.
-This can be useful for scenarios where you need to reset the state of your simulation or restart specific components without completely restarting the complete ROS system.
+在本教程中，你将学习如何使用 Webots 在机器人仿真中实现重置处理器。
+Webots 的重置按钮会将世界恢复到初始状态并重启控制器。
+它很方便，因为它可以快速重置仿真，但在 ROS 2 的上下文中，机器人控制器不会再次启动，导致仿真停止。
+重置处理器允许你在按下 Webots 中的重置按钮时重启特定节点或执行额外操作。
+这对于需要重置仿真状态或重启特定组件而无需完全重启整个 ROS 系统的场景非常有用。
 
-Prerequisites
--------------
+前置条件
+--------
 
-Before proceeding with this tutorial, make sure you have completed the following:
+在继续本教程之前，请确保你已完成以下内容：
 
-- Understanding of ROS 2 nodes and topics covered in the beginner :doc:`../../../../Tutorials`.
-- Knowledge of Webots and ROS 2 and its interface package.
-- Familiarity with :doc:`./Setting-Up-Simulation-Webots-Basic`.
+- 理解初学者 :doc:`../../../../Tutorials` 中涵盖的 ROS 2 节点和话题。
+- 了解 Webots、ROS 2 及其接口包。
+- 熟悉 :doc:`./Setting-Up-Simulation-Webots-Basic`。
 
 
-Reset Handler for Simple Cases (Controllers Only)
--------------------------------------------------
+简单场景的重置处理器（仅控制器）
+--------------------------------
 
-In the launch file of your package, add the ``respawn`` parameter.
+在你的包的启动文件中，添加 ``respawn`` 参数。
 
 .. code-block:: python
 
@@ -56,14 +56,14 @@ In the launch file of your package, add the ``respawn`` parameter.
           robot_driver
       ])
 
-On reset, Webots kills all driver nodes.
-Therefore, to start them again after reset, you should set the ``respawn`` property of the driver node to ``True``.
-It will ensure driver nodes are up and running after the reset.
+重置时，Webots 会终止所有驱动节点。
+因此，要在重置后再次启动它们，你应该将驱动节点的 ``respawn`` 属性设置为 ``True``。
+它将确保驱动节点在重置后正常运行。
 
-Reset Handler for Multiple Nodes (No Shutdown Required)
--------------------------------------------------------
+多节点的重置处理器（无需关闭）
+------------------------------
 
-If you have some other nodes that have to be started along with the driver node (e.g. ``ros2_control`` nodes), then you can use the ``OnProcessExit`` event handler:
+如果你有一些必须与驱动节点一起启动的其他节点（例如 ``ros2_control`` 节点），那么你可以使用 ``OnProcessExit`` 事件处理器：
 
 .. code-block:: python
 
@@ -106,20 +106,20 @@ If you have some other nodes that have to be started along with the driver node 
           reset_handler
       ] + get_ros2_control_spawners())
 
-It is not possible to use the ``respawn`` property on the ``ros2_control`` node, as the spawner exits during launch time and not when the simulation is reset.
-Instead we should declare a list of nodes in a function (e.g. ``get_ros2_control_spawners``).
-The nodes of this list are started along other nodes when executing the launch file.
-With the ``reset_handler``, the function is also declared as action to start when the ``robot_driver`` node exits, which corresponds to the moment when the simulation is reset in the Webots interface.
-The ``robot_driver`` node still has the ``respawn`` property set to ``True``, so that it gets restarted along with ``ros2_control`` nodes.
+无法在 ``ros2_control`` 节点上使用 ``respawn`` 属性，因为 spawner 是在启动时退出，而不是在仿真重置时退出。
+相反，我们应该在一个函数（例如 ``get_ros2_control_spawners``）中声明一个节点列表。
+此列表中的节点在执行启动文件时与其他节点一起启动。
+使用 ``reset_handler``，该函数还被声明为在 ``robot_driver`` 节点退出时要启动的操作，这对应着在 Webots 界面中重置仿真的时刻。
+``robot_driver`` 节点仍将 ``respawn`` 属性设置为 ``True``，以便它与 ``ros2_control`` 节点一起被重启。
 
-Reset Handler Requiring Node Shutdown
--------------------------------------
+需要关闭节点的重置处理器
+------------------------
 
-With the current ROS 2 launch API, there is no way to make the reset work in launch files where nodes need to be shutdown before the restart (e.g. ``Nav2`` or ``RViz``).
-The reason is that currently, ROS 2 doesn't allow to shutdown specific nodes from a launch file.
-There is a solution, but it requires to manually restart nodes after pushing the reset button.
+在当前的 ROS 2 launch API 中，无法让重置在节点需要在重启前关闭的启动文件中工作（例如 ``Nav2`` 或 ``RViz``）。
+原因是目前 ROS 2 不允许从启动文件关闭特定节点。
+有一个解决方案，但它需要在按下重置按钮后手动重启节点。
 
-Webots needs to be started in a specific launch file without other nodes.
+Webots 需要在一个不带其他节点的特定启动文件中启动。
 
 .. code-block:: python
 
@@ -132,8 +132,8 @@ Webots needs to be started in a specific launch file without other nodes.
       ])
 
 
-A second launch file must be started from another process.
-This launch file contains all other nodes, including robot controllers/plugins, Navigation2 nodes, RViz, state publishers, etc.
+第二个启动文件必须从另一个进程启动。
+此启动文件包含所有其他节点，包括机器人控制器/插件、Navigation2 节点、RViz、状态发布者等。
 
 .. code-block:: python
 
@@ -182,12 +182,12 @@ This launch file contains all other nodes, including robot controllers/plugins, 
           shutdown_handler
       ])
 
-The second launch file contains a handler that triggers a shutdown event when the driver node exits (which is the case when the simulation is reset).
-This second launch file must be manually restarted from the command line after pressing the reset button.
+第二个启动文件包含一个处理器，当驱动节点退出时（即仿真被重置时的情况）触发关闭事件。
+此第二个启动文件必须在按下重置按钮后从命令行手动重启。
 
-Summary
--------
+总结
+----
 
-In this tutorial, you learned how to implement a reset handler in a robot simulation using Webots.
-The reset handler allows you to restart specific nodes or perform additional actions when the reset button in Webots is pressed.
-You explored different approaches based on the complexity of your simulation and the requirements of your nodes.
+在本教程中，你学习了如何使用 Webots 在机器人仿真中实现重置处理器。
+重置处理器允许你在按下 Webots 中的重置按钮时重启特定节点或执行额外操作。
+你根据仿真的复杂性和节点的需求探索了不同的方法。

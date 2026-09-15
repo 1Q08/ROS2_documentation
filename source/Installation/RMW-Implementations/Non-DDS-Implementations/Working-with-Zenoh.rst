@@ -1,53 +1,53 @@
 Zenoh
 =====
 
-Zenoh is an open source communication protocol and middleware designed to facilitate efficient data distribution across heterogeneous systems.
-It provides location-transparent abstractions for high performance pub/sub and distributed queries.
-See also: https://zenoh.io/docs/getting-started/first-app/
+Zenoh 是一种开源通信协议和中间件，旨在促进在异构系统之间高效地分发数据。
+它为高性能的发布/订阅和分布式查询提供了与位置无关的抽象。
+另请参阅：https://zenoh.io/docs/getting-started/first-app/
 
-Prerequisites
--------------
+前置条件
+--------
 
-Have :doc:`rosdep installed <../../../Tutorials/Intermediate/Rosdep>`.
+已 :doc:`安装 rosdep <../../../Tutorials/Intermediate/Rosdep>`。
 
-Installation packages
----------------------
+安装软件包
+----------
 
-The rmw implementation Zenoh can be installed via binaries, recommended for stable development.
+RMW 实现 Zenoh 可以通过二进制包安装，推荐用于稳定的开发。
 
-Binary packages for supported ROS 2 distributions (see distro branches) are available on respective Tier-1 platforms for the distributions.
-First ensure that your system is set up to install ROS 2 binaries by following the instructions here.
+支持的 ROS 2 发行版（参见发行版分支）的二进制包可在各发行版对应的 Tier-1 平台上获取。
+首先请按照此处的说明，确保你的系统已配置好以安装 ROS 2 二进制包。
 
-Then install rmw_zenoh binaries using the command
+然后使用以下命令安装 rmw_zenoh 二进制包
 
 .. code-block:: bash
 
    sudo apt install ros-{DISTRO}-rmw-zenoh-cpp
 
-Build from source code
-----------------------
+从源码构建
+----------
 
-Building from source is only recommended if latest features are needed.
+仅当需要最新特性时，才推荐从源码构建。
 
-By default, we vendor and compile ``zenoh-cpp`` with a subset of zenoh features.
-The ``ZENOHC_CARGO_FLAGS`` CMake argument may be overwritten with other features included if required.
-See `zenoh_cpp_vendor/CMakeLists.txt <https://github.com/ros2/rmw_zenoh/blob/{DISTRO}/zenoh_cpp_vendor/CMakeLists.txt>`__ for more details.
+默认情况下，我们内置并编译带有 zenoh 特性子集的 ``zenoh-cpp``。
+如有需要，可以覆盖 ``ZENOHC_CARGO_FLAGS`` CMake 参数以包含其他特性。
+更多详情请参阅 `zenoh_cpp_vendor/CMakeLists.txt <https://github.com/ros2/rmw_zenoh/blob/{DISTRO}/zenoh_cpp_vendor/CMakeLists.txt>`__。
 
-1. Clone the repository
+1. 克隆仓库
 
 .. code-block:: bash
 
     mkdir ~/ws_rmw_zenoh/src -p && cd ~/ws_rmw_zenoh/src
     git clone https://github.com/ros2/rmw_zenoh.git -b {DISTRO}
 
-1. Install dependencies:
+1. 安装依赖项：
 
 .. code-block:: bash
 
     cd ~/ws_rmw_zenoh
     rosdep install --from-paths src --ignore-src --rosdistro {DISTRO} -y
 
-3. Build the workspace using Colcon:
+3. 使用 Colcon 构建工作空间：
 
 .. code-block:: bash
 
@@ -55,21 +55,21 @@ See `zenoh_cpp_vendor/CMakeLists.txt <https://github.com/ros2/rmw_zenoh/blob/{DI
     colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 
-Switch to rmw_zenoh_cpp
-------------------------
+切换到 rmw_zenoh_cpp
+--------------------
 
-Switch from other rmw to rmw_zenoh_cpp by specifying the environment variable.
+通过指定环境变量，从其他 rmw 切换到 rmw_zenoh_cpp。
 
 .. code-block:: bash
 
    export RMW_IMPLEMENTATION=rmw_zenoh_cpp
 
-Run the talker and listener
----------------------------
+运行 talker 和 listener
+-----------------------
 
-Now run ``talker`` and ``listener`` to test Zenoh.
+现在运行 ``talker`` 和 ``listener`` 来测试 Zenoh。
 
-Start the Zenoh router
+启动 Zenoh 路由器
 
 .. code-block:: bash
 
@@ -77,8 +77,8 @@ Start the Zenoh router
    source /opt/ros/{DISTRO}/setup.bash
    ros2 run rmw_zenoh_cpp rmw_zenohd
 
-.. note:: Without the Zenoh router, nodes will not be able to discover each other since multicast discovery is disabled by default in the node's session config.
-    Instead, nodes will receive discovery information about other peers via the Zenoh router's gossip functionality.
+.. note:: 如果没有 Zenoh 路由器，节点将无法彼此发现，因为在节点的会话配置中默认禁用了多播发现。
+    取而代之，节点会通过 Zenoh 路由器的 gossip 功能接收有关其他对等节点的发现信息。
 
 .. code-block:: bash
 
@@ -94,5 +94,5 @@ Start the Zenoh router
    source /opt/ros/{DISTRO}/setup.bash
    ros2 run demo_nodes_cpp listener
 
-.. note:: Remember to source your ROS 2 setup script before running these commands.
+.. note:: 在运行这些命令之前，请记得加载你的 ROS 2 安装脚本。
 

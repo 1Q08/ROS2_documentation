@@ -1,23 +1,23 @@
-Makoa Mata-mata Supported Platforms
-===================================
+Makoa Mata-mata 支持的平台
+==========================
 
-ROS Makoa supports the following platforms according to :doc:`the platform support tiers <../../The-ROS2-Project/Platform-Support-Tiers>`:
-
-TODO
-
-Minimum Language Requirements
------------------------------
+ROS Makoa 根据 :doc:`平台支持层级 <../../The-ROS2-Project/Platform-Support-Tiers>` 支持以下平台：
 
 TODO
 
-Dependency Requirements
------------------------
+最低语言要求
+------------
 
 TODO
 
-Middleware Implementation support
----------------------------------
+依赖项要求
+----------
 
-The default middleware in ROS Makoa is **TODO**.
+TODO
+
+中间件实现支持
+--------------
+
+ROS Makoa 中的默认中间件是 **TODO**.
 
 TODO

@@ -1,7 +1,7 @@
-Advanced Concepts
-=================
+高级概念
+========
 
-These conceptual documents are intended for developers who plan to modify or contribute to the ROS 2 core.
+这些概念文档面向计划修改或为 ROS 2 核心做贡献的开发者。
 
 .. toctree::
    :maxdepth: 1

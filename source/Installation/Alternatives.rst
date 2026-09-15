@@ -1,7 +1,7 @@
-Alternatives
+备选安装方式
 ============
 
-A list of alternative ways to install ROS 2 – whether it's by building from source or installing a binary.
+安装 ROS 2 的备选方式列表——无论是通过源码构建还是安装二进制包。
 
 .. toctree::
    :maxdepth: 1

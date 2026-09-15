@@ -4,60 +4,60 @@
 
 .. _CppPubSub:
 
-Writing a simple publisher and subscriber (C++)
-===============================================
+编写一个简单的发布者和订阅者（C++）
+===================================
 
-**Goal:** Create and run a publisher and subscriber node using C++.
+**目标：** 使用 C++ 创建并运行发布者和订阅者节点。
 
-**Tutorial level:** Beginner
+**教程级别：** 初级
 
-**Time:** 20 minutes
+**时间：** 20 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-:doc:`Nodes <../Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes>` are executable processes that communicate over the ROS graph.
-In this tutorial, the nodes will pass information in the form of string messages to each other over a :doc:`topic <../Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics>`.
-The example used here is a simple "talker" and "listener" system; one node publishes data and the other subscribes to the topic so it can receive that data.
+:doc:`节点 <../Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes>` 是通过 ROS 图进行通信的可执行进程。
+在本教程中，节点将通过 :doc:`话题 <../Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics>` 以字符串消息的形式相互传递信息。
+这里使用的例子是一个简单的“说者”（talker）和“听者”（listener）系统；一个节点发布数据，另一个节点订阅话题以接收该数据。
 
-The code used in these examples can be found `here <https://github.com/ros2/examples/tree/{REPOS_FILE_BRANCH}/rclcpp/topics>`__.
+这些例子中使用的代码可以在 `这里 <https://github.com/ros2/examples/tree/{REPOS_FILE_BRANCH}/rclcpp/topics>`__ 找到。
 
-Prerequisites
--------------
+前置条件
+--------
 
-In previous tutorials, you learned how to :doc:`create a workspace <./Creating-A-Workspace/Creating-A-Workspace>` and :doc:`create a package <./Creating-Your-First-ROS2-Package>`.
+在前面的教程中，你学习了如何 :doc:`创建工作空间 <./Creating-A-Workspace/Creating-A-Workspace>` 和 :doc:`创建包 <./Creating-Your-First-ROS2-Package>`。
 
-Tasks
------
+任务
+----
 
-1 Create a package
-^^^^^^^^^^^^^^^^^^
+1 创建一个包
+^^^^^^^^^^^^
 
-Open a new terminal and :doc:`source your ROS 2 installation <../Beginner-CLI-Tools/Configuring-ROS2-Environment>` so that ``ros2`` commands will work.
+打开一个新终端，并 :doc:`source 你的 ROS 2 安装环境 <../Beginner-CLI-Tools/Configuring-ROS2-Environment>`，这样 ``ros2`` 命令才能正常工作。
 
-Navigate into the ``ros2_ws`` directory created in a :ref:`previous tutorial <new-directory>`.
+进入在 :ref:`之前的教程 <new-directory>` 中创建的 ``ros2_ws`` 目录。
 
-Recall that packages should be created in the ``src`` directory, not the root of the workspace.
-So, navigate into ``ros2_ws/src``, and run the package creation command:
+请记住，包应该在 ``src`` 目录中创建，而不是在工作空间的根目录。
+因此，进入 ``ros2_ws/src``，然后运行包创建命令：
 
 .. code-block:: console
 
     $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 cpp_pubsub
 
-Your terminal will return a message verifying the creation of your package ``cpp_pubsub`` and all its necessary files and folders.
+你的终端将返回一条消息，验证你的包 ``cpp_pubsub`` 及其所有必要的文件和文件夹已创建。
 
-Navigate into ``ros2_ws/src/cpp_pubsub/src``.
-Recall that this is the directory in any CMake package where the source files containing executables belong.
+进入 ``ros2_ws/src/cpp_pubsub/src``。
+请记住，这是任何 CMake 包中包含可执行文件的源文件所在的目录。
 
 
-2 Write the publisher node
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 编写发布者节点
+^^^^^^^^^^^^^^^^
 
-Download the example talker code by entering the following command:
+通过输入以下命令下载示例 talker 代码：
 
 .. tabs::
 
@@ -65,35 +65,34 @@ Download the example talker code by entering the following command:
 
       .. code-block:: console
 
-            $ wget -O publisher_member_function.cpp https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_publisher/member_function.cpp
+            $ wget -O publisher_lambda_function.cpp https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_publisher/lambda.cpp
 
    .. group-tab:: macOS
 
       .. code-block:: console
 
-            $ wget -O publisher_member_function.cpp https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_publisher/member_function.cpp
+            $ wget -O publisher_lambda_function.cpp https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_publisher/lambda.cpp
 
    .. group-tab:: Windows
 
-      In a Windows command line prompt:
+      在 Windows 命令行提示符中：
 
       .. code-block:: console
 
-            $ curl -sk https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_publisher/member_function.cpp -o publisher_member_function.cpp
+            $ curl -sk https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_publisher/lambda.cpp -o publisher_lambda_function.cpp
 
-      Or in powershell:
+      或在 powershell 中：
 
       .. code-block:: console
 
-            $ curl https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_publisher/member_function.cpp -o publisher_member_function.cpp
+            $ curl https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_publisher/lambda.cpp -o publisher_lambda_function.cpp
 
-Now there will be a new file named ``publisher_member_function.cpp``.
-Open the file using your preferred text editor.
+现在会有一个名为 ``publisher_lambda_function.cpp`` 的新文件。
+使用你喜欢的文本编辑器打开该文件。
 
 .. code-block:: C++
 
     #include <chrono>
-    #include <functional>
     #include <memory>
     #include <string>
 
@@ -102,31 +101,31 @@ Open the file using your preferred text editor.
 
     using namespace std::chrono_literals;
 
-    /* This example creates a subclass of Node and uses std::bind() to register a
-    * member function as a callback from the timer. */
+    /* This example creates a subclass of Node and uses a fancy C++11 lambda
+    * function to shorten the callback syntax, at the expense of making the
+    * code somewhat more difficult to understand at first glance. */
 
     class MinimalPublisher : public rclcpp::Node
     {
-      public:
-        MinimalPublisher()
-        : Node("minimal_publisher"), count_(0)
-        {
-          publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
-          timer_ = this->create_wall_timer(
-          500ms, std::bind(&MinimalPublisher::timer_callback, this));
-        }
+    public:
+      MinimalPublisher()
+      : Node("minimal_publisher"), count_(0)
+      {
+        publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
+        auto timer_callback =
+          [this]() -> void {
+            auto message = std_msgs::msg::String();
+            message.data = "Hello, world! " + std::to_string(this->count_++);
+            RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
+            this->publisher_->publish(message);
+          };
+        timer_ = this->create_wall_timer(500ms, timer_callback);
+      }
 
-      private:
-        void timer_callback()
-        {
-          auto message = std_msgs::msg::String();
-          message.data = "Hello, world! " + std::to_string(count_++);
-          RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
-          publisher_->publish(message);
-        }
-        rclcpp::TimerBase::SharedPtr timer_;
-        rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
-        size_t count_;
+    private:
+      rclcpp::TimerBase::SharedPtr timer_;
+      rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
+      size_t count_;
     };
 
     int main(int argc, char * argv[])
@@ -137,17 +136,16 @@ Open the file using your preferred text editor.
       return 0;
     }
 
-2.1 Examine the code
-~~~~~~~~~~~~~~~~~~~~
+2.1 检查代码
+~~~~~~~~~~~~
 
-The top of the code includes the standard C++ headers you will be using.
-After the standard C++ headers is the ``rclcpp/rclcpp.hpp`` include which allows you to use the most common pieces of the ROS 2 system.
-Last is ``std_msgs/msg/string.hpp``, which includes the built-in message type you will use to publish data.
+代码顶部包含你将使用的标准 C++ 头文件。
+在标准 C++ 头文件之后是 ``rclcpp/rclcpp.hpp`` 的包含，它允许你使用 ROS 2 系统最常用的部分。
+最后是 ``std_msgs/msg/string.hpp``，它包含你将用于发布数据的内置消息类型。
 
 .. code-block:: C++
 
     #include <chrono>
-    #include <functional>
     #include <memory>
     #include <string>
 
@@ -156,19 +154,23 @@ Last is ``std_msgs/msg/string.hpp``, which includes the built-in message type yo
 
     using namespace std::chrono_literals;
 
-These lines represent the node's dependencies.
-Recall that dependencies have to be added to ``package.xml`` and ``CMakeLists.txt``, which you'll do in the next section.
+这些行表示节点的依赖。
+请记住，依赖必须添加到 ``package.xml`` 和 ``CMakeLists.txt`` 中，你将在下一节中完成。
 
-The next line creates the node class ``MinimalPublisher`` by inheriting from ``rclcpp::Node``.
-Every ``this`` in the code is referring to the node.
+下一行通过继承 ``rclcpp::Node`` 创建节点类 ``MinimalPublisher``。
+代码中的每个 ``this`` 都指代节点。
 
 .. code-block:: C++
 
     class MinimalPublisher : public rclcpp::Node
 
-The public constructor names the node ``minimal_publisher`` and initializes ``count_`` to 0.
-Inside the constructor, the publisher is initialized with the ``String`` message type, the topic name ``topic``, and the required queue size to limit messages in the event of a backup.
-Next, ``timer_`` is initialized, which causes the ``timer_callback`` function to be executed twice a second.
+公有构造函数将节点命名为 ``minimal_publisher``，并将 ``count_`` 初始化为 0。
+在构造函数内部，发布者使用 ``String`` 消息类型、话题名称 ``topic`` 以及限制消息积压所需的队列大小进行初始化。
+接下来，声明了一个名为 ``timer_callback`` 的 `lambda 函数 <https://en.cppreference.com/w/cpp/language/lambda>`_。
+它对当前对象 ``this`` 进行引用捕获，不接受输入参数并返回 void。
+``timer_callback`` 函数创建一个新的 ``String`` 类型消息，将其数据设置为所需字符串并发布它。
+``RCLCPP_INFO`` 宏确保每条发布的消息都打印到控制台。
+最后，``timer_`` 被初始化，这会导致 ``timer_callback`` 函数每秒执行两次。
 
 .. code-block:: C++
 
@@ -177,34 +179,27 @@ Next, ``timer_`` is initialized, which causes the ``timer_callback`` function to
       : Node("minimal_publisher"), count_(0)
       {
         publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
-        timer_ = this->create_wall_timer(
-        500ms, std::bind(&MinimalPublisher::timer_callback, this));
+        auto timer_callback =
+          [this]() -> void {
+            auto message = std_msgs::msg::String();
+            message.data = "Hello, world! " + std::to_string(this->count_++);
+            RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
+            this->publisher_->publish(message);
+          };
+        timer_ = this->create_wall_timer(500ms, timer_callback);
       }
 
-The ``timer_callback`` function is where the message data is set and the messages are actually published.
-The ``RCLCPP_INFO`` macro ensures every published message is printed to the console.
+在类的底部是计时器、发布者和计数器字段的声明。
 
 .. code-block:: C++
 
     private:
-      void timer_callback()
-      {
-        auto message = std_msgs::msg::String();
-        message.data = "Hello, world! " + std::to_string(count_++);
-        RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
-        publisher_->publish(message);
-      }
+      rclcpp::TimerBase::SharedPtr timer_;
+      rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
+      size_t count_;
 
-Last is the declaration of the timer, publisher, and counter fields.
-
-.. code-block:: C++
-
-    rclcpp::TimerBase::SharedPtr timer_;
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
-    size_t count_;
-
-Following the ``MinimalPublisher`` class is ``main``, where the node actually executes.
-``rclcpp::init`` initializes ROS 2, and ``rclcpp::spin`` starts processing data from the node, including callbacks from the timer.
+在 ``MinimalPublisher`` 类之后是 ``main``，节点在这里实际执行。
+``rclcpp::init`` 初始化 ROS 2，``rclcpp::spin`` 开始处理来自节点的数据，包括来自计时器的回调。
 
 .. code-block:: C++
 
@@ -216,51 +211,51 @@ Following the ``MinimalPublisher`` class is ``main``, where the node actually ex
       return 0;
     }
 
-2.2 Add dependencies
-~~~~~~~~~~~~~~~~~~~~
+2.2 添加依赖
+~~~~~~~~~~~~
 
-Navigate one level back to the ``ros2_ws/src/cpp_pubsub`` directory, where the ``CMakeLists.txt`` and ``package.xml`` files have been created for you.
+返回上一级目录，进入 ``ros2_ws/src/cpp_pubsub``，那里已经为你创建了 ``CMakeLists.txt`` 和 ``package.xml`` 文件。
 
-Open ``package.xml`` with your text editor.
+用文本编辑器打开 ``package.xml``。
 
-As mentioned in the :doc:`previous tutorial <./Creating-Your-First-ROS2-Package>`, make sure to fill in the ``<description>``, ``<maintainer>`` and ``<license>`` tags:
+如 :doc:`之前的教程 <./Creating-Your-First-ROS2-Package>` 所述，请确保填写 ``<description>``、``<maintainer>`` 和 ``<license>`` 标签：
 
 .. code-block:: xml
 
       <description>Examples of minimal publisher/subscriber using rclcpp</description>
       <maintainer email="you@email.com">Your Name</maintainer>
-      <license>Apache License 2.0</license>
+      <license>Apache-2.0</license>
 
-Add a new line after the ``ament_cmake`` buildtool dependency and paste the following dependencies corresponding to your node's include statements:
+在 ``ament_cmake`` 构建工具依赖之后添加一行，并粘贴与你的节点的 include 语句相对应的以下依赖：
 
 .. code-block:: xml
 
     <depend>rclcpp</depend>
     <depend>std_msgs</depend>
 
-This declares the package needs ``rclcpp`` and ``std_msgs`` when its code is built and executed.
+这声明了该包在构建和执行其代码时需要 ``rclcpp`` 和 ``std_msgs``。
 
-Make sure to save the file.
+请确保保存文件。
 
 2.3 CMakeLists.txt
 ~~~~~~~~~~~~~~~~~~
 
-Now open the ``CMakeLists.txt`` file.
-Below the existing dependency ``find_package(ament_cmake REQUIRED)``, add the lines:
+现在打开 ``CMakeLists.txt`` 文件。
+在现有依赖 ``find_package(ament_cmake REQUIRED)`` 下面添加以下行：
 
 .. code-block:: cmake
 
     find_package(rclcpp REQUIRED)
     find_package(std_msgs REQUIRED)
 
-After that, add the executable and name it ``talker`` so you can run your node using ``ros2 run``:
+之后，添加可执行文件并将其命名为 ``talker``，这样你就可以使用 ``ros2 run`` 运行你的节点：
 
 .. code-block:: cmake
 
-    add_executable(talker src/publisher_member_function.cpp)
+    add_executable(talker src/publisher_lambda_function.cpp)
     ament_target_dependencies(talker rclcpp std_msgs)
 
-Finally, add the ``install(TARGETS...)`` section so ``ros2 run`` can find your executable:
+最后，添加 ``install(TARGETS...)`` 部分，以便 ``ros2 run`` 可以找到你的可执行文件：
 
 .. code-block:: cmake
 
@@ -268,7 +263,7 @@ Finally, add the ``install(TARGETS...)`` section so ``ros2 run`` can find your e
     talker
     DESTINATION lib/${PROJECT_NAME})
 
-You can clean up your ``CMakeLists.txt`` by removing some unnecessary sections and comments, so it looks like this:
+你可以通过删除一些不必要的部分和注释来整理你的 ``CMakeLists.txt``，使其看起来像这样：
 
 .. code-block:: cmake
 
@@ -288,7 +283,7 @@ You can clean up your ``CMakeLists.txt`` by removing some unnecessary sections a
   find_package(rclcpp REQUIRED)
   find_package(std_msgs REQUIRED)
 
-  add_executable(talker src/publisher_member_function.cpp)
+  add_executable(talker src/publisher_lambda_function.cpp)
   ament_target_dependencies(talker rclcpp std_msgs)
 
   install(TARGETS
@@ -297,13 +292,13 @@ You can clean up your ``CMakeLists.txt`` by removing some unnecessary sections a
 
   ament_package()
 
-You could build your package now, source the local setup files, and run it, but let's create the subscriber node first so you can see the full system at work.
+你现在可以构建你的包，source 本地安装文件并运行它，但让我们先创建订阅者节点，这样你就可以看到完整的系统在运行。
 
-3 Write the subscriber node
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 编写订阅者节点
+^^^^^^^^^^^^^^^^
 
-Return to ``ros2_ws/src/cpp_pubsub/src`` to create the next node.
-Enter the following code in your terminal:
+返回到 ``ros2_ws/src/cpp_pubsub/src`` 来创建下一个节点。
+在终端中输入以下代码：
 
 .. tabs::
 
@@ -311,35 +306,35 @@ Enter the following code in your terminal:
 
       .. code-block:: console
 
-            $ wget -O subscriber_member_function.cpp https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_subscriber/member_function.cpp
+            $ wget -O subscriber_lambda_function.cpp https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_subscriber/lambda.cpp
 
    .. group-tab:: macOS
 
       .. code-block:: console
 
-            $ wget -O subscriber_member_function.cpp https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_subscriber/member_function.cpp
+            $ wget -O subscriber_lambda_function.cpp https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_subscriber/lambda.cpp
 
    .. group-tab:: Windows
 
-      In a Windows command line prompt:
+      在 Windows 命令行提示符中：
 
       .. code-block:: console
 
-            $ curl -sk https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_subscriber/member_function.cpp -o subscriber_member_function.cpp
+            $ curl -sk https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_subscriber/lambda.cpp -o subscriber_lambda_function.cpp
 
-      Or in powershell:
+      或在 powershell 中：
 
       .. code-block:: console
 
-            $ curl https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_subscriber/member_function.cpp -o subscriber_member_function.cpp
+            $ curl https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_subscriber/lambda.cpp -o subscriber_lambda_function.cpp
 
-Check to ensure that these files exist:
+检查以确保这些文件存在：
 
 .. code-block:: console
 
-    publisher_member_function.cpp  subscriber_member_function.cpp
+    publisher_lambda_function.cpp  subscriber_lambda_function.cpp
 
-Open the ``subscriber_member_function.cpp`` with your text editor.
+用文本编辑器打开 ``subscriber_lambda_function.cpp``。
 
 .. code-block:: C++
 
@@ -347,24 +342,23 @@ Open the ``subscriber_member_function.cpp`` with your text editor.
 
     #include "rclcpp/rclcpp.hpp"
     #include "std_msgs/msg/string.hpp"
-    using std::placeholders::_1;
 
     class MinimalSubscriber : public rclcpp::Node
     {
-      public:
-        MinimalSubscriber()
-        : Node("minimal_subscriber")
-        {
-          subscription_ = this->create_subscription<std_msgs::msg::String>(
-          "topic", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
-        }
+    public:
+      MinimalSubscriber()
+      : Node("minimal_subscriber")
+      {
+        auto topic_callback =
+          [this](std_msgs::msg::String::UniquePtr msg) -> void {
+            RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
+          };
+        subscription_ =
+          this->create_subscription<std_msgs::msg::String>("topic", 10, topic_callback);
+      }
 
-      private:
-        void topic_callback(const std_msgs::msg::String & msg) const
-        {
-          RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg.data.c_str());
-        }
-        rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
+    private:
+      rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
     };
 
     int main(int argc, char * argv[])
@@ -375,13 +369,17 @@ Open the ``subscriber_member_function.cpp`` with your text editor.
       return 0;
     }
 
-3.1 Examine the code
-~~~~~~~~~~~~~~~~~~~~
+3.1 检查代码
+~~~~~~~~~~~~
 
-The subscriber node's code is nearly identical to the publisher's.
-Now the node is named ``minimal_subscriber``, and the constructor uses the node's ``create_subscription`` class to execute the callback.
+订阅者节点的代码与发布者几乎相同。
+现在节点被命名为 ``minimal_subscriber``，构造函数使用节点的 ``create_subscription`` 函数来执行回调。
 
-There is no timer because the subscriber simply responds whenever data is published to the ``topic`` topic.
+这里没有计时器，因为订阅者只是在有数据发布到 ``topic`` 话题时做出响应。
+
+``topic_callback`` 函数接收通过话题发布的字符串消息数据，并使用 ``RCLCPP_INFO`` 宏将其写入控制台。
+
+回顾 :doc:`话题教程 <../Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics>`，发布者和订阅者使用的话题名称和消息类型必须匹配，才能进行通信。
 
 .. code-block:: C++
 
@@ -389,38 +387,34 @@ There is no timer because the subscriber simply responds whenever data is publis
       MinimalSubscriber()
       : Node("minimal_subscriber")
       {
-        subscription_ = this->create_subscription<std_msgs::msg::String>(
-        "topic", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
+        auto topic_callback =
+          [this](std_msgs::msg::String::UniquePtr msg) -> void {
+            RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
+          };
+        subscription_ =
+          this->create_subscription<std_msgs::msg::String>("topic", 10, topic_callback);
       }
 
-Recall from the :doc:`topic tutorial <../Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics>` that the topic name and message type used by the publisher and subscriber must match to allow them to communicate.
-
-The ``topic_callback`` function receives the string message data published over the topic, and simply writes it to the console using the ``RCLCPP_INFO`` macro.
-
-The only field declaration in this class is the subscription.
+这个类中唯一的字段声明是订阅。
 
 .. code-block:: C++
 
     private:
-      void topic_callback(const std_msgs::msg::String & msg) const
-      {
-        RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg.data.c_str());
-      }
       rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
 
-The ``main`` function is exactly the same, except now it spins the ``MinimalSubscriber`` node.
-For the publisher node, spinning meant starting the timer, but for the subscriber it simply means preparing to receive messages whenever they come.
+``main`` 函数完全相同，只是现在它 spin 的是 ``MinimalSubscriber`` 节点。
+对于发布者节点，spin 意味着启动计时器，但对于订阅者，它只意味着准备好在消息到来时接收它们。
 
-Since this node has the same dependencies as the publisher node, there's nothing new to add to ``package.xml``.
+由于这个节点与发布者节点具有相同的依赖，因此无需向 ``package.xml`` 添加新内容。
 
 3.2 CMakeLists.txt
 ~~~~~~~~~~~~~~~~~~
 
-Reopen ``CMakeLists.txt`` and add the executable and target for the subscriber node below the publisher's entries.
+重新打开 ``CMakeLists.txt``，在发布者的条目下面添加订阅者节点的可执行文件和目标。
 
 .. code-block:: cmake
 
-  add_executable(listener src/subscriber_member_function.cpp)
+  add_executable(listener src/subscriber_lambda_function.cpp)
   ament_target_dependencies(listener rclcpp std_msgs)
 
   install(TARGETS
@@ -428,14 +422,14 @@ Reopen ``CMakeLists.txt`` and add the executable and target for the subscriber n
     listener
     DESTINATION lib/${PROJECT_NAME})
 
-Make sure to save the file, and then your pub/sub system should be ready.
+请确保保存文件，然后你的发布/订阅系统就应该准备好了。
 
 .. _cpppubsub-build-and-run:
 
-4 Build and run
-^^^^^^^^^^^^^^^
-You likely already have the ``rclcpp`` and ``std_msgs`` packages installed as part of your ROS 2 system.
-It's good practice to run ``rosdep`` in the root of your workspace (``ros2_ws``) to check for missing dependencies before building:
+4 构建并运行
+^^^^^^^^^^^^
+你可能已经安装了 ``rclcpp`` 和 ``std_msgs`` 包作为 ROS 2 系统的一部分。
+在构建之前，最好在工作空间的根目录（``ros2_ws``）运行 ``rosdep`` 来检查缺失的依赖：
 
 .. tabs::
 
@@ -447,14 +441,14 @@ It's good practice to run ``rosdep`` in the root of your workspace (``ros2_ws``)
 
    .. group-tab:: macOS
 
-      rosdep only runs on Linux, so you can skip ahead to next step.
+      rosdep 只在 Linux 上运行，所以你可以跳到下一步。
 
    .. group-tab:: Windows
 
-      rosdep only runs on Linux, so you can skip ahead to next step.
+      rosdep 只在 Linux 上运行，所以你可以跳到下一步。
 
 
-Still in the root of your workspace, ``ros2_ws``, build your new package:
+仍然在工作空间的根目录 ``ros2_ws``，构建你的新包：
 
 .. tabs::
 
@@ -476,7 +470,7 @@ Still in the root of your workspace, ``ros2_ws``, build your new package:
 
       $ colcon build --merge-install --packages-select cpp_pubsub
 
-Open a new terminal, navigate to ``ros2_ws``, and source the setup files:
+打开一个新终端，进入 ``ros2_ws``，然后 source 安装文件：
 
 .. tabs::
 
@@ -498,8 +492,8 @@ Open a new terminal, navigate to ``ros2_ws``, and source the setup files:
 
       $ call install/setup.bat
 
-Now run the talker node.
-The terminal should start publishing info messages every 0.5 seconds, like so:
+现在运行 talker 节点。
+终端应该每 0.5 秒开始发布一次信息消息，如下所示：
 
 .. code-block:: console
 
@@ -510,8 +504,8 @@ The terminal should start publishing info messages every 0.5 seconds, like so:
      [INFO] [minimal_publisher]: Publishing: "Hello World: 3"
      [INFO] [minimal_publisher]: Publishing: "Hello World: 4"
 
-Open another terminal, source the setup files from inside ``ros2_ws`` again, and then start the listener node.
-The listener will start printing messages to the console, starting at whatever message count the publisher is on at that time:
+打开另一个终端，再次从 ``ros2_ws`` 内 source 安装文件，然后启动 listener 节点。
+listener 将开始向控制台打印消息，从发布者当时的消息计数开始：
 
 .. code-block:: console
 
@@ -522,21 +516,21 @@ The listener will start printing messages to the console, starting at whatever m
      [INFO] [minimal_subscriber]: I heard: "Hello World: 13"
      [INFO] [minimal_subscriber]: I heard: "Hello World: 14"
 
-Enter ``Ctrl+C`` in each terminal to stop the nodes from spinning.
+在每个终端中输入 ``Ctrl+C`` 来停止节点的 spin。
 
-Summary
--------
+总结
+----
 
-You created two nodes to publish and subscribe to data over a topic.
-Before compiling and running them, you added their dependencies and executables to the package configuration files.
+你创建了两个节点，通过话题发布和订阅数据。
+在编译和运行它们之前，你将它们的依赖和可执行文件添加到了包配置文件中。
 
-Next steps
-----------
+后续步骤
+--------
 
-Next you'll create another simple ROS 2 package using the service/client model.
-Again, you can choose to write it in either :doc:`C++ <./Writing-A-Simple-Cpp-Service-And-Client>` or :doc:`Python <./Writing-A-Simple-Py-Service-And-Client>`.
+接下来你将使用服务/客户端模型创建另一个简单的 ROS 2 包。
+同样，你可以选择用 :doc:`C++ <./Writing-A-Simple-Cpp-Service-And-Client>` 或 :doc:`Python <./Writing-A-Simple-Py-Service-And-Client>` 编写它。
 
-Related content
----------------
+相关内容
+--------
 
-There are several ways you could write a publisher and subscriber in C++; check out the ``minimal_publisher`` and ``minimal_subscriber`` packages in the `ros2/examples <https://github.com/ros2/examples/tree/{REPOS_FILE_BRANCH}/rclcpp/topics>`_ repo.
+有多种方式可以用 C++ 编写发布者和订阅者；请查看 `ros2/examples <https://github.com/ros2/examples/tree/{REPOS_FILE_BRANCH}/rclcpp/topics>`_ 仓库中的 ``minimal_publisher`` 和 ``minimal_subscriber`` 包。

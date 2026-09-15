@@ -1,82 +1,80 @@
-Release Team / Repository
-=========================
+发布团队 / 仓库
+===============
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-This page explains the recommended method of hosting your release repositories on `ros2-gbp <https://github.com/ros2-gbp>`_.
+本页说明将发布仓库托管在 `ros2-gbp <https://github.com/ros2-gbp>`_ 上的推荐方法。
 
-What is ROS 2 GBP?
+什么是 ROS 2 GBP？
 ------------------
 
-`ros2-gbp <https://github.com/ros2-gbp>`_ is a GitHub organization that hosts the release repositories for ROS packages.
-It also maintains a list of release teams, the list of members per release team and the list of release repositories maintained by the release teams in https://github.com/ros2-gbp/ros2-gbp-github-org.
-Interactions with ros2-gbp-github-org are done through raising GitHub issues.
-It is recommended that you request to join a release team and set up a release repository early as it can take some time for the ros2-gbp maintainers to respond to your requests.
+`ros2-gbp <https://github.com/ros2-gbp>`_ 是一个托管 ROS 软件包发布仓库的 GitHub 组织。
+它还在 https://github.com/ros2-gbp/ros2-gbp-github-org 中维护发布团队列表、每个发布团队的成员列表，以及各发布团队所维护的发布仓库列表。
+与 ros2-gbp-github-org 的交互通过提交 GitHub issue 来完成。
+建议你尽早申请加入发布团队并设置发布仓库，因为 ros2-gbp 维护者响应你的请求可能需要一些时间。
 
 .. _what-is-a-release-team:
 
-What is a release team?
------------------------
+什么是发布团队？
+----------------
 
-A release team is a `GitHub team <https://docs.github.com/en/organizations/organizing-members-into-teams/about-teams>`_ that consists of a group of people who are responsible for the release process of one or more repositories.
-Release teams are often made up of an organization, a working group, or even an individual, and are named after the team or group that they represent.
-The list of release teams and their associated release repositories are maintained at `ros2-gbp-github-org <https://github.com/ros2-gbp/ros2-gbp-github-org>`_.
+发布团队是一个 `GitHub 团队 <https://docs.github.com/en/organizations/organizing-members-into-teams/about-teams>`_，由一群负责一个或多个仓库发布流程的人员组成。
+发布团队通常由某个组织、某个工作组，甚至某个个人组成，并以它们所代表的团队或小组命名。
+发布团队列表及其对应的发布仓库维护在 `ros2-gbp-github-org <https://github.com/ros2-gbp/ros2-gbp-github-org>`_ 中。
 
-**You must be a part of the release team that you are planning on releasing the project for.**
-If you intend to release the repository under an existing team, follow :ref:`Join a release team <join-a-release-team>`.
-If you intend to start a new team, follow :ref:`Start a new release team <start-a-new-release-team>`.
+**你必须是你要为其发布项目的那个发布团队的一员。**
+如果你打算以某个现有团队的名义发布该仓库，请按照 :ref:`加入发布团队 <join-a-release-team>` 操作。
+如果你打算建立一个新的团队，请按照 :ref:`建立新的发布团队 <start-a-new-release-team>` 操作。
 
 .. _join-a-release-team:
 
-Join a release team
-^^^^^^^^^^^^^^^^^^^
+加入发布团队
+^^^^^^^^^^^^
 
-Fill the `Update Release Team Membership issue <https://github.com/ros2-gbp/ros2-gbp-github-org/issues/new?assignees=&labels=&template=update_release_team_membership.md&title=Update+release+team+membership>`_ issue template
-if a release team already exists for your project but you are not part of it.
+如果你的项目已有发布团队，但你并不是其中一员，请填写 `更新发布团队成员资格 issue <https://github.com/ros2-gbp/ros2-gbp-github-org/issues/new?assignees=&labels=&template=update_release_team_membership.md&title=Update+release+team+membership>`_ 模板。
 
 .. _start-a-new-release-team:
 
-Start a new release team
-^^^^^^^^^^^^^^^^^^^^^^^^
+建立新的发布团队
+^^^^^^^^^^^^^^^^
 
-If no release team exists for your project yet, fill out the `New Release Team issue <https://github.com/ros2-gbp/ros2-gbp-github-org/issues/new?assignees=&labels=&template=new_release_team.md&title=Add+release+team>`_ issue template to request one be created.
+如果你的项目还没有发布团队，请填写 `新建发布团队 issue <https://github.com/ros2-gbp/ros2-gbp-github-org/issues/new?assignees=&labels=&template=new_release_team.md&title=Add+release+team>`_ 模板，请求创建一个。
 
 .. _what-is-a-release-repository:
 
-What is a release repository?
------------------------------
+什么是发布仓库？
+----------------
 
-A release repository is a repository that
+发布仓库是一种仓库，它
 
-* stores files generated from the release process, for the ROS buildfarm to use
-* caches configurations from the release process to simplify subsequent releases of the repository in the future
+* 存储发布流程生成的文件，供 ROS 构建农场使用
+* 缓存发布流程中的配置，以便将来简化该仓库的后续发布
 
-Having a release repository separate from your source code repository is a requirement for making a release in ROS 2.
+在 ROS 2 中，要发布就必须有一个独立于源代码仓库的发布仓库。
 
 .. _create-a-new-release-repository:
 
-Create a new release repository
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+创建新的发布仓库
+^^^^^^^^^^^^^^^^
 
-If your repository is new to the ROS community, you should first open a pull request on `ros/rosdistro <https://github.com/ros/rosdistro>`_ adding a ``source`` entry for your repository (e.g. https://github.com/ros/rosdistro/pull/39513).
-The review process for the rosdistro database will ensure your repository and packages conform to the `REP 144 package naming conventions <https://reps.openrobotics.org/rep-0144/>`_ and other requirements before release.
-Once your package name has been approved and merged, fill in the `Add New Release Repositories issue <https://github.com/ros2-gbp/ros2-gbp-github-org/issues/new?assignees=&labels=&template=new_release_repository.md&title=Add+new+release+repositories>`_ issue template
-if you don't have a release repo for your project yet.
+如果你的仓库对 ROS 社区来说是全新的，你应当先在 `ros/rosdistro <https://github.com/ros/rosdistro>`_ 上提交一个拉取请求，为你的仓库添加一个 ``source`` 条目（例如 https://github.com/ros/rosdistro/pull/39513）。
+rosdistro 数据库的审核流程将确保你的仓库和软件包在发布前符合 `REP 144 软件包命名约定 <https://reps.openrobotics.org/rep-0144/>`_ 及其他要求。
+一旦你的软件包名称获得批准并被合并，如果你的项目还没有发布仓库，请填写 `新增发布仓库 issue <https://github.com/ros2-gbp/ros2-gbp-github-org/issues/new?assignees=&labels=&template=new_release_repository.md&title=Add+new+release+repositories>`_ 模板。
 
-What if my existing release repo isn't on ros2-gbp?
----------------------------------------------------
+如果我已有的发布仓库不在 ros2-gbp 上怎么办？
+--------------------------------------------
 
-Packages released before ros2-gbp existed may have their release repositories hosted elsewhere.
-It is now strongly recommended for release repositories to live in this dedicated GitHub organization.
-If you are porting a ROS 1 package to ROS 2 and planning on releasing your packages into ROS 2 for the first time, follow standard procedure to request for a new release repository for your ROS 2 releases.
-If you have previously released your packages for ROS 2, when raising the `Add New Release Repositories issue <https://github.com/ros2-gbp/ros2-gbp-github-org/issues/new?assignees=&labels=&template=new_release_repository.md&title=Add+new+release+repositories>`_, **specify your current release repository url**, and follow standard procedure for the rest.
+在 ros2-gbp 出现之前发布的软件包，其发布仓库可能托管在别处。
+现在强烈建议将发布仓库放在这个专门的 GitHub 组织中。
+如果你正在把一个 ROS 1 软件包移植到 ROS 2，并打算首次把你的软件包发布到 ROS 2 中，请按照标准流程为你的 ROS 2 发布申请一个新的发布仓库。
+如果你此前已经为 ROS 2 发布过你的软件包，那么在提交 `新增发布仓库 issue <https://github.com/ros2-gbp/ros2-gbp-github-org/issues/new?assignees=&labels=&template=new_release_repository.md&title=Add+new+release+repositories>`_ 时，**请注明你当前的发布仓库 url**，其余部分按照标准流程操作。
 
 .. note::
 
-   **When releasing your packages into the Rolling distribution, you must use a release repository hosted in the ros2-gbp organization**.
-   Release repositories hosted elsewhere are still supported for stable distributions if you are not planning to release the repository into Rolling.
-   Since stable distributions created from Rolling will start with release repositories in the ros2-gbp organization it is recommend that you use the ros2-gbp release repositories for all ROS 2 distributions to avoid fragmenting the release information.
+   **当把你的软件包发布到 Rolling 发行版时，你必须使用托管在 ros2-gbp 组织中的发布仓库**。
+   如果你不打算把该仓库发布到 Rolling，那么对于稳定发行版，托管在别处的发布仓库仍然受支持。
+   由于从 Rolling 创建出来的稳定发行版将以 ros2-gbp 组织中的发布仓库作为起点，因此建议你对所有 ROS 2 发行版都使用 ros2-gbp 发布仓库，以避免发布信息碎片化。
 
-   A ros2-gbp release repository may become a hard requirement for all distros in the future and maintaining a single release repository for all ROS 2 distributions simplifies the maintenance of releases for both the Rolling distribution maintainers and package maintainers.
+   ros2-gbp 发布仓库将来可能会成为所有发行版的硬性要求，而为所有 ROS 2 发行版只维护一个发布仓库，可以简化 Rolling 发行版维护者和软件包维护者双方的发布维护工作。

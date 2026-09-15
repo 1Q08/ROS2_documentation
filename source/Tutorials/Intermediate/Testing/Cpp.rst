@@ -1,18 +1,18 @@
 .. TestingCpp:
 
-Writing Basic Tests with C++ with GTest
-=======================================
+使用 C++ 与 GTest 编写基本测试
+==============================
 
-Starting point: we'll assume you have a :ref:`basic ament_cmake package<CreatePkg>` set up already and you want to add some tests to it.
+起点：我们假设你已经创建好了 :ref:`基本的 ament_cmake 软件包<CreatePkg>`，并想为其添加一些测试。
 
-In this tutorial, we'll be using `gtest <https://google.github.io/googletest/primer.html>`__.
+在本教程中，我们将使用 `gtest <https://google.github.io/googletest/primer.html>`__。
 
-Package Setup
--------------
+软件包设置
+----------
 
-Source Code
-^^^^^^^^^^^
-We'll start off with our code in a file called ``test/tutorial_test.cpp``
+源代码
+^^^^^^
+我们先将代码放在名为 ``test/tutorial_test.cpp`` 的文件中
 
 .. code-block:: c++
 
@@ -32,7 +32,7 @@ We'll start off with our code in a file called ``test/tutorial_test.cpp``
 
 package.xml
 ^^^^^^^^^^^
-Add the following line to ``package.xml``
+将以下行添加到 ``package.xml`` 中
 
 .. code-block:: c++
 
@@ -53,12 +53,12 @@ CMakeLists.txt
       # target_link_libraries(${PROJECT_NAME}_tutorial_test name_of_local_library)
     endif()
 
-The testing code is wrapped in the ``if/endif`` block to avoid building tests where possible.
-``ament_add_gtest`` functions much like ``add_executable`` so you'll need to call ``target_include_directories`` and ``target_link_libraries`` as you normally would.
-The ``target_link_libraries`` call is shown commented out because ``name_of_local_library`` is a placeholder, uncomment it and replace ``name_of_local_library`` with the actual target name from your ``add_library()`` call only if your tests depend on a library built in this package.
+测试代码被包裹在 ``if/endif`` 块中，以便尽可能避免构建测试。
+``ament_add_gtest`` 的功能与 ``add_executable`` 类似，因此你需要像往常一样调用 ``target_include_directories`` 和 ``target_link_libraries``。
+``target_link_libraries`` 调用被注释掉，是因为 ``name_of_local_library`` 是一个占位符；仅当你的测试依赖本软件包中构建的库时，才取消注释并将其替换为 ``add_library()`` 调用中实际的 target 名称。
 
 
-Running Tests
--------------
+运行测试
+--------
 
-See the :doc:`tutorial on how to run tests from the command line <CLI>` for more information on running the tests and inspecting the test results.
+有关运行测试和检查测试结果的更多信息，请参阅 :doc:`关于如何从命令行运行测试的教程 <CLI>`。

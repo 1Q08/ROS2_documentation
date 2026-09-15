@@ -4,44 +4,44 @@
     Tutorials/Advanced/Simulators/Ignition
     Tutorials/Advanced/Simulators/Gazebo
 
-Setting up a robot simulation (Gazebo)
-======================================
+设置机器人仿真（Gazebo）
+========================
 
-**Goal:** Launch a Simulation with Gazebo and ROS 2
+**目标：** 使用 Gazebo 和 ROS 2 启动仿真
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 20 minutes
+**时间：** 20 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Prerequisites
--------------
+前置条件
+--------
 
-First of all you should install ROS 2 and Gazebo.
-You have two options:
+首先你需要安装 ROS 2 和 Gazebo。
+你有两种选择：
 
- - Install from deb packages.
-   To check which versions are available from deb packages please check this `table <https://github.com/gazebosim/ros_ign>`__.
- - Compile from sources:
+ - 从 deb 软件包安装。
+   要查看 deb 软件包中提供哪些版本，请查看这个 `表格 <https://github.com/gazebosim/ros_ign>`__。
+ - 从源码编译：
 
-   - :doc:`ROS 2 install instructions <../../../../Installation>`
-   - `Gazebo install instructions <https://gazebosim.org/docs>`__
+   - :doc:`ROS 2 安装说明 <../../../../Installation>`
+   - `Gazebo 安装说明 <https://gazebosim.org/docs>`__
 
-Tasks
------
+任务
+----
 
-1 Launch the simulation
-^^^^^^^^^^^^^^^^^^^^^^^
+1 启动仿真
+^^^^^^^^^^
 
-In this demo you are going to simulate a simple diff drive robot in Gazebo.
-You are going to use one of the worlds defined in the Gazebo examples called
-`visualize_lidar.sdf <https://github.com/gazebosim/gz-sim/blob/main/examples/worlds/visualize_lidar.sdf>`__.
-To run this example you should execute the following command in a terminal:
+在这个演示中，你将在 Gazebo 中仿真一个简单的差速驱动机器人。
+你将使用 Gazebo 示例中定义的某个 world，名为
+`visualize_lidar.sdf <https://github.com/gazebosim/gz-sim/blob/main/examples/worlds/visualize_lidar.sdf>`__。
+要运行这个示例，你应该在终端中执行以下命令：
 
-`ROS REP-2000 <https://reps.openrobotics.org/rep-2000/>`__ standardizes what the default version of Gazebo is for each ROS distribution.
+`ROS REP-2000 <https://reps.openrobotics.org/rep-2000/>`__ 标准化了每个 ROS 发行版默认使用哪个版本的 Gazebo。
 
 .. tabs::
 
@@ -53,7 +53,7 @@ To run this example you should execute the following command in a terminal:
 
 .. image:: Image/gazebo_diff_drive.png
 
-When the simulation is running you can check the topics provided by Gazebo with the ``ign`` command line tool:
+仿真运行后，你可以使用 ``ign`` 命令行工具查看 Gazebo 提供的话题：
 
 .. tabs::
 
@@ -77,8 +77,8 @@ When the simulation is running you can check the topics provided by Gazebo with 
         /world/visualize_lidar_world/state
         /world/visualize_lidar_world/stats
 
-Since you have not launched an ROS 2 nodes yet, the output from ``ros2 topic list``
-should be free of any robot topics:
+由于你还没有启动任何 ROS 2 节点，``ros2 topic list`` 的输出中
+应该没有任何机器人话题：
 
 .. tabs::
 
@@ -90,12 +90,12 @@ should be free of any robot topics:
         /parameter_events
         /rosout
 
-2 Configuring ROS 2
-^^^^^^^^^^^^^^^^^^^
+2 配置 ROS 2
+^^^^^^^^^^^^
 
-To be able to communicate our simulation with ROS 2 you need to use a package called ``ros_gz_bridge``.
-This package provides a network bridge which enables the exchange of messages between ROS 2 and Gazebo Transport.
-You can install this package by typing:
+要让我们仿真的内容与 ROS 2 通信，你需要使用一个名为 ``ros_gz_bridge`` 的软件包。
+该软件包提供了一个网络桥接，可以在 ROS 2 和 Gazebo Transport 之间交换消息。
+你可以通过输入以下命令来安装这个软件包：
 
 .. tabs::
 
@@ -105,8 +105,8 @@ You can install this package by typing:
 
         $ sudo apt-get install ros-{DISTRO}-ros-ign-bridge
 
-At this point you are ready to launch a bridge from ROS to Gazebo.
-In particular you are going to create a bridge for the topic ``/model/vehicle_blue/cmd_vel``:
+此时你已经可以从 ROS 桥接到 Gazebo 了。
+具体来说，你将为话题 ``/model/vehicle_blue/cmd_vel`` 创建一个桥接：
 
 .. tabs::
 
@@ -117,12 +117,12 @@ In particular you are going to create a bridge for the topic ``/model/vehicle_bl
         $ source /opt/ros/{DISTRO}/setup.bash
         $ ros2 run ros_gz_bridge parameter_bridge /model/vehicle_blue/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist
 
-For more details about the ``ros_gz_bridge`` please check this `README <https://github.com/gazebosim/ros_gz/tree/ros2/ros_gz_bridge>`__ .
+有关 ``ros_gz_bridge`` 的更多细节，请查看这个 `README <https://github.com/gazebosim/ros_gz/tree/ros2/ros_gz_bridge>`__ 。
 
-Once the bridge is running the robot is able to follow your motor commands.
-There are two options:
+桥接运行后，机器人就能够跟随你的电机指令运动了。
+有两种选择：
 
-* Send a command to the topic using ``ros2 topic pub``
+* 使用 ``ros2 topic pub`` 向该话题发送命令
 
  .. tabs::
 
@@ -132,9 +132,9 @@ There are two options:
 
         $ ros2 topic pub /model/vehicle_blue/cmd_vel geometry_msgs/Twist "linear: { x: 0.1 }"
 
-* ``teleop_twist_keyboard`` package.
-  This node takes keypresses from the keyboard and publishes them as Twist messages.
-  You can install it typing:
+* ``teleop_twist_keyboard`` 软件包。
+  该节点从键盘获取按键，并将它们作为 Twist 消息发布。
+  你可以通过输入以下命令来安装它：
 
  .. tabs::
 
@@ -144,8 +144,8 @@ There are two options:
 
          $ sudo apt-get install ros-{DISTRO}-teleop-twist-keyboard
 
- The default topic where ``teleop_twist_keyboard`` is publishing Twist messages is ``/cmd_vel`` but you can remap this
- topic to make use of the topic used in the bridge:
+ ``teleop_twist_keyboard`` 发布 Twist 消息的默认话题是 ``/cmd_vel``，但你可以重映射该
+ 话题，以便使用桥接中使用的话题：
 
  .. tabs::
 
@@ -182,13 +182,13 @@ There are two options:
 
         currently:      speed 0.5       turn 1.0
 
-3 Visualizing lidar data in ROS 2
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 在 ROS 2 中可视化激光雷达数据
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The diff drive robot has a lidar.
-To send the data generated by Gazebo to ROS 2, you need to launch another bridge.
-In the case the data from the lidar is provided in the Gazebo Transport topic ``/lidar2``, which you are going to remap in the bridge.
-This topic will be available under the topic ``/lidar_scan``:
+这个差速驱动机器人带有一个激光雷达。
+要把 Gazebo 生成的数据发送到 ROS 2，你需要启动另一个桥接。
+这里激光雷达的数据由 Gazebo Transport 话题 ``/lidar2`` 提供，你将在桥接中重映射它。
+该话题将以 ``/lidar_scan`` 的名字提供：
 
 .. tabs::
 
@@ -199,7 +199,7 @@ This topic will be available under the topic ``/lidar_scan``:
         $ source /opt/ros/{DISTRO}/setup.bash
         $ ros2 run ros_gz_bridge parameter_bridge /lidar2@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan --ros-args -r /lidar2:=/laser_scan
 
-To visualize the data from the lidar in ROS 2 you can use Rviz2:
+要在 ROS 2 中可视化激光雷达的数据，你可以使用 Rviz2：
 
 .. tabs::
 
@@ -210,20 +210,20 @@ To visualize the data from the lidar in ROS 2 you can use Rviz2:
         $ source /opt/ros/{DISTRO}/setup.bash
         $ rviz2
 
-Then you need to configure the ``fixed frame``:
+然后你需要配置 ``fixed frame``：
 
 .. image:: Image/fixed_frame.png
 
-And then click in the button "Add" to include a display to visualize the lidar:
+接着点击“Add”按钮，添加一个显示项来可视化激光雷达：
 
 .. image:: Image/add_lidar.png
 
-Now you should see the data from the lidar in Rviz2:
+现在你应该能在 Rviz2 中看到激光雷达的数据了：
 
 .. image:: Image/rviz2.png
 
-Summary
--------
+小结
+----
 
-In this tutorial, you launched a robot simulation with Gazebo, launched
-bridges with actuators and sensors, visualized data from a sensor, and moved a diff drive robot.
+在本教程中，你使用 Gazebo 启动了一个机器人仿真，启动了
+与执行器和传感器相关的桥接，可视化了来自传感器的数据，并让一个差速驱动机器人运动起来。

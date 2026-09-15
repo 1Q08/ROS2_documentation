@@ -1,39 +1,39 @@
 .. redirect-from::
 
-Package Docs
-============
+包文档
+======
 
-ROS package documentation, that is to say documentation for specific packages you install via apt or some other tool, can be found in multiple places.
-Here is a brief list of where to look for specific ROS package documentation.
+ROS 包文档，即通过 apt 或其他工具安装的特定包的文档，可以在多个地方找到。
+下面简要列出了查找特定 ROS 包文档的位置。
 
 
-* Most ROS 2 packages have their package level documentation `included in this index page <https://docs.ros.org/en/{DISTRO}/p/>`__.
-* All ROS 2 package's documentation is hosted alongside its information on the `ROS Index <https://index.ros.org/>`_.
-  Searching for packages on ROS Index will yield their information such as released distributions, ``README.md`` files, URLs, and other important metadata.
+* 大多数 ROS 2 包的包级文档都 `包含在此索引页面中 <https://docs.ros.org/en/{DISTRO}/p/>`__。
+* 所有 ROS 2 包的文档都与其信息一同托管在 `ROS 索引 <https://index.ros.org/>`_ 上。
+  在 ROS 索引中搜索包，将返回其信息，例如已发布的发行版、``README.md`` 文件、URL 以及其他重要元数据。
 
-Larger Packages
----------------
+更大的包
+--------
 
-Larger packages like MoveIt, Nav2, and microROS, are given their own domain or subdomain on ros.org.
-Here is a short list.
+像 MoveIt、Nav2 和 microROS 这样较大的包，在 ros.org 上拥有自己的域或子域。
+以下是一个简短列表。
 
 * `MoveIt <https://moveit.ai/>`__
 * `Navigation2 <https://nav2.org/>`__
 * `Control <https://control.ros.org/master/index.html>`__
-* `microROS (embedded systems) <https://micro.ros.org/>`__
+* `microROS（嵌入式系统） <https://micro.ros.org/>`__
 
-API Documentation
------------------
+API 文档
+--------
 
-You can find the API level documentation for the ROS client libraries in the {DISTRO_TITLE} distribution using the links below:
+您可以使用下面的链接找到 {DISTRO_TITLE} 发行版中 ROS 客户端库的 API 级文档：
 
-* `rclcpp - C++ client library <https://docs.ros.org/en/{DISTRO}/p/rclcpp/generated/index.html>`_
-* `rclcpp_lifecycle - C++ lifecycle library <https://docs.ros.org/en/{DISTRO}/p/rclcpp_lifecycle/generated/index.html>`_
-* `rclcpp_components - C++ components library <https://docs.ros.org/en/{DISTRO}/p/rclcpp_components/generated/index.html>`_
-* `rclcpp_action - C++ actions library <https://docs.ros.org/en/{DISTRO}/p/rclcpp_action/generated/index.html>`_
+* `rclcpp - C++ 客户端库 <https://docs.ros.org/en/{DISTRO}/p/rclcpp/generated/index.html>`_
+* `rclcpp_lifecycle - C++ 生命周期库 <https://docs.ros.org/en/{DISTRO}/p/rclcpp_lifecycle/generated/index.html>`_
+* `rclcpp_components - C++ 组件库 <https://docs.ros.org/en/{DISTRO}/p/rclcpp_components/generated/index.html>`_
+* `rclcpp_action - C++ 动作库 <https://docs.ros.org/en/{DISTRO}/p/rclcpp_action/generated/index.html>`_
 
-Adding Your Package to docs.ros.org
------------------------------------
+将您的包添加到 docs.ros.org
+---------------------------
 
-All released ROS 2 packages are automatically added to docs.ros.org and `ROS Index <https://index.ros.org/>`_.
-If you would like to enable or configure your own package please see: :doc:`./How-To-Guides/Documenting-a-ROS-2-Package`.
+所有已发布的 ROS 2 包都会自动添加到 docs.ros.org 和 `ROS 索引 <https://index.ros.org/>`_。
+如果您想启用或配置自己的包，请参阅：:doc:`./How-To-Guides/Documenting-a-ROS-2-Package`。

@@ -1,7 +1,7 @@
-The ROS 2 Project
-=================
+ROS 2 项目
+==========
 
-Check out the resources below to learn more about the advancement of the ROS 2 project.
+查看以下资源，了解有关 ROS 2 项目进展的更多信息。
 
 .. toctree::
    :maxdepth: 1

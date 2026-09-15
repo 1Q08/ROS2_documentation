@@ -2,8 +2,8 @@
 
 .. _lyrical-release:
 
-Lyrical Luth (codename 'lyrical'; May, 2026)
-============================================
+Lyrical Luth（代号 ``lyrical``；2026 年 5 月）
+==============================================
 
 .. toctree::
    :hidden:
@@ -12,33 +12,33 @@ Lyrical Luth (codename 'lyrical'; May, 2026)
    lyrical/release-timeline.rst
    lyrical/supported-platforms.rst
 
-*Lyrical Luth* is the twelfth release of ROS 2.
-It is a Long Term Support (LTS) release, and it is supported until May 2031.
+*Lyrical Luth* 是 ROS 2 的第十二个发行版。
+它是长期支持（LTS）发行版，支持期至 2031 年 5 月。
 
-* `Install Lyrical Luth <../../lyrical/Installation.html>`_
+* `安装 Lyrical Luth <../../lyrical/Installation.html>`_
 * :doc:`lyrical/release-timeline`
 * :doc:`lyrical/supported-platforms`
 
-New Features in Lyrical
------------------------
+Lyrical 中的新特性
+------------------
 
-This section highlights some of the new features in ROS Lyrical.
-For all changes, see the :doc:`full ROS Lyrical changelog <Lyrical-Luth-Complete-Changelog>`.
+本节重点介绍 ROS Lyrical 中的一些新特性。
+有关所有变更，请参阅 :doc:`完整的 ROS Lyrical 变更日志 <Lyrical-Luth-Complete-Changelog>`。
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 1
    :local:
 
-Callback Group Events executor (``rclcpp``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+回调组事件执行器（``rclcpp``）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Looking for better executor performance?
-Check out the new Callback Group Events Executor.
-Like its predecessor the ``EventsExecutor``, the ``EventsCBGExecutor`` uses an events queue to process ready entities.
-However, ``EventsCBGExecutor`` adds support for multiple sources of ROS time and multiple threads.
-Compared to the Single and Multithreaded executors, the ``EventsCBGExecutor`` uses 10% to 15% less CPU.
+正在寻找更好的执行器性能？
+来看看新的回调组事件执行器（Callback Group Events Executor）。
+与其前身 ``EventsExecutor`` 一样，``EventsCBGExecutor`` 使用事件队列来处理就绪实体。
+不过，``EventsCBGExecutor`` 增加了对多个 ROS 时间源和多个线程的支持。
+相比单线程执行器和多线程执行器，``EventsCBGExecutor`` 的 CPU 占用低 10% 到 15%。
 
-Try it out by instantiating ``rclcpp::executors::EventsCBGExecutor``:
+通过实例化 ``rclcpp::executors::EventsCBGExecutor`` 来试用它：
 
 .. code-block:: c++
 
@@ -57,8 +57,8 @@ Try it out by instantiating ``rclcpp::executors::EventsCBGExecutor``:
       return 0;
     }
 
-Using composable nodes?
-Launch a component container with the ``EventsCBGExecutor`` using the new ``--executor-type`` argument.
+在使用可组合节点？
+使用新的 ``--executor-type`` 参数，以 ``EventsCBGExecutor`` 启动组件容器。
 
 .. code-block:: console
 
@@ -73,15 +73,15 @@ Launch a component container with the ``EventsCBGExecutor`` using the new ``--ex
       </node_container>
     </launch>
 
-For more info, see `ros2/rclcpp#3097 <https://github.com/ros2/rclcpp/pull/3097>`_, `ros2/rclcpp#3134 <https://github.com/ros2/rclcpp/pull/3134>`_, and `ros2/rclcpp#3137 <https://github.com/ros2/rclcpp/pull/3137>`_.
+更多信息请参阅 `ros2/rclcpp#3097 <https://github.com/ros2/rclcpp/pull/3097>`_、`ros2/rclcpp#3134 <https://github.com/ros2/rclcpp/pull/3134>`_ 和 `ros2/rclcpp#3137 <https://github.com/ros2/rclcpp/pull/3137>`_。
 
-Parameter range descriptors check bounds for integer and double arrays (``rclcpp``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+参数范围描述符会检查整数数组和双精度数组的边界（``rclcpp``）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Do your nodes have integer or double arrays?
-Do you need to constrain the values in those arrays?
-``rclcpp`` nodes now validate range constraints on these arrays.
-Using the code below, the node will only allow setting ``my_integer_array`` to a list containing even integers between 2 and 10 (inclusive).
+你的节点中有整数数组或双精度数组吗？
+你需要限制这些数组中的取值吗？
+``rclcpp`` 节点现在会验证这些数组上的范围约束。
+使用下面的代码，该节点只允许把 ``my_integer_array`` 设置为包含 2 到 10（含）之间偶数的列表。
 
 .. code-block:: c++
 
@@ -93,17 +93,17 @@ Using the code below, the node will only allow setting ``my_integer_array`` to a
     integer_range.step = 2;
     node->declare_parameter("my_integer_array", std::vector<int64_t>{2, 4, 6, 8, 10}, descriptor);
 
-See `ros2/rclcpp#2828 <https://github.com/ros2/rclcpp/pull/2828>`_ for more info.
+更多信息请参阅 `ros2/rclcpp#2828 <https://github.com/ros2/rclcpp/pull/2828>`_。
 
-``AsyncNode`` lets you use ``asyncio`` (``rclpy``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``AsyncNode`` 让你可以使用 ``asyncio`` （``rclpy``）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Want to use ``asyncio`` and ``rclpy`` at the same time?
-Check out the new ``AsyncNode`` class.
-This node runs an ``asyncio`` event loop.
-Call ``await`` on any ``asyncio`` operation from any subscription, service, and timer callback.
-Try ``await client.call(request)`` to wait for service calls, and the sim-time aware ``await clock.sleep(...)``.
-This class uses significantly less CPU compared to the default ``SingleThreadedExecutor``.
+想要同时使用 ``asyncio`` 和 ``rclpy`` 吗？
+来看看新的 ``AsyncNode`` 类。
+该节点会运行一个 ``asyncio`` 事件循环。
+可以在任意订阅、服务和定时器回调中对任意 ``asyncio`` 操作调用 ``await``。
+试用 ``await client.call(request)`` 来等待服务调用，以及能感知仿真时间的 ``await clock.sleep(...)``。
+与默认的 ``SingleThreadedExecutor`` 相比，该类显著降低了 CPU 占用。
 
 .. code-block:: python
 
@@ -128,25 +128,25 @@ This class uses significantly less CPU compared to the default ``SingleThreadedE
     if __name__ == '__main__':
         asyncio.run(_main())
 
-Publish messages without copying data using ``rosidl::Buffer``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+使用 ``rosidl::Buffer`` 发布消息而无需复制数据
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Are you publishing data on ROS topics, but using the data elsewhere, like a GPU?
-Tired of copying data out of the GPU before publishing just to copy it back into the GPU in the subscriber?
-Use ``rosidl::Buffer`` to publish and subscribe ROS messages without moving data from elsewhere.
+你是否在 ROS 话题上发布数据，却在别处（例如 GPU）使用这些数据？
+你是否厌倦了发布前把数据从 GPU 复制出来，只为在订阅方再复制回 GPU？
+使用 ``rosidl::Buffer`` 即可在不搬运别处数据的情况下发布和订阅 ROS 消息。
 
-All ``uint8[]`` fields now have the type ``rosidl::Buffer<uint8_t>`` in C++ instead of ``std::vector<uint8_t>``.
-Define your ROS messages with ``uint8[]`` fields and install an appropriate ``rosidl::BufferBackend`` implementation.
-Note that only publishers and subscribers using ``rmw_fastrtps_cpp`` may use this feature for now, but `support in Zenoh is coming <https://github.com/ros2/rmw_zenoh/pull/930>`_.
+在 C++ 中，所有 ``uint8[]`` 字段的类型现在都是 ``rosidl::Buffer<uint8_t>``，而不再是 ``std::vector<uint8_t>``。
+用 ``uint8[]`` 字段定义你的 ROS 消息，并安装合适的 ``rosidl::BufferBackend`` 实现。
+注意，目前只有使用 ``rmw_fastrtps_cpp`` 的发布者和订阅者可以使用此特性，不过 `Zenoh 中的支持即将到来 <https://github.com/ros2/rmw_zenoh/pull/930>`_。
 
-Using a custom hardware accelerator or machine learning library?
-You can benefit from this too.
+在使用自定义的硬件加速器或机器学习库？
+你也能从中受益。
 
-Annotate types in YAML Parameter Files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+在 YAML 参数文件中标注类型
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Tired of ``rcl`` interpreting ambiguous YAML parameter values as the wrong type?
-In ROS Lyrical, use YAML tags to specify the correct type.
+是否厌倦了 ``rcl`` 把有歧义的 YAML 参数值解释成错误的类型？
+在 ROS Lyrical 中，使用 YAML 标签来指定正确的类型。
 
 .. code-block:: yaml
 
@@ -159,16 +159,16 @@ In ROS Lyrical, use YAML tags to specify the correct type.
       seq_param: !!seq [10, 0, -10]
       map_param: !!map {str: string, bool: true, int: 10, float: 1.1}
 
-See `ros2/rcl#1275 <https://github.com/ros2/rcl/pull/1275>`_ for more info.
+更多信息请参阅 `ros2/rcl#1275 <https://github.com/ros2/rcl/pull/1275>`_。
 
-Per-message log severity in launch files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+launch 文件中按消息设置日志严重级别
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-ROS Lyrical now supports per-message log severity levels in launch files.
-This makes it easier to find important messages or ignore unimportant ones in log files when debugging!
+ROS Lyrical 现在支持在 launch 文件中为每条消息设置日志严重级别。
+这让调试时在日志文件中查找重要消息或忽略不重要消息变得更加容易！
 
-Specify the log level using the new ``level`` argument on the ``log`` action.
-Alternatively, use the new ``log_debug``, ``log_info``, ``log_warning``, or ``log_error`` actions.
+使用 ``log`` 动作上新增的 ``level`` 参数来指定日志级别。
+或者，使用新增的 ``log_debug``、``log_info``、``log_warning`` 或 ``log_error`` 动作。
 
 .. code-block:: xml
 
@@ -182,14 +182,14 @@ Alternatively, use the new ``log_debug``, ``log_info``, ``log_warning``, or ``lo
     </launch>
 
 
-For more info see `ros2/launch#866 <https://github.com/ros2/launch/pull/866>`_.
+更多信息请参阅 `ros2/launch#866 <https://github.com/ros2/launch/pull/866>`_。
 
-New substitutions in XML and YAML launch files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+XML 和 YAML launch 文件中的新替换
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Use XML or YAML launch files?
-:doc:`Substitutions <../Tutorials/Intermediate/Launch/Using-Substitutions>` make your launch files evaluate variables at launch time.
-Launch frontends (the things that make it possible to use XML and YAML launch files) may now use ``string-join`` and ``path-join`` substitutions.
+在使用 XML 或 YAML launch 文件？
+:doc:`替换 <../Tutorials/Intermediate/Launch/Using-Substitutions>` 能让你的 launch 文件在启动时对变量求值。
+launch 前端（即让使用 XML 和 YAML launch 文件成为可能的组件）现在可以使用 ``string-join`` 和 ``path-join`` 替换。
 
 .. code-block:: xml
 
@@ -200,36 +200,36 @@ Launch frontends (the things that make it possible to use XML and YAML launch fi
     </launch>
 
 
-See `ros2/launch#857 <https://github.com/ros2/launch/pull/857>`_ and `ros2/launch#943 <https://github.com/ros2/launch/pull/943>`_ for more info.
+更多信息请参阅 `ros2/launch#857 <https://github.com/ros2/launch/pull/857>`_ 和 `ros2/launch#943 <https://github.com/ros2/launch/pull/943>`_。
 
-Choose ROS logging backend at runtime
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+在运行时选择 ROS 日志后端
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Have you ever needed to use ROS with another framework that has its own logging system?
-ROS supports replacing its logging backend, but it previously required rebuilding ``rcl`` from source.
-Now you can change the logging implementation at runtime!
-Set the ``RCL_LOGGING_IMPLEMENTATION`` environment variable to switch between logging backends.
-Valid values are:
+你是否曾需要把 ROS 与另一个自带日志系统的框架一起使用？
+ROS 支持替换其日志后端，但以前需要从源码重新构建 ``rcl``。
+现在你可以在运行时更换日志实现！
+设置 ``RCL_LOGGING_IMPLEMENTATION`` 环境变量即可在日志后端之间切换。
+有效值包括：
 
 * ``rcl_logging_spdlog``
 * ``rcl_logging_noop``
-* or your own custom logging implementation!
+* 或者你自己的自定义日志实现！
 
-If not specified, ROS uses ``rcl_logging_spdlog`` by default.
+如果未指定，ROS 默认使用 ``rcl_logging_spdlog``。
 
-See `ros2/rcl#1178 <https://github.com/ros2/rcl/issues/1178>`_, `ros2/rcl#1276 <https://github.com/ros2/rcl/pull/1276>`_, and `ros2/rcl_logging#135 <https://github.com/ros2/rcl_logging/pull/135>`_ for more details.
+更多详情请参阅 `ros2/rcl#1178 <https://github.com/ros2/rcl/issues/1178>`_、`ros2/rcl#1276 <https://github.com/ros2/rcl/pull/1276>`_ 和 `ros2/rcl_logging#135 <https://github.com/ros2/rcl_logging/pull/135>`_。
 
-Control bag recording remotely using ROS services
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+使用 ROS 服务远程控制 bag 录制
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Want to remotely control bag recording?
-Use ``rosbag2``'s new services to:
+想要远程控制 bag 录制？
+使用 ``rosbag2`` 的新服务来：
 
-* start recording ``~/record``
-* stop recording ``~/stop``
-* start topic discovery ``~/start_discovery``
-* stop topic discovery ``~/stop_discovery``
-* query discovery state ``~/is_discovery_running``
+* 开始录制 ``~/record``
+* 停止录制 ``~/stop``
+* 开始话题发现 ``~/start_discovery``
+* 停止话题发现 ``~/stop_discovery``
+* 查询发现状态 ``~/is_discovery_running``
 
 .. code-block:: bash
 
@@ -241,16 +241,16 @@ Use ``rosbag2``'s new services to:
     ros2 service call /rosbag2_recorder/record rosbag2_interfaces/srv/Record "{uri: 'file:///tmp/my_awesome_bag_2'}"
 
 
-See `ros2/rosbag2#2248 <https://github.com/ros2/rosbag2/pull/2248>`_ for more details.
+更多详情请参阅 `ros2/rosbag2#2218 <https://github.com/ros2/rosbag2/pull/2218>`_。
 
-Control bag Playback and Recording using Python
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+使用 Python 控制 bag 回放和录制
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Want to control bag playback and recording programmatically?
-Previously, Python users relied on blocking command-line style helpers.
-Now Python users may call APIs to pause, resume, stop, seek, play next, control spinning, and wait for events.
+想要以编程方式控制 bag 回放和录制？
+以前，Python 用户只能依赖阻塞式命令行风格的工具。
+现在 Python 用户可以调用 API 来暂停、恢复、停止、跳转、播放下一条、控制自旋以及等待事件。
 
-Recording example:
+录制示例：
 
 .. code-block:: python
 
@@ -277,7 +277,7 @@ Recording example:
         recorder.stop()
         recorder.stop_spin()
 
-Playback example:
+回放示例：
 
 .. code-block:: python
 
@@ -315,49 +315,49 @@ Playback example:
         player.stop()
         player.stop_spin()
 
-See `ros2/rosbag2#2047 <https://github.com/ros2/rosbag2/pull/2047>`_, `ros2/rosbag2#2062 <https://github.com/ros2/rosbag2/pull/2062>`_, `ros2/rosbag2#2061 <https://github.com/ros2/rosbag2/pull/2061>`_, and `ros2/rosbag2#2095 <https://github.com/ros2/rosbag2/pull/2095>`_ for more details.
+更多详情请参阅 `ros2/rosbag2#2047 <https://github.com/ros2/rosbag2/pull/2047>`_、`ros2/rosbag2#2062 <https://github.com/ros2/rosbag2/pull/2062>`_、`ros2/rosbag2#2061 <https://github.com/ros2/rosbag2/pull/2061>`_ 和 `ros2/rosbag2#2095 <https://github.com/ros2/rosbag2/pull/2095>`_。
 
-Circular bag recording with limit on number of bags
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+循环录制并限制 bag 数量
+^^^^^^^^^^^^^^^^^^^^^^^
 
-Recording data on your robot with limited disk space?
-Try the new ``--max-bag-files`` option.
-It limits the maximum number of bag files stored on disk by automatically deleting the oldest split files as new ones are created.
+机器人的磁盘空间有限，还要录制数据？
+试试新增的 ``--max-bag-files`` 选项。
+它会在新的分片文件生成时自动删除最旧的分片文件，从而限制磁盘上保存的 bag 文件数量。
 
 .. code-block:: bash
 
     # Max bag size: 100MB
     ros2 bag record --all --max-bag-size 100000000 --max-bag-files 5
 
-See `ros2/rosbag2#2218 <https://github.com/ros2/rosbag2/pull/2218>`_ for more details.
+更多详情请参阅 `ros2/rosbag2#2218 <https://github.com/ros2/rosbag2/pull/2218>`_。
 
-More descriptive bag split names
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+更具描述性的 bag 分片名称
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Do you have trouble identifying which bag is which?
-``rosbag2`` now names bag splits so that each is self-descriptive and chronologically traceable.
+你是否难以分辨哪个 bag 是哪个？
+``rosbag2`` 现在会为 bag 分片命名，使每个分片都能自我描述，并可按时间顺序追溯。
 
 .. code-block:: text
 
    {counter}_{prefix}_{timestamp}.{extension}
 
-* **counter**: split index (integer starting from 0, *not zero-padded*)
-* **prefix**: derived from the bag directory name, with any default timestamp suffix removed
-* **timestamp**: local time at file creation, formatted as ``YYYY_MM_DD-HH_MM_SS``
-* **extension**: bag file extension. e.g., ``.mcap``, ``.db3``
+* **counter**：分片索引（从 0 开始的整数，*不补前导零*）
+* **prefix**：派生自 bag 目录名，并去除默认的时间戳后缀
+* **timestamp**：文件创建时的本地时间，格式为 ``YYYY_MM_DD-HH_MM_SS``
+* **extension**：bag 文件扩展名，例如 ``.mcap``、``.db3``
 
-See `ros2/rosbag2#2265 <https://github.com/ros2/rosbag2/pull/2265>`_ for more details.
+更多详情请参阅 `ros2/rosbag2#2265 <https://github.com/ros2/rosbag2/pull/2265>`_。
 
-Catch data loss early with ``rosbag2`` message-loss observability
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+借助 ``rosbag2`` 的消息丢失可观测性及早发现数据丢失
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Say you've built a robust system for recording data on your robot, but there is a problem.
-How do you *know* there's a problem?
-With ``rosbag2``'s new message-loss observability of course!
+假设你已在机器人上构建了一套健壮的数据录制系统，但现在出现了问题。
+你如何 *得知* 出了问题？
+当然是借助 ``rosbag2`` 新增的消息丢失可观测性！
 
-``rosbag2`` now collects message-loss statistics from the transport layer and recorder internals.
-It publishes incremental per-topic loss events on the ``events/rosbag2_messages_lost`` topic.
-Control the publishing rate using ``--stats_max_publishing_rate``.
+``rosbag2`` 现在会从传输层和录制器内部收集消息丢失统计信息。
+它会在 ``events/rosbag2_messages_lost`` 话题上发布按话题划分的增量丢失事件。
+使用 ``--stats_max_publishing_rate`` 控制发布频率。
 
 .. code-block:: bash
 
@@ -366,40 +366,40 @@ Control the publishing rate using ``--stats_max_publishing_rate``.
     # If all is going well, you should see no output from this command
     ros2 topic echo /events/rosbag2_messages_lost
 
-See `ros2/rosbag2#2039 <https://github.com/ros2/rosbag2/pull/2039>`_, `ros2/rosbag2#2144 <https://github.com/ros2/rosbag2/pull/2144>`_, and `ros2/rosbag2#2150 <https://github.com/ros2/rosbag2/pull/2150>`_ for more details.
+更多详情请参阅 `ros2/rosbag2#2039 <https://github.com/ros2/rosbag2/pull/2039>`_、`ros2/rosbag2#2144 <https://github.com/ros2/rosbag2/pull/2144>`_ 和 `ros2/rosbag2#2150 <https://github.com/ros2/rosbag2/pull/2150>`_。
 
 
-``fish`` shell support
-^^^^^^^^^^^^^^^^^^^^^^
+``fish`` shell 支持
+^^^^^^^^^^^^^^^^^^^
 
-Do you enjoy `fish shell <https://fishshell.com/>`_?
-Do you want to use it with ROS?
-Now you can!
-Try out the new ``setup.fish`` script.
+你喜欢 `fish shell <https://fishshell.com/>`_ 吗？
+想把它和 ROS 一起使用吗？
+现在可以了！
+试试新增的 ``setup.fish`` 脚本。
 
 .. code-block:: shell
 
     source /opt/ros/lyrical/setup.fish
 
-See `ros2/ros2cli#1211 <https://github.com/ros2/ros2cli/pull/1211>`_ and `ament/ament_package#164 <https://github.com/ament/ament_package/pull/164>`_ for more info.
-To use ``fish`` shell with ``colcon``, check out `@Sunrisepeak's <https://github.com/Sunrisepeak>`_ `colcon-fish package <https://github.com/ros-x/colcon-fish>`_.
+更多信息请参阅 `ros2/ros2cli#1211 <https://github.com/ros2/ros2cli/pull/1211>`_ 和 `ament/ament_package#164 <https://github.com/ament/ament_package/pull/164>`_。
+要在 ``colcon`` 中使用 ``fish`` shell，请查看 `@Sunrisepeak 的 <https://github.com/Sunrisepeak>`_ `colcon-fish 包 <https://github.com/ros-x/colcon-fish>`_。
 
-``ros2 param get`` a parameter from all nodes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+使用 ``ros2 param get`` 从所有节点获取参数
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Are you using simulated time?
-How do you know if all of your nodes are using simulated time?
-Use ``ros2 param get <param name>`` to get a parameter value from all nodes.
+你在使用仿真时间吗？
+你如何知道所有节点是否都在使用仿真时间？
+使用 ``ros2 param get <param name>`` 从所有节点获取某个参数的值。
 
 .. image:: images/ros2_param_get_use_sim_time.gif
 
-See `ros2/ros2cli#1174 <https://github.com/ros2/ros2cli/pull/1174>`_ for more info.
+更多信息请参阅 `ros2/ros2cli#1174 <https://github.com/ros2/ros2cli/pull/1174>`_。
 
-``ros2 param`` get and set multiple parameters on one node
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+使用 ``ros2 param`` 在一个节点上获取和设置多个参数
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Want to get and set multiple parameters on one node at the same time?
-Use ``ros2 param get <node name> <param1> <param2> ...`` to get multiple values from a single node.
+想要同时在同一个节点上获取和设置多个参数？
+使用 ``ros2 param get <node name> <param1> <param2> ...`` 从单个节点获取多个值。
 
 .. code-block:: console
 
@@ -411,7 +411,7 @@ Use ``ros2 param get <node name> <param1> <param2> ...`` to get multiple values 
     publish_frequency:
       Double value is: 20.0
 
-Use ``ros2 param set <node name> <param1> <value1> <param2> <value2> ...`` to set multiple values on a single node.
+使用 ``ros2 param set <node name> <param1> <value1> <param2> <value2> ...`` 在单个节点上设置多个值。
 
 .. code-block:: console
 
@@ -421,13 +421,13 @@ Use ``ros2 param set <node name> <param1> <value1> <param2> <value2> ...`` to se
     publish_frequency: Set parameter successful
 
 
-See `ros2/ros2cli#1203 <https://github.com/ros2/ros2cli/pull/1203>`_ and `ros2/ros2cli#1204 <https://github.com/ros2/ros2cli/pull/1204>`_ for more details.
+更多详情请参阅 `ros2/ros2cli#1203 <https://github.com/ros2/ros2cli/pull/1203>`_ 和 `ros2/ros2cli#1204 <https://github.com/ros2/ros2cli/pull/1204>`_。
 
-``ros2 doctor --report`` now reports Actions, Services, and Environment variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``ros2 doctor --report`` 现在会报告动作、服务和环境变量
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``ros2 doctor --report`` now includes information about Actions, Services, and ROS-related environment variables.
-Include this report in your GitHub issues or AI prompts to debug problems faster.
+``ros2 doctor --report`` 现在会包含动作、服务以及 ROS 相关环境变量的信息。
+在 GitHub issue 或 AI 提示中加入此报告，可以更快地调试问题。
 
 .. code-block:: console
 
@@ -454,14 +454,14 @@ Include this report in your GitHub issues or AI prompts to debug problems faster
     # ...
 
 
-For more information see `ros2/ros2cli#1059 <https://github.com/ros2/ros2cli/pull/1059>`_, `ros2/ros2cli#1076 <https://github.com/ros2/ros2cli/pull/1076>`_, and `ros2/ros2cli#1045 <https://github.com/ros2/ros2cli/pull/1045>`_.
+更多信息请参阅 `ros2/ros2cli#1059 <https://github.com/ros2/ros2cli/pull/1059>`_、`ros2/ros2cli#1076 <https://github.com/ros2/ros2cli/pull/1076>`_ 和 `ros2/ros2cli#1045 <https://github.com/ros2/ros2cli/pull/1045>`_。
 
-Verbose service information ``ros2 service info --verbose``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+详细的服务信息 ``ros2 service info --verbose``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Are you debugging mismatched QoS settings between ROS clients and ROS services?
-Try out the new ``--verbose`` option to ``ros2 service info``.
-Like ``ros2 topic info``, this flag outputs detailed information about clients and services to help you troubleshoot issues.
+你在调试 ROS 客户端与 ROS 服务之间不匹配的 QoS 设置吗？
+试试 ``ros2 service info`` 新增的 ``--verbose`` 选项。
+与 ``ros2 topic info`` 类似，该标志会输出客户端和服务的详细信息，帮你排查问题。
 
 .. code-block:: console
 
@@ -496,8 +496,8 @@ Like ``ros2 topic info``, this flag outputs detailed information about clients a
           Liveliness: AUTOMATIC
           Liveliness lease duration: Infinite
 
-Want to get client and service information programmatically?
-Use these new C++ and Python APIs.
+想以编程方式获取客户端和服务信息？
+可以使用这些新的 C++ 和 Python API。
 
 .. code-block:: python
 
@@ -509,35 +509,35 @@ Use these new C++ and Python APIs.
     node->get_servers_info_by_service("some/service/name");
     node->get_clients_info_by_service("some/service/name");
 
-See `ros2/ros2cli#916 <https://github.com/ros2/ros2cli/pull/916>`_, `ros2/rclpy#1307 <https://github.com/ros2/rclpy/pull/1307>`_, and `ros2/rclcpp#2569 <https://github.com/ros2/rclcpp/pull/2569>`_ for more info.
+更多信息请参阅 `ros2/ros2cli#916 <https://github.com/ros2/ros2cli/pull/916>`_、`ros2/rclpy#1307 <https://github.com/ros2/rclpy/pull/1307>`_ 和 `ros2/rclcpp#2569 <https://github.com/ros2/rclcpp/pull/2569>`_。
 
-``ros2 topic bw`` multiple topics at once
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``ros2 topic bw`` 一次查看多个话题
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Trying to figure out which topics are using most of your network bandwidth?
-Now you can use ``ros2 topic bw`` with multiple topics at the same time.
-Pass multiple topics by name:
+想知道哪些话题占用了大部分网络带宽？
+现在可以同时对多个话题使用 ``ros2 topic bw``。
+按名称传入多个话题：
 
 .. code-block:: bash
 
     ros2 topic bw /tf /joint_states
 
-Or pass ``--all`` to watch bandwidth statistics in real time.
+或者传入 ``--all`` 实时查看带宽统计信息。
 
 .. image:: images/ros2_topic_bw_all.gif
 
-See `ros2/ros2cli#1124 <https://github.com/ros2/ros2cli/pull/1124>`_ and `ros2/ros2cli#1130 <https://github.com/ros2/ros2cli/pull/1130>`_ for more info.
+更多信息请参阅 `ros2/ros2cli#1124 <https://github.com/ros2/ros2cli/pull/1124>`_ 和 `ros2/ros2cli#1130 <https://github.com/ros2/ros2cli/pull/1130>`_。
 
-URDF improvements
-^^^^^^^^^^^^^^^^^
+URDF 改进
+^^^^^^^^^
 
-URDF released a few new features:
+URDF 发布了一些新特性：
 
-* Quaternions
-* Capsule geometry
-* Acceleration, deceleration, and jerk limits
+* 四元数
+* 胶囊体几何
+* 加速度、减速度和加加速度限制
 
-Add ``version="1.2"`` to your robot description to start using them.
+在机器人描述中添加 ``version="1.2"`` 即可开始使用它们。
 
 .. code-block:: xml
 
@@ -570,33 +570,33 @@ Add ``version="1.2"`` to your robot description to start using them.
       <!-- ... -->
     </robot>
 
-See `ros/urdfdom#235 <https://github.com/ros/urdfdom/pull/235>`_, `ros/urdfdom#238 <https://github.com/ros/urdfdom/pull/238>`_, and `ros/urdfdom#212 <https://github.com/ros/urdfdom/pull/212>`_ for more info.
+更多信息请参阅 `ros/urdfdom#235 <https://github.com/ros/urdfdom/pull/235>`_、`ros/urdfdom#238 <https://github.com/ros/urdfdom/pull/238>`_ 和 `ros/urdfdom#212 <https://github.com/ros/urdfdom/pull/212>`_。
 
-Note that the Robot Model plugin `does not yet support capsule geometry <https://github.com/ros2/rviz/issues/1734>`_.
-Please consider opening a pull request for this feature!
+请注意，Robot Model 插件 `尚不支持胶囊体几何 <https://github.com/ros2/rviz/issues/1734>`_。
+欢迎为该特性提交 pull request！
 
-``robot_state_publisher`` can read the robot description from a topic
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``robot_state_publisher`` 可以从话题读取机器人描述
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Most of the time in a ROS system the ``robot_state_publisher`` node does two things:
+在 ROS 系统中，``robot_state_publisher`` 节点大多数时候会做两件事：
 
-* It publishes the ``robot_description`` on a topic, and
-* It publishes TF transforms given joint positions.
+* 在话题上发布 ``robot_description``，以及
+* 根据关节位置发布 TF 变换。
 
-If you have ever tried to add ROS interfaces to a framework with its own internal robot model, you may have wished these were two separate utilities.
-Now they can be!
-Set the ``use_robot_description_topic`` parameter to ``true`` to make ``robot_state_publisher`` subscribe to the ``robot_description`` topic instead of publishing it.
-Then, make the other robot framework publish its own robot description on that topic.
+如果你曾尝试为自带内部机器人模型的框架添加 ROS 接口，可能会希望这两件事分别由两个独立工具完成。
+现在可以了！
+将 ``use_robot_description_topic`` 参数设为 ``true``，即可让 ``robot_state_publisher`` 订阅 ``robot_description`` 话题，而不是发布它。
+然后，让另一个机器人框架在该话题上发布它自己的机器人描述。
 
-See `ros/robot_state_publisher#234 <https://github.com/ros/robot_state_publisher/pull/234>`_ for more info.
+更多信息请参阅 `ros/robot_state_publisher#234 <https://github.com/ros/robot_state_publisher/pull/234>`_。
 
-Resource retriever service
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+资源获取服务
+^^^^^^^^^^^^
 
-Say you are debugging a robot in the field.
-You open up RViz on your laptop, but you don't have the right version of the robot description installed.
-In ROS Kilted, RViz added the ability to load meshes over the network using a ROS service ``/rviz/get_resource``; however, that ability was limited to RViz.
-ROS Lyrical comes with a generic ``resource_retriever_service`` so that any node can load meshes over the network.
+假设你正在现场调试一台机器人。
+你在笔记本上打开 RViz，但没有安装正确版本的机器人描述。
+在 ROS Kilted 中，RViz 增加了通过 ROS 服务 ``/rviz/get_resource`` 从网络加载网格的能力；不过该能力仅限于 RViz。
+ROS Lyrical 带来了通用的 ``resource_retriever_service``，使任何节点都能从网络加载网格。
 
 .. code-block:: c++
 
@@ -606,39 +606,39 @@ ROS Lyrical comes with a generic ``resource_retriever_service`` so that any node
     // Give that plugin to your Retriever instance
     resource_retriever::Retriever retriever(plugins);
 
-See `ros2/rviz#1698 <https://github.com/ros2/rviz/pull/1698>`_ for more details.
+更多详情请参阅 `ros2/rviz#1698 <https://github.com/ros2/rviz/pull/1698>`_。
 
-Call ``ament_python_install_package`` multiple times
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+多次调用 ``ament_python_install_package``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Packages may now call ``ament_python_install_package()`` multiple times with the same Python package name.
-This allows you to use ``rosidl_generate_interfaces()`` and ``ament_python_install_package()`` to put generated messages and code into the same Python package.
+现在，包可以使用同一个 Python 包名多次调用 ``ament_python_install_package()``。
+这让你能够使用 ``rosidl_generate_interfaces()`` 和 ``ament_python_install_package()`` 将生成的消息和代码放入同一个 Python 包中。
 
-While you can include code and message definitions in the same package, a best practice is to put message definitions in their own package.
-This lets others depend on just the messages, as they might not need the code or its dependencies.
+虽然你可以把代码和消息定义放在同一个包中，但最佳实践是将消息定义放在它们自己的包里。
+这样其他人就可以只依赖消息，因为他们可能并不需要那些代码或其依赖项。
 
-See `ament/ament_cmake#587 <https://github.com/ament/ament_cmake/pull/587>`_ for more info.
+更多信息请参阅 `ament/ament_cmake#587 <https://github.com/ament/ament_cmake/pull/587>`_。
 
-New CMake target: ``ament_cmake_ros_core::ament_ros_defaults``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+新的 CMake 目标：``ament_cmake_ros_core::ament_ros_defaults``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Tired of specifying different C and C++ versions on different branches?
-Let the new CMake target ``ament_cmake_ros_core::ament_ros_defaults`` set those for you.
-This target uses `target_compile_features <https://cmake.org/cmake/help/v3.20/command/target_compile_features.html>`_ to specify C and C++ version requirements.
+厌倦了在不同分支上指定不同的 C 和 C++ 版本？
+让新的 CMake 目标 ``ament_cmake_ros_core::ament_ros_defaults`` 帮你设置。
+该目标使用 `target_compile_features <https://cmake.org/cmake/help/v3.20/command/target_compile_features.html>`_ 来指定 C 和 C++ 的版本要求。
 
 .. code-block:: cmake
 
     find_package(ament_cmake_ros REQUIRED)
     target_link_libraries(my_library PUBLIC ament_cmake_ros_core::ament_ros_defaults)
 
-See `ros2/ament_cmake_ros#62 <https://github.com/ros2/ament_cmake_ros/pull/62>`_ for more info.
+更多信息请参阅 `ros2/ament_cmake_ros#62 <https://github.com/ros2/ament_cmake_ros/pull/62>`_。
 
-New thread naming utilities
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+新增的线程命名工具
+^^^^^^^^^^^^^^^^^^
 
-Debugging multithreading issues?
-Use two new utilities in ``rcpputils`` to get and set thread names.
-This makes it easier to identify threads in debuggers like ``gdb``.
+正在调试多线程问题？
+使用 ``rcpputils`` 中新增的两个工具来获取和设置线程名。
+这让你在 ``gdb`` 等调试器中更容易识别各个线程。
 
 .. code-block:: c++
 
@@ -651,13 +651,13 @@ This makes it easier to identify threads in debuggers like ``gdb``.
     }
 
 
-See `ros2/rcpputils#213 <https://github.com/ros2/rcpputils/pull/213>`_ for more details.
+更多详情请参阅 `ros2/rcpputils#213 <https://github.com/ros2/rcpputils/pull/213>`_。
 
-New ``rcutils`` APIs
-^^^^^^^^^^^^^^^^^^^^
+新增的 ``rcutils`` API
+^^^^^^^^^^^^^^^^^^^^^^
 
-The ``rcutils`` package includes some new utilities.
-If your platform lacks ``strnlen``, you may now use ``rcutils_strnlen`` instead.
+``rcutils`` 包包含一些新增工具。
+如果你的平台缺少 ``strnlen``，现在可以改用 ``rcutils_strnlen``。
 
 .. code-block:: c
 
@@ -672,8 +672,8 @@ If your platform lacks ``strnlen``, you may now use ``rcutils_strnlen`` instead.
         return 0;
     }
 
-Need to encode or decode base64 data?
-Try the new ``rcutils_encode_base64`` and ``rcutils_decode_base64`` functions.
+需要编码或解码 base64 数据？
+试试新增的 ``rcutils_encode_base64`` 和 ``rcutils_decode_base64`` 函数。
 
 .. code-block:: c
 
@@ -707,44 +707,44 @@ Try the new ``rcutils_encode_base64`` and ``rcutils_decode_base64`` functions.
         return 0;
     }
 
-See `ros2/rcutils#430 <https://github.com/ros2/rcutils/pull/430>`_ and `ros2/rcutils#533 <https://github.com/ros2/rcutils/pull/533>`_ for more info.
+更多信息请参阅 `ros2/rcutils#430 <https://github.com/ros2/rcutils/pull/430>`_ 和 `ros2/rcutils#533 <https://github.com/ros2/rcutils/pull/533>`_。
 
-New ``rcl`` APIs
-^^^^^^^^^^^^^^^^
+新增的 ``rcl`` API
+^^^^^^^^^^^^^^^^^^
 
-If you maintain a ROS client library, you might be interested in these new ``rcl`` APIs:
+如果你在维护 ROS 客户端库，可能会对这些新的 ``rcl`` API 感兴趣：
 
 ``rcl_lifecycle_get_transition_label_by_id``
 """"""""""""""""""""""""""""""""""""""""""""
-Retrieve the human-readable string label for a lifecycle transition ID.
-Use this label to log, debug, or display state transitions without manually mapping IDs to strings.
+获取生命周期转换 ID 对应的可读字符串标签。
+使用该标签来记录、调试或显示状态转换，而无需手动将 ID 映射为字符串。
 
 ``rcl_subscription_is_cft_supported``
 """""""""""""""""""""""""""""""""""""
-Check whether a subscription supports Content Filtered Topics (CFT) on the underlying middleware.
-Verify filtering support safely before applying or configuring message content filters.
+检查订阅是否在其底层中间件上支持内容过滤话题（Content Filtered Topics，CFT）。
+在应用或配置消息内容过滤器之前，安全地确认过滤支持情况。
 
 ``rcl_action_count_clients``
 """"""""""""""""""""""""""""
-Query the ROS graph to count active action clients for a specific action name.
-Action servers can verify client presence before expending resources, or tools can inspect graph state.
+查询 ROS 图，统计指定动作名称对应的活跃动作客户端数量。
+动作服务端可以在消耗资源之前确认客户端是否存在，工具也可以借此检查图的状态。
 
 ``rcl_action_count_servers``
 """"""""""""""""""""""""""""
-Query the ROS graph to count active action servers for a specific action name.
-Action clients can confirm a server is online before sending goal requests.
+查询 ROS 图，统计指定动作名称对应的活跃动作服务端数量。
+动作客户端可以在发送目标请求之前确认服务端是否在线。
 
 ``rcl_timer_exchange_callback_data``
 """"""""""""""""""""""""""""""""""""
-Update the user data pointer passed to a timer callback upon execution.
-Dynamically swap callback context or state without recreating the active timer instance.
+更新执行时传给定时器回调的用户数据指针。
+无需重新创建活动的定时器实例，即可动态更换回调上下文或状态。
 
 ``rcl_action_server_set_expired_event_callback``
 """"""""""""""""""""""""""""""""""""""""""""""""
-Register a custom event callback that triggers when an action server goal expiration timer fires.
-Enable event-based execution patterns to asynchronously handle clean-up routines or notifications for expired goals.
+注册自定义事件回调，在动作服务端的目标过期定时器触发时调用。
+启用基于事件的执行模式，以异步处理过期目标的清理流程或通知。
 
-For more information see these pull requests:
+更多信息请参阅以下 pull request：
 
 * `ros2/rcl#1229 <https://github.com/ros2/rcl/pull/1229>`_
 * `ros2/rcl#1257 <https://github.com/ros2/rcl/pull/1257>`_
@@ -752,12 +752,12 @@ For more information see these pull requests:
 * `ros2/rcl#1294 <https://github.com/ros2/rcl/pull/1294>`_
 * `ros2/rcl#1295 <https://github.com/ros2/rcl/pull/1295>`_
 
-Pass constructor arguments to plugins using ``class_loader``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+使用 ``class_loader`` 向插件传递构造函数参数
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You may now pass arguments to plugins using ``class_loader``.
-This removes the need for an initialization method in a plugin's API.
-All you need to do is specialize ``class_loader::InterfaceTraits<>`` in your plugin's base class.
+现在可以使用 ``class_loader`` 向插件传递参数。
+这消除了在插件 API 中提供初始化方法的需要。
+你只需在插件基类中特化 ``class_loader::InterfaceTraits<>`` 即可。
 
 .. code-block:: c++
 
@@ -780,15 +780,15 @@ All you need to do is specialize ``class_loader::InterfaceTraits<>`` in your plu
     };
 
 
-For more information see `ros/class_loader#223 <https://github.com/ros/class_loader/pull/223>`_.
+更多信息请参阅 `ros/class_loader#223 <https://github.com/ros/class_loader/pull/223>`_。
 
-Runtime tracing opt-out mechanism
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+运行时关闭追踪的机制
+^^^^^^^^^^^^^^^^^^^^
 
-`Removing the built-in tracing instrumentation from ROS 2 <https://github.com/ros2/ros2_tracing/blob/lyrical/README.md#removing-the-instrumentation>`_ or `excluding tracepoints from the instrumentation <https://github.com/ros2/ros2_tracing/blob/lyrical/README.md#excluding-tracepoints>`_ have so far been build-time options only.
-This is all enabled by default in the Linux binaries.
+`从 ROS 2 中移除内置追踪插桩 <https://github.com/ros2/ros2_tracing/blob/lyrical/README.md#removing-the-instrumentation>`_ 或 `从插桩中排除追踪点 <https://github.com/ros2/ros2_tracing/blob/lyrical/README.md#excluding-tracepoints>`_ 此前一直是构建期选项。
+Linux 二进制包中这些都默认启用。
 
-To avoid loading the tracer at runtime (and therefore disable all instrumentation), set the ``TRACETOOLS_RUNTIME_DISABLE`` environment variable to ``1``:
+要避免在运行时加载追踪器（从而禁用所有插桩），请将 ``TRACETOOLS_RUNTIME_DISABLE`` 环境变量设为 ``1``：
 
 .. code-block:: console
 
@@ -796,30 +796,30 @@ To avoid loading the tracer at runtime (and therefore disable all instrumentatio
     $ ros2 run tracetools status
     Tracing disabled
 
-See `ros2/ros2_tracing#185 <https://github.com/ros2/ros2_tracing/pull/185>`_ for more info.
+更多信息请参阅 `ros2/ros2_tracing#185 <https://github.com/ros2/ros2_tracing/pull/185>`_。
 
-Long-term tracing improvements
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+长期追踪改进
+^^^^^^^^^^^^
 
-Snapshot mode tracing
-"""""""""""""""""""""
+快照模式追踪
+""""""""""""
 
-By default, tracing sessions write trace data continuously to disk.
-Tracing sessions using LTTng's `snapshot mode <https://lttng.org/docs/v2.13/#doc-tracing-session-mode>`_ store trace data in memory and only write to disk when a `snapshot is taken <https://lttng.org/docs/v2.13/#doc-taking-a-snapshot>`_.
-When memory buffers fill up, the oldest data is discarded, maintaining a rolling history whose size can be controlled by configuring sub-buffer size.
-This "flight recorder" mode is useful for capturing trace data only when something interesting occurs, avoiding continuous disk writes and thus lowering the runtime performance impact even more.
+默认情况下，追踪会话会持续将追踪数据写入磁盘。
+使用 LTTng `快照模式 <https://lttng.org/docs/v2.13/#doc-tracing-session-mode>`_ 的追踪会话将追踪数据保存在内存中，仅在 `拍摄快照 <https://lttng.org/docs/v2.13/#doc-taking-a-snapshot>`_ 时才写入磁盘。
+当内存缓冲区被填满时，最旧的数据会被丢弃，从而维持一段滚动历史，其大小可通过配置子缓冲区大小来控制。
+这种“飞行记录仪”模式适用于只在发生有趣事件时捕获追踪数据，避免持续写入磁盘，从而进一步降低运行时的性能影响。
 
-`Snapshot mode tracing <https://github.com/ros2/ros2_tracing/tree/lyrical#tracing-in-snapshot-mode>`_ is available in ``ros2_tracing`` through the `ros2 trace command <https://github.com/ros2/ros2_tracing/tree/lyrical#trace-command-1>`_ and the the `Trace launch file action <https://github.com/ros2/ros2_tracing/tree/lyrical#launch-file-trace-action-1>`_.
+``ros2_tracing`` 通过 `ros2 trace 命令 <https://github.com/ros2/ros2_tracing/tree/lyrical#trace-command-1>`_ 以及 `Trace launch 文件动作 <https://github.com/ros2/ros2_tracing/tree/lyrical#launch-file-trace-action-1>`_ 提供 `快照模式追踪 <https://github.com/ros2/ros2_tracing/tree/lyrical#tracing-in-snapshot-mode>`_。
 
-See `ros2/ros2_tracing#195 <https://github.com/ros2/ros2_tracing/pull/195>`_ and `ros2/ros2_tracing#206 <https://github.com/ros2/ros2_tracing/pull/206>`_ for more info.
+更多信息请参阅 `ros2/ros2_tracing#195 <https://github.com/ros2/ros2_tracing/pull/195>`_ 和 `ros2/ros2_tracing#206 <https://github.com/ros2/ros2_tracing/pull/206>`_。
 
-Dual session tracing
-""""""""""""""""""""
+双会话追踪
+""""""""""
 
-`Dual session mode <https://github.com/ros2/ros2_tracing/tree/lyrical#dual-session-tracing>`_ solves the problem of losing initialization trace data by using two separate tracing sessions: one for initialization events in snapshot mode, and another normal tracing session for runtime events.
-This allows starting to actively record trace data at any point without losing initialization data.
+`双会话模式 <https://github.com/ros2/ros2_tracing/tree/lyrical#dual-session-tracing>`_ 通过使用两个独立的追踪会话解决了初始化追踪数据丢失的问题：一个以快照模式追踪初始化事件，另一个为普通的追踪会话，用于追踪运行时事件。
+这样就可以在任何时刻开始主动记录追踪数据，而不会丢失初始化数据。
 
-Use the ``Trace`` action with ``dual_session=True`` to start the initialization data session in snapshot mode.
-Then use the trace commands with ``--dual-session`` option to take a snapshot of the initialization session and start the runtime session.
+使用带 ``dual_session=True`` 的 ``Trace`` 动作以快照模式启动初始化数据会话。
+然后使用带 ``--dual-session`` 选项的追踪命令对初始化会话拍摄快照，并启动运行时会话。
 
-See `ros2/ros2_tracing#191 <https://github.com/ros2/ros2_tracing/pull/191>`_ and `ros2/ros2_tracing#196 <https://github.com/ros2/ros2_tracing/pull/196>`_ for more info.
+更多信息请参阅 `ros2/ros2_tracing#191 <https://github.com/ros2/ros2_tracing/pull/191>`_ 和 `ros2/ros2_tracing#196 <https://github.com/ros2/ros2_tracing/pull/196>`_。

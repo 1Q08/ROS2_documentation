@@ -1,5 +1,5 @@
-Open all ``CHANGELOG.rst`` files in an editor.
-You will see that ``catkin_generate_changelog`` has auto-generated a forthcoming section with notes from commit messages:
+在编辑器中打开所有 ``CHANGELOG.rst`` 文件。
+你会看到 ``catkin_generate_changelog`` 已经根据提交信息自动生成了一个 forthcoming 小节：
 
 .. code-block:: rst
 
@@ -12,5 +12,5 @@ You will see that ``catkin_generate_changelog`` has auto-generated a forthcoming
    * you can modify this commit message
    * and this
 
-Clean up the list of commit messages to concisely convey the notable changes that have been made to the packages since the last release, and **commit all the CHANGELOG.rst files.**
-Do not modify the ``Forthcoming`` header.
+请整理这份提交信息列表，简明扼要地说明自上次发布以来软件包发生的重要变化，然后 **提交所有 CHANGELOG.rst 文件。**
+不要修改 ``Forthcoming`` 标题。

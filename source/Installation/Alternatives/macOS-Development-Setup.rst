@@ -1,29 +1,29 @@
 .. _macOS-latest:
 
-macOS (source)
-==============
+macOS（源码）
+=============
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-System requirements
--------------------
+系统要求
+--------
 
-We currently support macOS Mojave (10.14).
+我们目前支持 macOS Mojave（10.14）。
 
-Install prerequisites
----------------------
+安装前置依赖
+------------
 
-You need the following things installed to build ROS 2:
+要构建 ROS 2，你需要安装以下内容：
 
 
 #.
    **Xcode**
 
-   * If you don't already have it installed, install `Xcode <https://apps.apple.com/app/xcode/id497799835>`_.
-   * Note: Versions of Xcode later than 11.3.1 can no longer be installed on macOS Mojave, so you will need to install an older version manually, see: https://stackoverflow.com/a/61046761
-   * Also, if you don't already have it installed, install the Command Line Tools:
+   * 如果你还没有安装它，请安装 `Xcode <https://apps.apple.com/app/xcode/id497799835>`_。
+   * 注意：晚于 11.3.1 的 Xcode 版本已无法再安装到 macOS Mojave 上，因此你需要手动安装一个较旧的版本，参见：https://stackoverflow.com/a/61046761
+   * 此外，如果你还没有安装命令行工具，请安装它：
 
      .. code-block:: console
 
@@ -32,29 +32,29 @@ You need the following things installed to build ROS 2:
 
    .. note::
 
-      If you installed Xcode.app manually, you need to accept the Xcode.app license.
-      You can do this by opening Xcode.app or running:
+      如果你是手动安装的 Xcode.app，你需要接受 Xcode.app 的许可协议。
+      你可以通过打开 Xcode.app 或运行以下命令来完成：
 
       .. code-block:: console
 
          $ sudo xcodebuild -license
 
 #.
-   **brew** *(needed to install more stuff; you probably already have this)*:
+   **brew** *(用于安装更多软件；你可能已经装了它)*：
 
 
-   * Follow installation instructions at http://brew.sh/
+   * 按照 http://brew.sh/ 的安装说明操作
    *
-     *Optional*: Check that ``brew`` is happy with your system configuration by running:
+     *可选*：运行以下命令，检查 ``brew`` 对你的系统配置是否满意：
 
      .. code-block:: console
 
         $ brew doctor
 
-     Fix any problems that it identifies.
+     修复它指出的任何问题。
 
 #.
-   Use ``brew`` to install more stuff:
+   使用 ``brew`` 安装更多软件：
 
    .. code-block:: console
 
@@ -63,20 +63,20 @@ You need the following things installed to build ROS 2:
          pyqt@5 python qt@5 sip spdlog osrf/simulation/tinyxml1 tinyxml2
 
 #.
-   Setup some environment variables:
+   设置一些环境变量：
 
    .. code-block:: console
 
-      ~ Add the openssl dir for DDS-Security
-      ~ if you are using BASH, then replace '.zshrc' with '.bashrc'
+      ~ 为 DDS-Security 添加 openssl 目录
+      ~ 如果你使用 BASH，请将 '.zshrc' 替换为 '.bashrc'
       $ echo "export OPENSSL_ROOT_DIR=$(brew --prefix openssl)" >> ~/.zshrc
 
-      ~ Add the Qt directory to the PATH and CMAKE_PREFIX_PATH
+      ~ 将 Qt 目录添加到 PATH 和 CMAKE_PREFIX_PATH
       $ export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:$(brew --prefix qt@5)
       $ export PATH=$PATH:$(brew --prefix qt@5)/bin
 
 #.
-   Use ``python3 -m pip`` (just ``pip`` may install Python3 or Python2) to install more stuff:
+   使用 ``python3 -m pip`` （仅用 ``pip`` 可能会安装 Python3 或 Python2）来安装更多软件：
 
    .. code-block:: console
 
@@ -94,15 +94,15 @@ You need the following things installed to build ROS 2:
         nose pep8 psutil pydocstyle pydot pygraphviz pyparsing==2.4.7 \
         pytest-mock rosdep rosdistro setuptools==59.6.0 vcstool
 
-   Please ensure that the ``$PATH`` environment variable contains the install location of the binaries (``$(brew --prefix)/bin``)
+   请确保 ``$PATH`` 环境变量包含这些二进制文件的安装位置（``$(brew --prefix)/bin``）
 
 #.
-   *Optional*: if you want to build the ROS 1<->2 bridge, then you must also install ROS 1:
+   *可选*：如果你想构建 ROS 1<->2 桥接，那么你还必须安装 ROS 1：
 
 
-   * Start with the normal install instructions: http://wiki.ros.org/kinetic/Installation/OSX/Homebrew/Source
+   * 从常规安装说明开始：http://wiki.ros.org/kinetic/Installation/OSX/Homebrew/Source
    *
-     When you get to the step where you call ``rosinstall_generator`` to get the source code, here's an alternate invocation that brings in just the minimum required to produce a useful bridge:
+     当你走到调用 ``rosinstall_generator`` 获取源码的那一步时，这里有一个替代调用方式，它只引入生成一个可用桥接所需的最小内容：
 
      .. code-block:: console
 
@@ -110,18 +110,18 @@ You need the following things installed to build ROS 2:
         $ wstool init -j8 src kinetic-ros2-bridge-deps.rosinstall
 
 
-     Otherwise, just follow the normal instructions, then source the resulting ``install_isolated/setup.bash`` before proceeding here to build ROS 2.
+     否则，只需按照常规说明操作，然后在继续此处构建 ROS 2 之前，加载生成的 ``install_isolated/setup.bash``。
 
-Disable System Integrity Protection (SIP)
------------------------------------------
+禁用系统完整性保护（SIP）
+-------------------------
 
-macOS/OS X versions >=10.11 have System Integrity Protection enabled by default.
-So that SIP doesn't prevent processes from inheriting dynamic linker environment variables, such as ``DYLD_LIBRARY_PATH``, you'll need to disable it `following these instructions <https://developer.apple.com/library/content/documentation/Security/Conceptual/System_Integrity_Protection_Guide/ConfiguringSystemIntegrityProtection/ConfiguringSystemIntegrityProtection.html>`__.
+macOS/OS X 版本 >=10.11 默认启用了系统完整性保护。
+为了让 SIP 不阻止进程继承动态链接器环境变量（例如 ``DYLD_LIBRARY_PATH``），你需要 `按照这些说明 <https://developer.apple.com/library/content/documentation/Security/Conceptual/System_Integrity_Protection_Guide/ConfiguringSystemIntegrityProtection/ConfiguringSystemIntegrityProtection.html>`__ 禁用它。
 
-Get the ROS 2 code
-------------------
+获取 ROS 2 代码
+---------------
 
-Create a workspace and clone all repos:
+创建一个工作空间并克隆所有仓库：
 
 .. code-block:: console
 
@@ -129,85 +129,85 @@ Create a workspace and clone all repos:
    $ cd ~/ros2_{DISTRO}
    $ vcs import --input https://raw.githubusercontent.com/ros2/ros2/{REPOS_FILE_BRANCH}/ros2.repos src
 
-Install additional DDS vendors (optional)
------------------------------------------
+安装额外 DDS 厂商（可选）
+-------------------------
 
-If you would like to use another DDS or RTPS vendor besides the default, you can find instructions :doc:`here <../RMW-Implementations>`.
+如果你想使用除默认外的其他 DDS 或 RTPS 厂商，可以在此处找到说明：:doc:`这里 <../RMW-Implementations>`。
 
-Build the ROS 2 code
---------------------
+构建 ROS 2 代码
+---------------
 
-Run the ``colcon`` tool to build everything (more on using ``colcon`` in :doc:`this tutorial <../../Tutorials/Beginner-Client-Libraries/Colcon-Tutorial>`):
+运行 ``colcon`` 工具来构建所有内容（关于使用 ``colcon`` 的更多信息见 :doc:`本教程 <../../Tutorials/Beginner-Client-Libraries/Colcon-Tutorial>`）：
 
 .. code-block:: console
 
    $ cd ~/ros2_{DISTRO}/
    $ colcon build --symlink-install --packages-skip-by-dep python_qt_binding
 
-Note: due to an unresolved issue with SIP, Qt@5, and PyQt5, we need to disable ``python_qt_binding`` to have the build succeed.
-This will be removed when the issue is resolved, see: https://github.com/ros-visualization/python_qt_binding/issues/103
+注意：由于 SIP、Qt@5 和 PyQt5 之间存在一个未解决的问题，我们需要禁用 ``python_qt_binding`` 才能让构建成功。
+待该问题解决后，此项将被移除，参见：https://github.com/ros-visualization/python_qt_binding/issues/103
 
-Environment setup
------------------
+环境配置
+--------
 
-Source the ROS 2 setup file:
+加载 ROS 2 安装文件：
 
 .. code-block:: console
 
    $ . ~/ros2_{DISTRO}/install/setup.zsh
 
-This will automatically set up the environment for any DDS vendors that support was built for.
+这将自动为所有已构建支持的 DDS 厂商配置好环境。
 
-Try some examples
------------------
+尝试一些示例
+------------
 
-In one terminal, set up the ROS 2 environment as described above and then run a C++ ``talker``:
+在一个终端中，按上文所述配置好 ROS 2 环境，然后运行 C++ 的 ``talker``：
 
 .. code-block:: console
 
    $ ros2 run demo_nodes_cpp talker
 
-In another terminal source the setup file and then run a Python ``listener``:
+在另一个终端中加载安装文件，然后运行 Python 的 ``listener``：
 
 .. code-block:: console
 
    $ ros2 run demo_nodes_py listener
 
-You should see the ``talker`` saying that it's ``Publishing`` messages and the ``listener`` saying ``I heard`` those messages.
-This verifies both the C++ and Python APIs are working properly.
-Hooray!
+你应该会看到 ``talker`` 输出 ``Publishing`` 消息，而 ``listener`` 输出 ``I heard`` 这些消息。
+这验证了 C++ 和 Python API 都能正常工作。
+太棒了！
 
-Next steps after installing
----------------------------
-Continue with the `tutorials and demos <../../Tutorials>` to configure your environment, create your own workspace and packages, and learn ROS 2 core concepts.
+安装后的后续步骤
+----------------
+继续学习 `教程和演示 <../../Tutorials>`，以配置你的环境、创建自己的工作空间和软件包，并了解 ROS 2 的核心概念。
 
-Using the ROS 1 bridge
-----------------------
-The ROS 1 bridge can connect topics from ROS 1 to ROS 2 and vice-versa.
-See the dedicated `documentation <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__ on how to build and use the ROS 1 bridge.
-
-Additional RMW implementations (optional)
------------------------------------------
-The default middleware that ROS 2 uses is ``Fast DDS``, but the middleware (RMW) can be replaced at runtime.
-See the :doc:`guide <../../How-To-Guides/Working-with-multiple-RMW-implementations>` on how to work with multiple RMWs.
-
-Stay up to date
+使用 ROS 1 桥接
 ---------------
+ROS 1 桥接可以将话题从 ROS 1 连接到 ROS 2，反之亦然。
+请参阅关于如何构建和使用 ROS 1 桥接的专门 `文档 <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__。
 
-See :doc:`../Maintaining-a-Source-Checkout` to periodically refresh your source installation.
+其他 RMW 实现（可选）
+---------------------
+ROS 2 使用的默认中间件是 ``Fast DDS``，但中间件（RMW）可以在运行时替换。
+请参阅关于如何使用多个 RMW 的 :doc:`指南 <../../How-To-Guides/Working-with-multiple-RMW-implementations>`。
 
-Troubleshooting
----------------
+保持最新
+--------
 
-Troubleshooting techniques can be found :ref:`here <macOS-troubleshooting>`.
+请参阅 :doc:`../Maintaining-a-Source-Checkout`，以定期刷新你的源码安装。
 
-Uninstall
----------
+故障排查
+--------
 
-1. If you installed your workspace with colcon as instructed above, "uninstalling" could be just a matter of opening a new terminal and not sourcing the workspace's ``setup`` file.
-   This way, your environment will behave as though there is no {DISTRO_TITLE} install on your system.
+故障排查技巧可以在 :ref:`这里 <macOS-troubleshooting>` 找到。
 
-2. If you're also trying to free up space, you can delete the entire workspace directory with:
+卸载
+----
+
+1. 如果你按上面的说明使用 colcon 安装工作空间，那么“卸载”可能只需打开一个新终端，并且不要加载该工作空间的 ``setup`` 文件。
+   这样，你的环境就会表现得如同系统中没有安装 {DISTRO_TITLE}。
+
+2. 如果你还想释放空间，可以用以下命令删除整个工作空间目录：
 
    .. code-block:: console
 

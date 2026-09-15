@@ -5,73 +5,73 @@
 
 .. _PythonPackages:
 
-Using Python Packages with ROS 2
-================================
+在 ROS 2 中使用 Python 软件包
+=============================
 
-**Goal:** Explain how to interoperate with other Python packages from the ROS 2 ecosystem.
+**目标：** 说明如何与 ROS 2 生态系统中的其他 Python 软件包进行互操作。
 
-.. contents:: Contents
+.. contents:: 目录
     :depth: 2
     :local:
 
 .. note::
 
-    A cautionary note, if you intended to use pre-packaged binaries (either ``deb`` files, or the binary archive distributions), the Python interpreter must match what was used to build the original binaries.
-    If you intend to use something like ``virtualenv`` or ``pipenv``\, make sure to use the system interpreter.
-    If you use something like ``conda``, it is very likely that the interpreter will not match the system interpreter and will be incompatible with ROS 2 binaries.
+    一个提醒，如果你打算使用预先打包的二进制文件（无论是 ``deb`` 文件，还是二进制归档发行版），Python 解释器必须与构建原始二进制文件时所用的解释器一致。
+    如果你打算使用 ``virtualenv`` 或 ``pipenv``\ 之类的东西，请确保使用系统解释器。
+    如果你使用 ``conda`` 之类的东西，解释器很可能与系统解释器不一致，从而与 ROS 2 二进制文件不兼容。
 
-Installing via ``rosdep``
--------------------------
+通过 ``rosdep`` 安装
+--------------------
 
-The fastest way to include third-party python packages is to use their corresponding rosdep keys, if available.
-``rosdep`` keys can be checked via:
+包含第三方 Python 软件包最快的方式是使用它们对应的 rosdep 键（如果可用）。
+``rosdep`` 键可以通过以下方式查看：
 
 * https://github.com/ros/rosdistro/blob/master/rosdep/base.yaml
 * https://github.com/ros/rosdistro/blob/master/rosdep/python.yaml
 
-These ``rosdep`` keys can be added to your ``package.xml`` file, which indicates to the build system that your package (and dependent packages) depend on those keys.
-In a new workspace, you can also quickly install all rosdep keys with:
+这些 ``rosdep`` 键可以添加到你的 ``package.xml`` 文件中，这会向构建系统表明你的软件包（以及依赖它的软件包）依赖这些键。
+在一个新的工作空间中，你也可以通过以下命令快速安装所有 rosdep 键：
 
 .. code-block:: console
 
     $ rosdep install -yr --from-paths ./path/to/your/workspace
 
-If there aren't currently ``rosdep`` keys for the package that you are interested in, it is possible to add them by following the `rosdep key contribution guide`_.
+如果当前还没有你所关注的软件包对应的 ``rosdep`` 键，可以参考 `rosdep 键贡献指南`_ 来添加。
 
-To learn more about the ``rosdep`` tool and how it works, consult the `rosdep documentation`_.
+要了解有关 ``rosdep`` 工具及其工作原理的更多信息，请查阅 `rosdep 文档`_。
 
-Installing via a package manager
---------------------------------
+通过软件包管理器安装
+--------------------
 
-If you don't want to make a rosdep key, but the package is available in your system package manager (eg ``apt``), you can install and use the package that way:
+如果你不想创建 rosdep 键，但该软件包在你的系统软件包管理器（例如 ``apt``）中可用，你可以通过这种方式安装并使用该软件包：
 
 .. code-block:: console
 
     $ sudo apt install python3-serial
 
-If the package is available on `The Python Package Index (PyPI) <https://pypi.org/>`_ and you want to install globally on your system:
+如果该软件包在 `Python 软件包索引 (PyPI) <https://pypi.org/>`_ 上可用，并且你想在系统上全局安装：
 
 .. code-block:: console
 
     $ python3 -m pip install -U pyserial
 
-If the package is available on PyPI and you want to install locally to your user:
+如果该软件包在 PyPI 上可用，并且你想安装到用户的本地目录：
 
 .. code-block:: console
 
     $ python3 -m pip install -U --user pyserial
 
-Installing via a virtual environment
-------------------------------------
+通过虚拟环境安装
+----------------
 
-First, create a Colcon workspace:
+首先，创建一个 Colcon 工作空间：
 
 .. code-block:: console
 
     $ mkdir -p ~/colcon_venv/src
     $ cd ~/colcon_venv/
 
-Then setup your virtual environment:
+然后设置你的虚拟环境：
 
 .. code-block:: console
 
@@ -79,13 +79,13 @@ Then setup your virtual environment:
     $ source ./venv/bin/activate
     $ touch ./venv/COLCON_IGNORE # Make sure that colcon does not try to build the venv
 
-Next, install the Python packages that you want in your virtual environment:
+接下来，在你的虚拟环境中安装你想要的 Python 软件包：
 
 .. code-block:: console
 
     $ python3 -m pip install gtsam pyserial… etc
 
-Now you can build your workspace and run your python node that depends on packages installed in your virtual environment.
+现在你可以构建你的工作空间，并运行依赖虚拟环境中已安装软件包的 Python 节点。
 
 .. code-block:: console
 
@@ -94,8 +94,8 @@ Now you can build your workspace and run your python node that depends on packag
 
 .. note::
 
-    If you want to release your package using Bloom, you should add the packages you require to ``rosdep``, see the `rosdep key contribution guide`_.
+    如果你想使用 Bloom 发布你的软件包，你应该将所需的软件包添加到 ``rosdep``，请参见 `rosdep 键贡献指南`_。
 
-.. _rosdep key contribution guide: http://docs.ros.org/en/independent/api/rosdep/html/contributing_rules.html
+.. _rosdep 键贡献指南: http://docs.ros.org/en/independent/api/rosdep/html/contributing_rules.html
 
-.. _rosdep documentation: http://docs.ros.org/en/independent/api/rosdep/html/
+.. _rosdep 文档: http://docs.ros.org/en/independent/api/rosdep/html/

@@ -1,58 +1,58 @@
-Building ROS 2 with tracing instrumentation
-===========================================
+使用跟踪插桩构建 ROS 2
+======================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-This guide shows you how to build ROS 2 with the tracing instrumentation provided by ``ros2_tracing``.
-For more information, see `the repository <https://github.com/ros2/ros2_tracing>`__.
+本指南介绍如何使用 ``ros2_tracing`` 提供的跟踪插桩构建 ROS 2。
+更多信息请参见 `代码仓库 <https://github.com/ros2/ros2_tracing>`__。
 
-Instrumentation is included in the ROS 2 source code.
-However, if using the binaries or when building from source, the instrumentation does not actually trigger tracepoints by default.
-To get the tracepoints, the LTTng tracer needs to be installed, and then part of ROS 2 needs to be (re)built from source.
+插桩已包含在 ROS 2 源代码中。
+然而，如果使用二进制文件或从源代码构建，默认情况下插桩实际上并不会触发跟踪点。
+要获得跟踪点，需要安装 LTTng 跟踪器，然后需要从源代码（重新）构建部分 ROS 2。
 
 .. note::
 
-   This guide only applies to Linux systems and assumes that Ubuntu is used.
+   本指南仅适用于 Linux 系统，并假定使用 Ubuntu。
 
-Prerequisites
--------------
+前提条件
+--------
 
-Set up your system to build ROS 2 from source.
-See :doc:`the source installation page <../Installation/Alternatives/Ubuntu-Development-Setup>` for more information.
+设置好系统以便从源代码构建 ROS 2。
+更多信息请参见 :doc:`源代码安装页面 <../Installation/Alternatives/Ubuntu-Development-Setup>`。
 
-Installing the tracer
----------------------
+安装跟踪器
+----------
 
-Install the `LTTng tracer <https://lttng.org/docs>`__ and related tools and dependencies.
+安装 `LTTng 跟踪器 <https://lttng.org/docs>`__ 以及相关工具和依赖项。
 
 .. code-block:: bash
 
    sudo apt-get update
    sudo apt-get install -y lttng-tools liblttng-ust-dev python3-lttng python3-babeltrace babeltrace
 
-This only installs the LTTng userspace tracer, and not the LTTng kernel tracer, since it is not needed to trace ROS 2 applications.
+这只会安装 LTTng 用户空间跟踪器，而不会安装 LTTng 内核跟踪器，因为跟踪 ROS 2 应用程序并不需要后者。
 
-Building
---------
+构建
+----
 
-This step depends on whether you are building ROS 2 from source or using ROS 2 binaries.
+此步骤取决于你是从源代码构建 ROS 2 还是使用 ROS 2 二进制文件。
 
-With source installation
-^^^^^^^^^^^^^^^^^^^^^^^^
+使用源代码安装
+^^^^^^^^^^^^^^
 
-If you have already :doc:`built ROS 2 from source <../Installation/Alternatives/Ubuntu-Development-Setup>` before installing LTTng, you will need to re-build at least up to the ``tracetools`` package:
+如果你在安装 LTTng 之前已经 :doc:`从源代码构建了 ROS 2 <../Installation/Alternatives/Ubuntu-Development-Setup>`，则需要至少重新构建到 ``tracetools`` 软件包：
 
 .. code-block:: bash
 
    cd ~/ws
    colcon build --packages-up-to tracetools --cmake-force-configure
 
-With binary installation
-^^^^^^^^^^^^^^^^^^^^^^^^
+使用二进制安装
+^^^^^^^^^^^^^^
 
-If you rely on the ROS 2 binaries (:doc:`deb packages <../Installation/Ubuntu-Install-Debs>` or :doc:`"fat" archive <../Installation/Alternatives/Ubuntu-Install-Binary>`), you will need to clone the ``ros2_tracing`` repository into your workspace and build at least up to the ``tracetools`` package:
+如果你依赖 ROS 2 二进制文件（:doc:`deb 软件包 <../Installation/Ubuntu-Install-Debs>` 或 :doc:`“fat”压缩包 <../Installation/Alternatives/Ubuntu-Install-Binary>`），则需要将 ``ros2_tracing`` 仓库克隆到你的工作空间，并至少构建到 ``tracetools`` 软件包：
 
 .. code-block:: bash
 
@@ -61,10 +61,10 @@ If you rely on the ROS 2 binaries (:doc:`deb packages <../Installation/Ubuntu-In
    cd ../
    colcon build --packages-up-to tracetools
 
-Validating
-----------
+验证
+----
 
-Source and validate that tracing is enabled:
+获取并验证跟踪是否已启用：
 
 .. code-block:: bash
 
@@ -72,19 +72,19 @@ Source and validate that tracing is enabled:
    source install/setup.bash
    ros2 run tracetools status
 
-It should print out:
+它应该输出：
 
 .. code-block:: bash
 
    Tracing enabled
 
-If something else is printed, then something went wrong.
+如果输出的是其他内容，那就说明出了问题。
 
-Disabling tracing
------------------
+禁用跟踪
+--------
 
-If the LTTng userspace tracer is installed and found when building ``tracetools``, tracing will be automatically enabled.
-Alternatively, to build and completely remove both the tracepoints and the tracing instrumentation from ROS 2, set the ``TRACETOOLS_DISABLED`` CMake option to ``ON``:
+如果在构建 ``tracetools`` 时安装并找到了 LTTng 用户空间跟踪器，跟踪将自动启用。
+或者，要从 ROS 2 中构建并完全移除跟踪点和跟踪插桩，请将 ``TRACETOOLS_DISABLED`` CMake 选项设置为 ``ON``：
 
 .. code-block:: bash
 

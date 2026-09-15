@@ -1,54 +1,54 @@
-IDEs and Debugging [community-contributed]
-==========================================
+IDE 与调试 [社区贡献]
+=====================
 
-ROS 2 is not made around a specific development environment and the main focus is on building / running from the command line.
-Nonetheless Integrated Development Environments (IDEs) can be used to develop, run and/or debug ROS 2 nodes.
+ROS 2 并非围绕某个特定的开发环境而构建，其主要关注点是在命令行中构建 / 运行。
+尽管如此，集成开发环境（IDE）仍可用于开发、运行和/或调试 ROS 2 节点。
 
-Below are listed some IDEs and instructions on how to use them with ROS 2.
+下面列出了一些 IDE 以及如何在 ROS 2 中使用它们的说明。
 
 
-.. contents:: Contents
+.. contents:: 目录
     :depth: 2
     :local:
 
 
-General
--------
+通用
+----
 
 
 .. _InstalledPythonCode:
 
-Installed Python Code
-^^^^^^^^^^^^^^^^^^^^^
+已安装的 Python 代码
+^^^^^^^^^^^^^^^^^^^^
 
-By default, when building workspaces with:
+默认情况下，使用以下命令构建工作空间时：
 
 .. code-block:: console
 
    $ colcon build
 
-The Python code will be coped over into the ``build``/``install`` directories.
-So when attaching a debugger to a ``ros2 run`` command from within an IDE, the code being run (from the ``build``/``install``) is not the same as the files opened in the IDE project.
+Python 代码会被复制到 ``build``/``install`` 目录中。
+因此，当在 IDE 中把调试器附加到 ``ros2 run`` 命令时，正在运行的代码（来自 ``build``/``install``）与在 IDE 项目中打开的文件并不相同。
 
-There are 2 options to deal with this:
+有两种处理方式：
 
-* Open the source files from ``build``/``install`` directory and place breakpoints there.
-* Build the workspace with the `--symlink-install <https://colcon.readthedocs.io/en/released/reference/verb/build.html#command-line-arguments>`__ flag to colcon, which will symlink the source files to the ``build``/``install`` directory instead.
+* 从 ``build``/``install`` 目录打开源文件，并在那里放置断点。
+* 在构建工作空间时为 colcon 加上 `--symlink-install <https://colcon.readthedocs.io/en/released/reference/verb/build.html#command-line-arguments>`__ 标志，这样会把源文件符号链接到 ``build``/``install`` 目录。
 
 
 Visual Studio Code
 ------------------
 
-`VSCode <https://code.visualstudio.com/>`_ is a versatile and free development environment.
+`VSCode <https://code.visualstudio.com/>`_ 是一个多用途的免费开发环境。
 
-VSCode is relatively easy to use with ROS 2.
-Simply activate your environment in a command line and start the VSCode application from the same terminal and use as normal.
-So:
+VSCode 与 ROS 2 配合使用相对容易。
+只需在命令行中激活你的环境，并从同一终端启动 VSCode 应用程序，然后照常使用即可。
+即：
 
-#. Create your ROS workspace as you would normally.
-#. In a terminal, source both ROS 2 and your install (if it was built already).
-#. Start VSCode from the same command line.
-   The terminal will be blocked until the application is closed again.
+#. 按通常方式创建你的 ROS 工作空间。
+#. 在终端中，同时 source ROS 2 和你的 install（如果已经构建过）。
+#. 从同一命令行启动 VSCode。
+   终端会被阻塞，直到该应用程序再次关闭。
 
 .. tabs::
 
@@ -72,7 +72,7 @@ So:
 
    .. group-tab:: Windows
 
-      In a Windows command line interface:
+      在 Windows 命令行界面中：
 
       .. code-block:: console
 
@@ -81,7 +81,7 @@ So:
         $ call .\install\local_setup.bat
         $ "C:\Program Files\Microsoft VS Code\Code.exe" .\src\my_node\
 
-      Or in powershell:
+      或者在 powershell 中：
 
       .. code-block:: console
 
@@ -91,28 +91,28 @@ So:
         $ & "C:\Program Files\Microsoft VS Code\Code.exe" .\src\my_node\
 
 
-VSCode and any terminal created inside VSCode will correctly inherit from the parent environment and should have ROS and installed package available.
+VSCode 以及在 VSCode 内创建的任何终端都会正确继承父环境，并且应当能够使用 ROS 和已安装的软件包。
 
 .. note::
 
-   After adding packages or making major changes you might need to source your install again.
-   The simplest way to do this is to close VSCode and restart it as above.
+   在添加软件包或进行重大更改后，你可能需要重新 source 你的 install。
+   最简单的做法是关闭 VSCode，然后按上述方式重新启动它。
 
 
 Python
 ^^^^^^
 
-In your workspace, verify the correct interpreter is used.
-Through sourcing the basic command ``python`` should be correct, but VSCode likes to resort to an absolute path for Python.
-In the bottom right corner click on "Selected Python Interpreter" to change it.
+在你的工作空间中，确认使用的是正确的解释器。
+source 之后，基本的 ``python`` 命令应当是正确的，但 VSCode 倾向于使用 Python 的绝对路径。
+点击右下角的“Selected Python Interpreter”即可更改。
 
-If your ROS 2 Python version is from a virtual environment, VSCode will try to source it at each run command.
-But we already started VSCode from a sourced environment, so this extra step is not necessary.
-You can disable this for the current workspace by finding "Settings" > "Extensions" > "Python" > "Activate Environment" and disabling the check.
+如果你的 ROS 2 Python 版本来自虚拟环境，VSCode 会在每次运行命令时尝试 source 它。
+但我们已经从已 source 的环境中启动了 VSCode，因此这一步额外操作并不必要。
+你可以为当前工作空间禁用该功能，方法是找到“Settings” > “Extensions” > “Python” > “Activate Environment”并取消勾选。
 
-Now simply run a file or create a configuration in ``launch.json``.
-Debugging a node is easiest by creating a configuration like a ``python ...`` command, instead of ``ros2 run/launch ...``.
-An example of ``launch.json`` could be:
+现在只需运行某个文件，或在 ``launch.json`` 中创建配置即可。
+调试节点最简单的方式是创建类似 ``python ...`` 命令的配置，而不是 ``ros2 run/launch ...``。
+``launch.json`` 的一个示例如下：
 
 .. code-block::
 
@@ -129,32 +129,32 @@ An example of ``launch.json`` could be:
    }
 
 
-Instead you could also create a configuration for attaching to a running process, under "Attach using Process Id".
+此外，你也可以在“Attach using Process Id”下创建用于附加到正在运行的进程的配置。
 
 
-See :doc:`Setup ROS 2 with VSCode and Docker<Setup-ROS-2-with-VSCode-and-Docker-Container>` for full instructions on how to use VSCode, in combination with Docker.
+关于如何结合 Docker 使用 VSCode 的完整说明，请参见 :doc:`使用 VSCode 和 Docker 搭建 ROS 2<Setup-ROS-2-with-VSCode-and-Docker-Container>`。
 
 
 PyCharm
 -------
 
-`PyCharm <https://www.jetbrains.com/pycharm/>`_ is an IDE specifically for Python.
+`PyCharm <https://www.jetbrains.com/pycharm/>`_ 是一个专门面向 Python 的 IDE。
 
-Of course it can only be meaningfully used for nodes made in Python.
+当然，它只能有意义地用于用 Python 编写的节点。
 
-With PyCharm you can either attach to an existing process (probably started by you via ``ros2 run ...`` or ``ros2 launch ...``) or run the node directly from Python (equivalent to ``python [file.py]``.
+使用 PyCharm，你可以附加到已有的进程（可能由你通过 ``ros2 run ...`` 或 ``ros2 launch ...`` 启动），也可以直接从 Python 运行节点（相当于 ``python [file.py]``）。
 
 
-Integrate for code inspection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+集成以进行代码检查
+^^^^^^^^^^^^^^^^^^
 
-You can setup your PyCharm project such that it is fully aware of ROS 2 code, allowing code completion and suggestion.
+你可以设置 PyCharm 项目，使其完全理解 ROS 2 代码，从而提供代码补全和提示。
 
 
 Linux
 """""
 
-Open a terminal, source ROS and start PyCharm:
+打开终端，source ROS 并启动 PyCharm：
 
 .. code-block:: console
 
@@ -162,47 +162,47 @@ Open a terminal, source ROS and start PyCharm:
    $ cd path/to/dev_ws
    $ /opt/pycharm/bin/pycharm.sh
 
-After selecting the correct interpreter, everything should work.
+选择正确的解释器后，一切应当都能正常工作。
 
 .. note::
 
-    This is untested.
+    这一点尚未验证。
 
 
 Windows
 """""""
 
-First sourcing ROS and then starting PyCharm from the command line seems to have no effect on Windows.
-Instead, some settings need to be tweaked.
+在 Windows 上，先 source ROS 再从命令行启动 PyCharm 似乎没有效果。
+相反，需要调整一些设置。
 
-#. Create your ROS workspace as you would normally.
-#. Start PyCharm normally.
-#. Open a project.
-   This should be the root directory of the ROS node you're developing, e.g. ``C:\dev_ws\src\my_node``.
-#. Click "Add new interpreter" > "Add local interpreter...".
-   Select a system interpreter (or virtual environment if you're using one) and select the executable of your ROS Python version (typically ``C:\Python38\python.exe``).
+#. 按通常方式创建你的 ROS 工作空间。
+#. 正常启动 PyCharm。
+#. 打开一个项目。
+   这应当是你正在开发的 ROS 节点的根目录，例如 ``C:\dev_ws\src\my_node``。
+#. 点击“Add new interpreter” > “Add local interpreter...”。
+   选择一个系统解释器（或你正在使用的虚拟环境），然后选择你的 ROS Python 版本的可执行文件（通常是 ``C:\Python38\python.exe``）。
 
-      * If you now open one of your code files, you will see warnings about missing imports.
-        Trying to run the file will confirm these issues.
+      * 如果你此时打开某个代码文件，会看到关于缺少导入的警告。
+        尝试运行该文件会证实这些问题。
 
-#. Under the "Python Interpreters" window, find and select your ROS interpreter.
-   Edit the name to something recognizable.
-   More importantly, now click the "Show Interpreter Paths" button.
-#. In the new window, you will see the paths already associated with this interpreter.
-   Click the "+" button and add two more paths (according to your ROS install):
+#. 在“Python Interpreters”窗口中，找到并选择你的 ROS 解释器。
+   将名称编辑为易于识别的名称。
+   更重要的是，现在点击“Show Interpreter Paths”按钮。
+#. 在新窗口中，你会看到已经与该解释器关联的路径。
+   点击“+”按钮并再添加两个路径（根据你的 ROS 安装情况）：
 
       * ``C:\dev\ros2_humble\bin``
       * ``C:\dev\ros2_humble\Lib\site-packages``
 
-PyCharm will re-index and when finished it should correctly interpret your project, recognising the ROS 2 system packages.
-You can navigate through code, get completion and read doc blurbs as expected.
+PyCharm 会重新建立索引，完成后应能正确解析你的项目，识别 ROS 2 系统软件包。
+你可以浏览代码、获得补全，并按预期阅读文档说明。
 
 
-If there are dependencies built alongside with your package, they are probably not yet recognized and result in invalid IDE warnings and runtime errors.
+如果有与你的软件包一起构建的依赖项，它们可能尚未被识别，从而导致无效的 IDE 警告和运行时错误。
 
-Resolve this by:
+可通过以下方式解决：
 
-* Making sure the ``PATH`` override in the run/debug configuration includes both the ROS 2 install and your workspace, e.g.:
+* 确保运行/调试配置中的 ``PATH`` 覆盖同时包含 ROS 2 的 install 和你的工作空间，例如：
 
   .. code-block:: console
 
@@ -210,57 +210,57 @@ Resolve this by:
      $ C:\dev_ws\install\local_setup.ps1
      $ echo $ENV:Path
 
-* Adding the relevant folders from the ``install/`` directory to your project sources.
+* 将 ``install/`` 目录中的相关文件夹添加到你的项目源码中。
 
-  Go to "Settings..." and under "Project: " > "Project Structure" click "Add content root".
-  Add all the relevant ``site-packages`` folders under ``install/Lib/*``.
+  转到“Settings...”，在“Project: ” > “Project Structure”下点击“Add content root”。
+  添加 ``install/Lib/*`` 下所有相关的 ``site-packages`` 文件夹。
 
-  Finally, make sure your run/debug configuration has the option "include content roots in PYTHONPATH" enabled.
+  最后，确保你的运行/调试配置启用了“include content roots in PYTHONPATH”选项。
 
 .. tip::
 
-   Using the `--merge-install <https://colcon.readthedocs.io/en/released/user/isolated-vs-merged-workspaces.html>`__ option with your colcon build will limit the number of depending directories, making it easier to configure PyCharm.
+   在 colcon 构建中使用 `--merge-install <https://colcon.readthedocs.io/en/released/user/isolated-vs-merged-workspaces.html>`__ 选项可以减少依赖目录的数量，从而更容易配置 PyCharm。
 
 
-Attach to Process
-^^^^^^^^^^^^^^^^^
+附加到进程
+^^^^^^^^^^
 
-Even without any configuration to PyCharm, you can always just attach to a running Python node.
-Open your project source and simply run your node as usual:
+即使没有对 PyCharm 做任何配置，你也始终可以直接附加到正在运行的 Python 节点。
+打开你的项目源码并像往常一样运行你的节点：
 
 .. code-block:: console
 
    $ ros2 run my_node main
 
-Then in PyCharm select "Run" > "Attach to Process...".
-It might take a second, but a small window should show listing the currently running Python instances, including your node.
-There can be multiple Python processes, so there may be some trial-and-error to find the right one.
+然后在 PyCharm 中选择“Run” > “Attach to Process...”。
+可能需要一秒，但会弹出一个小窗口，列出当前正在运行的 Python 实例，包括你的节点。
+可能有多个 Python 进程，因此可能需要反复尝试才能找到正确的那个。
 
-After selecting an instance, the usual debugging tools are available.
-You can pause it or create breakpoints in the code and step through it.
+选择某个实例后，通常的调试工具即可使用。
+你可以暂停它，或在代码中创建断点并单步执行。
 
 .. note::
 
-   The code in your project might not be the files being executed, see :ref:`this<InstalledPythonCode>`.
+   你项目中的代码可能并不是正在执行的文件，参见 :ref:`此处<InstalledPythonCode>`。
 
 
-Run/Debug
+运行/调试
 ^^^^^^^^^
 
-Follow the steps for integration first.
+首先按集成步骤操作。
 
-Running your Python file from PyCharm will likely result in import errors.
-This is because PyCharm extends the ``PYTHONPATH`` environment variable, but it leaves ``PATH`` untouched.
-Necessary library files in ``ros/bin`` are not found.
+从 PyCharm 运行你的 Python 文件很可能会出现导入错误。
+这是因为 PyCharm 会扩展 ``PYTHONPATH`` 环境变量，但不会改动 ``PATH``。
+找不到 ``ros/bin`` 中必需的库文件。
 
-Edit the run/debug configuration for your file and under "Environment Variables:" add a new variable.
-It is currently not supported to extend the existing ``PATH``, so we need to override it.
-From a sourced ROS terminal, export the content of ``PATH`` with: ``echo $Env:PATH``.
-Copy the result.
+编辑该文件的运行/调试配置，并在“Environment Variables:”下添加一个新变量。
+目前不支持扩展现有的 ``PATH``，因此我们需要覆盖它。
+在已 source ROS 的终端中，用以下命令输出 ``PATH`` 的内容：``echo $Env:PATH``。
+复制结果。
 
-Back in PyCharm, paste it as ``PATH``, apply changes and run or debug your node.
-It should work like any Python project now, allowing easy additions of breakpoints and other debug methods.
+回到 PyCharm，将其粘贴为 ``PATH``，应用更改，然后运行或调试你的节点。
+现在它应当像任何 Python 项目一样工作，可以轻松添加断点和其他调试方式。
 
 .. note::
 
-   On Windows it seems the capitalization of the ``PATH`` variable under "Environment Variables:" must be "path" (all lowercase) in order to work.
+   在 Windows 上，“Environment Variables:”下的 ``PATH`` 变量似乎必须写作“path”（全小写）才能生效。

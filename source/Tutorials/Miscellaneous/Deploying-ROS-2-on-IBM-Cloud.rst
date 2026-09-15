@@ -3,61 +3,59 @@
     Deploying-ROS2-on-IBM-Cloud
     Tutorials/Deploying-ROS-2-on-IBM-Cloud
 
-Deploying on IBM Cloud Kubernetes [community-contributed]
-=========================================================
+在 IBM Cloud Kubernetes 上部署 [社区贡献]
+=========================================
 
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 3
    :local:
 
-About
------
+关于
+----
 
-This article describes how to get ROS 2 running on IBM Cloud using Docker files.
-It first gives a brief overview of docker images and how they work locally and then explores IBM Cloud and how the user can deploy their containers on it.
-Afterwards, a short description of how the user can use their own custom packages for ROS 2 from github on IBM Cloud is provided.
-A walkthrough of how to create a cluster and utilize Kubernetes on IBM Cloud is provided and finally the Docker image is deployed on the cluster.
-Originally published `here <https://github.com/mm-nasr/ros2_ibmcloud>`__ and `here <https://medium.com/@mahmoud-nasr/running-ros2-on-ibm-cloud-1b1284cbd487>`__.
+本文介绍如何使用 Docker 文件在 IBM Cloud 上运行 ROS 2。
+首先简要概述 docker 镜像及其在本地的运行方式，然后探讨 IBM Cloud 以及用户如何在其上部署容器。
+之后，简要介绍用户如何在 IBM Cloud 上使用来自 github 的自己的 ROS 2 自定义软件包。
+提供如何创建集群并在 IBM Cloud 上利用 Kubernetes 的演示，最后将 Docker 镜像部署到集群上。
+原文发表于 `此处 <https://github.com/mm-nasr/ros2_ibmcloud>`__ 和 `此处 <https://medium.com/@mahmoud-nasr/running-ros2-on-ibm-cloud-1b1284cbd487>`__。
 
-ROS 2 on IBM Cloud
-------------------
+IBM Cloud 上的 ROS 2
+--------------------
 
-In this tutorial, we show how you can easily integrate and run ROS 2 on
-IBM Cloud with your custom packages.
+在本教程中，我们展示如何轻松地将 ROS 2 与你自己的自定义软件包集成并在
+IBM Cloud 上运行。
 
-ROS 2 is the new generation of ROS which gives more control over multi-robot formations.
-With the advancements of cloud computing, cloud robotics are becoming more important in today's age.
-In this tutorial, we will go through a short introduction on running ROS 2 on IBM Cloud.
-By the end of the tutorial, you will be able to create your own packages in
-ROS 2 and deploy them to the cloud using docker files.
+ROS 2 是新一代 ROS，对多机器人编队提供了更多控制。
+随着云计算的进步，云机器人在当今时代变得越来越重要。
+在本教程中，我们将简要介绍如何在 IBM Cloud 上运行 ROS 2。
+到教程结束时，你将能够在 ROS 2 中创建自己的软件包，
+并使用 docker 文件将它们部署到云上。
 
-The following instructions assume you're using Linux and have been
-tested with Ubuntu 18.04 (Bionic Beaver).
+以下说明假设你使用的是 Linux，并且已在
+Ubuntu 18.04（Bionic Beaver）上测试过。
 
-Step 1: Setting up your system
--------------------------------
+第 1 步：设置你的系统
+---------------------
 
-Before we go into how the exact process works, lets first make sure all the required software is properly installed.
-We'll point you towards the appropriate sources to set up your system and only highlight the details that pertain to our use-case.
+在深入介绍具体过程之前，我们先确保所有必需的软件都已正确安装。
+我们将为你指向适当的资源来设置你的系统，只强调与我们的用例相关的细节。
 
-a) Docker files?
+a) Docker 文件？
 ^^^^^^^^^^^^^^^^
 
-Docker files are a form of containers that can run separate from your
-system, this way, you can set-up potentially hundreds of different
-projects without affecting one another.
-You can even set-up different versions of Linux on one machine, without the need for virtual machine.
-Docker files have an advantage of saving space and only utilizing your system resources when running.
-In addition, dockers are versatile and transferable.
-They contain all the required pre-requisites to run
-separately, meaning that you can easily use a docker file for a specific
-system or service without any cubersome steps!
+Docker 文件是一种可以独立于你的系统运行的容器形式，
+这样你就可以设置可能数百个不同的项目，而不会相互影响。
+你甚至可以在同一台机器上设置不同版本的 Linux，而无需虚拟机。
+Docker 文件的优势在于节省空间，并且仅在运行时使用你的系统资源。
+此外，docker 通用且可移植。
+它们包含独立运行所需的所有先决条件，
+这意味着你可以轻松地为特定的系统或服务使用 docker 文件，而无需任何繁琐的步骤！
 
-Excited yet?
-Let's start off by installing docker to your system by following the following `link <https://docs.docker.com/get-docker/>`__.
-From the tutorial, you should have done some sanity checks to make sure docker is properly set-up.
-Just in case, however, let's run the following command once again that uses the hello-world docker image:
+兴奋了吗？
+让我们先按照下面的 `链接 <https://docs.docker.com/get-docker/>`__ 将 docker 安装到你的系统。
+从教程中，你应该已经做了一些健全性检查，以确保 docker 已正确设置。
+不过为了以防万一，让我们再次运行以下命令，它使用 hello-world docker 镜像：
 
 .. code-block:: console
 
@@ -83,23 +81,18 @@ Just in case, however, let's run the following command once again that uses the 
    For more examples and ideas, visit:
     https://docs.docker.com/get-started/
 
-b) ROS 2 Image
-^^^^^^^^^^^^^^
+b) ROS 2 镜像
+^^^^^^^^^^^^^
 
-ROS
-`announced <https://discourse.openrobotics.org/t/announcing-official-docker-images-for-ros2/7381/2>`__
-image containers for several ROS distributions in January 2019.
-More detailed instructions on the use of ROS 2 docker images can be found
-`here <https://hub.docker.com/_/ros/>`__.
+ROS 于 2019 年 1 月为多个 ROS 发行版
+`宣布 <https://discourse.openrobotics.org/t/announcing-official-docker-images-for-ros2/7381/2>`__ 了镜像容器。
+有关 ROS 2 docker 镜像使用的更详细说明可在
+`此处 <https://hub.docker.com/_/ros/>`__ 找到。
 
-Let's skip through that and get to real-deal right away; creating a
-local ROS 2 docker.
-We'll create our own Dockerfile (instead of using a
-ready Image) since we'll need this method for deployment on IBM Cloud.
-First, we create a new directory which will hold our Dockerfile and any
-other files we need later on and navigate to it.
-Using your favorite $EDITOR of choice, open a new file named *Dockerfile* (make sure the
-file naming is correct):
+让我们跳过这些，直接进入正题；创建一个本地 ROS 2 docker。
+我们将创建自己的 Dockerfile（而不是使用现成镜像），因为我们在 IBM Cloud 上部署时需要这种方法。
+首先，我们创建一个新目录来存放我们的 Dockerfile 以及稍后需要的任何其他文件，并导航到它。
+使用你喜欢的 $EDITOR，打开一个名为 *Dockerfile* 的新文件（确保文件名正确）：
 
 .. code-block:: console
 
@@ -109,8 +102,8 @@ file naming is correct):
 
    $ $EDITOR Dockerfile
 
-Insert the following in the *Dockerfile*, and save it (also found
-`here <https://github.com/mm-nasr/ros2_ibmcloud/blob/main/dockers/ros2_basic/Dockerfile>`__):
+在 *Dockerfile* 中插入以下内容并保存（也可在
+`此处 <https://github.com/mm-nasr/ros2_ibmcloud/blob/main/dockers/ros2_basic/Dockerfile>`__ 找到）：
 
 .. code-block:: bash
 
@@ -127,24 +120,18 @@ Insert the following in the *Dockerfile*, and save it (also found
    # launch ros package
    CMD ["ros2", "launch", "demo_nodes_cpp", "talker_listener.launch.py"]
 
--  **FROM**: creates a layer from the ros:foxy Docker image
--  **RUN**: builds your container by installing vim into it and creating
-   a directory called /ros2_home
--  **WORKDIR**: informs the container where the working directory should
-   be for it
+-  **FROM**：从 ros:foxy Docker 镜像创建一层
+-  **RUN**：通过在其中安装 vim 并创建一个名为 /ros2_home 的目录来构建你的容器
+-  **WORKDIR**：告知容器其工作目录应在哪里
 
-Of course, you are free to change the ROS distribution (*foxy* is used
-here) or change the directory name.
-The above docker file sets up ROS-foxy and installs the demo nodes for C++ and Python.
-Then it launches a file which runs a talker and a listener node.
-We will see it in action in just a few, but they act very similar to the
-publisher-subscriber example found in the `ROS
-wiki <https://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29>`__
+当然，你可以自由更改 ROS 发行版（此处使用 *foxy*）或更改目录名。
+上面的 docker 文件设置了 ROS-foxy，并安装了 C++ 和 Python 的演示节点。
+然后启动一个运行 talker 和 listener 节点的文件。
+我们稍后就会看到它的实际运行，但它们的行为与 `ROS wiki <https://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29>`__ 中发布的发布者-订阅者示例非常相似。
 
-Now, we are ready to build the docker image to run ROS 2 in it (yes, it is THAT easy!).
+现在，我们准备好构建 docker 镜像以便在其中运行 ROS 2 了（是的，就这么简单！）。
 
-**Note**: if you have errors due to insufficient privileges or
-*permission denied*, try running the command with *sudo* privileges:
+**注意**：如果你因权限不足或 *permission denied* 而出现错误，请尝试使用 *sudo* 权限运行该命令：
 
 .. code-block:: console
 
@@ -154,16 +141,14 @@ Now, we are ready to build the docker image to run ROS 2 in it (yes, it is THAT 
 
    Successfully built 0dc6ce7cb487
 
-*0dc6ce7cb487* will most probably be different for you, so keep note of
-it and copy it somewhere for reference.
-You can always go back and check
-the docker images you have on your system using:
+*0dc6ce7cb487* 对你来说很可能不同，因此请记住它并复制到某个地方以备参考。
+你可以随时返回并使用以下命令检查系统上的 docker 镜像：
 
 .. code-block:: console
 
    $ sudo docker ps -as
 
-Now, run the docker file using:
+现在，使用以下命令运行 docker 文件：
 
 .. code-block:: console
 
@@ -185,52 +170,47 @@ Now, run the docker file using:
    [talker-1] [INFO] [1603852912.249556670] [talker]: Publishing: 'Hello World: 6'
    [listener-2] [INFO] [1603852912.250212678] [listener]: I heard: [Hello World: 6]
 
-If it works correctly, you should see something similar to what is shown above.
-As can be seen, there are two ROS nodes (a publisher and a
-subscriber) running and their output is provided to us through ROS INFO.
+如果它正常工作，你应该会看到与上面类似的内容。
+可以看到，有两个 ROS 节点（一个发布者和一个订阅者）正在运行，它们的输出通过 ROS INFO 提供给我们。
 
-Step 2: Running the image on IBM Cloud
---------------------------------------
+第 2 步：在 IBM Cloud 上运行镜像
+--------------------------------
 
-The following steps assume you have an IBM cloud account and have
-ibmcloud CLI installed.
-If not, please check this
-`link <https://cloud.ibm.com/docs/cli/reference/ibmcloud/download_cli.html>`__
-out to get that done first.
+以下步骤假设你已拥有 IBM cloud 账户并已安装 ibmcloud CLI。
+如果没有，请先查看这个
+`链接 <https://cloud.ibm.com/docs/cli/reference/ibmcloud/download_cli.html>`__ 来完成安装。
 
-We also need to make sure that the CLI plug-in for the IBM Cloud
-Container Registry is installed by running the command
+我们还需要通过运行以下命令确保 IBM Cloud Container Registry 的 CLI 插件已安装
 
 .. code-block:: console
 
    $ ibmcloud plugin install container-registry
 
-Afterwards, login to your ibmcloud account through the terminal:
+之后，通过终端登录到你的 ibmcloud 账户：
 
 .. code-block:: console
 
    $ ibmcloud login --sso
 
-From here, let's create a container registry name-space.
-Make sure you use a unique name that is also descriptive as to what it is.
-Here, I used *ros2nasr*.
+从这里开始，让我们创建一个容器注册表命名空间。
+确保使用一个独特且能描述其用途的名称。
+这里我使用 *ros2nasr*。
 
 .. code-block:: console
 
    $ ibmcloud cr namespace-add ros2nasr
 
-IBM cloud has a lot of shortcuts that would help us get our container onto the cloud right away.
-The command below builds the container and tags it with the name **ros2foxy** and the version of **1**.
-Make sure you use the correct registry name you created and you are free to change the container name as you wish.
-The ``.`` at the end indicates that the *Dockerfile* is in the current directory (and it is important), if not,
-change it to point to the directory containing the Dockerfile.
+IBM cloud 有很多快捷方式，可以帮助我们立即将容器部署到云上。
+下面的命令构建容器，并将其标记为名称 **ros2foxy** 和版本 **1**。
+确保使用你创建的正确注册表名称，并且你可以随意更改容器名称。
+末尾的 ``.`` 表示 *Dockerfile* 在当前目录中（这很重要），如果不是，
+请将其更改为指向包含 Dockerfile 的目录。
 
 .. code-block:: console
 
    $ ibmcloud cr build --tag registry.bluemix.net/ros2nasr/ros2foxy:1 .
 
-You can now make sure that the container has been pushed to the registry
-you created by running the following command
+现在你可以通过运行以下命令确认容器已被推送到你创建的注册表
 
 .. code-block:: console
 
@@ -242,9 +222,9 @@ you created by running the following command
 
    OK
 
-Next, it is important to log-in to your registry to run the docker image.
-Again, if you face a *permission denied* error, perform the command with sudo privileges.
-Afterwards, run your docker file as shown below.
+接下来，登录到你的注册表以运行 docker 镜像是很重要的。
+同样，如果你遇到 *permission denied* 错误，请使用 sudo 权限执行该命令。
+之后，按如下所示运行你的 docker 文件。
 
 .. code-block:: console
 
@@ -258,23 +238,22 @@ Afterwards, run your docker file as shown below.
 
    $ docker run -v -it registry.ng.bluemix.net/ros2nasr/ros2foxy:1
 
-Where *ros2nasr* is the name of the registry you created and
-*ros2foxy:1* is the tag of the docker container and the version as
-explained previously.
+其中 *ros2nasr* 是你创建的注册表名称，
+*ros2foxy:1* 是 docker 容器的标签和版本，如前所述。
 
-You should now see your docker file running and providing similar output
-to that you saw when you ran it locally on your machine.
+现在你应该看到你的 docker 文件正在运行，并提供与你
+在本机本地运行它时看到的类似输出。
 
-Step 3: Using Custom ROS 2 Packages
------------------------------------
+第 3 步：使用自定义 ROS 2 软件包
+--------------------------------
 
-So now we have the full pipeline working, from creating the Dockerfile, all the way to deploying it and seeing it work on IBM Cloud.
-But, what if we want to use a custom set of packages we (or someone else) created?
+现在我们的完整流程已经跑通了，从创建 Dockerfile，一直到部署它并在 IBM Cloud 上看到它运行。
+但是，如果我们想使用我们（或其他人）创建的一组自定义软件包呢？
 
-Well that all has to do with how you set-up your Dockerfile.
-Let's use the example provided by ROS 2 `here <https://hub.docker.com/_/ros/>`__.
-Create a new directory with a new Dockerfile (or overwrite the existing one) and add the following in it (or download the file
-`here <https://github.com/mm-nasr/ros2_ibmcloud/blob/main/dockers/git_pkgs_docker/Dockerfile>`__)
+这一切都与你如何设置 Dockerfile 有关。
+让我们使用 ROS 2 在 `此处 <https://hub.docker.com/_/ros/>`__ 提供的示例。
+创建一个新目录和新 Dockerfile（或覆盖现有文件），并在其中添加以下内容（或下载
+`此处 <https://github.com/mm-nasr/ros2_ibmcloud/blob/main/dockers/git_pkgs_docker/Dockerfile>`__ 的文件）
 
 .. code-block:: bash
 
@@ -338,10 +317,9 @@ Create a new directory with a new Dockerfile (or overwrite the existing one) and
    # run launch file
    CMD ["ros2", "launch", "demo_nodes_cpp", "talker_listener.launch.py"]
 
-Going through the lines shown, we can see how we can add custom packages
-from github in 4 steps:
+浏览上面显示的代码，我们可以看到如何通过 4 个步骤从 github 添加自定义软件包：
 
-1. Create an overlay with custom packages cloned from Github:
+1. 创建一个包含从 Github 克隆的自定义软件包的覆盖层：
 
 .. code-block:: bash
 
@@ -356,7 +334,7 @@ from github in 4 steps:
    " > ../overlay.repos
    RUN vcs import ./ < ../overlay.repos
 
-2. Install package dependencies using rosdep
+2. 使用 rosdep 安装软件包依赖
 
 .. code-block:: bash
 
@@ -372,7 +350,7 @@ from github in 4 steps:
          --ignore-src \
        && rm -rf /var/lib/apt/lists/*
 
-3. Build the packages *you need*
+3. 构建 *你需要的* 软件包
 
 .. code-block:: bash
 
@@ -386,29 +364,27 @@ from github in 4 steps:
            demo_nodes_py \
          --mixin $OVERLAY_MIXINS
 
-4. Running the launch file
+4. 运行 launch 文件
 
 .. code-block:: bash
 
    # run launch file
    CMD ["ros2", "launch", "demo_nodes_cpp", "talker_listener.launch.py"]
 
-Likewise, we can change the packages used, install their dependencies,
-and then run them.
+同样，我们可以更改使用的软件包，安装它们的依赖，然后运行它们。
 
-**Back to IBM Cloud**
+**回到 IBM Cloud**
 
-With this Dockerfile, we can follow the same steps we did before to deploy it on IBM Cloud.
-Since we already have our registry created, and we're logged in to IBM Cloud, we directly build our new Dockerfile.
-Notice how I kept the tag the same but changed the version, this way I can update the docker image created previously.
-(You are free to create a completely new one if you want)
+使用这个 Dockerfile，我们可以按照之前相同的步骤将其部署到 IBM Cloud 上。
+由于我们已经创建了注册表并且已登录 IBM Cloud，因此可以直接构建新的 Dockerfile。
+注意我是如何保持标签相同但更改了版本的，这样我就可以更新之前创建的 docker 镜像。
+（如果你愿意，可以随意创建一个全新的）
 
 .. code-block:: console
 
    $ ibmcloud cr build --tag registry.bluemix.net/ros2nasr/ros2foxy:2 .
 
-Then, make sure you are logged in to the registry and run the new docker
-image:
+然后，确保你已登录到注册表并运行新的 docker 镜像：
 
 .. code-block:: console
 
@@ -422,88 +398,84 @@ image:
 
    $ docker run -v -it registry.ng.bluemix.net/ros2nasr/ros2foxy:2
 
-You should see, again, the same output.
-However, this time we did it through custom packages from github, which allows us to utilize our personally created packages for ROS 2 on IBM Cloud.
+你应该再次看到相同的输出。
+不过，这次我们是通过来自 github 的自定义软件包完成的，这使我们能够在 IBM Cloud 上使用我们为 ROS 2 个人创建的软件包。
 
-Extra: Deleting Docker Images
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+额外内容：删除 Docker 镜像
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As you may find yourself in need of deleting a specific docker image(s)
-from IBM Cloud, this is how you should go about it!
+当你发现需要从 IBM Cloud 删除特定的 docker 镜像时，应该这样做！
 
-1. List all the images you have and find all the ones that share the
-   *IMAGE* name corresponding to
-   *registry.ng.bluemix.net/ros2nasr/ros2foxy:2* (in my case).
-   Then delete them using their *NAMES*
+1. 列出你拥有的所有镜像，找到所有共享
+   *IMAGE* 名称对应于
+   *registry.ng.bluemix.net/ros2nasr/ros2foxy:2* （在我的例子中）的镜像。
+   然后使用它们的 *NAMES* 删除它们
 
 .. code-block:: console
 
    $ docker rm your_docker_NAMES
 
-2. Delete the docker image from IBM Cloud using its *IMAGE* name
+2. 使用其 *IMAGE* 名称从 IBM Cloud 删除 docker 镜像
 
 .. code-block:: console
 
    $ docker rmi registry.ng.bluemix.net/ros2nasr/ros2foxy:2
 
-Step 4: Kubernetes
+第 4 步：Kubernetes
 -------------------
 
-a) Creating the Cluster
-^^^^^^^^^^^^^^^^^^^^^^^
+a) 创建集群
+^^^^^^^^^^^
 
-Create a cluster using the Console.
-The instructions are found `here <https://cloud.ibm.com/docs/containers?topic=containers-clusters#clusters_ui>`__.
-The settings used are detailed below.
-These are merely suggestions and can be changed if you need to.
-However, make sure you understand the implications of your choices:
+使用控制台创建集群。
+说明见 `此处 <https://cloud.ibm.com/docs/containers?topic=containers-clusters#clusters_ui>`__。
+使用的设置详见下文。
+这些仅是建议，如果你需要可以更改。
+但是，请确保你理解所选选项的含义：
 
-1. Plan: *Standard*
+1. 计划：*Standard*
 
-2. Orchestration Service: *Kubernetes v1.18.10*
+2. 编排服务：*Kubernetes v1.18.10*
 
-3. Infrastructure: *Classic*
+3. 基础设施：*Classic*
 
-4. Location:
+4. 位置：
 
--  Resource group: *Default*
+-  资源组：*Default*
 
--  Geography: *North America* (you are free to change this)
+-  地域：*North America* （你可以自由更改）
 
--  Availability: *Single zone*
-   (you are free to change this but make sure you understand the impact of your choices by checking the IBM Cloud documentation.)
+-  可用性：*Single zone*
+   （你可以自由更改，但请确保通过查阅 IBM Cloud 文档了解所选选项的影响。）
 
--  Worker Zone: *Toronto 01* (choose the location that is physically
-   closest to you)
+-  工作区域：*Toronto 01* （选择物理上离你最近的位置）
 
-5. Worker Pool:
+5. 工作节点池：
 
--  Virtual - shared, Ubuntu 18
+-  虚拟 - 共享，Ubuntu 18
 
--  Memory: 16 GB
+-  内存：16 GB
 
--  Worker nodes per zone: *1*
+-  每个区域的工作节点数：*1*
 
-6. Master service endpoint: *Both private & public endpoints*
+6. 主服务端点：*私有和公共端点*
 
-7. Resource details (Totally flexible):
+7. 资源详情（完全灵活）：
 
--  Cluster name: *mycluster-tor01-rosibm*
+-  集群名称：*mycluster-tor01-rosibm*
 
--  Tags: *version:1*
+-  标签：*version:1*
 
-After you create your cluster, you will be redirected to a page which details how you can set up the CLI tools and access your cluster.
-Please follow these instructions (or check the instructions `here <https://github.com/mm-nasr/ros2_ibmcloud/blob/main/Kubernetes-Cluster-Set-up.md>`__)
-and wait for the progress bar to show that the worker nodes you created are
-ready by indicating *Normal* next to the cluster name.
-You can also reach this screen from the IBM Cloud Console inside the Kubernetes.
+创建集群后，你将重定向到一个页面，该页面详细介绍了如何设置 CLI 工具并访问你的集群。
+请按照这些说明操作（或查看 `此处 <https://github.com/mm-nasr/ros2_ibmcloud/blob/main/Kubernetes-Cluster-Set-up.md>`__ 的说明）
+并等待进度条显示你创建的工作节点已准备就绪，在集群名称旁边显示 *Normal*。
+你也可以从 Kubernetes 内的 IBM Cloud 控制台进入此屏幕。
 
-b) Deploying your Docker Image *Finally!*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+b) 部署你的 Docker 镜像 *终于到了！*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. Create a deployment configuration yaml file named
-   *ros2-deployment.yaml* using your favorite $EDITOR and insert the
-   following in it:
+1. 使用你喜欢的 $EDITOR 创建一个名为
+   *ros2-deployment.yaml* 的部署配置 yaml 文件，并在其中插入以下内容：
 
 .. code-block:: bash
 
@@ -525,9 +497,9 @@ b) Deploying your Docker Image *Finally!*
          - name: <app_name>
            image: <region>.icr.io/<namespace>/<image>:<tag>
 
-You should replace the tags shown between *"<" ">"* as described
-`here <https://cloud.ibm.com/docs/containers?topic=containers-images#namespace>`__.
-The file in my case would look something like this:
+你应该按照
+`此处 <https://cloud.ibm.com/docs/containers?topic=containers-images#namespace>`__ 所述替换 *"<" ">"* 之间显示的标签。
+在我的例子中，文件看起来像这样：
 
 .. code-block:: bash
 
@@ -549,43 +521,42 @@ The file in my case would look something like this:
          - name: ros2-ibmcloud
            image: us.icr.io/ros2nasr/ros2foxy:2
 
-Deploy the file using the following command
+使用以下命令部署该文件
 
 .. code-block:: console
 
    $ kubectl apply -f ros2-deployment.yaml
    deployment.apps/ros2-deployment created
 
-Now your docker image is fully deployed on your cluster!
+现在你的 docker 镜像已完全部署到你的集群上！
 
-Step 5: Using CLI for your Docker Image
----------------------------------------
+第 5 步：为你的 Docker 镜像使用 CLI
+-----------------------------------
 
-1. Navigate to your cluster through the IBM Cloud console Kubernetes.
+1. 通过 IBM Cloud 控制台 Kubernetes 导航到你的集群。
 
-2. Click on *Kubernetes dashboard* on the top right corner of the page.
+2. 点击页面右上角的 *Kubernetes dashboard*。
 
-You should now be able to see a full list of all the different
-parameters of your cluster as well as its CPU and Memory Usage.
+现在你应该能够看到集群所有不同参数的完整列表，以及其 CPU 和内存使用情况。
 
-3. Navigate to *Pods* and click on your deployment.
+3. 导航到 *Pods* 并点击你的部署。
 
-4. On the top right corner, click on *Exec into pod*
+4. 在右上角，点击 *Exec into pod*
 
-Now you are inside your docker image!
-You can source your workspace (if needed) and run ROS 2!
-For example:
+现在你就在你的 docker 镜像内部了！
+你可以 source 你的工作空间（如果需要）并运行 ROS 2！
+例如：
 
 .. code-block:: console
 
    root@ros2-deployment-xxxxxxxx:/opt/ros/overlay_ws# . install/setup.sh
    root@ros2-deployment-xxxxxxxx:/opt/ros/overlay_ws# ros2 launch demo_nodes_cpp talker_listener.launch.py
 
-Final Remarks
----------------
+最终说明
+--------
 
-At this point, you are capable of creating your own docker image using ROS 2 packages on github.
-It is also possible, with little changes to utilize local ROS 2 packages as well.
-This could be the topic of another article.
-However, you are encouraged to check out the following `Dockerfile <https://github.com/mm-nasr/ros2_ibmcloud/tree/main/dockers/local_pkgs_docker>`__ which uses a local copy of the demos repository.
-Similarly, you can use your own local package.
+至此，你已经能够使用 github 上的 ROS 2 软件包创建自己的 docker 镜像。
+只需做少量更改，也可以使用本地 ROS 2 软件包。
+这可以是另一篇文章的主题。
+不过，鼓励你查看以下 `Dockerfile <https://github.com/mm-nasr/ros2_ibmcloud/tree/main/dockers/local_pkgs_docker>`__，它使用了 demos 仓库的本地副本。
+同样，你也可以使用自己的本地软件包。

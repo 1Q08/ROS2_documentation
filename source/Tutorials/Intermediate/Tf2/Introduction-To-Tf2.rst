@@ -4,23 +4,23 @@
 
 .. _IntroToTf2:
 
-Introducing ``tf2``
-===================
+tf2 简介
+========
 
-**Goal:** Run a turtlesim demo and see some of the power of tf2 in a multi-robot example using turtlesim.
+**目标：** 运行一个 turtlesim 演示，并通过使用 turtlesim 的多机器人示例了解 tf2 的一些强大功能。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 10 minutes
+**时间：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Installing the demo
--------------------
+安装演示
+--------
 
-Let's start by installing the demo package and its dependencies.
+让我们先安装演示包及其依赖。
 
 .. tabs::
 
@@ -42,51 +42,51 @@ Let's start by installing the demo package and its dependencies.
 
          $ git clone https://github.com/ros/geometry_tutorials.git -b ros2
 
-Running the demo
-----------------
+运行演示
+--------
 
-Now that we've installed the ``turtle_tf2_py`` tutorial package let's run the demo.
-First, open a new terminal and :doc:`source your ROS 2 installation <../../Beginner-CLI-Tools/Configuring-ROS2-Environment>` so that ``ros2`` commands will work.
-Then run the following command:
+现在我们已经安装了 ``turtle_tf2_py`` 教程包，让我们运行演示。
+首先，打开一个新终端并 :doc:`source 你的 ROS 2 安装 <../../Beginner-CLI-Tools/Configuring-ROS2-Environment>`，以便 ``ros2`` 命令可以正常工作。
+然后运行以下命令：
 
 .. code-block:: console
 
    $ ros2 launch turtle_tf2_py turtle_tf2_demo.launch.py
 
-You will see the turtlesim start with two turtles.
+你将看到 turtlesim 启动并出现两只 turtle。
 
 .. image:: images/turtlesim_follow1.png
 
-In the second terminal window type the following command:
+在第二个终端窗口中输入以下命令：
 
 .. code-block:: console
 
    $ ros2 run turtlesim turtle_teleop_key
 
-Once the turtlesim is started you can drive the central turtle around in the turtlesim using the keyboard arrow keys,
-select the second terminal window so that your keystrokes will be captured to drive the turtle.
+一旦 turtlesim 启动，你就可以在 turtlesim 中使用键盘方向键驾驶中央的 turtle 四处移动，
+选择第二个终端窗口，这样你的按键就会被捕获来驾驶 turtle。
 
 .. image:: images/turtlesim_follow2.png
 
-You can see that one turtle continuously moves to follow the turtle you are driving around.
+你可以看到一只 turtle 不断移动，跟随你驾驶的那只 turtle。
 
-What is happening?
-------------------
+发生了什么？
+------------
 
-This demo is using the tf2 library to create three coordinate frames: a ``world`` frame, a ``turtle1`` frame, and a ``turtle2`` frame.
-This tutorial uses a *tf2 broadcaster* to publish the turtle coordinate frames and a *tf2 listener* to compute the difference in the turtle frames and move one turtle to follow the other.
+这个演示使用 tf2 库创建了三个坐标帧：一个 ``world`` 帧、一个 ``turtle1`` 帧和一个 ``turtle2`` 帧。
+本教程使用一个 *tf2 广播器* 发布 turtle 坐标帧，并使用一个 *tf2 监听器* 计算 turtle 帧之间的差异，并让一只 turtle 移动以跟随另一只。
 
-tf2 tools
----------
+tf2 工具
+--------
 
-Now let's look at how tf2 is being used to create this demo.
-We can use ``tf2_tools`` to look at what tf2 is doing behind the scenes.
+现在让我们看看 tf2 是如何被用来创建这个演示的。
+我们可以使用 ``tf2_tools`` 来查看 tf2 在幕后做了什么。
 
-1 Using view_frames
-^^^^^^^^^^^^^^^^^^^
+1 使用 view_frames
+^^^^^^^^^^^^^^^^^^
 
-``view_frames`` creates a diagram of the frames being broadcast by tf2 over ROS.
-Note that this utility only works on Linux; if you are Windows, skip to "Using tf2_echo" below.
+``view_frames`` 创建一个 tf2 通过 ROS 广播的帧的图表。
+注意，这个实用程序仅在 Linux 上有效；如果你在 Windows 上，请跳到下面的“使用 tf2_echo”。
 
 .. code-block:: console
 
@@ -94,28 +94,28 @@ Note that this utility only works on Linux; if you are Windows, skip to "Using t
    Listening to tf data during 5 seconds...
    Generating graph in frames.pdf file...
 
-Here a tf2 listener is listening to the frames that are being broadcast over ROS and drawing a tree of how the frames are connected.
-To view the tree, open the resulting ``frames.pdf`` with your favorite PDF viewer.
+这里一个 tf2 监听器正在监听通过 ROS 广播的帧，并绘制一棵帧如何连接的树。
+要查看这棵树，用你喜欢的 PDF 查看器打开生成的 ``frames.pdf``。
 
 .. image:: images/turtlesim_frames.png
 
-Here we can see three frames that are broadcast by tf2: ``world``, ``turtle1``, and ``turtle2``.
-The ``world`` frame is the parent of the ``turtle1`` and ``turtle2`` frames.
-``view_frames`` also reports some diagnostic information about when the oldest and most
-recent frame transforms were received and how fast the tf2 frame is published to tf2 for debugging purposes.
+这里我们可以看到 tf2 广播的三个帧：``world``、``turtle1`` 和 ``turtle2``。
+``world`` 帧是 ``turtle1`` 和 ``turtle2`` 帧的父帧。
+``view_frames`` 还会报告一些诊断信息，说明最旧和
+最新的帧变换何时收到，以及 tf2 帧以多快的速度发布到 tf2，用于调试。
 
-2 Using tf2_echo
-^^^^^^^^^^^^^^^^
+2 使用 tf2_echo
+^^^^^^^^^^^^^^^
 
-``tf2_echo`` reports the transform between any two frames broadcast over ROS.
+``tf2_echo`` 报告通过 ROS 广播的任意两个帧之间的变换。
 
-Usage:
+用法：
 
 .. code-block:: console
 
    $ ros2 run tf2_ros tf2_echo [source_frame] [target_frame]
 
-Let's look at the transform of the ``turtle2`` frame with respect to ``turtle1`` frame which is equivalent to:
+让我们看一下 ``turtle2`` 帧相对于 ``turtle1`` 帧的变换，这等同于：
 
 .. code-block:: console
 
@@ -141,15 +141,16 @@ Let's look at the transform of the ``turtle2`` frame with respect to ``turtle1``
     -0.000  0.000  1.000  0.000
      0.000  0.000  0.000  1.000
 
-You will see the transform displayed as the ``tf2_echo`` listener receives the frames broadcast over ROS 2.
 
-As you drive your turtle around you will see the transform change as the two turtles move relative to each other.
+当 ``tf2_echo`` 监听器接收到通过 ROS 2 广播的帧时，你将看到变换显示出来。
 
-rviz2 and tf2
--------------
+当你驾驶 turtle 四处移动时，你会看到变换随着两只 turtle 相对移动而变化。
 
-``rviz2`` is a visualization tool that is useful for examining tf2 frames.
-Let's look at our turtle frames using ``rviz2`` by starting it with a configuration file using the ``-d`` option:
+rviz2 与 tf2
+------------
+
+``rviz2`` 是一个可视化工具，对于检查 tf2 帧很有用。
+让我们使用 ``rviz2`` 查看我们的 turtle 帧，通过使用 ``-d`` 选项用一个配置文件启动它：
 
 .. tabs::
 
@@ -167,5 +168,5 @@ Let's look at our turtle frames using ``rviz2`` by starting it with a configurat
 
 .. image:: images/turtlesim_rviz.png
 
-In the side bar you will see the frames broadcast by tf2.
-As you drive the turtle around you will see the frames move in rviz.
+在侧边栏中，你将看到 tf2 广播的帧。
+当你驾驶 turtle 四处移动时，你会看到帧在 rviz 中移动。

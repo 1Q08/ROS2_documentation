@@ -4,50 +4,50 @@
 
 .. _Turtlesim:
 
-Using ``turtlesim``, ``ros2``, and ``rqt``
-==========================================
+使用 ``turtlesim``、``ros2`` 和 ``rqt``
+=======================================
 
-**Goal:** Install and use the turtlesim package and rqt tools to prepare for upcoming tutorials.
+**目标：** 安装并使用 turtlesim 包和 rqt 工具，为接下来的教程做准备。
 
-**Tutorial level:** Beginner
+**教程级别：** 入门
 
-**Time:** 15 minutes
+**用时：** 15 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-Turtlesim is a lightweight simulator for learning ROS 2.
-It illustrates what ROS 2 does at the most basic level to give you an idea of what you will do with a real robot or a robot simulation later on.
+Turtlesim 是一个用于学习 ROS 2 的轻量级模拟器。
+它展示了 ROS 2 在最基本层面上的工作方式，让你了解之后使用真实机器人或机器人模拟时将会做些什么。
 
-The ros2 tool is how the user manages, introspects, and interacts with a ROS system.
-It supports multiple commands that target different aspects of the system and its operation.
-One might use it to start a node, set a parameter, listen to a topic, and many more.
-The ros2 tool is part of the core ROS 2 installation.
+ros2 工具是用户管理、内省和与 ROS 系统交互的方式。
+它支持多个命令，分别针对系统的不同方面及其运行。
+你可以使用它来启动节点、设置参数、监听话题等等。
+ros2 工具是核心 ROS 2 安装的一部分。
 
-rqt is a graphical user interface (GUI) tool for ROS 2.
-Everything done in rqt can be done on the command line, but rqt provides a more user-friendly way to manipulate ROS 2 elements.
+rqt 是 ROS 2 的图形用户界面（GUI）工具。
+在 rqt 中完成的所有操作都可以在命令行中完成，但 rqt 提供了一种更友好的方式来操作 ROS 2 元素。
 
-This tutorial touches upon core ROS 2 concepts, like nodes, topics, and services.
-All of these concepts will be elaborated on in later tutorials; for now, you will simply set up the tools and get a feel for them.
+本教程涉及 ROS 2 的核心概念，如节点、话题和服务。
+所有这些概念都将在后续教程中详细阐述；现在，你只需设置好工具并感受一下它们。
 
-Prerequisites
--------------
+前置条件
+--------
 
-The previous tutorial, :doc:`../Configuring-ROS2-Environment`, will show you how to set up your environment.
+上一篇教程 :doc:`../Configuring-ROS2-Environment` 将向你展示如何设置你的环境。
 
-Tasks
------
+任务
+----
 
-1 Install turtlesim
-^^^^^^^^^^^^^^^^^^^
+1 安装 turtlesim
+^^^^^^^^^^^^^^^^
 
-As always, start by sourcing your setup files in a new terminal, as described in the :doc:`previous tutorial <../Configuring-ROS2-Environment>`.
+和往常一样，首先在一个新终端中 source 你的 setup 文件，如 :doc:`上一篇教程 <../Configuring-ROS2-Environment>` 所述。
 
-Install the turtlesim package for your ROS 2 distro:
+为你的 ROS 2 发行版安装 turtlesim 包：
 
 .. tabs::
 
@@ -60,13 +60,13 @@ Install the turtlesim package for your ROS 2 distro:
 
    .. group-tab:: macOS
 
-      As long as the archive you installed ROS 2 from contains the ``ros_tutorials`` repository, you should already have turtlesim installed.
+      只要你安装 ROS 2 所用的归档包含 ``ros_tutorials`` 仓库，你就应该已经安装了 turtlesim。
 
    .. group-tab:: Windows
 
-      As long as the archive you installed ROS 2 from contains the ``ros_tutorials`` repository, you should already have turtlesim installed.
+      只要你安装 ROS 2 所用的归档包含 ``ros_tutorials`` 仓库，你就应该已经安装了 turtlesim。
 
-To check if the package is installed, run the following command, which should return a list of turtlesim's executables:
+要检查该包是否已安装，请运行以下命令，它应该会返回 turtlesim 的可执行程序列表：
 
 .. code-block:: console
 
@@ -76,10 +76,10 @@ To check if the package is installed, run the following command, which should re
   turtlesim turtle_teleop_key
   turtlesim turtlesim_node
 
-2 Start turtlesim
-^^^^^^^^^^^^^^^^^
+2 启动 turtlesim
+^^^^^^^^^^^^^^^^
 
-To start turtlesim, enter the following command in your terminal:
+要启动 turtlesim，请在你的终端中输入以下命令：
 
 .. code-block:: console
 
@@ -87,37 +87,37 @@ To start turtlesim, enter the following command in your terminal:
   [INFO] [turtlesim]: Starting turtlesim with node name /turtlesim
   [INFO] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
 
-Under the command, you will see messages from the node.
-There you can see the default turtle's name and the coordinates where it spawns.
+在命令下方，你会看到来自节点的消息。
+在那里你可以看到默认乌龟的名称以及它生成的位置坐标。
 
-The simulator window should appear, with a random turtle in the center.
+模拟器窗口应该会出现，中间有一只随机外观的乌龟。
 
 .. image:: images/turtlesim.png
 
 
-3 Use turtlesim
-^^^^^^^^^^^^^^^
+3 使用 turtlesim
+^^^^^^^^^^^^^^^^
 
-Open a new terminal and source ROS 2 again.
+打开一个新终端并再次 source ROS 2。
 
-Now you will run a new node to control the turtle in the first node:
+现在你将运行一个新节点来控制第一个节点中的乌龟：
 
 .. code-block:: console
 
   $ ros2 run turtlesim turtle_teleop_key
 
-At this point you should have three windows open: a terminal running ``turtlesim_node``, a terminal running ``turtle_teleop_key`` and the turtlesim window.
-Arrange these windows so that you can see the turtlesim window, but also have the terminal running ``turtle_teleop_key`` active so that you can control the turtle in turtlesim.
+此时你应该打开了三个窗口：一个运行 ``turtlesim_node`` 的终端、一个运行 ``turtle_teleop_key`` 的终端，以及 turtlesim 窗口。
+请排列这些窗口，使你能看到 turtlesim 窗口，同时让运行 ``turtle_teleop_key`` 的终端处于活动状态，这样你就能控制 turtlesim 中的乌龟。
 
-Use the arrow keys on your keyboard to control the turtle.
-It will move around the screen, using its attached "pen" to draw the path it followed so far.
+使用键盘上的方向键来控制乌龟。
+它会在屏幕上移动，并用它附带的“画笔”画出它到目前为止走过的路径。
 
 .. note::
 
-  Pressing an arrow key will only cause the turtle to move a short distance and then stop.
-  This is because, realistically, you wouldn't want a robot to continue carrying on an instruction if, for example, the operator lost the connection to the robot.
+  按下方向键只会让乌龟移动一小段距离然后停下。
+  这是因为，现实中你不会希望机器人持续执行一条指令，例如当操作员与机器人失去连接时。
 
-You can see the nodes, and their associated topics, services, and actions, using the ``list`` subcommands of the respective commands:
+你可以使用相应命令的 ``list`` 子命令查看节点及其关联的话题、服务和动作：
 
 .. code-block:: console
 
@@ -126,134 +126,140 @@ You can see the nodes, and their associated topics, services, and actions, using
   $ ros2 service list
   $ ros2 action list
 
-You will learn more about these concepts in the coming tutorials.
-Since the goal of this tutorial is only to get a general overview of turtlesim, you will use rqt to call some of the turtlesim services and interact with ``turtlesim_node``.
+你将在接下来的教程中了解更多关于这些概念的内容。
+由于本教程的目标只是对 turtlesim 有一个总体了解，你将使用 rqt 调用 turtlesim 的一些服务，并与 ``turtlesim_node`` 进行交互。
 
-4 Install rqt
-^^^^^^^^^^^^^
+4 安装 rqt
+^^^^^^^^^^
 
-Open a new terminal to install ``rqt`` and its plugins:
+打开一个新终端来安装 ``rqt`` 及其插件：
 
 .. tabs::
 
-  .. group-tab:: Ubuntu Linux
+  .. group-tab:: Ubuntu
 
     .. code-block:: console
 
       $ sudo apt update
       $ sudo apt install ros-{DISTRO}-rqt ros-{DISTRO}-rqt-common-plugins
 
+  .. group-tab:: RHEL
+
+    .. code-block:: console
+
+      $ sudo dnf install 'ros-{DISTRO}-rqt*'
+
   .. group-tab:: macOS
 
-    The standard archive for installing ROS 2 on macOS contains ``rqt`` and its plugins, so you should already have ``rqt`` installed.
+    在 macOS 上安装 ROS 2 的标准归档包含 ``rqt`` 及其插件，所以你应该已经安装了 ``rqt``。
 
   .. group-tab:: Windows
 
-    The standard archive for installing ROS 2 on Windows contains ``rqt`` and its plugins, so you should already have ``rqt`` installed.
+    在 Windows 上安装 ROS 2 的标准归档包含 ``rqt`` 及其插件，所以你应该已经安装了 ``rqt``。
 
-To run rqt:
+要运行 rqt：
 
 .. code-block:: console
 
   $ rqt
 
-5 Use rqt
-^^^^^^^^^
+5 使用 rqt
+^^^^^^^^^^
 
-When running rqt for the first time, the window will be blank.
-No worries; just select **Plugins** > **Services** > **Service Caller** from the menu bar at the top.
+首次运行 rqt 时，窗口将是空白的。
+不用担心；只需从顶部的菜单栏中选择 **Plugins** > **Services** > **Service Caller**。
 
 .. note::
 
-  It may take some time for rqt to locate all the plugins.
-  If you click on **Plugins** but don't see **Services** or any other options, you should close rqt and enter the command ``rqt --force-discover`` in your terminal.
+  rqt 定位所有插件可能需要一些时间。
+  如果你点击了 **Plugins** 但没有看到 **Services** 或任何其他选项，你应该关闭 rqt，并在终端中输入命令 ``rqt --force-discover``。
 
 .. image:: images/rqt.png
 
-Use the refresh button to the left of the **Service** dropdown list to ensure all the services of your turtlesim node are available.
+使用 **Service** 下拉列表左侧的刷新按钮，确保你的 turtlesim 节点的所有服务都可用。
 
-Click on the **Service** dropdown list to see turtlesim's services, and select the ``/spawn`` service.
+点击 **Service** 下拉列表查看 turtlesim 的服务，并选择 ``/spawn`` 服务。
 
-5.1 Try the spawn service
-~~~~~~~~~~~~~~~~~~~~~~~~~
+5.1 尝试 spawn 服务
+~~~~~~~~~~~~~~~~~~~
 
-Let's use rqt to call the ``/spawn`` service.
-You can guess from its name that ``/spawn`` will create another turtle in the turtlesim window.
+让我们使用 rqt 调用 ``/spawn`` 服务。
+从名称你可以猜到，``/spawn`` 会在 turtlesim 窗口中创建另一只乌龟。
 
-Give the new turtle a unique name, like ``turtle2``, by double-clicking between the empty single quotes in the **Expression** column.
-You can see that this expression corresponds to the value of **name** and is of type **string**.
+在 **Expression** 列的空单引号之间双击，给新乌龟起一个唯一的名称，比如 ``turtle2``。
+你可以看到这个表达式对应于 **name** 的值，并且类型是 **string**。
 
-Next enter some valid coordinates at which to spawn the new turtle, like ``x = 1.0`` and ``y = 1.0``.
+接下来输入一些用于生成新乌龟的有效坐标，比如 ``x = 1.0`` 和 ``y = 1.0``。
 
 .. image:: images/spawn.png
 
 .. note::
 
-  If you try to spawn a new turtle with the same name as an existing turtle, like the default ``turtle1``, you will get an error message in the terminal running ``turtlesim_node``:
+  如果你尝试生成一只与现有乌龟同名的新乌龟（比如默认的 ``turtle1``），你会在运行 ``turtlesim_node`` 的终端中看到一条错误消息：
 
   .. code-block:: console
 
     [ERROR] [turtlesim]: A turtle named [turtle1] already exists
 
-To spawn ``turtle2``, you then need to call the service by clicking the **Call** button on the upper right side of the rqt window.
+要生成 ``turtle2``，你需要通过点击 rqt 窗口右上角的 **Call** 按钮来调用该服务。
 
-If the service call was successful, you should see a new turtle (again with a random design) spawn at the coordinates you input for **x** and **y**.
+如果服务调用成功，你应该会看到一只新乌龟（同样是随机外观）在你为 **x** 和 **y** 输入的坐标处生成。
 
-If you refresh the service list in rqt, you will also see that now there are services related to the new turtle, ``/turtle2/...``, in addition to ``/turtle1/...``.
+如果你刷新 rqt 中的服务列表，你还会看到现在除了 ``/turtle1/...`` 之外，还有与新乌龟相关的服务 ``/turtle2/...``。
 
-5.2 Try the set_pen service
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+5.2 尝试 set_pen 服务
+~~~~~~~~~~~~~~~~~~~~~
 
-Now let's give ``turtle1`` a unique pen using the ``/set_pen`` service:
+现在让我们使用 ``/set_pen`` 服务给 ``turtle1`` 一支独特的画笔：
 
 .. image:: images/set_pen.png
 
-The values for **r**, **g** and **b**, which are between 0 and 255, set the color of the pen ``turtle1`` draws with, and **width** sets the thickness of the line.
+**r**、**g** 和 **b** 的值介于 0 到 255 之间，用于设置 ``turtle1`` 绘图所用画笔的颜色，而 **width** 设置线条的粗细。
 
-To have ``turtle1`` draw with a distinct red line, change the value of **r** to 255, and the value of **width** to 5.
-Don't forget to call the service after updating the values.
+要让 ``turtle1`` 用明显的红色线条绘图，请将 **r** 的值改为 255，并将 **width** 的值改为 5。
+更新值后别忘了调用该服务。
 
-If you return to the terminal where ``turtle_teleop_key`` is running and press the arrow keys, you will see ``turtle1``'s pen has changed.
+如果你回到运行 ``turtle_teleop_key`` 的终端并按下方向键，你会看到 ``turtle1`` 的画笔已经改变。
 
 .. image:: images/new_pen.png
 
-You've probably also noticed that there's no way to move ``turtle2``.
-That's because there is no teleop node for ``turtle2``.
+你可能也已经注意到，没有办法移动 ``turtle2``。
+这是因为没有用于 ``turtle2`` 的 teleop 节点。
 
-6 Remapping
-^^^^^^^^^^^
+6 重映射
+^^^^^^^^
 
-You need a second teleop node in order to control ``turtle2``.
-However, if you try to run the same command as before, you will notice that this one also controls ``turtle1``.
-The way to change this behavior is by remapping the ``cmd_vel`` topic and the ``rotate_absolute`` action.
+你需要第二个 teleop 节点才能控制 ``turtle2``。
+然而，如果你尝试运行与之前相同的命令，你会注意到它控制的也是 ``turtle1``。
+改变这种行为的方法是对 ``cmd_vel`` 话题和 ``rotate_absolute`` 动作进行重映射。
 
-In a new terminal, source ROS 2, and run:
+在一个新终端中，source ROS 2，然后运行：
 
 .. code-block:: console
 
   $ ros2 run turtlesim turtle_teleop_key --ros-args --remap turtle1/cmd_vel:=turtle2/cmd_vel --remap turtle1/rotate_absolute:=turtle2/rotate_absolute
 
 
-Now, you can move ``turtle2`` when this terminal is active, and ``turtle1`` when the other terminal running ``turtle_teleop_key`` is active.
+现在，当这个终端处于活动状态时，你可以移动 ``turtle2``；当另一个运行 ``turtle_teleop_key`` 的终端处于活动状态时，你可以移动 ``turtle1``。
 
 .. image:: images/remap.png
 
-7 Close turtlesim
-^^^^^^^^^^^^^^^^^
+7 关闭 turtlesim
+^^^^^^^^^^^^^^^^
 
-To stop the simulation, you can enter ``Ctrl + C`` in the ``turtlesim_node`` terminal, and ``q`` in the ``turtle_teleop_key`` terminals.
+要停止模拟，你可以在 ``turtlesim_node`` 终端中输入 ``Ctrl + C``，并在 ``turtle_teleop_key`` 终端中输入 ``q``。
 
-Summary
--------
+小结
+----
 
-Using turtlesim and rqt is a great way to learn the core concepts of ROS 2.
+使用 turtlesim 和 rqt 是学习 ROS 2 核心概念的绝佳方式。
 
-Next steps
-----------
+下一步
+------
 
-Now that you have turtlesim and rqt up and running, and an idea of how they work, let's dive into the first core ROS 2 concept with the next tutorial, :doc:`../Understanding-ROS2-Nodes/Understanding-ROS2-Nodes`.
+既然你已经让 turtlesim 和 rqt 运行起来，并对它们的工作方式有了概念，让我们通过下一篇教程 :doc:`../Understanding-ROS2-Nodes/Understanding-ROS2-Nodes` 深入学习第一个核心 ROS 2 概念。
 
-Related content
----------------
+相关内容
+--------
 
-The turtlesim package can be found in the `ros_tutorials <https://github.com/ros/ros_tutorials/tree/{REPOS_FILE_BRANCH}/turtlesim>`_ repo.
+turtlesim 包可以在 `ros_tutorials <https://github.com/ros/ros_tutorials/tree/{REPOS_FILE_BRANCH}/turtlesim>`_ 仓库中找到。

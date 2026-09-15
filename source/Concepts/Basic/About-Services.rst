@@ -1,13 +1,13 @@
-Services
-========
+服务
+====
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
-In ROS 2, a service refers to a remote procedure call.
-In other words, a node can make a remote procedure call to another node which will do a computation and return a result.
+在 ROS 2 中，服务指的是远程过程调用。
+换句话说，一个节点可以向另一个节点发起远程过程调用，后者会执行某项计算并返回结果。
 
-This structure is reflected in how a service message definition looks:
+这种结构体现在服务消息定义的形式上：
 
 .. code::
 
@@ -15,19 +15,19 @@ This structure is reflected in how a service message definition looks:
    ---
    uint32 response
 
-In ROS 2, services are expected to return quickly, as the client is generally waiting on the result.
-Services should never be used for longer running processes, in particular processes that might need to be preempted for exceptional situations.
-If you have a service that will be doing a long-running computation, consider using an :doc:`action <About-Actions>` instead.
+在 ROS 2 中，服务应当快速返回，因为客户端通常会等待结果。
+服务绝不应被用于运行时间较长的过程，尤其是那些可能因异常情况而需要被抢占的过程。
+如果您有一个会执行长时间运行计算的服务，请考虑改用 :doc:`动作 <About-Actions>`。
 
-Services are identified by a service name, which looks much like a topic name (but is in a different namespace).
+服务由服务名称标识，服务名称看起来很像话题名称（但处于不同的命名空间中）。
 
-A service consists of two parts: the service server and the service client.
+服务由两部分组成：服务服务端和服务客户端。
 
-Service server
---------------
+服务服务端
+----------
 
-A service server is the entity that will accept a remote procedure request, and perform some computation on it.
-For instance, suppose the ROS 2 message contains the following:
+服务服务端是接受远程过程请求并对其执行某种计算的实体。
+例如，假设 ROS 2 消息包含以下内容：
 
 .. code::
 
@@ -36,17 +36,17 @@ For instance, suppose the ROS 2 message contains the following:
    ---
    uint32 sum
 
-The service server would be the entity that receives this message, adds ``a`` and ``b`` together, and returns the ``sum``.
+那么服务服务端就是接收该消息、将 ``a`` 与 ``b`` 相加并返回 ``sum`` 的实体。
 
 .. note::
 
-   There should only ever be one service server per service name.
-   It is undefined which service server will receive client requests in the case of multiple service servers on the same service name.
+   每个服务名称只应有一个服务服务端。
+   如果同一服务名称上存在多个服务服务端，则由哪个服务服务端接收客户端请求是未定义的。
 
-Service client
---------------
+服务客户端
+----------
 
-A service client is an entity that will request a remote service server to perform a computation on its behalf.
-Following from the example above, the service client is the entity that creates the initial message containing ``a`` and ``b``, and waits for the service server to compute the sum and return the result.
+服务客户端是会请求远程服务服务端替它执行计算的实体。
+沿用上面的例子，服务客户端就是创建包含 ``a`` 和 ``b`` 的初始消息，并等待服务服务端计算和值并返回结果的实体。
 
-Unlike the service server, there can be arbitrary numbers of service clients using the same service name.
+与服务服务端不同，使用同一服务名称的服务客户端可以有任意多个。

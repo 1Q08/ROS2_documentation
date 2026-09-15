@@ -1,5 +1,5 @@
-Intermediate
-============
+中级
+====
 
 .. toctree::
    :maxdepth: 1

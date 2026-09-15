@@ -1,31 +1,31 @@
-Platform Support Tiers
-======================
+平台支持等级
+============
 
-Platforms are defined as a combination of the OS, the architecture, and the RMW implementation.
-If a platform / operating system provides multiple variants, (e.g. Ubuntu Desktop)  the ROS distro will be built for the desktop variant unless otherwise specified.
-ROS 2 variants are defined in `REP 2001 <https://www.ros.org/reps/rep-2001.html>`_.
+平台是指操作系统、体系架构与 RMW 实现的组合。
+如果一个平台／操作系统提供多个变体（例如 Ubuntu Desktop），除非另有说明，否则 ROS 发行版会针对桌面变体构建。
+ROS 2 变体定义于 `REP 2001 <https://www.ros.org/reps/rep-2001.html>`_。
 
 Tier 1
 ------
 
-Tier 1 platforms are subjected to our unit test suite and other testing tools on a frequent basis including continuous integration jobs, nightly jobs, packaging jobs, and performance testing.
-Errors or bugs discovered in these platforms are prioritized for correction by the development team.
-Significant errors discovered in Tier 1 platforms can impact release dates and we strive to resolve all known high priority errors in Tier 1 platforms prior to new version releases.
+Tier 1 平台会定期接受单元测试套件和其他测试工具的验证，包括持续集成作业、夜间作业、打包作业以及性能测试。
+在这些平台上发现的错误或缺陷会被优先由开发团队修复。
+在 Tier 1 平台上发现的重大错误可能会影响发布日期，因此我们会尽力在新版本发布前解决已知的高优先级错误。
 
 Tier 2
 ------
 
-Tier 2 platforms are subject to periodic CI testing which runs both builds and tests with publicly accessible results.
-The CI is expected to be run at least within a week of relevant changes for the current state of the ROS distribution.
-Package-level binary packages may not be provided but providing a downloadable archive of the built workspace is encouraged.
-Errors may be present in released product versions for Tier 2 platforms.
-Known errors in Tier 2 platforms will be addressed subject to resource availability on a best effort basis and may or may not be corrected prior to new version releases.
-One or more entities should be committed to continuing support of the platform.
+Tier 2 平台会进行周期性的 CI 测试，执行构建与测试，结果可公开查看。
+CI 预期会在与当前 ROS 发行版相关的改动发生后的一周内至少运行一次。
+可能不会提供包级别的二进制包，但鼓励提供可下载的构建工作区归档。
+Tier 2 平台的已发布产品版本中可能存在错误。
+Tier 2 平台已知错误会在资源可用情况下尽力处理，且不一定会在新版本发布前修正。
+至少需要一个或多个实体承诺持续支持该平台。
 
 Tier 3
 ------
 
-Tier 3 platforms are those for which community reports indicate that the release is functional.
-The development team does not run the unit test suite or perform any other tests on platforms in Tier 3.
-Installation instructions should be available and up-to-date in order for a platform to be listed in this category.
-Community members may provide assistance with these platforms.
+Tier 3 平台是指社区报告表明软件发布可用的平台。
+开发团队不会在 Tier 3 平台上运行单元测试套件或其它测试。
+为了让一个平台能被列入此类别，安装说明必须可用且保持更新。
+社区成员可以为这些平台提供协助。

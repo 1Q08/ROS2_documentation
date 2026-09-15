@@ -3,63 +3,63 @@
     Tutorials/Simulators/Webots/Setting-up-a-Robot-Simulation-Webots
     Tutorials/Advanced/Simulators/Webots
 
-Setting up a robot simulation (Basic)
-======================================
+搭建机器人仿真（基础）
+======================
 
-**Goal:** Setup a robot simulation and control it from ROS 2.
+**目标：** 搭建一个机器人仿真，并从 ROS 2 控制它。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 30 minutes
+**用时：** 30 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-In this tutorial, you are going to use the Webots robot simulator to set-up and run a very simple ROS 2 simulation scenario.
+在本教程中，你将使用 Webots 机器人模拟器搭建并运行一个非常简单的 ROS 2 仿真场景。
 
-The ``webots_ros2`` package provides an interface between ROS 2 and Webots.
-It includes several sub-packages, but in this tutorial, you are going to use only the ``webots_ros2_driver`` sub-package to implement a Python or C++ plugin controlling a simulated robot.
-Some other sub-packages contain demos with different robots such as the TurtleBot3.
-They are documented in the `Webots ROS 2 examples <https://github.com/cyberbotics/webots_ros2/wiki/Examples>`_ page.
+``webots_ros2`` 包提供了 ROS 2 与 Webots 之间的接口。
+它包含多个子包，但在本教程中，你只会使用 ``webots_ros2_driver`` 子包来实现一个控制仿真机器人的 Python 或 C++ 插件。
+其他一些子包包含不同机器人（如 TurtleBot3）的演示。
+它们在 `Webots ROS 2 示例 <https://github.com/cyberbotics/webots_ros2/wiki/Examples>`_ 页面中有文档说明。
 
-Prerequisites
--------------
+前置条件
+--------
 
-It is recommended to understand basic ROS principles covered in the beginner :doc:`../../../../Tutorials`.
-In particular, :doc:`../../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim`, :doc:`../../../Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics`, :doc:`../../../Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace`, :doc:`../../../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package` and :doc:`../../../Intermediate/Launch/Creating-Launch-Files` are useful prerequisites.
+建议理解初学者 :doc:`../../../../Tutorials` 中涵盖的基本 ROS 原理。
+特别是 :doc:`../../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim`、:doc:`../../../Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics`、:doc:`../../../Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace`、:doc:`../../../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package` 和 :doc:`../../../Intermediate/Launch/Creating-Launch-Files` 是有用的前置条件。
 
 .. tabs::
 
     .. group-tab:: Linux
 
-        The Linux and ROS commands of this tutorial can be run in a standard Linux terminal.
-        The following page :doc:`./Installation-Ubuntu` explains how to install the ``webots_ros2`` package on Linux.
+        本教程中的 Linux 和 ROS 命令可以在标准 Linux 终端中运行。
+        以下页面 :doc:`./Installation-Ubuntu` 介绍了如何在 Linux 上安装 ``webots_ros2`` 包。
 
     .. group-tab:: Windows
 
-        The Linux and ROS commands of this tutorial must be run in a WSL (Windows Subsystem for Linux) environment.
-        The following page :doc:`./Installation-Windows` explains how to install the ``webots_ros2`` package on Windows.
+        本教程中的 Linux 和 ROS 命令必须在 WSL（适用于 Linux 的 Windows 子系统）环境中运行。
+        以下页面 :doc:`./Installation-Windows` 介绍了如何在 Windows 上安装 ``webots_ros2`` 包。
 
     .. group-tab:: macOS
 
-        The Linux and ROS commands of this tutorial must be run in a pre-configured Linux Virtual Machine (VM).
-        The following page :doc:`./Installation-MacOS` explains how to install the ``webots_ros2`` package on macOS.
+        本教程中的 Linux 和 ROS 命令必须在预先配置好的 Linux 虚拟机（VM）中运行。
+        以下页面 :doc:`./Installation-MacOS` 介绍了如何在 macOS 上安装 ``webots_ros2`` 包。
 
-This tutorial is compatible with version 2023.1.0 of ``webots_ros2`` and Webots R2023b, as well as upcoming versions.
+本教程兼容 ``webots_ros2`` 的 2023.1.0 版本和 Webots R2023b，以及之后的版本。
 
-Tasks
------
+任务
+----
 
-1 Create the package structure
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 创建包结构
+^^^^^^^^^^^^
 
-Let's organize the code in a custom ROS 2 package.
-Create a new package named ``my_package`` from the ``src`` folder of your ROS 2 workspace.
-Change the current directory of your terminal to ``ros2_ws/src`` and run:
+让我们把代码组织在一个自定义 ROS 2 包中。
+从 ROS 2 工作空间的 ``src`` 文件夹创建一个名为 ``my_package`` 的新包。
+将终端当前目录切换到 ``ros2_ws/src``，然后运行：
 
 .. tabs::
 
@@ -69,10 +69,10 @@ Change the current directory of your terminal to ``ros2_ws/src`` and run:
 
             $ ros2 pkg create --build-type ament_python --license Apache-2.0 --node-name my_robot_driver my_package --dependencies rclpy geometry_msgs webots_ros2_driver
 
-        The ``--node-name my_robot_driver`` option will create a ``my_robot_driver.py`` template Python plugin in the ``my_package`` subfolder that you will modify later.
-        The ``--dependencies rclpy geometry_msgs webots_ros2_driver`` option specifies the packages needed by the ``my_robot_driver.py`` plugin in the ``package.xml`` file.
+        ``--node-name my_robot_driver`` 选项将在 ``my_package`` 子文件夹中创建一个 ``my_robot_driver.py`` Python 插件模板，你稍后将对其进行修改。
+        ``--dependencies rclpy geometry_msgs webots_ros2_driver`` 选项在 ``package.xml`` 文件中指定 ``my_robot_driver.py`` 插件所需的包。
 
-        Let's add a ``launch`` and a ``worlds`` folder inside the ``my_package`` folder.
+        让我们在 ``my_package`` 文件夹内添加一个 ``launch`` 和一个 ``worlds`` 文件夹。
 
         .. code-block:: console
 
@@ -80,7 +80,7 @@ Change the current directory of your terminal to ``ros2_ws/src`` and run:
                 $ mkdir launch
                 $ mkdir worlds
 
-        You should end up with the following folder structure:
+        你最终应该得到以下文件夹结构：
 
         .. code-block:: console
 
@@ -107,11 +107,11 @@ Change the current directory of your terminal to ``ros2_ws/src`` and run:
 
             $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 --node-name MyRobotDriver my_package --dependencies rclcpp geometry_msgs webots_ros2_driver pluginlib
 
-        The ``--node-name MyRobotDriver`` option will create a ``MyRobotDriver.cpp`` template C++ plugin in the ``my_package/src`` subfolder that you will modify later.
-        The ``--dependencies rclcpp geometry_msgs webots_ros2_driver pluginlib`` option specifies the packages needed by the ``MyRobotDriver`` plugin in the ``package.xml`` file.
+        ``--node-name MyRobotDriver`` 选项将在 ``my_package/src`` 子文件夹中创建一个 ``MyRobotDriver.cpp`` C++ 插件模板，你稍后将对其进行修改。
+        ``--dependencies rclcpp geometry_msgs webots_ros2_driver pluginlib`` 选项在 ``package.xml`` 文件中指定 ``MyRobotDriver`` 插件所需的包。
 
 
-        Let's add a ``launch``, a ``worlds`` and a ``resource`` folder inside the ``my_package`` folder.
+        让我们在 ``my_package`` 文件夹内添加一个 ``launch``、一个 ``worlds`` 和一个 ``resource`` 文件夹。
 
         .. code-block:: console
 
@@ -120,14 +120,14 @@ Change the current directory of your terminal to ``ros2_ws/src`` and run:
             $ mkdir worlds
             $ mkdir resource
 
-        Two additional files must be created: the header file for ``MyRobotDriver`` and the ``my_robot_driver.xml`` pluginlib description file.
+        还必须创建两个额外的文件：``MyRobotDriver`` 的头文件和 ``my_robot_driver.xml`` pluginlib 描述文件。
 
         .. code-block:: console
 
             $ touch my_robot_driver.xml
             $ touch include/my_package/MyRobotDriver.hpp
 
-        You should end up with the following folder structure:
+        你最终应该得到以下文件夹结构：
 
         .. code-block:: console
 
@@ -145,73 +145,73 @@ Change the current directory of your terminal to ``ros2_ws/src`` and run:
                 ├── my_robot_driver.xml
                 └── package.xml
 
-2 Setup the simulation world
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 设置仿真世界
+^^^^^^^^^^^^^^
 
-You will need a world file containing a robot to launch your simulation.
-:download:`Download this world file <Code/my_world.wbt>` and move it inside ``my_package/worlds/``.
+你需要一个包含机器人的世界文件来启动仿真。
+:download:`下载这个世界文件 <Code/my_world.wbt>`，并将其移动到 ``my_package/worlds/`` 中。
 
-This is actually a fairly simple text file you can visualize in a text editor.
-A simple robot is already included in this ``my_world.wbt`` world file.
-
-.. note::
-
-    In case you want to learn how to create your own robot model in Webots, you can check this `tutorial <https://cyberbotics.com/doc/guide/tutorial-6-4-wheels-robot>`_.
-
-3 Edit the ``my_robot_driver`` plugin
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The ``webots_ros2_driver`` sub-package automatically creates a ROS 2 interface for most sensors.
-More details on existing device interfaces and how to configure them is given in the second part of the tutorial: :doc:`./Setting-Up-Simulation-Webots-Advanced`.
-In this task, you will extend this interface by creating your own custom plugin.
-This custom plugin is a ROS node equivalent to a robot controller.
-You can use it to access the `Webots robot API  <https://cyberbotics.com/doc/reference/robot?tab-language=python>`_ and create your own topics and services to control your robot.
+这实际上是一个相当简单的文本文件，你可以在文本编辑器中查看它。
+这个 ``my_world.wbt`` 世界文件中已经包含一个简单的机器人。
 
 .. note::
 
-    The purpose of this tutorial is to show a basic example with a minimum number of dependencies.
-    However, you could avoid the use of this plugin by using another ``webots_ros2`` sub-package named ``webots_ros2_control``, introducing a new dependency.
-    This other sub-package creates an interface with the ``ros2_control`` package that facilitates the control of a differential wheeled robot.
+    如果你想学习如何在 Webots 中创建自己的机器人模型，可以查看这个 `教程 <https://cyberbotics.com/doc/guide/tutorial-6-4-wheels-robot>`_。
+
+3 编辑 ``my_robot_driver`` 插件
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``webots_ros2_driver`` 子包会自动为大多数传感器创建 ROS 2 接口。
+有关现有设备接口以及如何配置它们的更多细节，在教程第二部分中给出：:doc:`./Setting-Up-Simulation-Webots-Advanced`。
+在本任务中，你将通过创建自己的自定义插件来扩展此接口。
+这个自定义插件是一个相当于机器人控制器的 ROS 节点。
+你可以使用它访问 `Webots robot API  <https://cyberbotics.com/doc/reference/robot?tab-language=python>`_，并创建自己的话题和服务来控制你的机器人。
+
+.. note::
+
+    本教程的目的是展示一个依赖数量最少的简单示例。
+    但是，你可以通过使用另一个名为 ``webots_ros2_control`` 的 ``webots_ros2`` 子包来避免使用此插件，不过这会引入新的依赖。
+    这另一个子包创建了一个与 ``ros2_control`` 包的接口，便于控制差速轮式机器人。
 
 
 .. tabs::
 
     .. group-tab:: Python
 
-        Open ``my_package/my_package/my_robot_driver.py`` in your favorite editor and replace its contents with the following:
+        在你喜欢的编辑器中打开 ``my_package/my_package/my_robot_driver.py``，并将其内容替换为以下内容：
 
         .. literalinclude:: Code/my_robot_driver.py
             :language: python
 
-        As you can see, the ``MyRobotDriver`` class implements three methods.
+        如你所见，``MyRobotDriver`` 类实现了三个方法。
 
-        The first method, named ``init(self, ...)``, is actually the ROS node counterpart of the Python ``__init__(self, ...)`` constructor.
-        The ``init`` method always takes two arguments:
+        第一个方法名为 ``init(self, ...)``，实际上就是 Python ``__init__(self, ...)`` 构造函数的 ROS 节点对应版本。
+        ``init`` 方法总是接受两个参数：
 
-        - The ``webots_node`` argument contains a reference on the Webots instance.
-        - The ``properties`` argument is a dictionary created from the XML tags given in the URDF files (:ref:`4 Create the my_robot.urdf file`) and allows you to pass parameters to the controller.
+        - ``webots_node`` 参数包含对 Webots 实例的引用。
+        - ``properties`` 参数是一个字典，由 URDF 文件中给出的 XML 标签创建（:ref:`4 Create the my_robot.urdf file`），允许你向控制器传递参数。
 
-        The robot instance from the simulation ``self.__robot`` can be used to access the `Webots robot API <https://cyberbotics.com/doc/reference/robot?tab-language=python>`_.
-        Then, it gets the two motor instances and initializes them with a target position and a target velocity.
-        Finally a ROS node is created and a callback method is registered for a ROS topic named ``/cmd_vel`` that will handle ``Twist`` messages.
+        仿真中的机器人实例 ``self.__robot`` 可用于访问 `Webots robot API <https://cyberbotics.com/doc/reference/robot?tab-language=python>`_。
+        然后，它获取两个电机实例，并用目标位置和目标速度初始化它们。
+        最后，创建一个 ROS 节点，并为一个名为 ``/cmd_vel`` 的 ROS 话题注册一个回调方法，该话题将处理 ``Twist`` 消息。
 
         .. literalinclude:: Code/my_robot_driver.py
             :language: python
             :dedent: 4
             :lines: 8-24
 
-        Then comes the implementation of the ``__cmd_vel_callback(self, twist)`` callback private method that will be called for each ``Twist`` message received on the ``/cmd_vel`` topic and will save it in the ``self.__target_twist`` member variable.
+        然后是 ``__cmd_vel_callback(self, twist)`` 回调私有方法的实现，它将在 ``/cmd_vel`` 话题上收到的每条 ``Twist`` 消息时被调用，并将其保存到 ``self.__target_twist`` 成员变量中。
 
         .. literalinclude:: Code/my_robot_driver.py
             :language: python
             :dedent: 4
             :lines: 26-27
 
-        Finally, the ``step(self)`` method is called at every time step of the simulation.
-        The call to ``rclpy.spin_once()`` is needed to keep the ROS node running smoothly.
-        At each time step, the method will retrieve the desired ``forward_speed`` and ``angular_speed`` from ``self.__target_twist``.
-        As the motors are controlled with angular velocities, the method will then convert the ``forward_speed`` and ``angular_speed`` into individual commands for each wheel.
-        This conversion depends on the structure of the robot, more specifically on the radius of the wheel and the distance between them.
+        最后，``step(self)`` 方法在仿真的每个时间步被调用。
+        需要调用 ``rclpy.spin_once()`` 来保持 ROS 节点平稳运行。
+        在每个时间步，该方法将从 ``self.__target_twist`` 中获取所需的 ``forward_speed`` 和 ``angular_speed``。
+        由于电机是用角速度控制的，该方法随后会将 ``forward_speed`` 和 ``angular_speed`` 转换为每个车轮各自的命令。
+        这种转换取决于机器人的结构，更具体地说是车轮的半径和它们之间的距离。
 
         .. literalinclude:: Code/my_robot_driver.py
             :language: python
@@ -220,51 +220,51 @@ You can use it to access the `Webots robot API  <https://cyberbotics.com/doc/ref
 
     .. group-tab:: C++
 
-        Open ``my_package/include/my_package/MyRobotDriver.hpp`` in your favorite editor and replace its contents with the following:
+        在你喜欢的编辑器中打开 ``my_package/include/my_package/MyRobotDriver.hpp``，并将其内容替换为以下内容：
 
         .. literalinclude:: Code/MyRobotDriver.hpp
             :language: cpp
 
-        The class ``MyRobotDriver`` is defined, which inherits from the ``webots_ros2_driver::PluginInterface`` class.
-        The plugin has to override ``step(...)`` and ``init(...)`` functions.
-        More details are given in the ``MyRobotDriver.cpp`` file.
-        Several helper methods, callbacks and member variables that will be used internally by the plugin are declared privately.
+        定义了类 ``MyRobotDriver``，它继承自 ``webots_ros2_driver::PluginInterface`` 类。
+        该插件必须重写 ``step(...)`` 和 ``init(...)`` 函数。
+        更多细节在 ``MyRobotDriver.cpp`` 文件中给出。
+        插件内部会使用的几个辅助方法、回调和成员变量被声明为私有。
 
-        Then, open ``my_package/src/MyRobotDriver.cpp`` in your favorite editor and replace its contents with the following:
+        然后，在你喜欢的编辑器中打开 ``my_package/src/MyRobotDriver.cpp``，并将其内容替换为以下内容：
 
         .. literalinclude:: Code/MyRobotDriver.cpp
             :language: cpp
 
-        The ``MyRobotDriver::init`` method is executed once the plugin is loaded by the ``webots_ros2_driver`` package.
-        It takes two arguments:
+        ``MyRobotDriver::init`` 方法在插件被 ``webots_ros2_driver`` 包加载后执行一次。
+        它接受两个参数：
 
-        * A pointer to the ``WebotsNode`` defined by ``webots_ros2_driver``, which allows to access the ROS 2 node functions.
-        * The ``parameters`` argument is an unordered map of strings, created from the XML tags given in the URDF files (:ref:`4 Create the my_robot.urdf file`) and allows to pass parameters to the controller.
-          It is not used in this example.
+        * 一个指向 ``webots_ros2_driver`` 定义的 ``WebotsNode`` 的指针，它允许访问 ROS 2 节点函数。
+        * ``parameters`` 参数是一个字符串无序映射，由 URDF 文件中给出的 XML 标签创建（:ref:`4 Create the my_robot.urdf file`），允许向控制器传递参数。
+          在本示例中未使用它。
 
-        It initializes the plugin by setting up the robot motors, setting their positions and velocities, and subscribing to the ``/cmd_vel`` topic.
+        它通过设置机器人电机、设置它们的位置和速度，并订阅 ``/cmd_vel`` 话题来初始化插件。
 
         .. literalinclude:: Code/MyRobotDriver.cpp
             :language: cpp
             :lines: 13-29
 
-        Then comes the implementation of the ``cmdVelCallback()`` callback function that will be called for each Twist message received on the ``/cmd_vel`` topic and will save it in the ``cmd_vel_msg`` member variable.
+        接下来是 ``cmdVelCallback()`` 回调函数的实现，它会在收到 ``/cmd_vel`` 话题上的每条 Twist 消息时被调用，并将消息保存到 ``cmd_vel_msg`` 成员变量中。
 
         .. literalinclude:: Code/MyRobotDriver.cpp
             :language: cpp
             :lines: 31-35
 
-        The ``step()`` method is called at every time step of the simulation.
-        At each time step, the method will retrieve the desired ``forward_speed`` and ``angular_speed`` from ``cmd_vel_msg``.
-        As the motors are controlled with angular velocities, the method will then convert the ``forward_speed`` and ``angular_speed`` into individual commands for each wheel.
-        This conversion depends on the structure of the robot, more specifically on the radius of the wheel and the distance between them.
+        ``step()`` 方法在仿真的每个时间步被调用。
+        在每个时间步，该方法将从 ``cmd_vel_msg`` 中获取所需的 ``forward_speed`` 和 ``angular_speed``。
+        由于电机是用角速度控制的，该方法随后会将 ``forward_speed`` 和 ``angular_speed`` 转换为每个车轮各自的命令。
+        这种转换取决于机器人的结构，更具体地说是车轮的半径和它们之间的距离。
 
         .. literalinclude:: Code/MyRobotDriver.cpp
             :language: cpp
             :lines: 37-50
 
-        The final lines of the file define the end of the ``my_robot_driver`` namespace and include a macro to export the ``MyRobotDriver`` class as a plugin using the ``PLUGINLIB_EXPORT_CLASS`` macro.
-        This allows the plugin to be loaded by the Webots ROS2 driver at runtime.
+        文件的最后几行定义了 ``my_robot_driver`` 命名空间的结束，并包含一个宏，使用 ``PLUGINLIB_EXPORT_CLASS`` 宏将 ``MyRobotDriver`` 类导出为插件。
+        这允许插件在运行时被 Webots ROS2 驱动加载。
 
         .. literalinclude:: Code/MyRobotDriver.cpp
             :language: cpp
@@ -272,17 +272,17 @@ You can use it to access the `Webots robot API  <https://cyberbotics.com/doc/ref
 
         .. note::
 
-            While the plugin is implemented in C++, the C API must be used to interact with the Webots controller library.
+            虽然插件是用 C++ 实现的，但必须使用 C API 与 Webots 控制器库交互。
 
 .. _4 Create the my_robot.urdf file:
 
-4 Create the ``my_robot.urdf`` file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 创建 ``my_robot.urdf`` 文件
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You now have to create a URDF file to declare the ``MyRobotDriver`` plugin.
-This will allow the ``webots_ros2_driver`` ROS node to launch the plugin and connect it to the target robot.
+你现在必须创建一个 URDF 文件来声明 ``MyRobotDriver`` 插件。
+这将允许 ``webots_ros2_driver`` ROS 节点启动插件，并将其连接到目标机器人。
 
-In the ``my_package/resource`` folder create a text file named ``my_robot.urdf`` with this content:
+在 ``my_package/resource`` 文件夹中创建一个名为 ``my_robot.urdf`` 的文本文件，内容如下：
 
 .. tabs::
 
@@ -291,25 +291,25 @@ In the ``my_package/resource`` folder create a text file named ``my_robot.urdf``
         .. literalinclude:: Code/my_robot_python.urdf
             :language: xml
 
-        The ``type`` attribute specifies the path to the class given by the hierarchical structure of files.
-        ``webots_ros2_driver`` is responsible for loading the class based on the specified package and modules.
+        ``type`` 属性指定由文件层次结构给出的类的路径。
+        ``webots_ros2_driver`` 负责根据指定的包和模块加载类。
 
     .. group-tab:: C++
 
         .. literalinclude:: Code/my_robot_cpp.urdf
             :language: xml
 
-        The ``type`` attribute specifies the namespace and class name to load.
-        ``pluginlib`` is responsible for loading the class based on the specified information.
+        ``type`` 属性指定要加载的命名空间和类名。
+        ``pluginlib`` 负责根据指定的信息加载类。
 
 .. note::
 
-    This simple URDF file doesn't contain any link or joint information about the robot as it is not needed in this tutorial.
-    However, URDF files usually contain much more information as explained in the :doc:`../../../Intermediate/URDF/URDF-Main` tutorial.
+    这个简单的 URDF 文件不包含关于机器人的任何 link 或 joint 信息，因为本教程不需要它们。
+    但是，URDF 文件通常包含更多信息，如 :doc:`../../../Intermediate/URDF/URDF-Main` 教程所述。
 
 .. note::
 
-    Here the plugin does not take any input parameter, but this can be achieved with a tag containing the parameter name.
+    这里插件不接收任何输入参数，但这可以通过一个包含参数名的标签来实现。
 
     .. tabs::
 
@@ -330,62 +330,62 @@ In the ``my_package/resource`` folder create a text file named ``my_robot.urdf``
                 </plugin>
 
 
-    This is namely used to pass parameters to existing Webots device plugins (see :doc:`./Setting-Up-Simulation-Webots-Advanced`).
+    这即用于向现有的 Webots 设备插件传递参数（见 :doc:`./Setting-Up-Simulation-Webots-Advanced`）。
 
-5 Create the launch file
-^^^^^^^^^^^^^^^^^^^^^^^^
+5 创建 launch 文件
+^^^^^^^^^^^^^^^^^^
 
-Let's create the launch file to easily launch the simulation and the ROS controller with a single command.
-In the ``my_package/launch`` folder create a new text file named ``robot_launch.py`` with this code:
+让我们创建 launch 文件，以便用一条命令轻松启动仿真和 ROS 控制器。
+在 ``my_package/launch`` 文件夹中创建一个名为 ``robot_launch.py`` 的新文本文件，代码如下：
 
 .. literalinclude:: Code/robot_launch.py
     :language: python
 
-The ``WebotsLauncher`` object is a custom action that allows you to start a Webots simulation instance.
-You have to specify in the constructor which world file the simulator will open.
+``WebotsLauncher`` 对象是一个自定义操作，允许你启动一个 Webots 仿真实例。
+你必须在构造函数中指定模拟器将打开哪个世界文件。
 
 .. literalinclude:: Code/robot_launch.py
     :language: python
     :dedent: 4
     :lines: 13-15
 
-Then, the ROS node interacting with the simulated robot is created.
-This node, named ``WebotsController``, is located in the ``webots_ros2_driver`` package.
+然后，创建与仿真机器人交互的 ROS 节点。
+这个名为 ``WebotsController`` 的节点位于 ``webots_ros2_driver`` 包中。
 
 .. tabs::
 
     .. group-tab:: Linux
 
-        The node will be able to communicate with the simulated robot by using a custom protocol based on IPC and shared memory.
+        该节点将能够通过基于 IPC 和共享内存的自定义协议与仿真机器人通信。
 
     .. group-tab:: Windows
 
-        The node (in WSL) will be able to communicate with the simulated robot (in Webots on native Windows) through a TCP connection.
+        该节点（在 WSL 中）将能够通过 TCP 连接与仿真机器人（在原生 Windows 上的 Webots 中）通信。
 
     .. group-tab:: macOS
 
-        The node (in the docker container) will be able to communicate with the simulated robot (in Webots on native macOS) through a TCP connection.
+        该节点（在 docker 容器中）将能够通过 TCP 连接与仿真机器人（在原生 macOS 上的 Webots 中）通信。
 
 
-In your case, you need to run a single instance of this node, because you have a single robot in the simulation.
-But if you had more robots in the simulation, you would have to run one instance of this node per robot.
-The ``robot_name`` parameter is used to define the name of the robot the driver should connect to.
-The ``robot_description`` parameter holds the path to the URDF file which refers to the ``MyRobotDriver`` plugin.
-You can see the ``WebotsController`` node as the interface that connects your controller plugin to the target robot.
+在你的情况下，你只需要运行此节点的一个实例，因为仿真中只有一个机器人。
+但如果仿真中有更多机器人，你就必须为每个机器人运行一个此节点的实例。
+``robot_name`` 参数用于定义驱动应连接的机器人的名称。
+``robot_description`` 参数保存指向 ``MyRobotDriver`` 插件的 URDF 文件的路径。
+你可以将 ``WebotsController`` 节点视为连接你的控制器插件与目标机器人的接口。
 
 .. literalinclude:: Code/robot_launch.py
     :language: python
     :dedent: 4
     :lines: 17-22
 
-After that, the two nodes are set to be launched in the ``LaunchDescription`` constructor:
+之后，两个节点被设置为在 ``LaunchDescription`` 构造函数中启动：
 
 .. literalinclude:: Code/robot_launch.py
     :language: python
     :dedent: 4
     :lines: 24-26
 
-Finally, an optional part is added in order to shutdown all the nodes once Webots terminates (e.g. when it gets closed from the graphical user interface).
+最后，添加一个可选部分，以便在 Webots 终止时（例如从图形用户界面关闭时）关闭所有节点。
 
 .. literalinclude:: Code/robot_launch.py
     :language: python
@@ -394,54 +394,54 @@ Finally, an optional part is added in order to shutdown all the nodes once Webot
 
 .. note::
 
-    More details on ``WebotsController`` and ``WebotsLauncher`` arguments can be found `on the nodes reference page <https://github.com/cyberbotics/webots_ros2/wiki/References-Nodes>`_.
+    有关 ``WebotsController`` 和 ``WebotsLauncher`` 参数的更多细节，可以在 `节点参考页面 <https://github.com/cyberbotics/webots_ros2/wiki/References-Nodes>`_ 上找到。
 
-6 Edit additional files
-^^^^^^^^^^^^^^^^^^^^^^^
+6 编辑其他文件
+^^^^^^^^^^^^^^
 
 .. tabs::
 
     .. group-tab:: Python
 
-        Before you can start the launch file, you have to modify the ``setup.py`` file to include the extra files you added.
-        Open ``my_package/setup.py`` and replace its contents with:
+        在你可以启动 launch 文件之前，你必须修改 ``setup.py`` 文件，以包含你添加的额外文件。
+        打开 ``my_package/setup.py``，并将其内容替换为：
 
         .. literalinclude:: Code/setup.py
             :language: python
 
-        This sets-up the package and adds in the ``data_files`` variable the newly added files: ``my_world.wbt``, ``my_robot.urdf`` and ``robot_launch.py``.
+        这会设置包，并在 ``data_files`` 变量中添加新添加的文件：``my_world.wbt``、``my_robot.urdf`` 和 ``robot_launch.py``。
 
     .. group-tab:: C++
 
-        Before you can start the launch file, you have to modify ``CMakeLists.txt`` and ``my_robot_driver.xml`` files:
+        在你可以启动 launch 文件之前，你必须修改 ``CMakeLists.txt`` 和 ``my_robot_driver.xml`` 文件：
 
-        * ``CMakeLists.txt`` defines the compilation rules of your plugin.
-        * ``my_robot_driver.xml`` is necessary for the pluginlib to find your Webots ROS 2 plugin.
+        * ``CMakeLists.txt`` 定义你的插件的编译规则。
+        * ``my_robot_driver.xml`` 是 pluginlib 找到你的 Webots ROS 2 插件所必需的。
 
-        Open ``my_package/my_robot_driver.xml`` and replace its contents with:
+        打开 ``my_package/my_robot_driver.xml``，并将其内容替换为：
 
         .. literalinclude:: Code/my_robot_driver.xml
             :language: xml
 
-        Open ``my_package/CMakeLists.txt`` and replace its contents with:
+        打开 ``my_package/CMakeLists.txt``，并将其内容替换为：
 
         .. literalinclude:: Code/CMakeLists.txt
             :language: cmake
 
-        The CMakeLists.txt exports the plugin configuration file with the ``pluginlib_export_plugin_description_file()``, defines a shared library of the C++ plugin ``src/MyRobotDriver.cpp``, and sets the include and library dependencies using ``ament_target_dependencies()``.
+        CMakeLists.txt 使用 ``pluginlib_export_plugin_description_file()`` 导出插件配置文件，定义 C++ 插件 ``src/MyRobotDriver.cpp`` 的共享库，并使用 ``ament_target_dependencies()`` 设置 include 和库依赖。
 
-        The file then installs the library, the directories ``launch``, ``resource``, and ``worlds`` to the ``share/my_package`` directory.
-        Finally, it exports the include directories and libraries using ``ament_export_include_directories()`` and ``ament_export_libraries()``, respectively, and declares the package using ``ament_package()``.
+        然后，该文件将库以及 ``launch``、``resource`` 和 ``worlds`` 目录安装到 ``share/my_package`` 目录。
+        最后，它分别使用 ``ament_export_include_directories()`` 和 ``ament_export_libraries()`` 导出 include 目录和库，并使用 ``ament_package()`` 声明该包。
 
 
-7 Test the code
-^^^^^^^^^^^^^^^
+7 测试代码
+^^^^^^^^^^
 
 .. tabs::
 
     .. group-tab:: Linux
 
-        From a terminal in your ROS 2 workspace run:
+        在 ROS 2 工作空间中的终端运行：
 
         .. code-block:: console
 
@@ -449,12 +449,12 @@ Finally, an optional part is added in order to shutdown all the nodes once Webot
             $ source install/local_setup.bash
             $ ros2 launch my_package robot_launch.py
 
-        This will launch the simulation.
-        Webots will be automatically installed on the first run in case it was not already installed.
+        这将启动仿真。
+        如果 Webots 尚未安装，它将在首次运行时自动安装。
 
     .. group-tab:: Windows
 
-        From a terminal in your WSL ROS 2 workspace run:
+        在 WSL ROS 2 工作空间中的终端运行：
 
         .. code-block:: console
 
@@ -463,24 +463,24 @@ Finally, an optional part is added in order to shutdown all the nodes once Webot
             $ source install/local_setup.bash
             $ ros2 launch my_package robot_launch.py
 
-        Be sure to use the ``/mnt`` prefix in front of your path to the Webots installation folder to access the Windows file system from WSL.
+        请务必在 Webots 安装文件夹的路径前使用 ``/mnt`` 前缀，以从 WSL 访问 Windows 文件系统。
 
-        This will launch the simulation.
-        Webots will be automatically installed on the first run in case it was not already installed.
+        这将启动仿真。
+        如果 Webots 尚未安装，它将在首次运行时自动安装。
 
     .. group-tab:: macOS
 
-        On macOS, a local server must be started on the host to start Webots from the VM.
-        The local server can be downloaded `on the webots-server repository <https://github.com/cyberbotics/webots-server/blob/main/local_simulation_server.py>`_.
+        在 macOS 上，必须在主机上启动一个本地服务器，才能从 VM 启动 Webots。
+        本地服务器可以在 `webots-server 仓库 <https://github.com/cyberbotics/webots-server/blob/main/local_simulation_server.py>`_ 上下载。
 
-        In a terminal of the host machine (not in the VM), specify the Webots installation folder (e.g. ``/Applications/Webots.app``) and start the server using the following commands:
+        在主机（不是 VM）的终端中，指定 Webots 安装文件夹（例如 ``/Applications/Webots.app``），并使用以下命令启动服务器：
 
         .. code-block:: console
 
             $ export WEBOTS_HOME=/Applications/Webots.app
             $ python3 local_simulation_server.py
 
-        From a terminal in the Linux VM in your ROS 2 workspace, build and launch your custom package with:
+        在 Linux VM 的 ROS 2 工作空间中的终端，构建并启动你的自定义包：
 
         .. code-block:: console
 
@@ -491,36 +491,36 @@ Finally, an optional part is added in order to shutdown all the nodes once Webot
 
 .. note::
 
-    If you want to install Webots manually, you can download it `here <https://github.com/cyberbotics/webots/releases/latest>`_.
+    如果你想手动安装 Webots，可以在 `这里 <https://github.com/cyberbotics/webots/releases/latest>`_ 下载。
 
 
-Then, open a second terminal and send a command with:
+然后，打开第二个终端，用以下命令发送一条命令：
 
 .. code-block:: console
 
             $ ros2 topic pub /cmd_vel geometry_msgs/Twist  "linear: { x: 0.1 }"
 
-The robot is now moving forward.
+机器人现在正在向前移动。
 
 .. image:: Image/Robot_moving_forward.png
 
-At this point, the robot is able to blindly follow your motor commands.
-But it will eventually bump into the wall as you order it to move forwards.
+此时，机器人能够盲目地执行你的电机命令。
+但当你命令它向前移动时，它最终会撞上墙壁。
 
 .. image:: Image/Robot_colliding_wall.png
 
-Close the Webots window, this should also shutdown your ROS nodes started from the launcher.
-Close also the topic command with ``Ctrl+C`` in the second terminal.
+关闭 Webots 窗口，这也应该会关闭从 launcher 启动的 ROS 节点。
+在第二个终端中用 ``Ctrl+C`` 也关闭话题命令。
 
-Summary
--------
+总结
+----
 
-In this tutorial, you set-up a realistic robot simulation with Webots and implemented a custom plugin to control the motors of the robot.
+在本教程中，你用 Webots 搭建了一个真实的机器人仿真，并实现了一个自定义插件来控制机器人的电机。
 
-Next steps
-----------
+下一步
+------
 
-To improve the simulation, the robot's sensors can be used to detect obstacles and avoid them.
-The second part of the tutorial shows how to implement such behaviour:
+为了改进仿真，可以使用机器人的传感器来检测障碍物并避开它们。
+教程的第二部分展示了如何实现这种行为：
 
-* :doc:`./Setting-Up-Simulation-Webots-Advanced`.
+* :doc:`./Setting-Up-Simulation-Webots-Advanced`。

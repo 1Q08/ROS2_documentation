@@ -1,57 +1,56 @@
-Reading from a bag file (C++)
-=============================
+从 bag 文件中读取（C++）
+========================
 
-**Goal:** Read data from a bag without using the CLI.
+**目标：** 不使用 CLI 从 bag 中读取数据。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 10 minutes
+**预计用时：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-``rosbag2`` doesn't just provide the ``ros2 bag`` command line tool.
-It also provides a C++ API for reading from and writing to a bag from your own source code.
-This allows you to read the contents from a bag without having to play the bag, which can sometimes be useful.
+``rosbag2`` 不仅仅提供 ``ros2 bag`` 命令行工具。
+它还提供了一个 C++ API，用于从你自己的源代码中读取和写入 bag。
+这允许你在不必播放 bag 的情况下读取其内容，这在某些情况下很有用。
 
-Prerequisites
--------------
+前置条件
+--------
 
-You should have the ``rosbag2`` packages installed as part of your regular ROS 2 setup.
+你应该已经在常规的 ROS 2 安装中安装了 ``rosbag2`` 包。
 
-If you need to install ROS 2, see the :doc:`Installation instructions <../../Installation>`.
+如果你需要安装 ROS 2，请参阅 :doc:`安装说明 <../../Installation>`。
 
-You should have already completed the :doc:`basic ROS 2 bag tutorial <../Beginner-CLI-Tools/Recording-And-Playing-Back-Data/Recording-And-Playing-Back-Data>`, and we will be using the ``subset`` bag you created there.
+你应该已经完成了 :doc:`基础的 ROS 2 bag 教程 <../Beginner-CLI-Tools/Recording-And-Playing-Back-Data/Recording-And-Playing-Back-Data>`，我们将使用你在那里创建的 ``subset`` bag。
 
-Tasks
------
+任务
+----
 
-1 Create a Package
-^^^^^^^^^^^^^^^^^^
+1 创建包
+^^^^^^^^
 
-Open a new terminal and :doc:`source your ROS 2 installation <../Beginner-CLI-Tools/Configuring-ROS2-Environment>` so that ``ros2`` commands will work.
+打开一个新终端，并 :doc:`source 你的 ROS 2 安装 <../Beginner-CLI-Tools/Configuring-ROS2-Environment>`，使 ``ros2`` 命令能够正常工作。
 
-In a new or existing :ref:`workspace <new-directory>`, navigate to the ``src`` directory and create
-a new package:
+在一个新的或已有的 :ref:`工作空间 <new-directory>` 中，导航到 ``src`` 目录并创建一个新包：
 
 .. code-block:: console
 
   $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 bag_reading_cpp --dependencies rclcpp rosbag2_transport turtlesim
 
-Your terminal will return a message verifying the creation of your package ``bag_reading_cpp`` and all its necessary files and folders.
-The ``--dependencies`` argument will automatically add the necessary dependency lines to ``package.xml`` and ``CMakeLists.txt``.
-In this case, the package will use the ``rosbag2_transport`` package as well as the ``rclcpp`` package.
-A dependency on the ``turtlesim`` package is also required for working with the custom turtlesim messages.
+你的终端将返回一条消息，确认包 ``bag_reading_cpp`` 及其所有必要文件和文件夹已创建。
+``--dependencies`` 参数会自动将必要的依赖行添加到 ``package.xml`` 和 ``CMakeLists.txt``。
+在这种情况下，该包将使用 ``rosbag2_transport`` 包和 ``rclcpp`` 包。
+还需要依赖 ``turtlesim`` 包来处理自定义的 turtlesim 消息。
 
-1.1 Update ``package.xml``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+1.1 更新 ``package.xml``
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-Because you used the ``--dependencies`` option during package creation, you don't have to manually add dependencies to ``package.xml`` or ``CMakeLists.txt``.
-As always, though, make sure to add the description, maintainer email and name, and license information to ``package.xml``.
+由于你在创建包时使用了 ``--dependencies`` 选项，因此无需手动向 ``package.xml`` 或 ``CMakeLists.txt`` 添加依赖。
+不过，和往常一样，请确保向 ``package.xml`` 添加描述、维护者邮箱和姓名以及许可证信息。
 
 .. code-block:: xml
 
@@ -59,10 +58,10 @@ As always, though, make sure to add the description, maintainer email and name, 
   <maintainer email="you@email.com">Your Name</maintainer>
   <license>Apache-2.0</license>
 
-2 Write the C++ Reader
-^^^^^^^^^^^^^^^^^^^^^^
+2 编写 C++ 读取器
+^^^^^^^^^^^^^^^^^
 
-Inside your package's ``src`` directory, create a new file called ``simple_bag_reader.cpp`` and paste the following code into it.
+在你的包的 ``src`` 目录中，创建一个名为 ``simple_bag_reader.cpp`` 的新文件，并将以下代码粘贴进去。
 
 .. code-block:: C++
 
@@ -86,8 +85,10 @@ Inside your package's ``src`` directory, create a new file called ``simple_bag_r
         : Node("playback_node")
         {
           publisher_ = this->create_publisher<turtlesim::msg::Pose>("/turtle1/pose", 10);
-          timer_ = this->create_wall_timer(
-              100ms, std::bind(&PlaybackNode::timer_callback, this));
+
+          timer_ = this->create_wall_timer(100ms,
+              [this](){return this->timer_callback();}
+          );
 
           rosbag2_storage::StorageOptions storage_options;
           storage_options.uri = bag_filename;
@@ -138,21 +139,21 @@ Inside your package's ``src`` directory, create a new file called ``simple_bag_r
       return 0;
     }
 
-2.1 Examine the code
-~~~~~~~~~~~~~~~~~~~~
+2.1 分析代码
+~~~~~~~~~~~~
 
-The ``#include`` statements at the top are the package dependencies.
-Note the inclusion of headers from the ``rosbag2_transport`` package for the functions and structures necessary to work with bag files.
+顶部的 ``#include`` 语句是包依赖。
+注意包含了来自 ``rosbag2_transport`` 包的头文件，这些头文件提供了处理 bag 文件所需的函数和结构。
 
-The next line creates the node which will read from the bag file and play back the data.
+下一行创建了将读取 bag 文件并回放数据的节点。
 
 .. code-block:: C++
 
     class PlaybackNode : public rclcpp::Node
 
-Now, we can create a timer callback which will run at 10 hz.
-Our goal is to replay one message to the ``/turtle1/pose`` topic each time the callback is run.
-Note the constructor takes a path to the bag file as a parameter.
+现在，我们可以创建一个以 10 Hz 运行的回调定时器。
+我们的目标是每次运行回调时，向 ``/turtle1/pose`` 主题回放一条消息。
+注意构造函数接收 bag 文件的路径作为参数。
 
 .. code-block:: C++
 
@@ -161,11 +162,13 @@ Note the constructor takes a path to the bag file as a parameter.
       : Node("playback_node")
       {
         publisher_ = this->create_publisher<turtlesim::msg::Pose>("/turtle1/pose", 10);
-        timer_ = this->create_wall_timer(
-            100ms, std::bind(&PlaybackNode::timer_callback, this));
 
-We also open the bag in the constructor.
-The ``rosbag2_transport::ReaderWriterFactory`` is a class that can construct a compressed or uncompressed reader or writer based on the storage options.
+        timer_ = this->create_wall_timer(100ms,
+          [this](){return this->timer_callback();}
+        );
+
+我们还在构造函数中打开 bag。
+``rosbag2_transport::ReaderWriterFactory`` 是一个类，可以根据存储选项构造压缩或未压缩的读取器或写入器。
 
 .. code-block:: C++
 
@@ -174,8 +177,8 @@ The ``rosbag2_transport::ReaderWriterFactory`` is a class that can construct a c
       reader_ = rosbag2_transport::ReaderWriterFactory::make_reader(storage_options);
       reader_->open(storage_options);
 
-Now, inside our timer callback, we loop through messages in the bag until we read a message recorded from our desired topic.
-Note that the serialized message has timestamp metadata in addition to the topic name.
+现在，在我们的定时器回调中，我们遍历 bag 中的消息，直到读取到一条从我们期望的主题录制的消息。
+请注意，序列化消息除了主题名之外还带有时间戳元数据。
 
 .. code-block:: C++
 
@@ -188,9 +191,9 @@ Note that the serialized message has timestamp metadata in addition to the topic
           continue;
         }
 
-We then construct an ``rclcpp::SerializedMessage`` object from the serialized data we just read.
-Additionally, we need to create a ROS 2 deserialized message which will hold the result of our deserialization.
-Then, we can pass both these objects to the ``rclcpp::Serialization::deserialize_message`` method.
+然后，我们从刚读取的序列化数据构造一个 ``rclcpp::SerializedMessage`` 对象。
+此外，我们需要创建一个 ROS 2 反序列化消息，用于保存反序列化的结果。
+然后，我们可以将这两个对象都传给 ``rclcpp::Serialization::deserialize_message`` 方法。
 
 .. code-block:: C++
 
@@ -199,8 +202,8 @@ Then, we can pass both these objects to the ``rclcpp::Serialization::deserialize
 
     serialization_.deserialize_message(&serialized_msg, ros_msg.get());
 
-Finally, we publish the deserialized message and print out the xy coordinate to the terminal.
-We also break out of the loop so that we publish the next message during the next timer callback.
+最后，我们发布反序列化后的消息，并将 xy 坐标打印到终端。
+我们还跳出循环，以便在下一次定时器回调中发布下一条消息。
 
 .. code-block:: C++
 
@@ -210,7 +213,7 @@ We also break out of the loop so that we publish the next message during the nex
       break;
     }
 
-We must also declare the private variables used throughout the node.
+我们还需要声明整个节点中使用的私有变量。
 
 .. code-block:: C++
 
@@ -221,7 +224,7 @@ We must also declare the private variables used throughout the node.
       std::unique_ptr<rosbag2_cpp::Reader> reader_;
     };
 
-Lastly, we create the main function which will check that the user passes an argument for the bag file path and spins our node.
+最后，我们创建主函数，用于检查用户是否为 bag 文件路径传入了参数，并旋转我们的节点。
 
 .. code-block:: C++
 
@@ -239,12 +242,12 @@ Lastly, we create the main function which will check that the user passes an arg
       return 0;
     }
 
-2.2 Add executable
+2.2 添加可执行文件
 ~~~~~~~~~~~~~~~~~~
 
-Now open the ``CMakeLists.txt`` file.
+现在打开 ``CMakeLists.txt`` 文件。
 
-Below the dependencies block, which contains ``find_package(rosbag2_transport REQUIRED)``, add the following lines of code.
+在包含 ``find_package(rosbag2_transport REQUIRED)`` 的依赖块下面，添加以下代码行。
 
 .. code-block:: console
 
@@ -256,10 +259,10 @@ Below the dependencies block, which contains ``find_package(rosbag2_transport RE
       DESTINATION lib/${PROJECT_NAME}
     )
 
-3 Build and run
-^^^^^^^^^^^^^^^
+3 构建并运行
+^^^^^^^^^^^^
 
-Navigate back to the root of your workspace and build your new package.
+导航回工作空间的根目录，并构建你的新包。
 
 .. tabs::
 
@@ -281,7 +284,7 @@ Navigate back to the root of your workspace and build your new package.
 
       $ colcon build --merge-install --packages-select bag_reading_cpp
 
-Next, source the setup files.
+接下来，source 安装文件。
 
 .. tabs::
 
@@ -303,17 +306,17 @@ Next, source the setup files.
 
       $ call install/setup.bat
 
-Now, run the script.
-Make sure to replace ``/path/to/subset`` with the path to your ``subset`` bag.
+现在，运行该脚本。
+确保将 ``/path/to/subset`` 替换为你的 ``subset`` bag 的路径。
 
 .. code-block:: console
 
     $ ros2 run bag_reading_cpp simple_bag_reader /path/to/subset
 
-You should see the (x, y) coordinates of the turtle printed to the console.
+你应该会看到乌龟的 (x, y) 坐标打印到控制台。
 
-Summary
--------
+总结
+----
 
-You created a C++ executable that reads data from a bag.
-You then compiled and ran the executable which printed some information from the bag to the console.
+你创建了一个从 bag 中读取数据的 C++ 可执行文件。
+然后你编译并运行了该可执行文件，它将 bag 中的一些信息打印到了控制台。

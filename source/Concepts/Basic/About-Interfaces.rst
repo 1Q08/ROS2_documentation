@@ -3,44 +3,44 @@
     About-ROS-Interfaces
     Concepts/About-ROS-Interfaces
 
-Interfaces
-==========
+接口
+====
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
-Background
-----------
+背景
+----
 
-ROS applications typically communicate through interfaces of one of three types: :doc:`topics <About-Topics>`, :doc:`services <About-Services>`, or :doc:`actions <About-Actions>`.
-ROS 2 uses a simplified description language, the interface definition language (IDL), to describe these interfaces.
-This description makes it easy for ROS tools to automatically generate source code for the interface type in several target languages.
+ROS 应用通常通过三种接口之一进行通信：:doc:`主题 <About-Topics>`、:doc:`服务 <About-Services>` 或 :doc:`动作 <About-Actions>`。
+ROS 2 使用一种简化的描述语言，即接口定义语言（IDL），来描述这些接口。
+这种描述方式使 ROS 工具能够方便地为多种目标语言中的接口类型自动生成源代码。
 
-In this document we will describe the supported types:
+本文档将描述受支持的类型：
 
-* msg: ``.msg`` files are simple text files that describe the fields of a ROS message.
-  They are used to generate source code for messages in different languages.
-* srv: ``.srv`` files describe a service.
-  They are composed of two parts: a request and a response.
-  The request and response are message declarations.
-* action: ``.action`` files describe actions.
-  They are composed of three parts: a goal, a result, and feedback.
-  Each part is a message declaration itself.
+* msg：``.msg`` 文件是描述 ROS 消息字段的纯文本文件。
+  它们用于为不同语言生成消息的源代码。
+* srv：``.srv`` 文件描述一个服务。
+  它由两部分组成：请求和响应。
+  请求和响应都是消息声明。
+* action：``.action`` 文件描述动作。
+  它由三部分组成：目标、结果和反馈。
+  每一部分本身都是一个消息声明。
 
-Messages
---------
+消息
+----
 
-Messages are a way for a ROS 2 node to send data on the network to other ROS nodes, with no response expected.
-For instance, if a ROS 2 node reads temperature data from a sensor, it can then publish that data on the ROS 2 network using a ``Temperature`` message.
-Other nodes on the ROS 2 network can subscribe to that data and receive the ``Temperature`` message.
+消息是 ROS 2 节点在网络中向其他 ROS 节点发送数据的一种方式，且无需预期响应。
+例如，如果一个 ROS 2 节点从传感器读取温度数据，则它可以利用 ``Temperature`` 消息将该数据发布到 ROS 2 网络。
+ROS 2 网络中的其他节点可以订阅该数据并接收 ``Temperature`` 消息。
 
-Messages are described and defined in ``.msg`` files in the ``msg/`` directory of a ROS package.
-``.msg`` files are composed of two parts: fields and constants.
+消息在 ROS 包的 ``msg/`` 目录中的 ``.msg`` 文件中被描述和定义。
+``.msg`` 文件由两部分组成：字段和常量。
 
-Fields
-^^^^^^
+字段
+^^^^
 
-Each field consists of a type and a name, separated by a space, i.e:
+每个字段都由类型和名称组成，中间用空格分隔，例如：
 
 .. code-block:: bash
 
@@ -48,30 +48,30 @@ Each field consists of a type and a name, separated by a space, i.e:
    fieldtype2 fieldname2
    fieldtype3 fieldname3
 
-For example:
+例如：
 
 .. code-block:: bash
 
    int32 my_int
    string my_string
 
-Field types
-~~~~~~~~~~~
+字段类型
+~~~~~~~~
 
-Field types can be:
+字段类型可以是：
 
-* a built-in-type
-* names of Message descriptions defined on their own, such as "geometry_msgs/PoseStamped"
+* 内置类型
+* 单独定义的消息描述名称，例如 ``geometry_msgs/PoseStamped``
 
-*Built-in-types currently supported:*
+*当前支持的内置类型：*
 
 .. list-table::
    :header-rows: 1
 
-   * - Type name
+   * - 类型名称
      - `C++ <https://design.ros2.org/articles/generated_interfaces_cpp.html>`__
      - `Python <https://design.ros2.org/articles/generated_interfaces_python.html>`__
-     - `DDS type <https://design.ros2.org/articles/mapping_dds_types.html>`__
+     - `DDS 类型 <https://design.ros2.org/articles/mapping_dds_types.html>`__
    * - bool
      - bool
      - builtins.bool
@@ -133,15 +133,15 @@ Field types can be:
      - builtins.str
      - wstring
 
-*Every built-in-type can be used to define arrays:*
+*任意内置类型都可以用于定义数组：*
 
 .. list-table::
    :header-rows: 1
 
-   * - Type name
+   * - 类型名称
      - `C++ <https://design.ros2.org/articles/generated_interfaces_cpp.html>`__
      - `Python <https://design.ros2.org/articles/generated_interfaces_python.html>`__
-     - `DDS type <https://design.ros2.org/articles/mapping_dds_types.html>`__
+     - `DDS 类型 <https://design.ros2.org/articles/mapping_dds_types.html>`__
    * - static array
      - std::array<T, N>
      - builtins.list*
@@ -159,9 +159,9 @@ Field types can be:
      - builtins.str*
      - string
 
-(*) All types that are more permissive than their ROS definition enforce the ROS constraints in range and length by software.
+(*) 所有比其 ROS 定义更宽松的类型都将由软件强制执行 ROS 对范围和长度的约束。
 
-*Example of message definition using arrays and bounded types:*
+*使用数组和有界类型的消息定义示例：*
 
 .. code-block:: bash
 
@@ -176,25 +176,25 @@ Field types can be:
    string<=10[] unbounded_array_of_strings_up_to_ten_characters_each
    string<=10[<=5] up_to_five_strings_up_to_ten_characters_each
 
-Field names
-~~~~~~~~~~~
+字段名称
+~~~~~~~~
 
-Field names must be lowercase alphanumeric characters with underscores for separating words.
-They must start with an alphabetic character, and they must not end with an underscore or have two consecutive underscores.
+字段名称必须仅包含小写字母数字字符，并使用下划线作为分隔符。
+它们必须以字母开头，且不能以下划线结尾，也不能包含连续两个下划线。
 
-Field default value
-~~~~~~~~~~~~~~~~~~~
+字段默认值
+~~~~~~~~~~
 
-Default values can be set to any field in the message type.
-Currently default values are not supported for string arrays and complex types (i.e. types not present in the built-in-types table above; that applies to all nested messages).
+默认值可以设置为消息类型中的任意字段。
+目前，字符串数组和复杂类型（即不在上面的内置类型表中的类型；这同样适用于所有嵌套消息）不支持默认值。
 
-Defining a default value is done by adding a third element to the field definition line, i.e:
+设置默认值的方法是在字段定义行中添加第三个元素，即：
 
 .. code-block:: bash
 
    fieldtype fieldname fielddefaultvalue
 
-For example:
+例如：
 
 .. code-block:: bash
 
@@ -205,20 +205,20 @@ For example:
 
 .. note::
 
-  * string values must be defined in single ``'`` or double ``"`` quotes
-  * currently string values are not escaped
+  * 字符串值必须使用单引号 ``'`` 或双引号 ``"`` 括起来
+  * 当前字符串值不会被转义
 
-Constants
-^^^^^^^^^
+常量
+^^^^
 
-Each constant definition is like a field description with a default value, except that this value can never be changed programmatically.
-This value assignment is indicated by use of an equal '=' sign, e.g.
+每个常量定义都类似于带有默认值的字段描述，只是该值无法通过程序进行修改。
+这个赋值使用等号 ``=`` 表示，例如：
 
 .. code-block:: bash
 
    constanttype CONSTANTNAME=constantvalue
 
-For example:
+例如：
 
 .. code-block:: bash
 
@@ -229,19 +229,19 @@ For example:
 
 .. note::
 
-   Constants names have to be UPPERCASE
+   常量名称必须全部为大写
 
-Services
---------
+服务
+----
 
-Services are a request/response communication, where the client (requester) is waiting for the server (responder) to make a short computation and return a result.
+服务是请求/响应式通信，其中客户端（请求方）会等待服务端（响应方）做一个简短计算并返回结果。
 
-Services are described and defined in ``.srv`` files in the ``srv/`` directory of a ROS package.
+服务在 ROS 包的 ``srv/`` 目录中的 ``.srv`` 文件中被描述和定义。
 
-A service description file consists of a request and a response msg type, separated by ``---``.
-Any two ``.msg`` files concatenated with a ``---`` are a legal service description.
+服务描述文件由一个请求和一个响应消息类型组成，两者以 ``---`` 分隔。
+任意两个按 ``---`` 连接起来的 ``.msg`` 文件都构成合法的服务描述。
 
-Here is a very simple example of a service that takes in a string and returns a string:
+下面给出一个非常简单的服务示例：它接受一个字符串并返回一个字符串：
 
 .. code-block:: bash
 
@@ -249,7 +249,7 @@ Here is a very simple example of a service that takes in a string and returns a 
    ---
    string str
 
-We can of course get much more complicated (if you want to refer to a message from the same package you must not mention the package name):
+当然，我们也可以构造更复杂的形式（如果你想引用同一个包中的消息，不能提到包名）：
 
 .. code-block:: bash
 
@@ -267,15 +267,15 @@ We can of course get much more complicated (if you want to refer to a message fr
    CustomMessageDefinedInThisPackage value
    uint32 an_integer
 
-You cannot embed another service inside of a service.
+不能在一个服务内部嵌套另一个服务。
 
-Actions
--------
+动作
+----
 
-Actions are a long-running request/response communication, where the action client (requester) is waiting for the action server (the responder) to take some action and return a result.
-In contrast to services, actions can be long-running (many seconds or minutes), provide feedback while they are happening, and can be interrupted.
+动作是一种长时间运行的请求/响应通信，其中动作客户端（请求者）等待动作服务器（响应者）执行某些动作并返回结果。
+与服务相比，动作可以持续很长时间（几秒到几分钟），在执行过程中提供反馈，并且可以被中断。
 
-Action definitions have the following form:
+动作定义的形式如下：
 
 .. code::
 
@@ -285,15 +285,15 @@ Action definitions have the following form:
    ---
    <feedback_type> <feedback_fieldname>
 
-Like services, the request fields are before and the response fields are after the first triple-dash (``---``), respectively.
-There is also a third set of fields after the second triple-dash, which is the fields to be sent when sending feedback.
+与服务类似，请求字段位于第一个三段横线（``---``）之前，响应字段位于其后。
+此外，在第二个三段横线之后还有第三组字段，用于发送反馈时携带的字段。
 
-There can be arbitrary numbers of request fields (including zero), arbitrary numbers of response fields (including zero), and arbitrary numbers of feedback fields (including zero).
+请求字段、响应字段和反馈字段的数量都可以是任意数量（包括零）。
 
-The ``<request_type>``, ``<response_type>``, and ``<feedback_type>`` follow all of the same rules as the ``<type>`` for a message.
-The ``<request_fieldname>``, ``<response_fieldname>``, and ``<feedback_fieldname>`` follow all of the same rules as the ``<fieldname>`` for a message.
+``<request_type>``、``<response_type>`` 和 ``<feedback_type>`` 与消息中的 ``<type>`` 遵循相同规则。
+``<request_fieldname>``、``<response_fieldname>`` 和 ``<feedback_fieldname>`` 与消息中的 ``<fieldname>`` 遵循相同规则。
 
-For instance, the ``Fibonacci`` action definition contains the following:
+例如，``Fibonacci`` 动作定义如下：
 
 .. code::
 
@@ -303,5 +303,5 @@ For instance, the ``Fibonacci`` action definition contains the following:
    ---
    int32[] sequence
 
-This is an action definition where the action client is sending a single ``int32`` field representing the number of Fibonacci steps to take, and expecting the action server to produce an array of ``int32`` containing the complete steps.
-Along the way, the action server may also provide an intermediate array of ``int32`` containing the steps accomplished up until a certain point.
+这是一个动作定义，其中动作客户端发送一个表示 Fibonacci 步骤数的单个 ``int32`` 字段，并期望动作服务器返回包含完整步骤的 ``int32`` 数组。
+在此过程中，动作服务器还可能提供一个中间数组，其中包含在某个时间点之前已经完成的步骤。

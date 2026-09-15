@@ -2,54 +2,54 @@
 
     Tutorials/Tf2/Adding-A-Frame-Cpp
 
-Adding a frame (C++)
-====================
+添加帧（C++）
+=============
 
-**Goal:** Learn how to to add an extra frame to tf2.
+**目标：** 学习如何向 tf2 添加额外的帧。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 15 minutes
+**时间：** 15 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 3
    :local:
 
-Background
-----------
+背景
+----
 
-In previous tutorials, we recreated the turtle demo by writing a :doc:`tf2 broadcaster <./Writing-A-Tf2-Broadcaster-Cpp>` and a :doc:`tf2 listener <Writing-A-Tf2-Listener-Cpp>`.
-This tutorial will teach you how to add extra fixed and dynamic frames to the transformation tree.
-In fact, adding a frame in tf2 is very similar to creating the tf2 broadcaster, but this example will show you some additional features of tf2.
+在之前的教程中，我们通过编写 :doc:`tf2 广播器 <./Writing-A-Tf2-Broadcaster-Cpp>` 和 :doc:`tf2 监听器 <Writing-A-Tf2-Listener-Cpp>` 重建了 turtle 演示。
+本教程将教你如何向变换树添加额外的固定帧和动态帧。
+实际上，在 tf2 中添加帧与创建 tf2 广播器非常相似，但本例将向你展示 tf2 的一些额外功能。
 
-For many tasks related to transformations, it is easier to think inside a local frame.
-For example, it is easiest to reason about laser scan measurements in a frame at the center of the laser scanner.
-tf2 allows you to define a local frame for each sensor, link, or joint in your system.
-When transforming from one frame to another, tf2 will take care of all the hidden intermediate frame transformations that are introduced.
+对于许多与变换相关的任务，在局部帧中思考会更容易。
+例如，在位于激光扫描仪中心的帧中推理激光扫描测量值是最容易的。
+tf2 允许你为系统中的每个传感器、链接或关节定义局部帧。
+当从一个帧变换到另一个帧时，tf2 会负责处理所有引入的隐藏中间帧变换。
 
-tf2 tree
---------
+tf2 树
+------
 
-tf2 builds up a tree structure of frames and, thus, does not allow a closed loop in the frame structure.
-This means that a frame only has one single parent, but it can have multiple children.
-Currently, our tf2 tree contains three frames: ``world``, ``turtle1`` and ``turtle2``.
-The two turtle frames are children of the ``world`` frame.
-If we want to add a new frame to tf2, one of the three existing frames needs to be the parent frame, and the new one will become its child frame.
+tf2 构建帧的树状结构，因此不允许帧结构中出现闭环。
+这意味着一个帧只有一个父帧，但可以有多个子帧。
+目前，我们的 tf2 树包含三个帧：``world``、``turtle1`` 和 ``turtle2``。
+两个 turtle 帧是 ``world`` 帧的子帧。
+如果我们想向 tf2 添加一个新帧，三个现有帧中的一个需要成为父帧，新帧将成为其子帧。
 
 .. image:: images/turtlesim_frames.png
 
-Tasks
------
+任务
+----
 
-1 Write the fixed frame broadcaster
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 编写固定帧广播器
+^^^^^^^^^^^^^^^^^^
 
-In our turtle example, we'll add a new frame ``carrot1``, which will be the child of the ``turtle1``.
-This frame will serve as the goal for the second turtle.
+在我们的 turtle 示例中，我们将添加一个新帧 ``carrot1``，它将是 ``turtle1`` 的子帧。
+这个帧将作为第二只 turtle 的目标。
 
-Let's first create the source files.
-Go to the ``learning_tf2_cpp`` package we created in the previous tutorials.
-Inside the ``src`` directory download the fixed frame broadcaster code by entering the following command:
+让我们先创建源文件。
+转到我们在前面教程中创建的 ``learning_tf2_cpp`` 包。
+在 ``src`` 目录中，通过输入以下命令下载固定帧广播器代码：
 
 .. tabs::
 
@@ -67,19 +67,19 @@ Inside the ``src`` directory download the fixed frame broadcaster code by enteri
 
    .. group-tab:: Windows
 
-      In a Windows command line prompt:
+      在 Windows 命令行提示符中：
 
       .. code-block:: console
 
           $ curl -sk https://raw.githubusercontent.com/ros/geometry_tutorials/{DISTRO}/turtle_tf2_cpp/src/fixed_frame_tf2_broadcaster.cpp -o fixed_frame_tf2_broadcaster.cpp
 
-      Or in powershell:
+      或者在 powershell 中：
 
       .. code-block:: console
 
           $ curl https://raw.githubusercontent.com/ros/geometry_tutorials/{DISTRO}/turtle_tf2_cpp/src/fixed_frame_tf2_broadcaster.cpp -o fixed_frame_tf2_broadcaster.cpp
 
-Now open the file called ``fixed_frame_tf2_broadcaster.cpp``.
+现在打开名为 ``fixed_frame_tf2_broadcaster.cpp`` 的文件。
 
 .. code-block:: C++
 
@@ -100,30 +100,28 @@ Now open the file called ``fixed_frame_tf2_broadcaster.cpp``.
       : Node("fixed_frame_tf2_broadcaster")
       {
         tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
-        timer_ = this->create_wall_timer(
-          100ms, std::bind(&FixedFrameBroadcaster::broadcast_timer_callback, this));
+
+        auto broadcast_timer_callback = [this](){
+            geometry_msgs::msg::TransformStamped t;
+
+            t.header.stamp = this->get_clock()->now();
+            t.header.frame_id = "turtle1";
+            t.child_frame_id = "carrot1";
+            t.transform.translation.x = 0.0;
+            t.transform.translation.y = 2.0;
+            t.transform.translation.z = 0.0;
+            t.transform.rotation.x = 0.0;
+            t.transform.rotation.y = 0.0;
+            t.transform.rotation.z = 0.0;
+            t.transform.rotation.w = 1.0;
+
+            tf_broadcaster_->sendTransform(t);
+        };
+        timer_ = this->create_wall_timer(100ms, broadcast_timer_callback);
       }
 
     private:
-      void broadcast_timer_callback()
-      {
-        geometry_msgs::msg::TransformStamped t;
-
-        t.header.stamp = this->get_clock()->now();
-        t.header.frame_id = "turtle1";
-        t.child_frame_id = "carrot1";
-        t.transform.translation.x = 0.0;
-        t.transform.translation.y = 2.0;
-        t.transform.translation.z = 0.0;
-        t.transform.rotation.x = 0.0;
-        t.transform.rotation.y = 0.0;
-        t.transform.rotation.z = 0.0;
-        t.transform.rotation.w = 1.0;
-
-        tf_broadcaster_->sendTransform(t);
-      }
-
-    rclcpp::TimerBase::SharedPtr timer_;
+      rclcpp::TimerBase::SharedPtr timer_;
       std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
     };
 
@@ -135,14 +133,14 @@ Now open the file called ``fixed_frame_tf2_broadcaster.cpp``.
       return 0;
     }
 
-The code is very similar to the tf2 broadcaster tutorial example and the only difference is that the transform here does not change over time.
+这段代码与 tf2 广播器教程中的示例非常相似，唯一的区别是这里的变换不随时间变化。
 
-1.1 Examine the code
-~~~~~~~~~~~~~~~~~~~~
+1.1 检查代码
+~~~~~~~~~~~~
 
-Let's take a look at the key lines in this piece of code.
-Here we create a new transform, from the parent ``turtle1`` to the new child ``carrot1``.
-The ``carrot1`` frame is 2 meters offset in y axis in terms of the ``turtle1`` frame.
+让我们看看这段代码中的关键行。
+这里我们创建一个新变换，从父帧 ``turtle1`` 到新子帧 ``carrot1``。
+``carrot1`` 帧在 ``turtle1`` 帧的坐标系中沿 y 轴偏移 2 米。
 
 .. code-block:: C++
 
@@ -158,9 +156,9 @@ The ``carrot1`` frame is 2 meters offset in y axis in terms of the ``turtle1`` f
 1.2 CMakeLists.txt
 ~~~~~~~~~~~~~~~~~~
 
-Navigate one level back to the ``learning_tf2_cpp`` directory, where the ``CMakeLists.txt`` and ``package.xml`` files are located.
+返回上一级目录 ``learning_tf2_cpp``，那里有 ``CMakeLists.txt`` 和 ``package.xml`` 文件。
 
-Now open the ``CMakeLists.txt`` add the executable and name it ``fixed_frame_tf2_broadcaster``.
+现在打开 ``CMakeLists.txt``，添加可执行文件并将其命名为 ``fixed_frame_tf2_broadcaster``。
 
 .. code-block:: console
 
@@ -172,7 +170,7 @@ Now open the ``CMakeLists.txt`` add the executable and name it ``fixed_frame_tf2
         tf2_ros
     )
 
-Finally, add the ``install(TARGETS…)`` section so ``ros2 run`` can find your executable:
+最后，添加 ``install(TARGETS…)`` 部分，以便 ``ros2 run`` 能找到你的可执行文件：
 
 .. code-block:: console
 
@@ -180,11 +178,11 @@ Finally, add the ``install(TARGETS…)`` section so ``ros2 run`` can find your e
         fixed_frame_tf2_broadcaster
         DESTINATION lib/${PROJECT_NAME})
 
-1.3 Write the launch file
-~~~~~~~~~~~~~~~~~~~~~~~~~
+1.3 编写启动文件
+~~~~~~~~~~~~~~~~
 
-Now let's create a launch file for this example.
-With your text editor, create a new file called ``turtle_tf2_fixed_frame_demo_launch`` with extension ``.py``, ``.xml``, or ``.yaml`` in the ``src/learning_tf2_cpp/launch`` directory, and add the following lines:
+现在让我们为这个示例创建一个启动文件。
+用你的文本编辑器，在 ``src/learning_tf2_cpp/launch`` 目录中创建一个名为 ``turtle_tf2_fixed_frame_demo_launch``、扩展名为 ``.py``、``.xml`` 或 ``.yaml`` 的新文件，并添加以下行：
 
 .. tabs::
 
@@ -203,9 +201,9 @@ With your text editor, create a new file called ``turtle_tf2_fixed_frame_demo_la
     .. literalinclude:: launch/turtle_tf2_fixed_frame_demo_launch.yaml
         :language: yaml
 
-This launch file imports the required packages and then creates a ``demo_nodes`` variable that will store nodes that we created in the previous tutorial's launch file.
+这个启动文件导入了所需的包，然后创建一个 ``demo_nodes`` 变量，用来存储我们在上一个教程的启动文件中创建的节点。
 
-The last part of the code will add our fixed ``carrot1`` frame to the turtlesim world using our ``fixed_frame_tf2_broadcaster`` node.
+代码的最后一部分将使用我们的 ``fixed_frame_tf2_broadcaster`` 节点，把我们固定的 ``carrot1`` 帧添加到 turtlesim 世界中。
 
 .. tabs::
 
@@ -227,10 +225,10 @@ The last part of the code will add our fixed ``carrot1`` frame to the turtlesim 
         :language: yaml
         :lines: 6-9
 
-1.4 Build
-~~~~~~~~~
+1.4 构建
+~~~~~~~~
 
-Run ``rosdep`` in the root of your workspace to check for missing dependencies.
+在工作区根目录运行 ``rosdep`` 以检查缺少的依赖。
 
 .. tabs::
 
@@ -242,13 +240,13 @@ Run ``rosdep`` in the root of your workspace to check for missing dependencies.
 
    .. group-tab:: macOS
 
-        rosdep only runs on Linux, so you will need to install ``geometry_msgs`` and ``turtlesim`` dependencies yourself
+        rosdep 仅在 Linux 上运行，因此你需要自己安装 ``geometry_msgs`` 和 ``turtlesim`` 依赖
 
    .. group-tab:: Windows
 
-        rosdep only runs on Linux, so you will need to install ``geometry_msgs`` and ``turtlesim`` dependencies yourself
+        rosdep 仅在 Linux 上运行，因此你需要自己安装 ``geometry_msgs`` 和 ``turtlesim`` 依赖
 
-Still in the root of your workspace, build your package:
+仍然在工作区根目录，构建你的包：
 
 .. tabs::
 
@@ -270,7 +268,7 @@ Still in the root of your workspace, build your package:
 
           $ colcon build --merge-install --packages-select learning_tf2_cpp
 
-Open a new terminal, navigate to the root of your workspace, and source the setup files:
+打开一个新终端，导航到工作区根目录，并 source 设置文件：
 
 .. tabs::
 
@@ -288,44 +286,44 @@ Open a new terminal, navigate to the root of your workspace, and source the setu
 
    .. group-tab:: Windows
 
-        In a Windows command line prompt:
+        在 Windows 命令行提示符中：
 
         .. code-block:: console
 
             $ call install\setup.bat
 
-        Or in powershell:
+        或者在 powershell 中：
 
         .. code-block:: console
 
             $ .\install\setup.ps1
 
-1.5 Run
-~~~~~~~
+1.5 运行
+~~~~~~~~
 
-Now you can start the turtle broadcaster demo:
+现在你可以启动 turtle 广播器演示：
 
 .. code-block:: console
 
     $ ros2 launch learning_tf2_cpp turtle_tf2_fixed_frame_demo_launch.xml # .py or .yaml are also acceptable
 
-You should notice that the new ``carrot1`` frame appeared in the transformation tree.
+你应该会注意到新的 ``carrot1`` 帧出现在变换树中。
 
 .. image:: images/turtlesim_frames_carrot.png
 
-If you drive the first turtle around, you should notice that the behavior didn't change from the previous tutorial, even though we added a new frame.
-That's because adding an extra frame does not affect the other frames and our listener is still using the previously defined frames.
+如果你驾驶第一只 turtle 四处移动，你应该会注意到行为与上一个教程相比没有变化，即使我们添加了一个新帧。
+这是因为添加额外帧不会影响其他帧，而且我们的监听器仍然使用之前定义的帧。
 
-Therefore if we want our second turtle to follow the carrot instead of the first turtle, we need to change value of the ``target_frame``.
-This can be done two ways.
-One way is to pass the ``target_frame`` argument to the launch file directly from the console:
+因此，如果我们希望第二只 turtle 跟随胡萝卜而不是第一只 turtle，我们需要改变 ``target_frame`` 的值。
+有两种方法可以做到。
+一种方法是直接从控制台将 ``target_frame`` 参数传递给启动文件：
 
 .. code-block:: console
 
     $ ros2 launch learning_tf2_cpp turtle_tf2_fixed_frame_demo_launch.xml target_frame:=carrot1 # .py or .yaml are also acceptable
 
-The second way is to update the launch file.
-To do so, open the ``turtle_tf2_fixed_frame_demo.launch.py`` file, and add the ``'target_frame': 'carrot1'`` parameter via ``launch_arguments`` argument.
+第二种方法是更新启动文件。
+为此，打开 ``turtle_tf2_fixed_frame_demo_launch.py`` 文件，并通过 ``launch_arguments`` 参数添加 ``'target_frame': 'carrot1'`` 参数。
 
 .. code-block:: python
 
@@ -335,18 +333,18 @@ To do so, open the ``turtle_tf2_fixed_frame_demo.launch.py`` file, and add the `
             launch_arguments={'target_frame': 'carrot1'}.items(),
             )
 
-Now rebuild the package, restart the ``turtle_tf2_fixed_frame_demo.launch.py``, and you'll see the second turtle following the carrot instead of the first turtle!
+现在重新构建包，重新启动 ``turtle_tf2_fixed_frame_demo_launch.py``，你会看到第二只 turtle 跟随胡萝卜而不是第一只 turtle！
 
 .. image:: images/carrot_static.png
 
-2 Write the dynamic frame broadcaster
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 编写动态帧广播器
+^^^^^^^^^^^^^^^^^^
 
-The extra frame we published in this tutorial is a fixed frame that doesn't change over time in relation to the parent frame.
-However, if you want to publish a moving frame you can code the broadcaster to change the frame over time.
-Let's change our ``carrot1`` frame so that it changes relative to ``turtle1`` frame over time.
-Go to the ``learning_tf2_cpp`` package we created in the previous tutorial.
-Inside the ``src`` directory download the dynamic frame broadcaster code by entering the following command:
+我们在本教程中发布的额外帧是一个固定帧，它相对于父帧不随时间变化。
+但是，如果你想发布一个移动帧，你可以编写广播器使帧随时间变化。
+让我们改变我们的 ``carrot1`` 帧，使其随时间相对于 ``turtle1`` 帧变化。
+转到我们在上一个教程中创建的 ``learning_tf2_cpp`` 包。
+在 ``src`` 目录中，通过输入以下命令下载动态帧广播器代码：
 
 .. tabs::
 
@@ -376,7 +374,7 @@ Inside the ``src`` directory download the dynamic frame broadcaster code by ente
 
           $ curl https://raw.githubusercontent.com/ros/geometry_tutorials/{DISTRO}/turtle_tf2_cpp/src/dynamic_frame_tf2_broadcaster.cpp -o dynamic_frame_tf2_broadcaster.cpp
 
-Now open the file called ``dynamic_frame_tf2_broadcaster.cpp``:
+现在打开名为 ``dynamic_frame_tf2_broadcaster.cpp`` 的文件：
 
 .. code-block:: C++
 
@@ -399,31 +397,29 @@ Now open the file called ``dynamic_frame_tf2_broadcaster.cpp``:
       : Node("dynamic_frame_tf2_broadcaster")
       {
         tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
-        timer_ = this->create_wall_timer(
-          100ms, std::bind(&DynamicFrameBroadcaster::broadcast_timer_callback, this));
+
+        auto broadcast_timer_callback = [this](){
+            rclcpp::Time now = this->get_clock()->now();
+            double x = now.seconds() * PI;
+
+            geometry_msgs::msg::TransformStamped t;
+            t.header.stamp = now;
+            t.header.frame_id = "turtle1";
+            t.child_frame_id = "carrot1";
+            t.transform.translation.x = 10 * sin(x);
+            t.transform.translation.y = 10 * cos(x);
+            t.transform.translation.z = 0.0;
+            t.transform.rotation.x = 0.0;
+            t.transform.rotation.y = 0.0;
+            t.transform.rotation.z = 0.0;
+            t.transform.rotation.w = 1.0;
+
+            tf_broadcaster_->sendTransform(t);
+        };
+        timer_ = this->create_wall_timer(100ms, broadcast_timer_callback);
       }
 
     private:
-      void broadcast_timer_callback()
-      {
-        rclcpp::Time now = this->get_clock()->now();
-        double x = now.seconds() * PI;
-
-        geometry_msgs::msg::TransformStamped t;
-        t.header.stamp = now;
-        t.header.frame_id = "turtle1";
-        t.child_frame_id = "carrot1";
-        t.transform.translation.x = 10 * sin(x);
-        t.transform.translation.y = 10 * cos(x);
-        t.transform.translation.z = 0.0;
-        t.transform.rotation.x = 0.0;
-        t.transform.rotation.y = 0.0;
-        t.transform.rotation.z = 0.0;
-        t.transform.rotation.w = 1.0;
-
-        tf_broadcaster_->sendTransform(t);
-      }
-
       rclcpp::TimerBase::SharedPtr timer_;
       std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
     };
@@ -436,10 +432,10 @@ Now open the file called ``dynamic_frame_tf2_broadcaster.cpp``:
       return 0;
     }
 
-2.1 Examine the code
-~~~~~~~~~~~~~~~~~~~~
+2.1 检查代码
+~~~~~~~~~~~~
 
-Instead of a fixed definition of our x and y offsets, we are using the ``sin()`` and ``cos()`` functions on the current time so that the offset of ``carrot1`` is constantly changing.
+我们不是固定定义 x 和 y 偏移量，而是对当前时间使用 ``sin()`` 和 ``cos()`` 函数，这样 ``carrot1`` 的偏移量就会不断变化。
 
 .. code-block:: C++
 
@@ -451,9 +447,9 @@ Instead of a fixed definition of our x and y offsets, we are using the ``sin()``
 2.2 CMakeLists.txt
 ~~~~~~~~~~~~~~~~~~
 
-Navigate one level back to the ``learning_tf2_cpp`` directory, where the ``CMakeLists.txt`` and ``package.xml`` files are located.
+返回上一级目录 ``learning_tf2_cpp``，那里有 ``CMakeLists.txt`` 和 ``package.xml`` 文件。
 
-Now open the ``CMakeLists.txt`` add the executable and name it ``dynamic_frame_tf2_broadcaster``.
+现在打开 ``CMakeLists.txt``，添加可执行文件并将其命名为 ``dynamic_frame_tf2_broadcaster``。
 
 .. code-block:: console
 
@@ -465,7 +461,7 @@ Now open the ``CMakeLists.txt`` add the executable and name it ``dynamic_frame_t
         tf2_ros
     )
 
-Finally, add the ``install(TARGETS…)`` section so ``ros2 run`` can find your executable:
+最后，添加 ``install(TARGETS…)`` 部分，以便 ``ros2 run`` 能找到你的可执行文件：
 
 .. code-block:: console
 
@@ -473,10 +469,10 @@ Finally, add the ``install(TARGETS…)`` section so ``ros2 run`` can find your e
         dynamic_frame_tf2_broadcaster
         DESTINATION lib/${PROJECT_NAME})
 
-2.3 Write the launch file
-~~~~~~~~~~~~~~~~~~~~~~~~~
+2.3 编写启动文件
+~~~~~~~~~~~~~~~~
 
-To test this code, create a new launch file ``turtle_tf2_dynamic_frame_demo_launch`` with extension ``.py``, ``.xml``, or ``.yaml`` in the ``src/learning_tf2_cpp/launch`` directory and paste the following code:
+为了测试这段代码，在 ``src/learning_tf2_cpp/launch`` 目录中创建一个名为 ``turtle_tf2_dynamic_frame_demo_launch``、扩展名为 ``.py``、``.xml`` 或 ``.yaml`` 的新启动文件，并粘贴以下代码：
 
 .. tabs::
 
@@ -496,10 +492,10 @@ To test this code, create a new launch file ``turtle_tf2_dynamic_frame_demo_laun
         :language: yaml
 
 
-2.4 Build
-~~~~~~~~~
+2.4 构建
+~~~~~~~~
 
-Run ``rosdep`` in the root of your workspace to check for missing dependencies.
+在工作区根目录运行 ``rosdep`` 以检查缺少的依赖。
 
 .. tabs::
 
@@ -511,13 +507,13 @@ Run ``rosdep`` in the root of your workspace to check for missing dependencies.
 
    .. group-tab:: macOS
 
-        rosdep only runs on Linux, so you will need to install ``geometry_msgs`` and ``turtlesim`` dependencies yourself
+        rosdep 仅在 Linux 上运行，因此你需要自己安装 ``geometry_msgs`` 和 ``turtlesim`` 依赖
 
    .. group-tab:: Windows
 
-        rosdep only runs on Linux, so you will need to install ``geometry_msgs`` and ``turtlesim`` dependencies yourself
+        rosdep 仅在 Linux 上运行，因此你需要自己安装 ``geometry_msgs`` 和 ``turtlesim`` 依赖
 
-Still in the root of your workspace, build your package:
+仍然在工作区根目录，构建你的包：
 
 .. tabs::
 
@@ -539,7 +535,7 @@ Still in the root of your workspace, build your package:
 
           $ colcon build --merge-install --packages-select learning_tf2_cpp
 
-Open a new terminal, navigate to the root of your workspace, and source the setup files:
+打开一个新终端，导航到工作区根目录，并 source 设置文件：
 
 .. tabs::
 
@@ -557,34 +553,34 @@ Open a new terminal, navigate to the root of your workspace, and source the setu
 
    .. group-tab:: Windows
 
-      In a Windows command line prompt:
+      在 Windows 命令行提示符中：
 
       .. code-block:: console
 
           $ call install\setup.bat
 
-      Or in powershell:
+      或者在 powershell 中：
 
       .. code-block:: console
 
           $ .\install\setup.ps1
 
-2.5 Run
-~~~~~~~
+2.5 运行
+~~~~~~~~
 
-Now you can start the dynamic frame demo:
+现在你可以启动动态帧演示：
 
 .. code-block:: console
 
     $ ros2 launch learning_tf2_cpp turtle_tf2_dynamic_frame_demo_launch.xml # .py or .yaml are also acceptable
 
-You should see that the second turtle is following the carrot's position that is constantly changing.
+你应该会看到第二只 turtle 在不断变化的胡萝卜位置后跟随。
 
 .. image:: images/carrot_dynamic.png
 
 
-Summary
--------
+总结
+----
 
-In this tutorial, you learned about the tf2 transformation tree, its structure, and its features.
-You also learned that it is easiest to think inside a local frame, and learned to add extra fixed and dynamic frames for that local frame.
+在本教程中，你学习了 tf2 变换树、它的结构及其特性。
+你还学习了在局部帧中思考是最容易的，并学会了为该局部帧添加额外的固定帧和动态帧。

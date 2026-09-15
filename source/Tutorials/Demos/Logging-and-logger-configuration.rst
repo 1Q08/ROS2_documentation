@@ -3,22 +3,22 @@
     Logging-and-logger-configuration
     Tutorials/Logging-and-logger-configuration
 
-Logging
-=======
+日志记录
+========
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-See `the logging page <../../Concepts/Intermediate/About-Logging>` for details on available functionality.
+有关可用功能的详细信息，请参阅 `日志页面 <../../Concepts/Intermediate/About-Logging>`。
 
-Using log statements in code
-----------------------------
+在代码中使用日志语句
+--------------------
 
-Basic logging
-^^^^^^^^^^^^^
+基本日志
+^^^^^^^^
 
-The following code will output a log message from a ROS 2 node at ``DEBUG`` severity:
+以下代码将从 ROS 2 节点以 ``DEBUG`` 严重级别输出一条日志消息：
 
 .. tabs::
 
@@ -38,12 +38,12 @@ The following code will output a log message from a ROS 2 node at ``DEBUG`` seve
 
             node.get_logger().debug('My log message %d' % (4))
 
-Note that in both cases, no trailing newline is added, as the logging infrastructure will automatically add one.
+请注意，在两种情况下都不会添加末尾换行符，因为日志基础设施会自动添加一个。
 
-Logging only the first time
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+仅首次记录日志
+^^^^^^^^^^^^^^
 
-The following code will output a log message from a ROS 2 node at ``INFO`` severity, but only the first time it is hit:
+以下代码将从 ROS 2 节点以 ``INFO`` 严重级别输出一条日志消息，但仅在首次命中时输出：
 
 .. tabs::
 
@@ -64,10 +64,10 @@ The following code will output a log message from a ROS 2 node at ``INFO`` sever
             num = 4
             node.get_logger().info(f'My log message {num}', once=True)
 
-Logging all but the first time
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+除了首次之外都记录日志
+^^^^^^^^^^^^^^^^^^^^^^
 
-The following code will output a log message from a ROS 2 node at ``WARN`` severity, but not the very first time it is hit:
+以下代码将从 ROS 2 节点以 ``WARN`` 严重级别输出一条日志消息，但不在首次命中时输出：
 
 .. tabs::
 
@@ -88,12 +88,12 @@ The following code will output a log message from a ROS 2 node at ``WARN`` sever
             num = 4
             node.get_logger().warning('My log message {0}'.format(num), skip_first=True)
 
-Logging throttled
-^^^^^^^^^^^^^^^^^
+节流日志
+^^^^^^^^
 
-The following code will output a log message from a ROS 2 node at ``ERROR`` severity, but no more than once per second.
+以下代码将从 ROS 2 节点以 ``ERROR`` 严重级别输出一条日志消息，但每秒不超过一次。
 
-The interval parameter specifying milliseconds between messages should have an integer data type so it can be converted to a ``rcutils_duration_value_t`` (an ``int64_t``):
+指定消息之间毫秒数的 interval 参数应使用整数数据类型，以便可以转换为 ``rcutils_duration_value_t`` （一个 ``int64_t``）：
 
 .. tabs::
 
@@ -117,10 +117,10 @@ The interval parameter specifying milliseconds between messages should have an i
             num = 4
             node.get_logger().error(f'My log message {num}', throttle_duration_sec=1)
 
-Logging throttled all but the first time
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+除首次之外都节流记录日志
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following code will output a log message from a ROS 2 node at ``DEBUG`` severity, no more than once per second, skipping the very first time it is hit:
+以下代码将从 ROS 2 节点以 ``DEBUG`` 严重级别输出一条日志消息，每秒不超过一次，并跳过首次命中：
 
 .. tabs::
 
@@ -140,31 +140,31 @@ The following code will output a log message from a ROS 2 node at ``DEBUG`` seve
             num = 4
             node.get_logger().debug(f'My log message {num}', skip_first=True, throttle_duration_sec=1.0)
 
-Logging demo
-------------
+日志演示
+--------
 
-In this `demo <https://github.com/ros2/demos/tree/{REPOS_FILE_BRANCH}/logging_demo>`_, different types of log calls are shown and the severity level of different loggers is configured locally and externally.
+在这个 `演示 <https://github.com/ros2/demos/tree/{REPOS_FILE_BRANCH}/logging_demo>`_ 中，展示了不同类型的日志调用，并在本地和外部配置了不同日志记录器的严重级别。
 
-Start the demo with:
+使用以下命令启动演示：
 
 .. code-block:: console
 
    $ ros2 run logging_demo logging_demo_main
 
-Over time you will see output from various log calls with different properties.
-To start with you will only see output from log calls with severity ``INFO`` and above (``WARN``, ``ERROR``, ``FATAL``).
-Note that the first message will only be logged once, though the line is reached on each iteration, as that is a property of the log call used for that message.
+随着时间的推移，你会看到来自各类日志调用的、具有不同属性的输出。
+一开始，你只会看到严重级别为 ``INFO`` 及以上（``WARN``、``ERROR``、``FATAL``）的日志调用的输出。
+请注意，第一条消息只会被记录一次，尽管每次迭代都会执行到该行，因为这是用于该消息的日志调用的一个特性。
 
-Logging directory configuration
--------------------------------
+日志目录配置
+------------
 
-The logging directory can be configured through two environment variables: ``ROS_LOG_DIR`` and ``ROS_HOME``.
-The logic is as follows:
+日志目录可以通过两个环境变量配置：``ROS_LOG_DIR`` 和 ``ROS_HOME``。
+逻辑如下：
 
-* Use ``$ROS_LOG_DIR`` if ``ROS_LOG_DIR`` is set and not empty.
-* Otherwise, use ``$ROS_HOME/log``, using ``~/.ros`` for ``ROS_HOME`` if not set or if empty.
+* 如果 ``ROS_LOG_DIR`` 已设置且不为空，则使用 ``$ROS_LOG_DIR``。
+* 否则，使用 ``$ROS_HOME/log``；如果 ``ROS_HOME`` 未设置或为空，则使用 ``~/.ros`` 作为 ``ROS_HOME``。
 
-For example, to set the logging directory to ``~/my_logs``:
+例如，要将日志目录设置为 ``~/my_logs``：
 
 .. tabs::
 
@@ -189,12 +189,12 @@ For example, to set the logging directory to ``~/my_logs``:
       $ set "ROS_LOG_DIR=~/my_logs"
       $ ros2 run logging_demo logging_demo_main
 
-You will then find the logs under ``~/my_logs/``.
+然后你可以在 ``~/my_logs/`` 下找到日志。
 
-Alternatively, you can set ``ROS_HOME`` and the logging directory will be relative to it (``$ROS_HOME/log``).
-``ROS_HOME`` is intended to be used by anything that needs a base directory.
-Note that ``ROS_LOG_DIR`` has to be either unset or empty.
-For example, with ``ROS_HOME`` set to ``~/my_ros_home``:
+或者，你可以设置 ``ROS_HOME``，日志目录将相对于它（``$ROS_HOME/log``）。
+``ROS_HOME`` 旨在供任何需要基目录的组件使用。
+请注意，``ROS_LOG_DIR`` 必须处于未设置或为空的状态。
+例如，将 ``ROS_HOME`` 设置为 ``~/my_ros_home``：
 
 .. tabs::
 
@@ -219,47 +219,47 @@ For example, with ``ROS_HOME`` set to ``~/my_ros_home``:
       $ set "ROS_HOME=~/my_ros_home"
       $ ros2 run logging_demo logging_demo_main
 
-You will then find the logs under ``~/my_ros_home/log/``.
+然后你可以在 ``~/my_ros_home/log/`` 下找到日志。
 
-Logger level configuration: programmatically
---------------------------------------------
+日志级别配置：程序化
+--------------------
 
-After 10 iterations the level of the logger will be set to ``DEBUG``, which will cause additional messages to be logged.
+经过 10 次迭代后，日志记录器的级别将被设置为 ``DEBUG``，这将导致额外的消息被记录。
 
-Some of these debug messages cause additional functions/expressions to be evaluated, which were previously skipped as ``DEBUG`` log calls were not enabled.
-See `the source code <https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/logging_demo/src/logger_usage_component.cpp>`__ of the demo for further explanation of the calls used, and see the rclcpp logging documentation for a full list of supported logging calls.
+其中一些调试消息会导致额外的函数/表达式被求值，这些此前因为未启用 ``DEBUG`` 日志调用而被跳过。
+有关所用调用的进一步说明，请参阅演示的 `源代码 <https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/logging_demo/src/logger_usage_component.cpp>`__，有关受支持日志调用的完整列表，请参阅 rclcpp 日志文档。
 
-Logger level configuration: externally
---------------------------------------
+日志级别配置：外部
+------------------
 
-In the future there will be a generalized approach to external configuration of loggers at runtime (similar to how `rqt_logger_level <https://wiki.ros.org/rqt_logger_level>`__ in ROS 1 allows logger configuration via remote procedural calls).
-**This concept is not yet officially supported in ROS 2.**
-In the meantime, this demo provides an **example** service that can be called externally to request configuration of logger levels for known names of loggers in the process.
+将来会有一种通用的方法，在运行时从外部配置日志记录器（类似于 ROS 1 中的 `rqt_logger_level <https://wiki.ros.org/rqt_logger_level>`__ 允许通过远程过程调用配置日志记录器）。
+**这个概念在 ROS 2 中尚未得到官方支持。**
+与此同时，本演示提供了一个 **示例** 服务，可以从外部调用它，为进程中已知名称的日志记录器请求配置日志级别。
 
-The demo previously started is already running this example service.
-To set the level of the demo's logger back to ``INFO``\ , call the service with:
+之前启动的演示已经在运行这个示例服务。
+要将演示的日志记录器级别设置回 ``INFO`` ，请使用以下命令调用服务：
 
 .. code-block:: console
 
    $ ros2 service call /config_logger logging_demo/srv/ConfigLogger "{logger_name: 'logger_usage_demo', level: INFO}"
 
-This service call will work on any logger that is running in the process provided that you know its name.
-This includes the loggers in the ROS 2 core, such as ``rcl`` (the common client library package).
-To enable debug logging for ``rcl``, call:
+只要有日志记录器在进程中运行，并且你知道它的名称，此服务调用就对其有效。
+这包括 ROS 2 核心中的日志记录器，例如 ``rcl`` （通用客户端库包）。
+要为 ``rcl`` 启用调试日志，请调用：
 
 .. code-block:: console
 
    $ ros2 service call /config_logger logging_demo/srv/ConfigLogger "{logger_name: 'rcl', level: DEBUG}"
 
-You should see debug output from ``rcl`` start to show.
+你应该会看到 ``rcl`` 开始输出调试信息。
 
-Using the logger config component
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+使用日志配置组件
+^^^^^^^^^^^^^^^^
 
-The server that responds to the logger configuration requests has been developed as a component so that it may be added to an existing composition-based system.
-For example, if you are using `a container to run your nodes <../Intermediate/Composition>`, to be able to configure your loggers you only need to request that it additionally load the ``logging_demo::LoggerConfig`` component into the container.
+响应日志配置请求的服务器已开发为组件，以便可以将其添加到现有的基于组合的系统中。
+例如，如果你正在使用 `容器来运行你的节点 <../Intermediate/Composition>`，为了能够配置你的日志记录器，你只需要请求它额外将 ``logging_demo::LoggerConfig`` 组件加载到容器中。
 
-As an example, if you want to debug the ``composition::Talker`` demo, you can start the talker as normal with:
+例如，如果你想调试 ``composition::Talker`` 演示，你可以像往常一样启动 talker：
 
 Shell 1:
 
@@ -273,7 +273,7 @@ Shell 2:
 
    $ ros2 component load /ComponentManager composition composition::Talker
 
-And then when you want to enable debug logging, load the ``LoggerConfig`` component with:
+然后，当你想启用调试日志时，用以下命令加载 ``LoggerConfig`` 组件：
 
 Shell 2
 
@@ -281,8 +281,8 @@ Shell 2
 
    $ ros2 component load /ComponentManager logging_demo logging_demo::LoggerConfig
 
-And finally, configure all unset loggers to the debug severity by addressing the empty-named logger.
-Note that loggers that have been specifically configured to use a particular severity will not be affected by this call.
+最后，通过寻址名称为空的日志记录器，将所有未设置的日志记录器配置为 debug 严重级别。
+请注意，已专门配置为使用特定严重级别的日志记录器不会受此调用影响。
 
 Shell 2:
 
@@ -290,39 +290,39 @@ Shell 2:
 
    $ ros2 service call /config_logger logging_demo/srv/ConfigLogger "{logger_name: '', level: DEBUG}"
 
-You should see debug output from any previously unset loggers in the process start to appear, including from the ROS 2 core.
+你应该会看到进程中所有之前未设置的日志记录器开始输出调试信息，包括来自 ROS 2 核心的日志记录器。
 
-Logger level configuration: command line
-----------------------------------------
+日志级别配置：命令行
+--------------------
 
-As of the Bouncy ROS 2 release, the severity level for loggers that have not had their severity set explicitly can be configured from the command line.
-Restart the demo including the following command line argument:
+从 Bouncy ROS 2 发行版开始，对于尚未显式设置严重级别的日志记录器，可以从命令行配置其严重级别。
+重新启动演示，并包含以下命令行参数：
 
 
 .. code-block:: console
 
    $ ros2 run logging_demo logging_demo_main --ros-args --log-level debug
 
-This configures the default severity for any unset logger to the debug severity level.
-You should see debug output from loggers from the demo itself and from the ROS 2 core.
+这会将任何未设置日志记录器的默认严重级别配置为 debug 严重级别。
+你应该会看到来自演示本身以及 ROS 2 核心的日志记录器的调试输出。
 
-As of the Galactic ROS 2 release, the severity level for individual loggers can be configured from the command-line.
-Restart the demo including the following command line arguments:
+从 Galactic ROS 2 发行版开始，可以从命令行配置单个日志记录器的严重级别。
+重新启动演示，并包含以下命令行参数：
 
 .. tabs::
 
-  .. group-tab:: Galactic and newer
+  .. group-tab:: Galactic 及更新版本
 
     .. code-block:: console
 
       $ ros2 run logging_demo logging_demo_main --ros-args --log-level logger_usage_demo:=debug
 
 
-Console output formatting
-^^^^^^^^^^^^^^^^^^^^^^^^^
+控制台输出格式
+^^^^^^^^^^^^^^
 
-If you would like more or less verbose formatting, you can use RCUTILS_CONSOLE_OUTPUT_FORMAT environment variable.
-For example, to additionally get the timestamp and location of the log calls, stop the demo and restart it with the environment variable set:
+如果你想要更详细或更简洁的格式，可以使用 ``RCUTILS_CONSOLE_OUTPUT_FORMAT`` 环境变量。
+例如，为了额外获取日志调用的时间戳和位置，请停止演示并设置该环境变量后重新启动它：
 
 .. tabs::
 
@@ -347,15 +347,15 @@ For example, to additionally get the timestamp and location of the log calls, st
       $ set "RCUTILS_CONSOLE_OUTPUT_FORMAT=[{severity} {time}] [{name}]: {message} ({function_name}() at {file_name}:{line_number})"
       $ ros2 run logging_demo logging_demo_main
 
-You should see the timestamp in seconds and the function name, filename and line number additionally printed with each message.
-*The ``time`` option is only supported as of the ROS 2 Bouncy release.*
+你应该会看到每条消息额外打印出以秒为单位的时间戳、函数名、文件名和行号。
+*该 ``time`` 选项仅从 ROS 2 Bouncy 发行版开始受支持。*
 
-Console output colorizing
-^^^^^^^^^^^^^^^^^^^^^^^^^
+控制台输出着色
+^^^^^^^^^^^^^^
 
-By default, the output is colorized when it's targeting a terminal.
-If you would like to force enabling or disabling it, you can use the ``RCUTILS_COLORIZED_OUTPUT`` environment variable.
-For example:
+默认情况下，当输出目标是终端时，输出会被着色。
+如果你想强制启用或禁用它，可以使用 ``RCUTILS_COLORIZED_OUTPUT`` 环境变量。
+例如：
 
 .. tabs::
 
@@ -380,26 +380,26 @@ For example:
       $ set "RCUTILS_COLORIZED_OUTPUT=0" :: 1 for forcing it
       $ ros2 run logging_demo logging_demo_main
 
-You should see that debug, warn, error and fatal logs aren't colorized now.
+你应该会看到 debug、warn、error 和 fatal 日志现在都不再着色了。
 
 .. note::
 
-   In Linux and MacOS forcing colorized output means that if you redirect the output to a file, the ansi escape color codes will appear on it.
-   In windows the colorization method relies on console APIs.
-   If it is forced you will get a new warning saying that colorization failed.
-   The default behavior already checks if the output is a console or not, so forcing colorization is not recommended.
+   在 Linux 和 MacOS 中，强制着色输出意味着如果你将输出重定向到文件，文件中会出现 ansi 转义颜色代码。
+   在 Windows 中，着色方法依赖于控制台 API。
+   如果被强制，你会得到一条新的警告，说明着色失败。
+   默认行为已经会检查输出是否为控制台，因此不建议强制着色。
 
 .. note::
 
-   If you start several nodes via ``ros2 launch``, no node has an active terminal attached to it (unless you set ``emulate_tty=True``).
-   This means that to get colorized output for ``ros2 launch``, you need to set ``RCUTILS_COLORIZED_OUTPUT=1`` explicitly.
+   如果你通过 ``ros2 launch`` 启动多个节点，没有任何节点会附加一个活动终端（除非你设置 ``emulate_tty=True``）。
+   这意味着要让 ``ros2 launch`` 获得着色输出，你需要显式设置 ``RCUTILS_COLORIZED_OUTPUT=1``。
 
-Default stream for console output
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+控制台输出的默认流
+^^^^^^^^^^^^^^^^^^
 
-In Foxy and later, the output from all debug levels goes to stderr by default.
-It is possible to force all output to go to stdout by setting the ``RCUTILS_LOGGING_USE_STDOUT`` environment variable to ``1``.
-For example:
+在 Foxy 及更高版本中，所有调试级别的输出默认都发送到 stderr。
+可以通过将 ``RCUTILS_LOGGING_USE_STDOUT`` 环境变量设置为 ``1`` 来强制所有输出都发送到 stdout。
+例如：
 
 .. tabs::
 
@@ -422,13 +422,13 @@ For example:
       $ set "RCUTILS_LOGGING_USE_STDOUT=1"
 
 
-Line buffered console output
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+行缓冲控制台输出
+^^^^^^^^^^^^^^^^
 
 
-By default, all logging output is unbuffered.
-You can force it to be buffered by setting the ``RCUTILS_LOGGING_BUFFERED_STREAM`` environment variable to 1.
-For example:
+默认情况下，所有日志输出都是无缓冲的。
+你可以通过将 ``RCUTILS_LOGGING_BUFFERED_STREAM`` 环境变量设置为 1 来强制其使用缓冲。
+例如：
 
 .. tabs::
 
@@ -450,7 +450,7 @@ For example:
 
       $ set "RCUTILS_LOGGING_BUFFERED_STREAM=1"
 
-Then run:
+然后运行：
 
 .. code-block:: console
 

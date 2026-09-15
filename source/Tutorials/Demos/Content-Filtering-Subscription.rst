@@ -2,71 +2,71 @@
 
     Tutorials/Content-Filtering-Subscription
 
-Creating a content filtering subscription
-=========================================
+创建内容过滤订阅
+================
 
-**Goal:** Create a content filtering subscription.
+**目标：** 创建一个内容过滤订阅。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 15 minutes
+**时间：** 15 分钟
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 1
    :local:
 
-Overview
+概述
+----
+
+ROS 2 应用通常由话题组成，用于将数据从发布者传输到订阅。
+基本上，订阅会接收话题上发布者发布的所有数据。
+但有时，订阅可能只对发布者发送的数据中的一小部分感兴趣。
+内容过滤订阅允许只接收应用感兴趣的数据。
+
+在本演示中，我们将重点介绍如何创建内容过滤订阅以及它们是如何工作的。
+
+RMW 支持
 --------
 
-ROS 2 applications typically consist of topics to transmit data from publishers to subscriptions.
-Basically, subscriptions receive all published data from publishers on the topic.
-But sometimes, a subscription might be interested in only a subset of the data which is being sent by publishers.
-A content filtering subscription allows to receive only the data of interest for the application.
+内容过滤订阅需要 RMW 实现的支持。
 
-In this demo, we'll be highlighting how to create a content filtering subscription and how they work.
-
-RMW Support
------------
-
-Content filtering subscriptions require RMW implementation support.
-
-.. list-table::  Content-Filtering-Subscription Support Status
+.. list-table::  内容过滤订阅支持状态
    :widths: 25 25
 
    * - rmw_fastrtps
-     - supported
+     - 支持
    * - rmw_connextdds
-     - supported
+     - 支持
    * - rmw_cyclonedds
-     - not supported
+     - 不支持
    * - rmw_zenoh_cpp
-     - not supported
+     - 不支持
 
-Currently all RMW implementations that support content filtering subscriptions are `DDS <https://www.omg.org/omg-dds-portal/>`__ based.
-That means that the supported filtering expressions and parameters are also dependent on `DDS <https://www.omg.org/omg-dds-portal/>`__, you can refer to `DDS specification <https://www.omg.org/spec/DDS/1.4/PDF>`__ ``Annex B - Syntax for Queries and Filters`` for details.
+目前所有支持内容过滤订阅的 RMW 实现都是基于 `DDS <https://www.omg.org/omg-dds-portal/>`__ 的。
+这意味着支持的过滤表达式和参数也依赖于 `DDS <https://www.omg.org/omg-dds-portal/>`__，你可以参考 `DDS 规范 <https://www.omg.org/spec/DDS/1.4/PDF>`__ 中的 ``Annex B - Syntax for Queries and Filters`` 获取详细信息。
 
-Installing the demo
--------------------
+安装演示
+--------
 
-See the :doc:`installation instructions <../../Installation>` for details on installing ROS 2.
+有关安装 ROS 2 的详细信息，请参阅 :doc:`安装说明 <../../Installation>`。
 
-If you've installed ROS 2 from packages, ensure that you have ``ros-{DISTRO}-demo-nodes-cpp`` installed.
-If you downloaded the archive or built ROS 2 from source, it will already be part of the installation.
+如果你是通过软件包安装 ROS 2 的，请确保已安装 ``ros-{DISTRO}-demo-nodes-cpp``。
+如果你下载了归档文件或从源代码构建了 ROS 2，它将已经是安装的一部分。
 
-Temperature filtering demo
---------------------------
+温度过滤演示
+------------
 
-This demo shows how a content filtering subscription can be used to only receive temperature values that are out of the acceptable temperature range, detecting emergencies.
-The content filtering subscription filters out the uninteresting temperature data, so that the subscription callback is not issued.
+本演示展示了如何使用内容过滤订阅，只接收超出可接受温度范围的温度值，从而检测紧急情况。
+内容过滤订阅会过滤掉不感兴趣的温度数据，因此订阅回调不会被触发。
 
-ContentFilteringPublisher:
+ContentFilteringPublisher：
 
 https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics/content_filtering_publisher.cpp
 
 .. code-block:: c++
 
+    #include <array>
     #include <chrono>
-    #include <cstdio>
     #include <memory>
     #include <utility>
 
@@ -75,9 +75,7 @@ https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics
 
     #include "std_msgs/msg/float32.hpp"
 
-    #include "demo_nodes_cpp/visibility_control.h"
-
-    using namespace std::chrono_literals;
+    #include "demo_nodes_cpp/visibility_control.hpp"
 
     namespace demo_nodes_cpp
     {
@@ -86,7 +84,7 @@ https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics
 
     // Create a ContentFilteringPublisher class that subclasses the generic rclcpp::Node base class.
     // The main function below will instantiate the class as a ROS node.
-    class ContentFilteringPublisher : public rclcpp::Node
+    class ContentFilteringPublisher final : public rclcpp::Node
     {
     public:
       DEMO_NODES_CPP_PUBLIC
@@ -94,7 +92,6 @@ https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics
       : Node("content_filtering_publisher", options)
       {
         // Create a function for when messages are to be sent.
-        setvbuf(stdout, NULL, _IONBF, BUFSIZ);
         auto publish_message =
           [this]() -> void
           {
@@ -116,8 +113,10 @@ https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics
         rclcpp::QoS qos(rclcpp::KeepLast{7});
         pub_ = this->create_publisher<std_msgs::msg::Float32>("temperature", qos);
 
+        int64_t publish_ms = this->declare_parameter("publish_ms", 1000);
+
         // Use a timer to schedule periodic message publishing.
-        timer_ = this->create_wall_timer(1s, publish_message);
+        timer_ = this->create_wall_timer(std::chrono::milliseconds(publish_ms), publish_message);
       }
 
     private:
@@ -129,10 +128,10 @@ https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics
 
     }  // namespace demo_nodes_cpp
 
-The content filter is defined in the subscription side, publishers don't need to be configured in any special way to allow content filtering.
-The ``ContentFilteringPublisher`` node publishes simulated temperature data starting from -100.0 and ending at 150.0 with a step size of 10.0 every second.
+内容过滤器定义在订阅一侧，发布者不需要进行任何特殊配置即可支持内容过滤。
+``ContentFilteringPublisher`` 节点每秒发布一次从 -100.0 开始、到 150.0 结束、步长为 10.0 的模拟温度数据。
 
-We can run the demo by running the ``ros2 run demo_nodes_cpp content_filtering_publisher`` executable (don't forget to source the setup file first):
+我们可以通过运行 ``ros2 run demo_nodes_cpp content_filtering_publisher`` 可执行文件来运行演示（别忘了先 source 安装文件）：
 
 .. code-block:: console
 
@@ -168,11 +167,14 @@ We can run the demo by running the ``ros2 run demo_nodes_cpp content_filtering_p
     [INFO] [1651094622.822694292] [content_filtering_publisher]: Publishing: '-80.000000'
     [...]
 
-ContentFilteringSubscriber:
+ContentFilteringSubscriber：
 
 https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics/content_filtering_subscriber.cpp
 
 .. code-block:: c++
+
+    #include <array>
+    #include <string>
 
     #include "rclcpp/rclcpp.hpp"
     #include "rclcpp_components/register_node_macro.hpp"
@@ -180,7 +182,7 @@ https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics
 
     #include "std_msgs/msg/float32.hpp"
 
-    #include "demo_nodes_cpp/visibility_control.h"
+    #include "demo_nodes_cpp/visibility_control.hpp"
 
     namespace demo_nodes_cpp
     {
@@ -196,7 +198,6 @@ https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics
       explicit ContentFilteringSubscriber(const rclcpp::NodeOptions & options)
       : Node("content_filtering_subscriber", options)
       {
-        setvbuf(stdout, NULL, _IONBF, BUFSIZ);
         // Create a callback function for when messages are received.
         auto callback =
           [this](const std_msgs::msg::Float32 & msg) -> void
@@ -240,15 +241,15 @@ https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics
 
     }  // namespace demo_nodes_cpp
 
-To enable content filtering, applications can set the filtering expression and the expression parameters in ``SubscriptionOptions``.
-The application can also check if content filtering is enabled on the subscription.
+要启用内容过滤，应用可以在 ``SubscriptionOptions`` 中设置过滤表达式和表达式参数。
+应用还可以检查订阅上是否启用了内容过滤。
 
-In this demo, the ``ContentFilteringSubscriber`` node creates a content filtering subscription that receives a message only if the temperature value is less than -30.0 or greater than 100.0.
+在本演示中，``ContentFilteringSubscriber`` 节点创建了一个内容过滤订阅，只有当温度值小于 -30.0 或大于 100.0 时才接收消息。
 
-As commented before, content filtering subscription support depends on the RMW implementation.
-Applications can use the ``is_cft_enabled`` method to check if content filtering is actually enabled on the subscription.
+如前所述，内容过滤订阅的支持取决于 RMW 实现。
+应用可以使用 ``is_cft_enabled`` 方法检查订阅上是否实际启用了内容过滤。
 
-To test content filtering subscription, let's run it:
+为了测试内容过滤订阅，让我们运行它：
 
 .. code-block:: console
 
@@ -274,10 +275,10 @@ To test content filtering subscription, let's run it:
     [INFO] [1651094625.823266469] [content_filtering_subscriber]: I receive an emergency temperature data: [-50.000000]
     [INFO] [1651094626.823284093] [content_filtering_subscriber]: I receive an emergency temperature data: [-40.000000]
 
-You should see a message showing the content filtering options used and logs for each message received only if the temperature value is less than -30.0 or greater than 100.0.
+你应该会看到一条显示所用内容过滤选项的消息，以及每条消息的日志——只有当温度值小于 -30.0 或大于 100.0 时才会收到。
 
-If content filtering is not supported by the RMW implementation, the subscription will still be created without content filtering enabled.
-We can try that by executing ``RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 run demo_nodes_cpp content_filtering_publisher``.
+如果 RMW 实现不支持内容过滤，订阅仍会被创建，但不会启用内容过滤。
+我们可以通过执行 ``RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 run demo_nodes_cpp content_filtering_publisher`` 来尝试这一点。
 
 .. code-block:: console
 
@@ -301,10 +302,10 @@ We can try that by executing ``RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 run de
     [INFO] [1651096656.245833975] [content_filtering_subscriber]: I receive a temperature data: [50.000000]
     [INFO] [1651096657.245971483] [content_filtering_subscriber]: I receive a temperature data: [60.000000]
 
-You can see the message ``Content filter is not enabled`` because underlying RMW implementation does not support the feature, but the demo still successfully creates the normal subscription to receive all temperature data.
+你可以看到消息 ``Content filter is not enabled``，因为底层 RMW 实现不支持该功能，但演示仍然成功创建了普通订阅来接收所有温度数据。
 
-Related content
----------------
+相关内容
+--------
 
-- `content filtering examples <https://github.com/ros2/examples/blob/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_subscriber/content_filtering.cpp>`__ that covers all interfaces for content filtering subscription.
-- `content filtering design PR <https://github.com/ros2/design/pull/282>`__
+- `内容过滤示例 <https://github.com/ros2/examples/blob/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_subscriber/content_filtering.cpp>`__ 涵盖了内容过滤订阅的所有接口。
+- `内容过滤设计 PR <https://github.com/ros2/design/pull/282>`__

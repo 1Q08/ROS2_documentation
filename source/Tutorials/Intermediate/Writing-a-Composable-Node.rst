@@ -1,16 +1,16 @@
-Writing a Composable Node (C++)
-===============================
+编写一个可组合节点（C++）
+=========================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Starting Place
---------------
+起点
+----
 
-Let's assume that you have a regular ``rclcpp::Node`` executable that you want to run in the same process as other nodes to enable more efficient communication.
+假设你有一个常规的 ``rclcpp::Node`` 可执行文件，并且希望它与其他节点在同一进程中运行，以实现更高效的通信。
 
-We'll start from having a class that directly inherits from ``Node``, and that also has a main method defined.
+我们从拥有一个直接继承自 ``Node`` 的类开始，并且该类还定义了一个 main 方法。
 
 .. code-block:: c++
 
@@ -30,7 +30,7 @@ We'll start from having a class that directly inherits from ``Node``, and that a
         return 0;
     }
 
-This will typically be compiled as an executable in your Cmake.
+这通常会在你的 Cmake 中被编译为可执行文件。
 
 .. code-block:: cmake
 
@@ -41,24 +41,24 @@ This will typically be compiled as an executable in your Cmake.
         DESTINATION lib/${PROJECT_NAME}
     )
 
-Code Updates
-------------
+代码更新
+--------
 
-Add the Package Dependency
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+添加包依赖
+^^^^^^^^^^
 
-Your `package.xml <https://github.com/ros2/demos/tree/{REPOS_FILE_BRANCH}/composition/package.xml>`__ should have a dependency on ``rclcpp_components``, a la
+你的 `package.xml <https://github.com/ros2/demos/tree/{REPOS_FILE_BRANCH}/composition/package.xml>`__ 应该对 ``rclcpp_components`` 有依赖，就像这样
 
 .. code-block:: xml
 
     <depend>rclcpp_components</depend>
 
-Alternatively, you can independently add a ``build_depend/exec_depend``.
+或者，你也可以独立添加一个 ``build_depend/exec_depend``。
 
-Class Definition
-^^^^^^^^^^^^^^^^
+类定义
+^^^^^^
 
-The only change to your class definition that you may have to do is ensure that `the constructor for the class <https://github.com/ros2/demos/tree/{REPOS_FILE_BRANCH}/composition/src/talker_component.cpp>`__ takes a ``NodeOptions`` argument.
+你可能需要对类定义做的唯一改动是，确保 `类的构造函数 <https://github.com/ros2/demos/tree/{REPOS_FILE_BRANCH}/composition/src/talker_component.cpp>`__ 接受一个 ``NodeOptions`` 参数。
 
 .. code-block:: c++
 
@@ -67,10 +67,10 @@ The only change to your class definition that you may have to do is ensure that 
       // ...
     }
 
-No More Main Method
-^^^^^^^^^^^^^^^^^^^
+不再需要 main 方法
+^^^^^^^^^^^^^^^^^^
 
-Replace your main method with a ``pluginlib``-style macro invocation.
+将你的 main 方法替换为一个 ``pluginlib`` 风格的宏调用。
 
 .. code-block:: c++
 
@@ -78,28 +78,28 @@ Replace your main method with a ``pluginlib``-style macro invocation.
     RCLCPP_COMPONENTS_REGISTER_NODE(palomino::VincentDriver)
 
 .. caution::
-    If the main method you are replacing contains a ``MultiThreadedExecutor``, be sure to make note and ensure that your container node is multithreaded.
-    See section below.
+    如果你正在替换的 main 方法包含 ``MultiThreadedExecutor``，请务必留意并确保你的容器节点是多线程的。
+    参见下文部分。
 
-CMake Changes
-^^^^^^^^^^^^^
-First, add ``rclcpp_components`` as a dependency in your CMakeLists.txt with:
+CMake 更改
+^^^^^^^^^^
+首先，在你的 CMakeLists.txt 中添加 ``rclcpp_components`` 作为依赖：
 
 .. code-block:: cmake
 
     find_package(rclcpp_components REQUIRED)
 
-Second, we're going to replace our ``add_executable`` with a ``add_library`` with a new target name.
+其次，我们将用 ``add_library`` 替换我们的 ``add_executable``，并使用一个新的目标名称。
 
 .. code-block:: cmake
 
     add_library(vincent_driver_component SHARED src/vincent_driver.cpp)
 
-Third, replace other build commands that used the old target to act on the new target.
-Don't forget to add ``rclcpp_components`` in ``ament_target_dependencies``.
-i.e. ``ament_target_dependencies(vincent_driver ...)`` becomes ``ament_target_dependencies(vincent_driver_component "rclcpp_components" ...)``
+第三，替换其他使用旧目标的构建命令，使其作用于新目标。
+别忘了在 ``ament_target_dependencies`` 中添加 ``rclcpp_components``。
+即 ``ament_target_dependencies(vincent_driver ...)`` 变为 ``ament_target_dependencies(vincent_driver_component "rclcpp_components" ...)``
 
-Fourth, add a new command to declare your component.
+第四，添加一个新命令来声明你的组件。
 
 .. code-block:: cmake
 
@@ -109,9 +109,9 @@ Fourth, add a new command to declare your component.
         EXECUTABLE vincent_driver
     )
 
-Fifth and finally, change any installation commands in the CMake that operated on the old target to install the library version instead.
-For instance, do not install either target into ``lib/${PROJECT_NAME}``.
-Replace with the library installation.
+第五，也是最后一步，将 CMake 中作用于旧目标的任何安装命令改为安装库版本。
+例如，不要将任一个目标安装到 ``lib/${PROJECT_NAME}`` 中。
+改为安装库。
 
 .. code-block:: cmake
 
@@ -124,11 +124,11 @@ Replace with the library installation.
     )
 
 
-Running Your Node
------------------
+运行你的节点
+------------
 
-See the :doc:`Composition tutorial <Composition>` for an in-depth look at composing nodes.
-The quick and dirty version is that if you had the following in your Python launch file,
+参见 :doc:`Composition 教程 <Composition>` 以深入了解节点组合。
+快速而粗略的版本是，如果你的 Python launch 文件中有以下内容，
 
 .. code-block:: python
 
@@ -142,7 +142,7 @@ The quick and dirty version is that if you had the following in your Python laun
         # ..
     ))
 
-you can replace it with
+你可以将它替换为
 
 .. code-block:: python
 
@@ -168,4 +168,4 @@ you can replace it with
 
 .. caution::
 
-    If you need multi-threading, instead of setting your executable to ``component_container``, set it to ``component_container_mt``
+    如果你需要多线程，不要将可执行文件设置为 ``component_container``，而是将其设置为 ``component_container_mt``

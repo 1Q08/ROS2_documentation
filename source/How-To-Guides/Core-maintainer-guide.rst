@@ -3,165 +3,165 @@
   Guides/Package-maintainer-guide
   How-To-Guides/Package-maintainer-guide
 
-ROS 2 Core Maintainer Guide
-===========================
+ROS 2 核心维护者指南
+====================
 
-Each package in the ROS 2 core has one or more maintainers that are responsible for the general health of the package.
-This guide gives some information about the responsibilities of a ROS 2 core package maintainer.
+ROS 2 核心中的每个软件包都有一名或多名维护者，负责该软件包的整体健康状况。
+本指南提供了一些有关 ROS 2 核心软件包维护者职责的信息。
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
-Continuous Integration
-----------------------
+持续集成
+--------
 
-All incoming code to ROS 2 core repositories must be run through Continuous Integration.
-ROS 2 currently has two separate CI systems, and it is required that PRs pass both of them before merging.
+所有进入 ROS 2 核心仓库的代码都必须经过持续集成（CI）。
+ROS 2 目前有两个独立的 CI 系统，PR 必须同时通过这两者才能合并。
 
-PR builds (https://build.ros2.org/view/Rpr)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PR 构建（https://build.ros2.org/view/Rpr）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-ROS 2 PR (Pull Request) builds run automatically every time a pull request is opened.
-These builds run a build and test of this repository, and this repository only.
-This means that it does not build any dependencies, and it also does not build any repositories that depend upon packages in this repository.
-These builds are good for quick feedback to see if the change passes linters, unit tests, etc.
-There are two major problems with them:
+每当有拉取请求（PR）打开时，ROS 2 的 PR 构建都会自动运行。
+这些构建只对本仓库进行构建和测试，仅限本仓库。
+这意味着它不会构建任何依赖项，也不会构建任何依赖本仓库中软件包的仓库。
+这些构建非常适合快速反馈，用来查看修改是否通过了代码检查工具、单元测试等。
+它们有两个主要问题：
 
-* These builds do not work across multiple repositories (so won't work for adding or changing an API, etc)
-* These tests only run on Linux (they won't run on macOS or Windows)
+* 这些构建无法跨多个仓库工作（因此不适用于添加或更改 API 等情况）
+* 这些测试只在 Linux 上运行（不会在 macOS 或 Windows 上运行）
 
-To address these two problems, there is also the CI builds.
+为了解决这两个问题，还有 CI 构建。
 
-CI builds (https://ci.ros2.org)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+CI 构建（https://ci.ros2.org）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CI builds do not run automatically when a pull request is opened.
-One of the maintainers of the repository must manually request that a CI build is done by going to https://ci.ros2.org/job/ci_launcher/ .
+当拉取请求打开时，CI 构建不会自动运行。
+仓库的某位维护者必须访问 https://ci.ros2.org/job/ci_launcher/ 手动请求执行 CI 构建。
 
-By default, running a job in this way will build and run tests for all packages (> 300 currently) on all platforms (Linux, macOS, and Windows).
-As a full run can take many hours and tie up the CI machines, it is recommended that all runs here restrict the number of packages that are built and tested.
-This can be accomplished by using the colcon arguments ``--packages-up-to``, ``--packages-select``, ``--packages-above-and-dependencies``, ``--packages-above``, amongst others.
-See the `colcon documentation <https://colcon.readthedocs.io/en/released/user/how-to.html#build-only-a-single-package-or-selected-packages>`__ for more examples on the flags that can be used.
-Further documentation on how to use the CI machinery is available at https://github.com/ros2/ci/blob/master/CI_BUILDERS.md.
+默认情况下，以这种方式运行任务会在所有平台（Linux、macOS 和 Windows）上为所有软件包（目前超过 300 个）进行构建和运行测试。
+由于一次完整运行可能耗时数小时并占用 CI 机器，因此建议这里的所有运行都限制被构建和测试的软件包数量。
+这可以通过使用 colcon 参数 ``--packages-up-to``、``--packages-select``、``--packages-above-and-dependencies``、``--packages-above`` 等来实现。
+有关可用标志的更多示例，请参阅 `colcon 文档 <https://colcon.readthedocs.io/en/released/user/how-to.html#build-only-a-single-package-or-selected-packages>`__。
+关于如何使用 CI 机制的更多文档见 https://github.com/ros2/ci/blob/master/CI_BUILDERS.md 。
 
-Merging pull requests
----------------------
+合并拉取请求
+------------
 
-A pull request can be merged if all of the following are true:
+只有当以下条件全部满足时，拉取请求才可以合并：
 
-* The DCO bot reports a passing result
-* The PR build reports a passing result
-* The CI build reports a passing result on all platforms
-* The PR has been reviewed and approved by at least one maintainer
+* DCO 机器人报告结果为通过
+* PR 构建报告结果为通过
+* CI 构建在所有平台上报告结果为通过
+* 该 PR 已经由至少一名维护者审查并批准
 
-For more information about what happens when a PR is reviewed, see :doc:`/The-ROS2-Project/Contributing/Contributing-to-code/Reviewing-a-PR`.
+有关 PR 被审查时会发生什么的更多信息，请参阅 :doc:`/The-ROS2-Project/Contributing/Contributing-to-code/Reviewing-a-PR`。
 
-After a PR is merged, it will automatically get built with the next `nightlies <https://ci.ros2.org/view/nightly>`__.
-It is highly recommended to check the nightlies after merging pull requests to ensure no regressions have occurred.
+PR 合并后，它会自动随下一次 `每日构建 <https://ci.ros2.org/view/nightly>`__ 一起构建。
+强烈建议在合并拉取请求后检查每日构建，以确保没有引入回归。
 
-Keeping CI green
-----------------
+保持 CI 绿色
+------------
 
-The nightly jobs that run tests are typically much more comprehensive than what is done for individual pull requests.
-For this reason, there can be regressions that occur in the nightlies that were not seen in the CI jobs.
-It is a maintainer's responsibility to check for regressions in their packages at the following locations:
+运行测试的每日任务通常比针对单个拉取请求所做的测试全面得多。
+因此，每日构建中可能会出现 CI 任务中未曾发现的回归。
+维护者有责任在以下位置检查其软件包是否出现回归：
 
 * https://ci.ros2.org/view/nightly
 * https://ci.ros2.org/view/packaging
 * https://build.ros2.org/view/Rci
 * https://build.ros2.org/view/Rdev
 
-For any problems that are found, new issues and/or pull requests on the relevant repositories should be opened.
+对于发现的任何问题，都应在相关仓库上提交新的 issue 和/或拉取请求。
 
-Making releases
----------------
+发布版本
+--------
 
-In order to get new features and bugfixes out to end users, the maintainers must periodically do a release of the repository (a release may also be requested on-demand from other maintainers).
+为了把新功能和缺陷修复送达最终用户，维护者必须定期对仓库进行一次发布（其他维护者也可以按需请求发布）。
 
-As outlined in the :ref:`developer guide <semver>`, ROS 2 packages follow semver for version numbers.
+正如 :ref:`开发者指南 <semver>` 中所述，ROS 2 软件包的版本号遵循语义化版本规范（semver）。
 
-A release, in ROS terms, consists of two distinct steps: making a source release, and then making a binary release.
+在 ROS 术语中，一次发布包含两个不同的步骤：先做源码发布，然后做二进制发布。
 
-Source release
-^^^^^^^^^^^^^^
+源码发布
+^^^^^^^^
 
-A source release creates a changelog and a tag in the relevant repository.
+源码发布会创建一个变更日志并在相关仓库中打一个标签。
 
-The process starts by generating or updating CHANGELOG.rst files with the following command:
+该流程首先使用以下命令生成或更新 CHANGELOG.rst 文件：
 
 .. code-block:: console
 
   $ catkin_generate_changelog
 
-If one or more packages in the repository don't have contain CHANGELOG.rst, add the ``--all`` option to populate all of the previous commits for each package.
-The ``catkin_generate_changelog`` command will simply populate the files with the commit logs from the repository.
-Since those commit logs aren't always appropriate for a changelog, it is recommended to edit CHANGELOG.rst and edit it to make it more readable.
-Once editing is done, it is important to commit the updated CHANGELOG.rst file to the repository.
+如果仓库中有一个或多个软件包不包含 CHANGELOG.rst，请加上 ``--all`` 选项来为每个软件包填充之前所有的提交。
+``catkin_generate_changelog`` 命令只是简单地用仓库中的提交日志填充这些文件。
+由于这些提交日志并不总是适合作为变更日志，建议编辑 CHANGELOG.rst 使其更易读。
+编辑完成后，务必把更新后的 CHANGELOG.rst 文件提交到仓库。
 
-The next step is to bump the version in the package.xml and the changelog files with the following command:
+下一步是使用以下命令更新 package.xml 和变更日志文件中的版本号：
 
 .. code-block:: console
 
   $ catkin_prepare_release
 
-This command will find all of the packages in the repository, check that the changelogs exist, check that there are no uncommitted local changes, increment the version in the package.xml files, and commit/tag the changes with a bloom-compatible tag.
-Using this command is the best way to ensure the release versions are consistent and compatible with bloom.
-By default, ``catkin_prepare_release`` will bump the patch version of the packages, e.g. 0.1.1 -> 0.1.2 .
-However, it can also bump the minor or major number, or even have an exact version set.
-See the help output from ``catkin_prepare_release`` for more information.
+该命令会查找仓库中的所有软件包，检查变更日志是否存在，检查是否有没有提交的本地修改，递增 package.xml 文件中的版本号，并以兼容 bloom 的标签提交/打标签这些修改。
+使用该命令是确保发布版本一致且与 bloom 兼容的最佳方式。
+默认情况下，``catkin_prepare_release`` 会递增软件包的补丁版本号，例如 0.1.1 -> 0.1.2 。
+不过，它也可以递增次版本号或主版本号，甚至设置一个确切的版本号。
+更多信息请参阅 ``catkin_prepare_release`` 的帮助输出。
 
-Assuming the above was successful, a source release has been made.
+假设以上操作成功，源码发布就完成了。
 
-Binary release
-^^^^^^^^^^^^^^
+二进制发布
+^^^^^^^^^^
 
-The next step is to use the ``bloom-release`` command to create a binary release.
-For full instructions on how to use bloom, please see http://wiki.ros.org/bloom.
-To do a binary release of a repository, run:
+下一步是使用 ``bloom-release`` 命令创建二进制发布。
+关于如何使用 bloom 的完整说明，请参阅 http://wiki.ros.org/bloom 。
+要对某个仓库进行二进制发布，请运行：
 
 .. code-block:: console
 
   $ bloom-release --track <rosdistro> --rosdistro <rosdistro> <repository_name>
 
-For instance, to release the ``rclcpp`` repository to the {DISTRO_TITLE} distribution, the command would be:
+例如，要把 ``rclcpp`` 仓库发布到 {DISTRO_TITLE} 发行版，命令为：
 
 .. code-block:: console
 
   $ bloom-release --track {DISTRO} --rosdistro {DISTRO} rclcpp
 
-This command will fetch the release repository, make the necessary changes to make the release, push the changes to the release repository, and finally open a pull request to https://github.com/ros/rosdistro .
+该命令会获取发布仓库，进行发布所需的必要更改，把更改推送到发布仓库，最后向 https://github.com/ros/rosdistro 提交一个拉取请求。
 
-Backporting to released distributions
--------------------------------------
+向后移植到已发布的发行版
+------------------------
 
-All incoming changes should first land on the development branch.
-Once a change has been merged onto the development branch, it can be considered for backporting to released distributions.
-However, any backported code must not break `API <https://en.wikipedia.org/wiki/API>`__ or `ABI <https://en.wikipedia.org/wiki/Application_binary_interface>`__ in a released distribution.
-If a change can be backported without breaking API or ABI, then a new pull request targeting the appropriate branch should be created.
-The new pull request should be added to the appropriate distributions project board at https://github.com/orgs/ros2/projects.
-The new pull request should have all of the steps run as before, but making sure to target the distribution in question for CI, etc.
+所有进入的更改都应首先落到开发分支上。
+一旦更改被合并到开发分支，就可以考虑把它向后移植到已发布的发行版。
+不过，任何向后移植的代码都不得破坏已发布发行版中的 `API <https://en.wikipedia.org/wiki/API>`__ 或 `ABI <https://en.wikipedia.org/wiki/Application_binary_interface>`__。
+如果某个更改可以在不破坏 API 或 ABI 的情况下向后移植，那么就应该创建一个针对相应分支的新拉取请求。
+新的拉取请求应添加到 https://github.com/orgs/ros2/projects 上相应的发行版项目看板中。
+新的拉取请求应像之前一样完成所有步骤，但请确保 CI 等针对的是相应的发行版。
 
-Responding to issues
---------------------
+响应问题
+--------
 
-Package maintainers should also look at incoming issues on the repository and triage the problems that users are having.
+软件包维护者还应查看仓库上新增的 issue，并对用户遇到的问题进行分诊。
 
-For issues that look like questions, the issue should be closed and the user redirected to `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ .
+对于看起来像是提问的 issue，应关闭该 issue 并引导用户到 `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ 。
 
-If an issue looks like a problem, but is not relevant to this particular repository, it should be moved to the appropriate repository with the GitHub "Transfer issue" button.
+如果某个 issue 看起来是个问题，但与本仓库无关，则应使用 GitHub 的 “Transfer issue” 按钮将其转移到相应的仓库。
 
-If the reporter has not provided enough information to determine the cause of the problem, more information should be requested from the reporter.
+如果报告者没有提供足够的信息来确定问题的原因，应向报告者索取更多信息。
 
-If this is a new feature, tag the issue with "help-wanted".
+如果这是一个新功能需求，请给该 issue 打上 “help-wanted” 标签。
 
-Any remaining issues should be reproduced, and determined if they are truly a bug.
-If it is a bug, fixes are highly appreciated.
+其余所有 issue 都应被复现，并判断它们是否真的是缺陷。
+如果确实是缺陷，非常欢迎提供修复。
 
-Getting help
-------------
+获取帮助
+--------
 
-While doing maintenance on a package, questions about general procedures or individual issues may come up.
+在维护软件包的过程中，可能会遇到有关通用流程或单个 issue 的问题。
 
-For general questions, please follow the :doc:`contributing guidelines <../The-ROS2-Project/Contributing>`.
+对于通用问题，请遵循 :doc:`贡献指南 <../The-ROS2-Project/Contributing>`。
 
-For questions on individual issues, please tag the ROS 2 GitHub team (@ros/team), and someone on the team will take a look.
+对于单个 issue 的问题，请 @ 提及 ROS 2 GitHub 团队（@ros/team），团队中会有人来查看。

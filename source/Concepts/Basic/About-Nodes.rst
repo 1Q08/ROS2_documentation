@@ -1,18 +1,18 @@
-Nodes
-=====
+节点
+====
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
-A node is a participant in the ROS 2 graph, which uses a :doc:`client library <About-Client-Libraries>` to communicate with other nodes.
-Nodes can communicate with other nodes within the same process, in a different process, or on a different machine.
-Nodes are typically the unit of computation in a ROS graph; each node should do one logical thing.
+节点是 ROS 2 图中的参与者，它使用 :doc:`客户端库 <About-Client-Libraries>` 与其他节点通信。
+节点可以与同一进程内、不同进程内或不同机器上的其他节点通信。
+节点通常是 ROS 图中的计算单元；每个节点应该只做一件逻辑上的事情。
 
-Nodes can :doc:`publish <About-Topics>` to named topics to deliver data to other nodes, or :doc:`subscribe <About-Topics>` to named topics to get data from other nodes.
-They can also act as a :doc:`service client <About-Services>` to have another node perform a computation on their behalf, or as a :doc:`service server <About-Services>` to provide functionality to other nodes.
-For long-running computations, a node can act as an :doc:`action client <About-Actions>` to have another node perform it on their behalf, or as an :doc:`action server <About-Actions>` to provide functionality to other nodes.
-Nodes can provide configurable :doc:`parameters <About-Parameters>` to change behavior during run-time.
+节点可以向具名话题 :doc:`发布 <About-Topics>` 数据，从而把数据传递给其他节点；也可以 :doc:`订阅 <About-Topics>` 具名话题，从其他节点获取数据。
+节点还可以作为 :doc:`服务客户端 <About-Services>`，让其他节点替它完成某项计算；或者作为 :doc:`服务端 <About-Services>`，向其他节点提供功能。
+对于长时间运行的计算，节点可以作为 :doc:`动作客户端 <About-Actions>`，让其他节点替它执行；或者作为 :doc:`动作服务端 <About-Actions>`，向其他节点提供功能。
+节点可以提供可配置的 :doc:`参数 <About-Parameters>`，以便在运行时改变行为。
 
-Nodes are often a complex combination of publishers, subscribers, service servers, service clients, action servers, and action clients, all at the same time.
+节点往往同时是发布者、订阅者、服务服务端、服务客户端、动作服务端和动作客户端的复杂组合。
 
-Connections between nodes are established through a distributed :doc:`discovery <About-Discovery>` process.
+节点之间的连接通过分布式的 :doc:`发现 <About-Discovery>` 过程建立。

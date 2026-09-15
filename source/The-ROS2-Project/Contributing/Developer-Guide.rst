@@ -3,127 +3,127 @@
     Developer-Guide
     Contributing/Developer-Guide
 
-ROS 2 developer guide
-=====================
+ROS 2 开发者指南
+================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-This page defines the practices and policies we employ when developing ROS 2.
+本页面定义了我们在开发 ROS 2 时所采用的实践与政策。
 
 .. _general-principles:
 
-General Principles
-------------------
+一般原则
+--------
 
-Some principles are common to all ROS 2 development:
+有些原则适用于所有 ROS 2 开发工作：
 
 
-* **Shared ownership**:
-  Everybody working on ROS 2 should feel ownership over all parts of the system.
-  The original author of a chunk of code does not have any special permission or obligation to control or maintain that chunk of code.
-  Everyone is free to propose changes anywhere, to handle any type of ticket, and to review any pull request.
-* **Be willing to work on anything**:
-  As a corollary to shared ownership, everybody should be willing to take on any available task and contribute to any aspect of the system.
-* **Ask for help**:
-  If you run into trouble on something, ask your fellow developers for help, via tickets, comments, or email, as appropriate.
+* **共同所有权：**
+  ROS 2 的每一位参与者都应当对整个系统的所有部分都抱有主人翁意识。
+  某段代码的原始作者并不拥有任何特殊权限或义务去控制或维护那段代码。
+  任何人都可以自由地对任何地方提出修改建议、处理任何类型的工单，以及评审任何拉取请求。
+* **乐于承担任何工作：**
+  作为共同所有权的一个推论，每个人都应当愿意承担任何可用的任务，并为系统的任何方面做出贡献。
+* **主动寻求帮助：**
+  如果您在某件事上遇到困难，请向您的开发者同伴寻求帮助，可以通过工单、评论或电子邮件等适当方式进行。
 
-Quality Practices
------------------
+质量实践
+--------
 
-Packages can ascribe to different levels of quality based on the development practices they adhere to, as per the guidelines in `REP 2004: Package Quality Categories <https://reps.openrobotics.org/rep-2004/>`_.
-The categories are differentiated by their policies on versioning, testing, documentation, and more.
+根据 `REP 2004：包质量类别 <https://reps.openrobotics.org/rep-2004/>`_ 中的指导原则，软件包可以依据其所遵循的开发实践归属于不同的质量等级。
+这些类别因其在版本管理、测试、文档等方面的政策而有所区别。
 
-The following sections are the specific development rules we follow to ensure core packages are of the highest quality ('Level 1').
-We recommend all ROS developers strive to adhere to the following policies to ensure quality across the ROS ecosystem.
+以下各节是我们为确保核心软件包达到最高质量（“Level 1”）而遵循的具体开发规则。
+我们建议所有 ROS 开发者都努力遵循以下政策，以确保整个 ROS 生态系统的质量。
 
-For more specific code recommendations please see :doc:`the Quality Guide <Quality-Guide>`.
+有关更具体的代码建议，请参阅 :doc:`质量指南 <Quality-Guide>` 。
 
-Use of generative AI
-^^^^^^^^^^^^^^^^^^^^
+使用生成式 AI
+^^^^^^^^^^^^^
 
-When making contributions of any kind to ROS code or documentation, you must follow the `OSRF Policy <https://osralliance.org/wp-content/uploads/2025/05/OSRF-Policy-on-the-Use-of-Generative-Tools-Generative-AI-in-Contributions.pdf>`__ on the use of generative AI.
+在向 ROS 代码或文档做出任何形式的贡献时，您必须遵守 `OSRF 政策 <https://osralliance.org/wp-content/uploads/2025/05/OSRF-Policy-on-the-Use-of-Generative-Tools-Generative-AI-in-Contributions.pdf>`__ 中关于使用生成式 AI 的规定。
 
-This includes tools which automatically create any part of your contribution using models trained on existing human-created content.
-It does not include tools which generate content through standard algorithms, or appropriately licensed content libraries.
+这包括那些使用基于现有的人为创作内容训练出来的模型自动生成您贡献内容中任何部分的工具。
+它不包括通过标准算法生成内容，或使用适当授权的内容库生成内容的工具。
 
 .. _semver:
 
-Versioning
-^^^^^^^^^^
+版本管理
+^^^^^^^^
 
-We will use the `Semantic Versioning guidelines <http://semver.org/>`__ (``semver``) for versioning.
+我们将使用 `语义化版本控制指南 <http://semver.org/>`__ （``semver``）进行版本管理。
 
-We will also adhere to some ROS-specific rules built on top of ``semver's`` full meaning:
+我们还将在 ``semver`` 完整含义的基础上遵循一些 ROS 特有的规则：
 
-* Major version increments (i.e. breaking changes) should not be made within a released ROS distribution.
+* 不应在已发布的 ROS 发行版中引入主版本号递增（即破坏性变更）。
 
-  * Patch (interface-preserving) and minor (non-breaking) version increments do not break compatibility, so these sorts of changes *are* allowed within a release.
+  * 补丁版本（保持接口不变）和次版本（非破坏性）递增不会破坏兼容性，因此这类变更 *是* 允许在发行版内进行的。
 
-  * Major ROS releases are the best time to release breaking changes.
-    If a core package needs multiple breaking changes, they should be merged into their integration branch (e.g. rolling) to allow catching problems in CI quickly, but released together to reduce the number of major releases for ROS users.
+  * ROS 主版本发布是发布破坏性变更的最佳时机。
+    如果某个核心软件包需要多项破坏性变更，它们应当被合并到其集成分支（例如 rolling）中，以便在 CI 中快速发现问题，但应一起发布，以减少 ROS 用户所经历的 ROS 主版本发布次数。
 
-  * Though major increments require a new distribution, a new distribution does not necessarily require a major bump (if development and release can happen without breaking API).
+  * 尽管主版本号递增需要新的发行版，但新的发行版并不一定需要主版本号递增（如果开发和发布能够在不破坏 API 的情况下进行的话）。
 
-* For compiled code, the ABI is considered part of the public interface.
-  Any change that requires recompiling dependent code is considered major (breaking).
+* 对于编译型代码，ABI 被视为公共接口的一部分。
+  任何需要重新编译依赖代码的变更都被视为主版本（破坏性）变更。
 
-  * ABI breaking changes *can* be made in a minor version bump *before* a distribution release (getting added to the rolling release).
+  * ABI 破坏性变更 *可以* 在发行版发布 *之前* 的次版本号递增中进行（即进入 rolling 发行版）。
 
-* We enforce API stability for core packages in Dashing and Eloquent even though their major version components are ``0``, despite `SemVer's specification <https://semver.org/#spec-item-4>`_ regarding initial development.
+* 即使 Dashing 和 Eloquent 的主版本号组成部分是 ``0``，我们仍然对这两个发行版中的核心软件包强制要求 API 稳定性，尽管 `SemVer 的规范 <https://semver.org/#spec-item-4>`_ 对初始开发阶段另有说明。
 
-  * Subsequently, packages should strive to reach a mature state and increase to version ``1.0.0`` so to match ``semver's`` specifications.
+  * 因此，软件包应当努力达到成熟状态并提升到 ``1.0.0`` 版本，以符合 ``semver`` 的规范。
 
-Caveats
-~~~~~~~
+注意事项
+~~~~~~~~
 
-These rules are *best-effort*.
-In unlikely, extreme cases, it may be necessary to break API within a major version/distribution.
-Whether an unplanned break increments the major or minor version will be assessed on a case-by-case basis.
+这些规则是 *尽力而为* 的。
+在不太可能的极端情况下，可能有必要在一个主版本/发行版内破坏 API。
+未计划内的破坏究竟应递增主版本号还是次版本号，将根据具体情况逐一评估。
 
-For example, consider a situation involving released X-turtle, corresponding to major version ``1.0.0``, and released Y-turtle, corresponding to major version ``2.0.0``.
+例如，考虑这样一种情形：已发布的 X-turtle 对应主版本 ``1.0.0``，而已发布的 Y-turtle 对应主版本 ``2.0.0``。
 
-If an API-breaking fix is identified to be absolutely necessary in X-turtle, bumping to ``2.0.0`` is obviously not an option because ``2.0.0`` already exists.
+如果发现在 X-turtle 中必须进行一项破坏 API 的修复，那么显然不能选择递增到 ``2.0.0``，因为 ``2.0.0`` 已经存在。
 
-The solutions for handling X-turtle's version in such a case, both non-ideal, are:
+在这种情况下，处理 X-turtle 版本号的方案有两种，而且都不理想：
 
-1. Bumping X-turtle's minor version: non-ideal because it violates SemVer's principle that breaking changes must bump the major version.
+1. 递增 X-turtle 的次版本号：不理想，因为它违反了 SemVer 中破坏性变更必须递增主版本号的原则。
 
-2. Bumping X-turtle's major version past Y-turtle (to ``3.0.0``): non-ideal because the older distro's version would become higher than the already-available version of a newer distro, which would invalidate/break version-specific conditional code.
+2. 将 X-turtle 的主版本号提升到超过 Y-turtle（即 ``3.0.0``）：不理想，因为较旧发行版的版本号会高于较新发行版已经可用的版本号，从而使针对特定版本的条件代码失效或被破坏。
 
-The developer will have to decide which solution to use, or more importantly, which principle they are willing to break.
-We cannot suggest one or the other, but in either case we do require that explicit measures be taken to communicate the disruption and its explanation to users manually (beyond just the version increment).
+开发者必须自行决定采用哪种方案，或者更重要的是，决定愿意打破哪条原则。
+我们无法推荐其中任何一种，但无论采用哪种方案，我们都要求采取明确的措施，手动向用户传达这一破坏性变化及其原因解释（而不仅仅是递增版本号）。
 
-If there were no Y-turtle, even though the fix would technically just be a patch, X-turtle would have to bump to ``2.0.0``.
-This case adheres to SemVer, but breaks from our own rule that major increments should not be introduced in a released distribution.
+如果没有 Y-turtle，即使该修复在技术上只是一个补丁，X-turtle 也必须递增到 ``2.0.0``。
+这种情况符合 SemVer，但违背了我们自己的规则，即不应在已发布的发行版中引入主版本号递增。
 
-This is why we consider the versioning rules *best-effort*.
-As unlikely as the examples above are, it is important to accurately define our versioning system.
+这就是为什么我们认为版本管理规则是 *尽力而为* 的。
+尽管上面的例子不太可能出现，但准确地定义我们的版本管理系统仍然很重要。
 
-Public API declaration
-~~~~~~~~~~~~~~~~~~~~~~
+公共 API 声明
+~~~~~~~~~~~~~
 
-According to ``semver``, every package must clearly declare a public API.
-We will use the "Public API Declaration" section of the quality declaration of a package to declare what symbols are part of the public API.
+根据 ``semver``，每个软件包都必须清楚地声明一个公共 API。
+我们将使用软件包质量声明中的“公共 API 声明”小节来声明哪些符号属于公共 API 的一部分。
 
-For most C and C++ packages the declaration is any header that it installs.
-However, it is acceptable to define a set of symbols which are considered private.
-Avoiding private symbols in headers can help with ABI stability, but is not required.
+对于大多数 C 和 C++ 软件包而言，声明就是它所安装的任何头文件。
+不过，定义一组被视为私有的符号也是可以接受的。
+在头文件中避免出现私有符号有助于 ABI 稳定性，但并非强制要求。
 
-For other languages like Python, a public API must be explicitly defined, so that it is clear what symbols can be relied on with respect to the versioning guidelines.
-The public API can also be extended to build artifacts like configuration variables, CMake config files, etc. as well as executables and command-line options and output.
-Any elements of the public API should be clearly stated in the package's documentation.
-If something you are using is not explicitly listed as part of the public API in the package's documentation, then you cannot depend on it not changing between minor or patch versions.
+对于 Python 等其他语言，必须显式定义公共 API，这样才能清楚地知道哪些符号可以依据版本管理指南被依赖。
+公共 API 还可以扩展到构建产物，例如配置变量、CMake 配置文件等，以及可执行程序和命令行选项及输出。
+公共 API 的任何元素都应当在软件包的文档中清楚地说明。
+如果您正在使用的某个东西没有在软件包文档中被明确列为公共 API 的一部分，那么您就不能依赖它在次版本或补丁版本之间保持不变。
 
-Deprecation strategy
-~~~~~~~~~~~~~~~~~~~~
+弃用策略
+~~~~~~~~
 
-Where possible, we will also use the tick-tock deprecation and migration strategy for major version increments.
-New deprecations will come in a new distribution release, accompanied by compiler warnings expressing that the functionality is being deprecated.
-In the next release, the functionality will be completely removed (no warnings).
+在可能的情况下，我们还将对主版本号递增采用“tick-tock”式的弃用和迁移策略。
+新的弃用将在新的发行版中引入，并伴随编译器警告，说明该功能正在被弃用。
+在下一个发行版中，该功能将被彻底移除（不再有警告）。
 
-Example of function ``foo`` deprecated and replaced by function ``bar``:
+函数 ``foo`` 被弃用并由函数 ``bar`` 替换的示例：
 
 =========  ========================================================
  Version    API
@@ -133,740 +133,736 @@ Y-turtle   [[deprecated("use bar()")]] void foo(); <br> void bar();
 Z-turtle   void bar();
 =========  ========================================================
 
-We must not add deprecations after a distribution is released.
-Deprecations do not necessarily require a major version bump, though.
-A deprecation can be introduced in a minor version bump if the bump happens before the distro is released (similar to ABI breaking changes).
+我们不得在发行版发布之后新增弃用。
+不过，弃用并不一定需要主版本号递增。
+如果次版本号递增发生在发行版发布之前（类似于 ABI 破坏性变更），那么弃用可以在该次版本号递增中引入。
 
-For example, if X-turtle begins development as ``2.0.0``, a deprecation can be added in ``2.1.0`` before X-turtle is released.
+例如，如果 X-turtle 以 ``2.0.0`` 开始开发，那么可以在 X-turtle 发布之前的 ``2.1.0`` 中加入弃用。
 
-We will attempt to maintain compatibility across distros as much as possible.
-However, like the caveats associated with SemVer, tick-tock or even deprecation in general may be impossible to completely adhere to in certain cases.
+我们将尽可能尝试保持各发行版之间的兼容性。
+然而，就像与 SemVer 相关的注意事项一样，tick-tock 甚至一般意义上的弃用在某些情况下可能无法完全遵循。
 
-Change control process
-^^^^^^^^^^^^^^^^^^^^^^
+变更控制流程
+^^^^^^^^^^^^
 
-* All changes must go through a pull request.
+* 所有变更都必须经过拉取请求。
 
-* We will enforce the `Developer Certificate of Origin (DCO) <https://developercertificate.org/>`_ on pull requests in ROSCore repositories.
+* 在 ROSCore 仓库中，我们将在拉取请求上强制执行 `开发者原创认证（DCO） <https://developercertificate.org/>`_ 。
 
-  * It requires all commit messages to contain the ``Signed-off-by`` line with an email address that matches the commit author.
+  * 它要求所有提交信息都包含 ``Signed-off-by`` 行，且其电子邮件地址与提交作者一致。
 
-  * You can pass ``-s`` / ``--signoff`` to the ``git commit`` invocation or write the expected message manually (e.g. ``Signed-off-by: Your Name Developer <your.name@example.com>``).
+  * 您可以在调用 ``git commit`` 时传入 ``-s`` / ``--signoff`` ，或者手动写入预期的信息（例如 ``Signed-off-by: Your Name Developer <your.name@example.com>``）。
 
-  * DCO is *not* required for pull requests that only address whitespace removal, typo correction, and other `trivial changes <http://cr.openjdk.java.net/~jrose/draft/trivial-fixes.html>`_.
+  * 对于仅涉及删除空白、修正拼写错误以及其他 `琐碎变更 <http://cr.openjdk.java.net/~jrose/draft/trivial-fixes.html>`_ 的拉取请求， *不* 要求 DCO。
 
-* Always run CI jobs for all `tier 1 platforms <https://reps.openrobotics.org/rep-2000/#support-tiers>`_ for every pull request and include links to jobs in the pull request.
-  (If you don't have access to the Jenkins jobs someone will trigger the jobs for you.)
+* 对于每个拉取请求，都要为所有 `第一级平台 <https://reps.openrobotics.org/rep-2000/#support-tiers>`_ 运行 CI 任务，并在拉取请求中附上任务的链接。
+  （如果您无权访问 Jenkins 任务，会有人为您触发这些任务。）
 
-* A minimum of 1 approval from a fellow developer who did not author the pull request is required to consider it approved.
-  Approval is required before merging.
+* 需要至少 1 位未撰写该拉取请求的开发者同伴批准，才能认为该拉取请求已获批准。
+  在合并之前必须获得批准。
 
-  * Packages may choose to increase this number.
+  * 软件包可以选择提高这一数字。
 
-Guidelines for backporting PRs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+向后移植 PR 的指南
+~~~~~~~~~~~~~~~~~~
 
-When changing an older version of ROS:
+在修改旧版本 ROS 时：
 
-* Make sure the features or fixes are accepted and merged in the rolling branch before opening a PR to backport the changes to older versions.
-* When backporting to older versions, also consider backporting to any other :doc:`still supported versions <../../Releases>`, even non-LTS versions.
-* If you are backporting a single PR in its entirety, title the backport PR "[Distro] <name of original PR>".
-* Link to all PRs whose changes you're backporting from the description of your backport PR.
-* Package maintainers typically use `Mergifyio <https://mergify.com/>`_ to automatically backport PRs to downstream distributions when needed, however developers can still perform manual backporting operations as described above when necessary.
+* 在针对旧版本创建向后移植的 PR 之前，请确保相关功能或修复已被接受并合并到 rolling 分支中。
+* 向后移植到旧版本时，也请考虑向后移植到任何其他 :doc:`仍受支持的版本 <../../Releases>` ，即使是非 LTS 版本。
+* 如果您要完整地向后移植单个 PR，请将向后移植的 PR 标题命名为“[Distro] <name of original PR>”。
+* 在向后移植 PR 的描述中链接所有您正在向后移植其变更的 PR。
+* 软件包维护者通常会使用 `Mergifyio <https://mergify.com/>`_ 在需要时自动将 PR 向后移植到下游发行版，不过开发者在必要时仍可按上述方式执行手动向后移植操作。
 
-Documentation
-^^^^^^^^^^^^^
+文档
+^^^^
 
-All packages should have these documentation elements present in their README or linked to from their README:
+所有软件包都应在其 README 中提供以下文档要素，或从 README 链接到这些内容：
 
-* Description and purpose
-* Definition and description of the public API
-* Examples
-* How to build and install (should reference external tools/workflows)
-* How to build and run tests
-* How to build documentation
-* How to develop (useful for describing things like ``python setup.py develop``)
-* License and copyright statements
+* 描述和用途
+* 公共 API 的定义和描述
+* 示例
+* 如何构建和安装（应引用外部工具/工作流）
+* 如何构建和运行测试
+* 如何构建文档
+* 如何开发（对于描述诸如 ``python setup.py develop`` 之类的操作很有用）
+* 许可证和版权声明
 
-Each source file must have a license and copyright statement, checked with an automated linter.
+每个源文件都必须带有许可证和版权声明，并通过自动化的 linter 进行检查。
 
-Each package must have a LICENSE file, typically the Apache 2.0 license, unless the package has an existing permissive license (e.g. rviz uses three-clause BSD).
+每个软件包都必须有一个 LICENSE 文件，通常是 Apache 2.0 许可证，除非该软件包已有现成的宽松许可证（例如 rviz 使用三条款 BSD 许可证）。
 
-Each package should describe itself and its purpose assuming, as much as possible, that the reader has stumbled onto it without previous knowledge of ROS or other related projects.
+每个软件包都应尽可能在读者事先不了解 ROS 或其他相关项目的前提下，来描述自身及其用途。
 
-Each package should define and describe its public API so that there is a reasonable expectation for users about what is covered by the semantic versioning policy.
-Even in C and C++, where the public API can be enforced by API and ABI checking, it is a good opportunity to describe the layout of the code and the function of each part of the code.
+每个软件包都应定义并描述其公共 API，以便用户对语义化版本管理政策所覆盖的范围有合理的预期。
+即使在 C 和 C++ 中，公共 API 可以通过 API 和 ABI 检查来强制执行，描述代码的布局以及各部分代码的功能仍然是一个很好的机会。
 
-It should be easy to take any package and from that package's documentation understand how to build, run, build and run tests, and build the documentation.
-Obviously we should avoid repeating ourselves for common workflows, like building a package in a workspace, but the basic workflows should be either described or referenced.
+应当能够轻松地拿到任意一个软件包，并从该软件包的文档中理解如何构建、运行、构建并运行测试，以及构建文档。
+显然，对于诸如在工作空间中构建软件包这类常见工作流，我们应避免重复，但基本的工作流应当被描述或引用。
 
-Finally, it should include any documentation for developers.
-This might include workflows for testing the code using something like ``python setup.py develop``, or it might mean describing how to make use of extension points provided by your package.
+最后，它还应当包含面向开发者的任何文档。
+这可能包括使用 ``python setup.py develop`` 之类的方式测试代码的工作流，也可能意味着描述如何利用您的软件包所提供的扩展点。
 
-Examples:
+示例：
 
 * `capabilities <https://docs.ros.org/hydro/api/capabilities/html/>`_
 
-  * This one gives an example of docs which describe the public API
+  * 这个示例展示了描述公共 API 的文档
 
 * `catkin_tools <https://catkin-tools.readthedocs.org/en/latest/development/extending_the_catkin_command.html>`_
 
-  * This is an example of describing an extension point for a package
+  * 这是一个描述软件包扩展点的示例
 
-API Documentation for ROS Packages
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ROS 软件包的 API 文档
+~~~~~~~~~~~~~~~~~~~~~
 
-API documentation for all released ROS packages can be `found here <https://docs.ros.org/en/{DISTRO}/p/>`__.
-We recommend using `index.ros.org <https://index.ros.org/>`_ to search through available ROS packages to find their documentation.
+所有已发布的 ROS 软件包的 API 文档都可以 `在这里找到 <https://docs.ros.org/en/{DISTRO}/p/>`__ 。
+我们建议使用 `index.ros.org <https://index.ros.org/>`_ 搜索可用的 ROS 软件包以找到它们的文档。
 
-If you are a ROS package developer looking for guidance on documenting your package please see :doc:`our "how to" guide on package level documentation <../../How-To-Guides/Documenting-a-ROS-2-Package>`.
-The documentation for all released ROS 2 packages is automatically hosted on `docs.ros.org <https://docs.ros.org/en/{DISTRO}/p/>`_.
+如果您是 ROS 软件包开发者，正在寻找有关为软件包编写文档的指导，请参阅 :doc:`我们关于软件包级文档的“操作指南” <../../How-To-Guides/Documenting-a-ROS-2-Package>` 。
+所有已发布的 ROS 2 软件包的文档都会自动托管在 `docs.ros.org <https://docs.ros.org/en/{DISTRO}/p/>`_ 上。
 
-Testing
-^^^^^^^
+测试
+^^^^
 
-All packages should have some level of :ref:`system, integration, and/or unit tests.<TestingMain>`
+所有软件包都应具有某种程度的 :ref:`系统、集成和/或单元测试。<TestingMain>`
 
-**Unit tests** should always be in the package which is being tested and should make use of tools like ``Mock`` to try and test narrow parts of the codebase in constructed scenarios.
-Unit tests should not bring in test dependencies that are not testing tools, e.g. gtest, nosetest, pytest, mock, etc...
+**单元测试** 应当始终位于被测试的软件包中，并且应当利用 ``Mock`` 之类的工具，在构造好的场景中尝试测试代码库中较窄的部分。
+单元测试不应引入非测试工具的测试依赖项，例如 gtest、nosetest、pytest、mock 等……
 
-**Integration tests** can test interactions between parts of the code or between parts of the code and the system.
-They often test software interfaces in ways that we expect the user to use them.
-Like Unit tests, Integration tests should be in the package which is being tested and should not bring in non-tool test dependencies unless absolutely necessary, i.e. all non-tool dependencies should only be allowed under extreme scrutiny so they should be avoided if possible.
+**集成测试** 可以测试代码各部分之间，或代码各部分与系统之间的交互。
+它们通常以我们期望用户使用软件接口的方式来测试这些接口。
+与单元测试一样，集成测试应位于被测试的软件包中，并且除非绝对必要，否则不应引入非工具的测试依赖项。也就是说，所有非工具的依赖项都只应在极为严格的审查下才被允许，因此应尽可能避免。
 
-**System tests** are designed to test end-to-end situations between packages and should be in their own packages to avoid bloating or coupling packages and to avoid circular dependencies.
+**系统测试** 旨在测试软件包之间的端到端场景，应当放在它们各自的软件包中，以避免软件包膨胀或耦合，同时避免循环依赖。
 
-In general external or cross package test dependencies should be minimized to prevent circular dependencies and tightly coupled test packages.
+一般而言，应尽量减少外部或跨软件包的测试依赖项，以防止循环依赖和测试软件包之间的紧耦合。
 
-All packages should have some unit tests and possibly integration tests, but the degree to which they should have them is based on the package's quality category.
-The following subsections apply to 'Level 1' packages:
+所有软件包都应有一些单元测试，可能还有集成测试，但它们应达到的程度取决于该软件包的质量类别。
+以下小节适用于“Level 1”软件包：
 
-Code coverage
-~~~~~~~~~~~~~
+代码覆盖率
+~~~~~~~~~~
 
-We will provide line coverage, and achieve line coverage above 95%.
-If a lower percentage target is justifiable, it must be prominently documented.
-We may provide branch coverage, or exclude code from coverage (test code, debug code, etc.).
-We require that coverage increase or stay the same before merging a change, but it may be acceptable to make a change that decreases code coverage with proper justification (e.g. deleting code that was previously covered can cause the percentage to drop).
+我们将提供行覆盖率，并达到 95% 以上的行覆盖率。
+如果较低的目标百分比是合理的，则必须显著地记录在文档中。
+我们可以提供分支覆盖率，或将代码从覆盖率统计中排除（测试代码、调试代码等）。
+我们要求在合并变更之前覆盖率提升或保持不变，不过在给出适当理由的情况下，允许做出降低代码覆盖率的变更（例如删除之前被覆盖的代码可能导致百分比下降）。
 
-Performance
-~~~~~~~~~~~
+性能
+~~~~
 
-We strongly recommend performance tests, but recognize they don't make sense for some packages.
-If there are performance tests, we will choose to either check each change or before each release or both.
-We will also require justification for merging a change or making a release that lowers performance.
+我们强烈建议进行性能测试，但也认识到它们对某些软件包并不适用。
+如果有性能测试，我们将选择检查每次变更、每次发布之前，或两者兼而有之。
+我们还将要求对降低性能的变更或发布给出合理的理由。
 
-Linters and static analysis
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Linter 与静态分析
+~~~~~~~~~~~~~~~~~
 
-We will use :doc:`ROS code style <Code-Style-Language-Versions>` and enforce it with linters from `ament_lint_common <https://github.com/ament/ament_lint/tree/{REPOS_FILE_BRANCH}/ament_lint_common/doc/index.rst>`_.
-All linters/static analysis that are part of ``ament_lint_common`` must be used.
+我们将使用 :doc:`ROS 代码风格 <Code-Style-Language-Versions>` ，并通过 `ament_lint_common <https://github.com/ament/ament_lint/tree/{REPOS_FILE_BRANCH}/ament_lint_common/doc/index.rst>`_ 中的 linter 来强制执行。
+所有属于 ``ament_lint_common`` 的 linter/静态分析工具都必须被使用。
 
-The `ament_lint_auto <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_lint_auto/doc/index.rst>`_ documentation provides information on running ``ament_lint_common``.
+`ament_lint_auto <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_lint_auto/doc/index.rst>`_ 文档提供了有关运行 ``ament_lint_common`` 的信息。
 
-General Practices
------------------
+一般实践
+--------
 
-Some practices are common to all ROS 2 development.
+有些实践适用于所有 ROS 2 开发工作。
 
-These practices don't affect package quality level as described in `REP 2004 <https://reps.openrobotics.org/rep-2004/>`_, but are still highly recommended for the development process.
+这些实践不会影响 `REP 2004 <https://reps.openrobotics.org/rep-2004/>`_ 中所述的软件包质量等级，但仍然强烈推荐在开发过程中采用。
 
-Issues
-^^^^^^
+Issue
+^^^^^
 
-When filing an issue please make sure to:
+提交 issue 时请确保：
 
-- Include enough information for another person to understand the issue.
-  In ROS 2, the following points are needed for narrowing down the cause of an issue.
-  Testing with as many alternatives in each category as feasible will be especially helpful.
+- 包含足够的信息，以便他人理解该问题。
+  在 ROS 2 中，需要以下要点来缩小问题的成因范围。
+  在每一类信息上都尽可能多地尝试各种替代方案进行测试会特别有帮助。
 
-  - **The operating system and version.**
-    Reasoning: ROS 2 supports multiple platforms, and some bugs are specific to particular versions of operating systems/compilers.
-  - **The installation method.**
-    Reasoning: Some issues only manifest if ROS 2 has been installed from binary archives or from debs.
-    This can help us determine if the issue is with the packaging process.
-  - **The specific version of ROS 2.**
-    Reasoning: Some bugs may be present in a particular ROS 2 release and later fixed.
-    It is important to know if your installation includes these fixes.
-  - **The DDS/RMW implementation being used** (see `this page <../../Concepts/Intermediate/About-Different-Middleware-Vendors>` for how to determine which one).
-    Reasoning: Communication issues may be specific to the underlying ROS middleware being used.
-  - **The ROS 2 client library being used.**
-    Reasoning: This helps us narrow down the layer in the stack at which the issue might be.
+  - **操作系统及其版本。**
+    理由：ROS 2 支持多个平台，某些 bug 是特定操作系统/编译器版本所特有的。
+  - **安装方式。**
+    理由：有些问题只有在 ROS 2 通过二进制归档或 deb 包安装时才会出现。
+    这有助于我们判断问题是否出在打包过程中。
+  - **具体的 ROS 2 版本。**
+    理由：某些 bug 可能存在于特定的 ROS 2 发行版中并在之后被修复。
+    了解您的安装是否包含这些修复非常重要。
+  - **正在使用的 DDS/RMW 实现** （关于如何确定使用的是哪一个，请参阅 `本页面 <../../Concepts/Intermediate/About-Different-Middleware-Vendors>` ）。
+    理由：通信问题可能特定于所使用的底层 ROS 中间件。
+  - **正在使用的 ROS 2 客户端库。**
+    理由：这有助于我们缩小问题可能出在技术栈中哪一层。
 
-- Include a list of steps to reproduce the issue.
-- In case of a bug consider to provide a `short, self contained, correct (compilable), example <http://sscce.org/>`__.
-  Issues are much more likely to be resolved if others can reproduce them easily.
+- 包含一份重现该问题的步骤列表。
+- 如果是 bug，请考虑提供一个 `简短、自包含、正确（可编译）的示例 <http://sscce.org/>`__ 。
+  如果其他人能够轻松重现，问题就更有可能得到解决。
 
-- Mention troubleshooting steps that have been tried already, including:
+- 说明已经尝试过的故障排查步骤，包括：
 
-  - Upgrading to the latest version of the code, which may include bug fixes that have not been released yet.
-    See `this section <building-from-source>` and follow the instructions to get the "rolling" branches.
-  - Trying with a different RMW implementation.
-    See `this page <../../How-To-Guides/Working-with-multiple-RMW-implementations>` for how to do that.
+  - 升级到最新版本的代码，其中可能包含尚未发布的 bug 修复。
+    请参阅 `本小节 <building-from-source>` 并按照说明获取“rolling”分支。
+  - 尝试使用不同的 RMW 实现。
+    关于如何进行，请参阅 `本页面 <../../How-To-Guides/Working-with-multiple-RMW-implementations>` 。
 
-Branches
+分支
+^^^^
+
+.. note::
+    这些只是指导原则。
+    由软件包维护者自行选择与其自身工作流相匹配的分支名称。
+
+一个良好的实践是，在软件包的源仓库中，为它针对的每个 ROS 发行版都建立 **独立的分支** 。
+这些分支通常以它们所针对的发行版命名。
+例如，一个专门针对 Humble 发行版进行开发的 ``humble`` 分支。
+
+发布也从这些分支进行，针对相应的发行版。
+针对特定 ROS 发行版的开发可以在相应的分支上进行。
+例如：针对 ``foxy`` 的开发提交被提交到 ``foxy`` 分支，而 ``foxy`` 的软件包发布也从同一个分支进行。
+
+.. note::
+    这要求软件包维护者视情况执行向后移植或向前移植，以使所有分支都具备最新的功能。
+    维护者还必须对所有仍在从其中进行软件包发布的分支执行日常维护（bug 修复等）。
+
+    例如，如果某个功能被合并到 Rolling 专属分支（如 ``rolling`` 或 ``main``），并且该功能也适用于 Humble 发行版（不破坏 API 等），那么良好的实践是将其向后移植到 Humble 专属分支。
+
+    如果有新的功能或 bug 修复可用，维护者可以为那些较旧的发行版进行发布。
+
+**那么** ``main`` **和** ``rolling`` **呢？**
+
+``main`` 通常针对 :doc:`Rolling <../../Releases/Release-Rolling-Ridley>` （因此也针对下一个尚未发布的 ROS 发行版），不过维护者也可以决定改从 ``rolling`` 分支进行开发和发布。
+
+库的版本管理
+^^^^^^^^^^^^
+
+我们将对软件包内的所有库统一进行版本管理。
+这意味着库的版本继承自软件包。
+这样可以防止库和软件包的版本发生偏离，并且与将共享同一仓库的软件包一起发布的政策基于相同的理由。
+如果您需要让库具有不同的版本，那么请考虑将它们拆分为不同的软件包。
+
+开发流程
 ^^^^^^^^
 
-.. note::
-    These are just guidelines.
-    It is up to the package maintainer to choose branch names that match their own workflow.
+* 默认分支（大多数情况下是 rolling 分支）必须始终能够构建、通过所有测试并且编译无警告。
+  如果任何时候出现了回归，首要任务就是至少恢复到之前的状态。
+* 始终在启用测试的情况下进行构建。
+* 在做出变更之后、在拉取请求中提出变更之前，始终在本地运行测试。
+  除了使用自动化测试之外，还要手动运行被修改的代码路径，以确保补丁按预期工作。
+* 始终为每个拉取请求在所有平台上运行 CI 任务，并在拉取请求中包含任务的链接。
 
-It is good practice to have **separate branches** in a package's source repository for each ROS distribution it is targeting.
-These branches are typically named after the distribution they target.
-For example, a ``humble`` branch for development targeted specifically at the Humble distribution.
+有关推荐的软件开发工作流的更多细节，请参阅 `软件开发生命周期`_ 一节。
 
-Releases are also made from these branches, targeting the appropriate distribution.
-Development targeted at a specific ROS distribution can happen on the appropriate branch.
-For example: Development commits targeting ``foxy`` are made to the ``foxy`` branch, and package releases for ``foxy`` are made from that same branch.
+对 RMW API 的变更
+^^^^^^^^^^^^^^^^^
 
-.. note::
-    This requires the package maintainers to perform backports or forwardports as appropriate to keep all branches up to date with features.
-    The maintainers must also perform general maintenance (bug fixes, etc.) on all branches from which package releases are still made.
-
-    For example, if a feature is merged into the Rolling-specific branch (e.g. ``rolling`` or ``main``), and that feature is also appropriate
-    to the Humble distribution (does not break API, etc.), then it is good practice to backport the feature to the Humble-specific branch.
-
-    The maintainers may make releases for those older distributions if there are new features or bug fixes available.
-
-**What about** ``main`` **and** ``rolling`` **?**
-
-``main`` typically targets :doc:`Rolling <../../Releases/Release-Rolling-Ridley>` (and so, the next unreleased ROS distribution), though the maintainers may decide to develop and release from a ``rolling`` branch instead.
-
-Library versioning
-^^^^^^^^^^^^^^^^^^
-
-We will version all libraries within a package together.
-This means that libraries inherit their version from the package.
-This keeps library and package versions from diverging and shares reasoning with the policy of releasing packages which share a repository together.
-If you need libraries to have different versions then consider splitting them into different packages.
-
-Development process
-^^^^^^^^^^^^^^^^^^^
-
-* The default branch (in most cases the rolling branch) must always build, pass all tests and compile without warnings.
-  If at any time there is a regression it is the top priority to restore at least the previous state.
-* Always build with tests enabled.
-* Always run tests locally after changes and before proposing them in a pull request.
-  Besides using automated tests, also run the modified code path manually to ensure that the patch works as intended.
-* Always run CI jobs for all platforms for every pull request and include links to the jobs in the pull request.
-
-For more details on recommended software development workflow, see `Software Development Lifecycle`_ section.
-
-Changes to RMW API
-^^^^^^^^^^^^^^^^^^
-
-When updating `RMW API <https://github.com/ros2/rmw>`__, it is required that RMW implementations for the Tier 1 middleware libraries are updated as well.
-For example, a new function ``rmw_foo()`` introduced to the RMW API must be implemented in the following packages (as of ROS Galactic):
+在更新 `RMW API <https://github.com/ros2/rmw>`__ 时，要求第一级中间件库的 RMW 实现也一并更新。
+例如，向 RMW API 中引入的新函数 ``rmw_foo()`` 必须在以下软件包中实现（截至 ROS Galactic）：
 
 * `rmw_connextdds <https://github.com/ros2/rmw_connextdds>`__
 * `rmw_cyclonedds <https://github.com/ros2/rmw_cyclonedds>`__
 * `rmw_fastrtps <https://github.com/ros2/rmw_fastrtps>`__
 
-Updates for non-Tier 1 middleware libraries should also be considered if feasible (e.g. depending on the size of the change).
-See `REP-2000 <https://reps.openrobotics.org/rep-2000/>`__ for the list of middleware libraries and their tiers.
+在可行的情况下（例如取决于变更的规模），也应考虑为非第一级中间件库进行更新。
+中间件库的列表及其层级请参阅 `REP-2000 <https://reps.openrobotics.org/rep-2000/>`__ 。
 
-Tracking tasks
+任务跟踪
+^^^^^^^^
+
+为帮助组织 ROS 2 的工作，ROS 2 核心开发团队使用看板式的 `GitHub 项目板 <https://github.com/orgs/ros2/projects>`_ 。
+
+不过，并非所有 issue 和拉取请求都在项目板上跟踪。
+一块项目板通常代表一个即将到来的发布或某个具体项目。
+通过浏览 `ROS 2 仓库 <https://github.com/ros2>`_ 各自的 issue 页面，可以按仓库逐个浏览工单。
+
+各个 ROS 2 项目板中列的名称和用途不尽相同，但通常遵循相同的总体结构：
+
+* **To do**：
+  与项目相关、可以被分派的 issue
+* **In progress**：
+  正在进行工作的活跃拉取请求
+* **In review**：
+  工作已完成并可供评审的拉取请求，以及当前正在积极评审的拉取请求
+* **Done**：
+  已合并/关闭的拉取请求及相关 issue（仅供参考）
+
+要请求修改权限，只需在您感兴趣的工单上发表评论即可。
+根据复杂程度，描述您计划如何解决它可能会有帮助。
+我们将更新状态（如果您没有权限的话），之后您就可以开始为拉取请求进行工作了。如果您经常贡献，我们很可能会直接授予您自行管理标签等的权限。
+
+软件包命名规范
 ^^^^^^^^^^^^^^
 
-To help organize work on ROS 2, the core ROS 2 development team uses kanban-style `GitHub project boards <https://github.com/orgs/ros2/projects>`_.
+名称在 ROS 中扮演着重要角色，遵循命名规范可以简化学习和理解大型系统的过程。
 
-Not all issues and pull requests are tracked on the project boards, however.
-A board usually represents an upcoming release or specific project.
-Tickets can be browsed on a per-repo basis by browsing the `ROS 2 repositories' <https://github.com/ros2>`_ individual issue pages.
+ROS 软件包占用一个扁平命名空间，因此命名应当谨慎且一致。
+`REP-144 <https://reps.openrobotics.org/rep-0144/>`__ 中给出了软件包命名的标准
 
-The names and purposes of columns in any given ROS 2 project board vary, but typically follow the same general structure:
+* 软件包名称应遵循常见的 C 变量命名规范：小写、以字母开头、使用下划线分隔，例如 laser_viewer
 
-* **To do**:
-  Issues that are relevant to the project, ready to be assigned
-* **In progress**:
-  Active pull requests on which work is currently in progress
-* **In review**:
-  Pull requests where work is complete and ready for review, and for those currently under active review
-* **Done**:
-  Pull requests and related issues are merged/closed (for informational purposes)
+* 软件包名称应足够具体，以便说明该软件包的功能。
+  例如，运动规划器不叫 planner。
+  如果它实现了波前传播算法，那么它可能叫 wavefront_planner。
+  显然，在让名称足够具体与避免名称过于冗长之间存在张力。
 
-To request permission to make changes, simply comment on the tickets you're interested in.
-Depending on the complexity, it might be useful to describe how you plan to address it.
-We will update the status (if you don't have the permission) and you can start working on a pull request.
-If you contribute regularly we will likely just grant you permission to manage the labels etc. yourself.
+  * 应避免使用诸如 utils 这样的笼统名称，因为它们没有界定哪些内容属于该软件包、哪些内容应在软件包之外。
 
-Package Naming Conventions
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+* 要检查某个名称是否已被占用，请查阅 `<https://index.ros.org/packages/>`__ 。
+  如果您希望自己的仓库被纳入该列表，请参阅 `rosdistro 贡献指南 <https://github.com/ros/rosdistro/blob/master/CONTRIBUTING.md>`__ 。
 
-Names play an important role in ROS and following naming conventions simplifies the process of learning and understanding large systems.
+* 我们的目标是为让机器人做有趣的事情而开发一套规范的工具。
+  软件包名称应告诉您该软件包做什么，而不是它来自哪里。
+  作为一个社区，我们应当能够做到这一点。
+  一个 Ubuntu 发行版提供了大约 33,000 个软件包，而名称中并未包含来源或作者信息。
 
-The ROS packages occupy a flat namespace, so naming should be done carefully and consistently.
-There is a standard for package naming in `REP-144 <https://reps.openrobotics.org/rep-0144/>`__
+* 只有当软件包不打算被更广泛地使用时，才建议为软件包名称添加前缀（例如，PR2 机器人专用的软件包使用 ``pr2_`` 前缀）。
+  在 fork 现有软件包时，您也可以为软件包名称添加前缀，但同样地，该前缀最好能够说明发生了什么变化，而不是谁更改了它。
 
-* Package names should follow common C variable naming conventions: lower case, start with a letter, use underscore separators, e.g. laser_viewer
+* 为 ROS 软件包名称添加 'ros' 前缀是多余的。
+  除非是非常核心的软件包，否则不建议这样做。
 
-* Package names should be specific enough to identify what the package does.
-  For example, a motion planner is not called planner.
-  If it implements the wavefront propagation algorithm, it might be called wavefront_planner.
-  There's obviously tension between making a name specific and keeping it from becoming overly verbose.
+度量单位与坐标系规范
+^^^^^^^^^^^^^^^^^^^^
 
-  * Using catchall names such as utils should be avoided as they do not scope what goes into the package or what should be outside the package.
+ROS 中使用的标准单位和坐标规范已在 `REP-0103 <https://reps.openrobotics.org/rep-0103/>`__ 中正式确定。
+除非有非常充分的理由，并且有非常清晰的文档说明以避免混淆，否则所有消息都应遵循这些准则。
 
-* To check whether a name is taken, consult `<https://index.ros.org/packages/>`__.
-  If you'd like your repository included in that list, see the `rosdistro Contributing Guide <https://github.com/ros/rosdistro/blob/master/CONTRIBUTING.md>`__.
+ROS 中距离测量值里诸如“太近”或“太远”这类特殊情况的表示方法，已在 `REP-0117 <https://reps.openrobotics.org/rep-0117/>`__ 中正式确定。
 
-* Our goal is to develop a canonical set of tools for making robots do interesting things.
-  The package name should tell you what the package does, not where it came from.
-  It should be possible for us, as a community, to make this work.
-  An Ubuntu distribution offers approximately 33,000 packages without inserting origin or authorship into names.
+编程规范
+^^^^^^^^
 
-* Prefixing a package name is recommended only when the package is not meant to be used more widely (e.g., packages that are specific to the PR2 robot use the ``pr2_`` prefix).
-  You might prefix the package name when forking an existing package, but again, the prefix would hopefully communicate what changed, not who changed it.
+* 防御性编程：确保假设尽早得到验证。
+  例如，检查每一个返回码，并确保至少抛出异常，直到该情况得到更优雅的处理。
+* 所有错误消息都必须输出到 ``stderr`` 。
+* 在尽可能最小的作用域中声明变量。
+* 使成组的条目（依赖项、导入、包含等）按字母顺序排列。
 
-* Prefixing a package name with 'ros' is redundant for a ROS package.
-  This is not recommended except for very core packages.
+C++ 专属
+~~~~~~~~
 
-Units of Measure and Coordinate System Conventions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* 避免使用直接流式输出（``<<``）到 ``stdout`` / ``stderr`` ，以防止多个线程之间发生交错。
+* 避免对 ``std::shared_ptr`` 使用引用，因为这会破坏引用计数。
+  如果原始实例离开作用域而引用仍在使用，就会访问已释放的内存。
 
-Standard units and coordinate conventions for use in ROS have been formalized in `REP-0103 <https://reps.openrobotics.org/rep-0103/>`__.
-All messages should follow these guidelines unless there's a very strong reason which is very clearly documented to avoid confusion.
+文件系统布局
+^^^^^^^^^^^^
 
-Representation of special conditions within distance measurements like "too close" or "too far" in ROS have been formalized in `REP-0117 <https://reps.openrobotics.org/rep-0117/>`__.
+软件包和仓库的文件系统布局应遵循相同的规范，以便为浏览我们源代码的用户提供一致的体验。
 
-Programming conventions
-^^^^^^^^^^^^^^^^^^^^^^^
+软件包布局
+~~~~~~~~~~
 
-* Defensive programming: ensure that assumptions are held as early as possible.
-  E.g. check every return code and make sure to at least throw an exception until the case is handled more gracefully.
-* All error messages must be directed to ``stderr``.
-* Declare variables in the narrowest scope possible.
-* Keep group of items (dependencies, imports, includes, etc.) ordered alphabetically.
+* ``src``：包含所有 C 和 C++ 代码
 
-C++ specific
-~~~~~~~~~~~~
+  * 也包含未安装的 C/C++ 头文件
 
-* Avoid using direct streaming (``<<``) to ``stdout`` / ``stderr`` to prevent interleaving between multiple threads.
-* Avoid using references for ``std::shared_ptr`` since that subverts the reference counting.
-  If the original instance goes out of scope and the reference is being used it accesses freed memory.
+* ``include``：包含所有已安装的 C 和 C++ 头文件
 
-Filesystem layout
-^^^^^^^^^^^^^^^^^
+  * ``<package name>``：对于所有已安装的 C 和 C++ 头文件，应以软件包名作为文件夹命名空间
 
-The filesystem layout of packages and repositories should follow the same conventions in order to provide a consistent experience for users browsing our source code.
+* ``<package_name>``：包含所有 Python 代码
+* ``test``：包含所有自动化测试和测试数据
+* ``config``：包含配置文件，例如 YAML 参数文件和 RViz 配置文件
+* ``doc``：包含所有文档
+* ``launch``：包含所有 launch 文件
+* ``msg``：包含所有 ROS 消息定义
+* ``srv``：包含所有 ROS 服务定义
+* ``action``：包含所有 ROS 动作定义
+* ``package.xml``：如 `REP-0140 <https://reps.openrobotics.org/rep-0140/>`_ 中所定义（在原型开发阶段可以有所调整）
+* ``CMakeLists.txt``：仅使用 CMake 的 ROS 软件包需要
+* ``setup.py``：仅使用 Python 代码的 ROS 软件包需要
+* ``README``：可以在 GitHub 上作为项目的落地页进行渲染
 
-Package layout
-~~~~~~~~~~~~~~
+  * 它可以像您希望的那么简短或详细，但至少应链接到项目文档
+  * 考虑在此 README 中加入 CI 或代码覆盖率徽章
+  * 它也可以是 ``.rst`` 或 GitHub 支持的任何其他格式
 
-* ``src``: contains all C and C++ code
+* ``CONTRIBUTING``：描述贡献指南
 
-  * Also contains C/C++ headers which are not installed
+  * 这可能包含许可证方面的说明，例如在使用 Apache 2 许可证时。
 
-* ``include``: contains all C and C++ headers which are installed
+* ``LICENSE``：该软件包的一份或多份许可证副本
+* ``CHANGELOG.rst``：符合 `REP-0132 <https://reps.openrobotics.org/rep-0132/>`_ 的变更日志
 
-  * ``<package name>``: for all C and C++ installed headers they should be folder namespaced by the package name
+仓库布局
+~~~~~~~~
 
-* ``<package_name>``: contains all Python code
-* ``test``: contains all automated tests and test data
-* ``config``: contains configuration files, e.g. YAML parameters files and RViz config files
-* ``doc``: contains all the documentation
-* ``launch``: contains all launch files
-* ``msg``: contains all ROS Message definitions
-* ``srv``: contains all ROS Service definitions
-* ``action``: contains all ROS Action definitions
-* ``package.xml``: as defined by `REP-0140 <https://reps.openrobotics.org/rep-0140/>`_ (may be updated for prototyping)
-* ``CMakeLists.txt``: only ROS packages which use CMake
-* ``setup.py``: only ROS packages which use Python code only
-* ``README``: can be rendered on GitHub as a landing page for the project
+每个软件包都应位于一个与软件包同名的子文件夹中。
+如果一个仓库只包含一个软件包，则可以选择将其放在仓库的根目录下。
 
-  * This can be as short or detailed as is convenient, but it should at least link to project documentation
-  * Consider putting a CI or code coverage tag in this README
-  * It can also be ``.rst`` or anything else that GitHub supports
+上游软件包
+^^^^^^^^^^
 
-* ``CONTRIBUTING``: describes the contribution guidelines
+Debian 和 Ubuntu 上游中的软件包
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  * This might include license implication, e.g. when using the Apache 2 License.
+得益于 Jochen Sprickerhof 和 Leopold Palomo-Avellaneda 的勤勉努力，部分 `ROS 2 软件包现已可从 Debian 和 Ubuntu 主仓库中获得 <https://wiki.debian.org/DebianScience/Robotics/ROS2/Packages>`_ 。
+`这里是 Jochen 在 ROSCon 2015 上对该流程的简要介绍 <https://vimeo.com/142151399#t=29m15s>`_ 。
+原始 ROS 软件包已被修改以遵循 Debian 准则，其中包括将软件包拆分为多个部分、在某些情况下更改名称、按照 FHS 准则安装到 /usr，以及对共享库使用 soversions。
 
-* ``LICENSE``: a copy of the license or licenses for this package
-* ``CHANGELOG.rst``: `REP-0132 <https://reps.openrobotics.org/rep-0132/>`_ compliant changelog
+此外，一些引导依赖项，例如 ``vcstool`` 和 ``colcon`` 等命令行工具，以及 ``osrf-pycommon`` 和 ``ament`` 等一些库，也已在上游打包。
 
-Repository layout
-~~~~~~~~~~~~~~~~~
+与 http://packages.ros.org 提供的 OSRF ROS 软件包不同，上游仓库中的软件包并不绑定到特定的 :doc:`ROS 发行版 <../../Releases>` 。
+相反，它们代表某一时刻的快照，会在 Debian unstable 中定期更新，然后在各个时间点被锁定到下游的 Debian 和 Ubuntu 发行版中。
 
-Each package should be in a subfolder which has the same name as the package.
-If a repository contains only a single package it can optionally be in the root of the repository.
+不要混用这些来源
+~~~~~~~~~~~~~~~~
 
-Upstream Packages
-^^^^^^^^^^^^^^^^^
+我们强烈建议不要在同一系统上混用来自上游 Debian/Ubuntu 的 ROS 软件包和来自 http://packages.ros.org 的 ROS 软件包。
+在某些情况下，这种混合系统可以正常工作，但这两组软件包之间可能会产生负面的相互影响。
+我们正在与 Jochen 及其伙伴合作，通过文档和软件包冲突声明来尽量减少出现问题的可能性，但我们预计仍会存在一些风险，包括一些相当微妙的问题。
 
-Packages in Debian and Ubuntu Upstream
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+因此，我们建议您选择要么从上游安装软件包，要么从 http://packages.ros.org 安装，但不要两者同时使用。
+您不仅不应同时从两者安装软件包，而且如果您打算使用上游软件包，那么您的 apt 源中甚至不应存在 http://packages.ros.org 的相关条目（即 ``/etc/apt/sources*`` 下的任何文件中都不应有）。
+同时启用两者可能导致两个源之间名称重叠的软件包发生混用，例如 ``python3-rospkg`` 。
 
-Thanks to diligent effort from Jochen Sprickerhof and Leopold Palomo-Avellaneda, some of the `ROS 2 packages are now available <https://wiki.debian.org/DebianScience/Robotics/ROS2/Packages>`_ from the main Debian and Ubuntu repositories.
-`Here is a short overview of the process from Jochen at ROSCon 2015 <https://vimeo.com/142151399#t=29m15s>`_.
-The original ROS packages have been modified to follow Debian guidelines, which includes splitting packages into multiple pieces, changing names in some cases, installing to /usr according to FHS guidelines, and using soversions on shared libraries.
+已知差异
+~~~~~~~~
 
-In addition several of the bootstrap dependencies such as command line tools like ``vcstool`` and ``colcon`` as well as some libraries like ``osrf-pycommon`` and ``ament`` are also packaged upstream.
+与来自 packages.ros.org 的 ROS 软件包相比，上游 ROS 软件包存在一些人们应当注意的差异：
 
-Unlike the OSRF-provided ROS packages from http://packages.ros.org, the packages in the upstream repositories are not attached to a specific :doc:`ROS distribution <../../Releases>`.
-Rather, they represent a snapshot in time that will be updated periodically within Debian unstable and then latched at various points into downstream Debian and Ubuntu distributions.
+* 软件包集合并不完整。
+* 软件包可能有不同的名称，并且被以不同的方式划分。
 
-Don't mix the streams
-~~~~~~~~~~~~~~~~~~~~~
+开发者工作流
+------------
 
-We strongly recommend against mixing ROS packages from upstream Debian/Ubuntu and from http://packages.ros.org on the same system.
-In some cases such a mixed system will work correctly, but there can be negative interactions between the two sets of packages.
-We're working with Jochen and friends to minimize the chance of problems via documentation and package conflict specifications, but we expect some risks to remain, including some fairly subtle issues.
+我们使用 `GitHub 项目板 <https://github.com/orgs/ros2/projects>`_ 来跟踪与即将到来的发布和较大项目相关的未关闭工单和活跃 PR。
 
-As such, we recommend that you choose to either install packages from upstream or from http://packages.ros.org, but not both.
-Not only should you not install packages from both at the same time, but if you intend to use the upstream packages then you should not even have the http://packages.ros.org entries in your apt sources (i.e. in any files in ``/etc/apt/sources*``).
-Having both of them enabled can cause mixing of packages which overlap by name between the two sources, e.g. ``python3-rospkg``.
+通常的工作流是：
 
-Known Differences
-~~~~~~~~~~~~~~~~~
+* 讨论设计（在相应仓库上提 GitHub 工单，如有需要再向 https://github.com/ros2/design 提交设计 PR）
+* 在 fork 的功能分支上编写实现
 
-As compared to the ROS packages from packages.ros.org, there are some differences in the upstream ROS packages that people should be aware of:
+  * 请查阅 `开发者指南 <Developer-Guide>` 以了解准则和最佳实践
 
-* The package set is incomplete.
-* Packages may have different names and be partitioned differently.
+* 编写测试
+* 启用并运行 linter
+* 使用 ``colcon test`` 在本地运行测试（见 :doc:`colcon 教程 <../../Tutorials/Beginner-Client-Libraries/Colcon-Tutorial>` ）
+* 一旦所有内容都能在本地无警告地构建、且所有测试都通过，就在您的功能分支上运行 CI：
 
-Developer Workflow
-------------------
+  * 前往 ci.ros2.org
+  * 登录（右上角）
+  * 点击 ``ci_launcher`` 任务
+  * 点击 “Build with Parameters”（左列）
+  * 在第一个框 “CI_BRANCH_TO_TEST” 中输入您的功能分支名称
+  * 点击 ``build`` 按钮
 
-We track open tickets and active PRs related to upcoming releases and larger projects using `GitHub project boards <https://github.com/orgs/ros2/projects>`_.
+  （如果您不是 ROS 2 提交者，则没有访问 CI 农场的权限。
+  在这种情况下，请通知您 PR 的评审者代您运行 CI）
 
-The usual workflow is:
+* 如果您的用例需要运行代码覆盖率：
 
-* Discuss design (GitHub ticket on the appropriate repository, and a design PR to https://github.com/ros2/design if needed)
-* Write implementation on a feature branch on a fork
+  * 前往 ci.ros2.org
+  * 登录（右上角）
+  * 点击 ``ci_linux_coverage`` 任务
+  * 点击 “Build with Parameters”（左列）
+  * 务必让 “CI_BUILD_ARGS” 和 “CI_TEST_ARGS” 保持默认值
+  * 点击 ``build`` 按钮
+  * 在文档末尾有关于如何 :ref:`解读报告结果 <read-coverage-report>` 和 :ref:`计算覆盖率 <calculate-coverage-rate>` 的说明
 
-  * Please check out the `developer guide <Developer-Guide>` for guidelines and best practices
+* 如果 CI 任务在无警告、无错误、无测试失败的情况下完成构建，请将您的任务链接发布在您的 PR 上，或者发布在汇总您所有 PR 的高层级工单上（参见 `此处 <https://github.com/ros2/rcl/pull/106#issuecomment-271119200>`__ 的示例）
 
-* Write tests
-* Enable and run linters
-* Run tests locally using ``colcon test`` (see the :doc:`colcon tutorial <../../Tutorials/Beginner-Client-Libraries/Colcon-Tutorial>`)
-* Once everything builds locally without warnings and all tests are passing, run CI on your feature branch:
+  * 请注意，这些徽章的 markdown 代码位于 ``ci_launcher`` 任务的控制台输出中
 
-  * Go to ci.ros2.org
-  * Log in (top right corner)
-  * Click on the ``ci_launcher`` job
-  * Click "Build with Parameters" (left column)
-  * In the first box "CI_BRANCH_TO_TEST" enter your feature branch name
-  * Hit the ``build`` button
+* 当 PR 被批准后：
 
-  (if you are not a ROS 2 committer, you don't have access to the CI farm.
-  In that case, ping the reviewer of your PR to run CI for you)
+  * 提交 PR 的人使用 “Squash and Merge” 选项将其合并，以便我们保持整洁的历史记录
 
-* If your use case requires running code coverage:
+    * 如果这些提交值得分开保留：将所有吹毛求疵/linter/拼写错误的提交压缩在一起，并合并剩余的部分
 
-  * Go to ci.ros2.org
-  * Log in (top right corner)
-  * Click on the ``ci_linux_coverage`` job
-  * Click "Build with Parameters" (left column)
-  * Be sure of leaving "CI_BUILD_ARGS" and "CI_TEST_ARGS" with the default values
-  * Hit the ``build`` button
-  * At the end of the document there are instructions on how to :ref:`interpret the result of the report <read-coverage-report>` and :ref:`calculate the coverage rate <calculate-coverage-rate>`
+      * 注意：每个 PR 都应针对一个特定功能，因此 99% 的情况下 Squash and Merge 是合理的
 
-* If the CI job built without warnings, errors and test failures, post the links of your jobs on your PR or high-level ticket aggregating all your PRs (see example `here <https://github.com/ros2/rcl/pull/106#issuecomment-271119200>`__)
+* 合并后删除该分支
 
-  * Note that the markdown for these badges is in the console output of the ``ci_launcher`` job
+Gitconfig 优化
+^^^^^^^^^^^^^^
 
-* When the PR has been approved:
+为了能够推送到仓库，您需要在系统上配置好 ssh 密钥。
+然而，我们仓库的默认 url 方案是使用 https，因为它可以被匿名访问。
+在您的系统上，您可以使用 ``gitconfig`` 的 ``insteadOf`` 选项，让 ``git`` 即使远程地址声明为 https 也自动使用您的 ssh 密钥。
 
-  * the person who submitted the PR merges it using "Squash and Merge" option so that we keep a clean history
-
-    * If the commits deserve to keep separated: squash all the nitpick/linters/typo ones together and merge the remaining set
-
-      * Note: each PR should target a specific feature so Squash and Merge should make sense 99% of the time
-
-* Delete the branch once merged
-
-Gitconfig Optimization
-^^^^^^^^^^^^^^^^^^^^^^
-
-To be able to push to repositories you will need to have ssh keys setup on your system.
-However our default url schema for repositories is to use https because it's anonymously accessible.
-On your system you can use the ``gitconfig`` option ``insteadOf`` to have ``git`` automatically use your ssh key even if the remote is declared as https.
-
-Add the following to your ``~/.gitconfig``
+将以下内容添加到您的 ``~/.gitconfig``
 
 .. code-block::
 
     [url "ssh://git@github.com/"]
       insteadOf = https://github.com/
 
-If you're working on repositories on GitLab or Bitbucket you can do the same thing.
+如果您在 GitLab 或 Bitbucket 上的仓库中工作，也可以做同样的事情。
 
 
-Architectural Development Practices
------------------------------------
+架构开发实践
+------------
 
-This section describes the ideal lifecycle that should be employed when making large architectural changes to ROS 2.
+本节描述在对 ROS 2 进行重大架构变更时应采用的理想生命周期。
 
-Software Development Lifecycle
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+软件开发生命周期
+^^^^^^^^^^^^^^^^
 
-This section describes step-by-step how to plan, design, and implement a new feature:
+本节逐步描述如何规划、设计和实现一个新功能：
 
-1. Task Creation
-2. Creating the Design Document
-3. Design Review
-4. Implementation
-5. Code Review
+1. 任务创建
+2. 编写设计文档
+3. 设计评审
+4. 实现
+5. 代码评审
 
-Task creation
-~~~~~~~~~~~~~
+任务创建
+~~~~~~~~
 
-Tasks requiring changes to critical parts of ROS 2 should have design reviews during early stages of the release cycle.
-If a design review is happening in the later stages, the changes will be part of a future release.
+需要对 ROS 2 的关键部分进行变更的任务，应在发布周期的早期阶段进行设计评审。
+如果设计评审发生在后期阶段，那么这些变更将成为未来某个发布的一部分。
 
-* An issue should be created in the appropriate `ros2 repository <https://github.com/ros2/>`__, clearly describing the task being worked on.
+* 应在相应的 `ros2 仓库 <https://github.com/ros2/>`__ 中创建一个 issue，清楚地描述正在进行的工作。
 
-  * It should have a clear success criteria and highlight the concrete improvements expected from it.
-  * If the feature is targeting a ROS release, ensure this is tracked in the ROS release ticket (`example <https://github.com/ros2/ros2/issues/607>`__).
+  * 它应有明确的成功标准，并突出说明期望从中获得的具体改进。
+  * 如果该功能针对某个 ROS 发布，请确保在 ROS 发布工单中对其进行跟踪（`示例 <https://github.com/ros2/ros2/issues/607>`__）。
 
-Writing the design document
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+编写设计文档
+~~~~~~~~~~~~
 
-Design docs must never include confidential information.
-Whether or not a design document is required for your change depends on how big the task is.
+设计文档绝不能包含机密信息。
+您的变更是否需要设计文档，取决于任务的规模大小。
 
-1. You are making a small change or fixing a bug:
+1. 您正在做一个小改动或修复一个 bug：
 
-  * A design document is not required, but an issue should be opened in the appropriate repository to track the work and avoid duplication of efforts.
+  * 不需要设计文档，但应在相应的仓库中创建一个 issue 来跟踪工作并避免重复劳动。
 
-2. You are implementing a new feature or would like to contribute to OSRF-owned infrastructure (like Jenkins CI):
+2. 您正在实现一个新功能，或者希望为 OSRF 拥有的基础设施（例如 Jenkins CI）做贡献：
 
-  * Design doc is required and should be contributed to `ros2/design <https://github.com/ros2/design/>`__ to be made accessible on https://design.ros2.org/.
-  * You should fork the repository and submit a pull request detailing the design.
+  * 需要设计文档，且应贡献到 `ros2/design <https://github.com/ros2/design/>`__ ，以便在 https://design.ros2.org/ 上公开访问。
+  * 您应 fork 该仓库并提交一个详细说明该设计的拉取请求。
 
-  Mention the related ros2 issue (for example, ``Design doc for task ros2/ros2#<issue id>``) in the pull request or the commit message.
-  Detailed instructions are on the `ROS 2 Contribute <https://design.ros2.org/contribute.html>`__ page.
-  Design comments will be made directly on the pull request.
+  在拉取请求或提交信息中提及相关的 ros2 issue（例如 ``Design doc for task ros2/ros2#<issue id>`` ）。
+  详细说明见 `ROS 2 Contribute <https://design.ros2.org/contribute.html>`__ 页面。
+  设计评论将直接写在拉取请求上。
 
-If the task is planned to be released with a specific version of ROS, this information should be included in the pull request.
+如果该任务计划随某个特定版本的 ROS 发布，则此信息应包含在拉取请求中。
 
-Design document review
-~~~~~~~~~~~~~~~~~~~~~~
+设计文档评审
+~~~~~~~~~~~~
 
-Once the design is ready for review, a pull request should be opened and appropriate reviewers should be assigned.
-It is recommended to include project owner(s) -
-maintainers of all impacted packages (as defined by ``package.xml`` maintainer field, see `REP-140 <https://reps.openrobotics.org/rep-0140/#required-tags>`__) - as reviewers.
+一旦设计可供评审，就应打开一个拉取请求并指派合适的评审者。
+建议将项目负责人——所有受影响软件包的维护者（由 ``package.xml`` 的 maintainer 字段定义，见 `REP-140 <https://reps.openrobotics.org/rep-0140/#required-tags>`__ ）——作为评审者纳入其中。
 
-* If the design doc is complex or reviewers have conflicting schedules, an optional design review meeting can be set up.
-  In this case,
+* 如果设计文档很复杂，或者评审者的日程有冲突，可以组织一次可选的设计评审会议。
+  在这种情况下，
 
-  **Before the meeting**
+  **会议前**
 
-  * Send a meeting invite at least one week in advance
-  * Meeting duration of one hour is recommended
-  * Meeting invite should list all decisions to be made during the review (decisions requiring package maintainer approval)
-  * Meeting required attendees: design pull request reviewers
-      Meeting optional attendees: all OSRF engineers, if applicable
+  * 至少提前一周发送会议邀请
+  * 建议会议时长为一小时
+  * 会议邀请应列出评审期间需要做出的所有决定（需要软件包维护者批准的决定）
+  * 会议必需出席者：设计拉取请求的评审者
+      会议可选出席者：所有 OSRF 工程师（如果适用）
 
-  **During the meeting**
+  **会议中**
 
-  * The task owner drives the meeting, presents their ideas and manages discussions to ensure an agreement is reached on time
+  * 任务负责人主持会议，展示自己的想法并管理讨论，以确保按时达成一致
 
-  **After the meeting**
+  **会议后**
 
-  * The task owner should send back meeting notes to all attendees
-  * If minor issues have been raised about the design:
+  * 任务负责人应向所有与会者回传会议记录
+  * 如果针对该设计提出了小问题：
 
-    * The task owner should update the design doc pull request based on the feedback
-    * Additional review is not required
+    * 任务负责人应根据反馈更新设计文档的拉取请求
+    * 不需要额外的评审
 
-  * If major issues have been raised about the design:
+  * 如果针对该设计提出了重大问题：
 
-    * It is acceptable to remove sections for which there is no clear agreement
-    * The debatable parts of the design can be resubmitted as a separate task in the future
-    * If removing the debatable parts is not an option, work directly with package owners to reach an agreement
+    * 可以删除没有明确一致意见的章节
+    * 设计中存在争议的部分可以在将来作为单独的任务重新提交
+    * 如果无法删除有争议的部分，请直接与软件包所有者合作以达成一致
 
-* Once consensus is reached:
+* 一旦达成共识：
 
-  * Ensure the `ros2/design <https://github.com/ros2/design/>`__ pull request has been merged, if applicable
-  * Update and close the GitHub issue associated with this design task
+  * 如果适用，请确保 `ros2/design <https://github.com/ros2/design/>`__ 的拉取请求已被合并
+  * 更新并关闭与此设计任务关联的 GitHub issue
 
-Implementation
-~~~~~~~~~~~~~~
+实现
+~~~~
 
-Before starting, look at :doc:`Contributing-to-code/Making-a-PR` for best practices in pull requests.
+在开始之前，请查看 :doc:`Contributing-to-code/Making-a-PR` 以了解拉取请求的最佳实践。
 
-* For each repo to be modified:
+* 对于每个要修改的仓库：
 
-  * Modify the code, go to the next step if finished or at regular intervals to backup your work.
-  * `Self-review <https://git-scm.com/book/en/v2/Git-Tools-Interactive-Staging>`__ your changes using ``git add -i``.
-  * Create a new signed commit using ``git commit -s``.
+  * 修改代码，完成后或定期进入下一步以备份您的工作。
+  * 使用 ``git add -i`` 对您的变更进行 `自查 <https://git-scm.com/book/en/v2/Git-Tools-Interactive-Staging>`__ 。
+  * 使用 ``git commit -s`` 创建一个新的签名提交。
 
-    * A pull request should contain minimal semantically meaningful commits (for instance, a large number of 1-line commits is not acceptable).
-      Create new fixup commits while iterating on feedback, or optionally, amend existing commits using ``git commit --amend`` if you don't want to create a new commit every time.
-    * Each commit must have a properly written, meaningful, commit message.
-      More instructions `here <https://chris.beams.io/posts/git-commit/>`__.
-    * Moving files must be done in a separate commit, otherwise git may fail to accurately track the file history.
-    * Either the pull request description or the commit message must contain a reference to the related ros2 issue, so it gets automatically closed when the pull request is merged.
-      See this `doc <https://help.github.com/articles/closing-issues-using-keywords/>`__ for more details.
-    * Push the new commits.
+    * 一个拉取请求应包含数量最少且在语义上有意义的提交（例如，大量单行提交是不可接受的）。
+      在根据反馈迭代时创建新的 fixup 提交，或者如果您不想每次都创建新提交，可以使用 ``git commit --amend`` 修改现有提交。
+    * 每个提交都必须有写得恰当、有意义的提交信息。
+      更多说明见 `此处 <https://chris.beams.io/posts/git-commit/>`__ 。
+    * 移动文件必须在单独的提交中完成，否则 git 可能无法准确跟踪文件历史。
+    * 拉取请求描述或提交信息中必须包含对相关 ros2 issue 的引用，这样当拉取请求被合并时该 issue 会自动关闭。
+      更多细节请参阅此 `文档 <https://help.github.com/articles/closing-issues-using-keywords/>`__ 。
+    * 推送新的提交。
 
 
-Build Farm Introduction
------------------------
+构建农场简介
+------------
 
-The build farm is located at `ci.ros2.org <https://ci.ros2.org/>`__.
+构建农场位于 `ci.ros2.org <https://ci.ros2.org/>`__ 。
 
-Every night we run nightly jobs which build and run all the tests in various scenarios on various platforms.
-Additionally, we test all pull requests against these platforms before merging.
+每晚我们都会运行夜间任务，在各种平台上以各种场景构建并运行所有测试。
+此外，在合并之前，我们会针对这些平台测试所有拉取请求。
 
-Check :ref:`the current set of target platforms and architectures <binary-package-platforms>`, though it evolves overtime.
+请查看 :ref:`当前的目标平台和架构集合 <binary-package-platforms>` ，不过它会随时间演进。
 
-There are several categories of jobs on the buildfarm:
+构建农场上有几类任务：
 
-* manual jobs (triggered manually by developers):
+* 手动任务（由开发者手动触发）：
 
-  * ci_linux: build + test the code on Ubuntu
-  * ci_linux-aarch64: build + test the code on Ubuntu on an ARM 64-bit machine (aarch64)
-  * ci_linux_coverage: build + test + generation of test coverage
-  * ci_linux-rhel: build + test the code on Red Hat Enterprise Linux
-  * ci_windows: build + test the code on Windows
-  * ci_launcher: trigger all the jobs listed above
+  * ci_linux：在 Ubuntu 上构建 + 测试代码
+  * ci_linux-aarch64：在 ARM 64 位机器（aarch64）上的 Ubuntu 中构建 + 测试代码
+  * ci_linux_coverage：构建 + 测试 + 生成测试覆盖率
+  * ci_linux-rhel：在 Red Hat Enterprise Linux 上构建 + 测试代码
+  * ci_windows：在 Windows 上构建 + 测试代码
+  * ci_launcher：触发上述所有任务
 
-* nightly (run every night):
+* 夜间任务（每晚运行）：
 
-  * Debug: build + test the code with CMAKE_BUILD_TYPE=Debug
+  * Debug：使用 CMAKE_BUILD_TYPE=Debug 构建 + 测试代码
 
     * nightly_linux_debug
     * nightly_linux-aarch64_debug
     * nightly_linux-rhel_debug
     * nightly_win_deb
 
-  * Release: build + test the code with CMAKE_BUILD_TYPE=Release
+  * Release：使用 CMAKE_BUILD_TYPE=Release 构建 + 测试代码
 
     * nightly_linux_release
     * nightly_linux-aarch64_release
     * nightly_linux-rhel_release
     * nightly_win_rel
 
-  * Repeated: build then run each test up to 20 times or until failed (aka flakiness hunter)
+  * Repeated：构建后将每个测试最多运行 20 次或直至失败（又称“不稳定猎手”）
 
     * nightly_linux_repeated
     * nightly_linux-aarch64_repeated
     * nightly_linux-rhel_repeated
     * nightly_win_rep
 
-  * Coverage:
+  * Coverage：
 
-    * nightly_linux_coverage: build + test the code + analyses coverage for c/c++ and python
+    * nightly_linux_coverage：构建 + 测试代码 + 分析 c/c++ 和 python 的覆盖率
 
-      * results are exported as a cobertura report
+      * 结果导出为 cobertura 报告
 
 
-* packaging (run every night; result is bundled into an archive):
+* packaging（每晚运行；结果被打包成归档文件）：
 
   * packaging_linux
   * packaging_linux-rhel
   * packaging_windows
 
-Two additional build farms support the ROS / ROS 2 ecosystem by providing building of source and
-binary packages, continuous integration, testing, and analysis.
+另有构建农场通过提供源码包和二进制包的构建、持续集成、测试和分析，为 ROS / ROS 2 生态系统提供支持。
 
-For details, frequently asked questions, and troubleshooting see :doc:`build farms <Build-Farms>`.
+有关详细信息、常见问题和故障排查，请参阅 :doc:`构建农场 <Build-Farms>` 。
 
-Note on Coverage runs
-^^^^^^^^^^^^^^^^^^^^^
+关于覆盖率运行的说明
+^^^^^^^^^^^^^^^^^^^^
 
-ROS 2 packages are organized in a way that the testing code for a given package is not only contained within the package, but could also be present in a different package.
-In other words: packages can exercise code belonging to other packages during the testing phase.
+ROS 2 软件包的编排方式使得某个软件包的测试代码不仅包含在该软件包内，也可能存在于另一个软件包中。
+换句话说：软件包在测试阶段可以运行属于其他软件包的代码。
 
-To achieve the coverage rate reached by all code available in the ROS 2 core packages it is recommended to run builds using a fixed set of proposed repositories.
-That set is defined in the default parameters of coverage jobs in Jenkins.
+要达到 ROS 2 核心软件包中所有代码所达到的覆盖率，建议使用一组固定的拟用仓库来运行构建。
+该集合在 Jenkins 中覆盖率任务的默认参数中定义。
 
 
 .. _read-coverage-report:
 
-How to read the coverage rate from the buildfarm report
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+如何从构建农场报告中读取覆盖率
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To see the coverage report for a given package:
+要查看某个软件包的覆盖率报告：
 
-* When the ``ci_linux_coverage`` build finishes, click on ``Coverage Report``
-* Scroll down to the ``Coverage Breakdown by Package`` table
-* In the table, look at the first column called "Name"
+* 当 ``ci_linux_coverage`` 构建完成后，点击 ``Coverage Report``
+* 向下滚动到 ``Coverage Breakdown by Package`` 表格
+* 在该表格中，查看第一列名为 “Name” 的列
 
-The coverage reports in the buildfarm include all the packages that were used in the ROS workspace.
-The coverage report includes different paths corresponding to the same package:
+构建农场中的覆盖率报告包含 ROS 工作空间中用到的所有软件包。
+覆盖率报告包含与同一软件包对应的不同路径：
 
-* Name entries with the form: ``src.*.<repository_name>.<package_name>.*``
-  These correspond to the unit test runs available in a package against its own source code
-* Name entries with the form: ``build.<repository_name>.<package_name>.*``
-  These correspond to the unit test runs available in a package against its files generated at building or configuring time
-* Name entries with the form: ``install.<package_name>.*``
-  These correspond to the system/integration tests coming from testing runs of other packages
+* 形式为： ``src.*.<repository_name>.<package_name>.*`` 的 Name 条目
+  这些对应软件包针对其自身源代码运行的单元测试
+* 形式为： ``build.<repository_name>.<package_name>.*`` 的 Name 条目
+  这些对应软件包针对其构建或配置时生成的文件运行的单元测试
+* 形式为： ``install.<package_name>.*`` 的 Name 条目
+  这些对应来自其他软件包测试运行的系统/集成测试
 
 .. _calculate-coverage-rate:
 
-How to calculate the coverage rate from the buildfarm report
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+如何从构建农场报告计算覆盖率
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Get the combined unit coverage rate using the automatic script:
+使用自动脚本获取合并后的单元覆盖率：
 
- * From the ci_linux_coverage Jenkins build copy the URL of the build
- * Download the `get_coverage_ros2_pkg <https://raw.githubusercontent.com/ros2/ci/master/tools/get_coverage_ros2_pkg.py>`__ script
- * Execute the script: ``./get_coverage_ros2_pkg.py <jenkins_build_url> <ros2_package_name>`` (`README <https://github.com/ros2/ci/blob/master/tools/README.md>`__)
- * Grab the results from the "Combined unit testing" final line in the output of the script
+ * 从 ci_linux_coverage 的 Jenkins 构建中复制该构建的 URL
+ * 下载 `get_coverage_ros2_pkg <https://raw.githubusercontent.com/ros2/ci/master/tools/get_coverage_ros2_pkg.py>`__ 脚本
+ * 执行该脚本： ``./get_coverage_ros2_pkg.py <jenkins_build_url> <ros2_package_name>`` （ `README <https://github.com/ros2/ci/blob/master/tools/README.md>`__ ）
+ * 从脚本输出中最后一行 “Combined unit testing” 获取结果
 
-Alternative: get the combined unit coverage rate from coverage report (require manual calculation):
+替代方法：从覆盖率报告获取合并后的单元覆盖率（需要手动计算）：
 
-* When the ci_linux_coverage build finishes, click on ``Cobertura Coverage Report``
-* Scroll down to the ``Coverage Breakdown by Package`` table
-* In the table, under the first column "Name", look for (where <package_name> is your package under testing):
+* 当 ci_linux_coverage 构建完成后，点击 ``Cobertura Coverage Report``
+* 向下滚动到 ``Coverage Breakdown by Package`` 表格
+* 在该表格中，在第一列 “Name” 下查找（其中 <package_name> 是您正在测试的软件包）：
 
-  * all the directories under the pattern ``src.*.<repository_name>.<package_name>.*`` grab the two absolute values in the column "Lines".
-  * all the directories under the pattern ``build/.<repository_name>.*`` grab the two absolute values in the column "Lines".
+  * 所有位于 ``src.*.<repository_name>.<package_name>.*`` 模式下的目录，获取 “Lines” 列中的两个绝对值。
+  * 所有位于 ``build/.<repository_name>.*`` 模式下的目录，获取 “Lines” 列中的两个绝对值。
 
-* With the previous selection: for each cell, the first value is the lines tested and the second is the total lines of code.
-  Aggregate all rows for getting the total of the lines tested and the total of lines of code under test.
-  Divide to get the coverage rate.
+* 根据前面的选择：对于每个单元格，第一个值是已测试的行数，第二个是代码总行数。
+  汇总所有行，得到已测试的行数总和以及被测代码总行数。
+  相除即可得到覆盖率。
 
 .. _measure-coverage-locally:
 
-How to measure coverage locally using lcov (Ubuntu)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+如何在本地使用 lcov 测量覆盖率（Ubuntu）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To measure coverage on your own machine, install ``lcov``.
+要在您自己的机器上测量覆盖率，请安装 ``lcov`` 。
 
 .. code-block:: console
 
      $ sudo apt install -y lcov
 
-The rest of this section assumes you are working from your colcon workspace.
-Compile in debug with coverage flags.
-Feel free to use colcon flags to target specific packages.
+本节的其余部分假设您在 colcon 工作空间中工作。
+使用覆盖率标志进行 debug 编译。
+可以随意使用 colcon 标志来针对特定软件包。
 
 .. code-block:: console
 
      $ colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} --coverage" -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} --coverage"
 
-``lcov`` requires an initial baseline, which you can produce with the following command.
-Update the output file location for your needs.
+``lcov`` 需要一个初始基线，您可以使用以下命令生成它。
+请根据您的需要更新输出文件位置。
 
 .. code-block:: console
 
      $ lcov --no-external --capture --initial --directory . --output-file ~/ros2_base.info
 
-Run tests for the packages that matter for your coverage measurements.
-For example, if measuring ``rclcpp`` also with ``test_rclcpp``
+对与您的覆盖率测量相关的软件包运行测试。
+例如，如果测量 ``rclcpp`` ，同时也测量 ``test_rclcpp``
 
 .. code-block:: console
 
      $ colcon test --packages-select rclcpp test_rclcpp
 
-Capture the lcov results with a similar command this time dropping the ``--initial`` flag.
+使用类似的命令捕获 lcov 结果，这次去掉 ``--initial`` 标志。
 
 .. code-block:: console
 
      $ lcov --no-external --capture --directory . --output-file ~/ros2.info
 
-Combine the trace ``.info`` files:
+合并 trace 文件 ``.info`` ：
 
 .. code-block:: console
 
      $ lcov --add-tracefile ~/ros2_base.info --add-tracefile ~/ros2.info --output-file ~/ros2_coverage.info
 
-Generate html for easy visualization and annotation of covered lines.
+生成 html，以便于可视化和标注已覆盖的行。
 
 .. code-block:: console
 

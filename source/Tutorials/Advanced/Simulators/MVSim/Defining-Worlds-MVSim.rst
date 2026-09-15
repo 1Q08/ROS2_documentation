@@ -1,38 +1,38 @@
-Defining worlds, robots, and sensors
-=====================================
+定义世界、机器人和传感器
+========================
 
-**Goal:** Learn the basics of defining MVSim world files, adding vehicles and sensors, and the main features available.
+**目标：** 学习定义 MVSim 世界文件、添加车辆和传感器的基础知识，以及主要可用功能。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 30 minutes
+**用时：** 30 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-MVSim worlds are defined in XML files (``.world.xml``).
-A world file describes the environment (ground, walls, obstacles), the vehicles (dynamics model, shape, sensors),
-and simulation parameters (physics timestep, GUI options).
+MVSim 世界在 XML 文件（``.world.xml``）中定义。
+世界文件描述了环境（地面、墙壁、障碍物）、车辆（动力学模型、形状、传感器）
+以及仿真参数（物理时间步长、GUI 选项）。
 
-MVSim provides a library of predefined vehicle and sensor definitions that you can reuse in your worlds via XML includes.
-You can also define everything from scratch for full control.
+MVSim 提供了一个预定义车辆和传感器定义的库，你可以通过 XML include 在自己的世界中复用。
+你也可以从头开始定义所有内容，以获得完全的控制。
 
-Prerequisites
--------------
+前置条件
+--------
 
-You should have completed the :doc:`Getting-Started-MVSim` tutorial and have MVSim installed.
+你应该已完成 :doc:`Getting-Started-MVSim` 教程并安装了 MVSim。
 
-Tasks
------
+任务
+----
 
-1 Minimal world file
-^^^^^^^^^^^^^^^^^^^^^^
+1 最小世界文件
+^^^^^^^^^^^^^^
 
-Here is a minimal world file that creates an empty environment with one robot:
+这是一个最小世界文件，创建一个带有一个机器人的空环境：
 
 .. code-block:: xml
 
@@ -81,39 +81,39 @@ Here is a minimal world file that creates an empty environment with one robot:
       </vehicle>
     </mvsim_world>
 
-Save this as ``my_world.world.xml`` and launch it:
+将其保存为 ``my_world.world.xml`` 并启动它：
 
 .. code-block:: console
 
     $ mvsim launch my_world.world.xml
 
-2 Using predefined vehicles and sensors
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 使用预定义车辆和传感器
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-Instead of defining vehicles from scratch, you can use the predefined definitions that ship with MVSim.
-These are XML files in the ``definitions/`` directory of the MVSim package.
+不必从头定义车辆，你可以使用 MVSim 自带的预定义定义。
+这些是 MVSim 包 ``definitions/`` 目录中的 XML 文件。
 
-**Available vehicles:**
+**可用车辆：**
 
-- ``turtlebot3_burger.vehicle.xml`` -- TurtleBot3 Burger (differential drive)
-- ``jackal.vehicle.xml`` -- Clearpath Jackal UGV (4-wheel differential)
-- ``ackermann.vehicle.xml`` -- Generic Ackermann (car-like) vehicle
-- ``pickup.vehicle.xml`` -- Pickup truck (Ackermann)
-- ``agricobiot2.vehicle.xml`` -- Agricultural robot (Ackermann drivetrain)
+- ``turtlebot3_burger.vehicle.xml`` -- TurtleBot3 Burger（差速驱动）
+- ``jackal.vehicle.xml`` -- Clearpath Jackal UGV（4 轮差速）
+- ``ackermann.vehicle.xml`` -- 通用阿克曼（类汽车）车辆
+- ``pickup.vehicle.xml`` -- 皮卡（阿克曼）
+- ``agricobiot2.vehicle.xml`` -- 农业机器人（阿克曼传动系）
 
-**Available sensors:**
+**可用传感器：**
 
-- ``lidar2d.sensor.xml`` -- Generic 2D laser scanner
+- ``lidar2d.sensor.xml`` -- 通用 2D 激光扫描仪
 - ``rplidar-a2.sensor.xml`` -- RPLidar A2
-- ``velodyne-vlp16.sensor.xml`` -- Velodyne VLP-16 3D LiDAR
-- ``ouster-os1.sensor.xml`` -- Ouster OS1 3D LiDAR
-- ``helios-32-FOV-70.sensor.xml`` -- Helios 32-beam 3D LiDAR
-- ``camera.sensor.xml`` -- RGB camera
-- ``rgbd_camera.sensor.xml`` -- Depth camera (RGBD)
-- ``imu.sensor.xml`` -- Inertial measurement unit
-- ``gnss.sensor.xml`` -- GPS/GNSS receiver
+- ``velodyne-vlp16.sensor.xml`` -- Velodyne VLP-16 3D 激光雷达
+- ``ouster-os1.sensor.xml`` -- Ouster OS1 3D 激光雷达
+- ``helios-32-FOV-70.sensor.xml`` -- Helios 32 线 3D 激光雷达
+- ``camera.sensor.xml`` -- RGB 相机
+- ``rgbd_camera.sensor.xml`` -- 深度相机（RGBD）
+- ``imu.sensor.xml`` -- 惯性测量单元
+- ``gnss.sensor.xml`` -- GPS/GNSS 接收器
 
-To use a predefined vehicle with sensors attached, use XML includes:
+要使用一个附带传感器的预定义车辆，请使用 XML include：
 
 .. code-block:: xml
 
@@ -167,12 +167,12 @@ To use a predefined vehicle with sensors attached, use XML includes:
 
     </mvsim_world>
 
-3 World environment elements
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 世界环境元素
+^^^^^^^^^^^^^^
 
-MVSim supports several types of environment elements:
+MVSim 支持多种类型的环境元素：
 
-**Occupancy grid maps** load a grayscale image as a 2D obstacle map, commonly used for indoor navigation testing:
+**占据栅格地图** 将灰度图像加载为 2D 障碍地图，通常用于室内导航测试：
 
 .. code-block:: xml
 
@@ -181,7 +181,7 @@ MVSim supports several types of environment elements:
       <resolution>0.05</resolution>  <!-- meters/pixel -->
     </element>
 
-**Elevation maps** define terrain height from a grayscale heightmap image, useful for outdoor scenarios:
+**高程地图** 根据灰度高度图图像定义地形高度，适用于户外场景：
 
 .. code-block:: xml
 
@@ -192,7 +192,7 @@ MVSim supports several types of environment elements:
       <elevation_image_max_z>5.0</elevation_image_max_z>
     </element>
 
-**Textured planes** add visual ground surfaces:
+**带纹理平面** 添加视觉地面表面：
 
 .. code-block:: xml
 
@@ -206,7 +206,7 @@ MVSim supports several types of environment elements:
       <texture_size_y>5.0</texture_size_y>
     </element>
 
-**Blocks** are static or dynamic rigid bodies (boxes, custom shapes) that serve as obstacles or manipulable objects:
+**块** 是静态或动态刚体（盒子、自定义形状），用作障碍物或可操作对象：
 
 .. code-block:: xml
 
@@ -219,33 +219,33 @@ MVSim supports several types of environment elements:
       <mass>20</mass>
     </block>
 
-4 Vehicle dynamics models
-^^^^^^^^^^^^^^^^^^^^^^^^^
+4 车辆动力学模型
+^^^^^^^^^^^^^^^^
 
-MVSim provides three main dynamics models:
+MVSim 提供了三种主要的动力学模型：
 
-- **Differential drive** (``class="differential"``): Two-wheeled robots like TurtleBot3.
-  Controlled via linear and angular velocity.
+- **差速驱动** （``class="differential"``）：像 TurtleBot3 这样的两轮机器人。
+  通过线速度和角速度进行控制。
 
-- **Ackermann** (``class="ackermann"``): Car-like vehicles with front-wheel steering.
-  Controlled via linear velocity and steering angle.
+- **阿克曼** （``class="ackermann"``）：前轮转向的类汽车车辆。
+  通过线速度和转向角进行控制。
 
-- **Ackermann drivetrain** (``class="ackermann_drivetrain"``): Realistic drivetrain model with
-  open or Torsen differentials, useful for more accurate vehicle behavior simulation.
+- **阿克曼传动系** （``class="ackermann_drivetrain"``）：带开式或 Torsen 差速器的逼真传动系模型，
+  适用于更精确的车辆行为仿真。
 
-Each vehicle can use different motor controllers:
+每辆车辆可以使用不同的电机控制器：
 
-- ``twist_pid``: Accepts ``geometry_msgs/msg/Twist`` commands with PID velocity tracking.
-  This is the most common choice for ROS 2 integration.
-- ``twist_ideal``: Instantaneous velocity commands (no dynamics delay).
-- ``twist_front_steer_pid``: For Ackermann vehicles controlled via linear velocity and steering angle.
-- ``raw``: Direct wheel torque control.
+- ``twist_pid``：接受 ``geometry_msgs/msg/Twist`` 命令，进行 PID 速度跟踪。
+  这是 ROS 2 集成最常见的选择。
+- ``twist_ideal``：瞬时速度命令（无动力学延迟）。
+- ``twist_front_steer_pid``：用于通过线速度和转向角控制的阿克曼车辆。
+- ``raw``：直接轮扭矩控制。
 
-5 Sensor noise and configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 传感器噪声与配置
+^^^^^^^^^^^^^^^^^^
 
-Sensors in MVSim support configurable noise models.
-For example, an IMU sensor with noise parameters:
+MVSim 中的传感器支持可配置的噪声模型。
+例如，一个带噪声参数的 IMU 传感器：
 
 .. code-block:: xml
 
@@ -268,7 +268,7 @@ For example, an IMU sensor with noise parameters:
       </accelerometer_noise>
     </sensor>
 
-LiDAR sensors support parameters for range, angular resolution, and noise:
+激光雷达传感器支持距离、角分辨率和噪声等参数：
 
 .. code-block:: xml
 
@@ -282,61 +282,61 @@ LiDAR sensors support parameters for range, angular resolution, and noise:
       <raytrace_3d>true</raytrace_3d>  <!-- use 3D collision for 2D scans -->
     </sensor>
 
-6 Additional features
-^^^^^^^^^^^^^^^^^^^^^^
+6 其他功能
+^^^^^^^^^^
 
-**Multi-robot simulation:**
-MVSim natively supports multiple vehicles in the same world.
-Each vehicle gets its own ROS 2 namespace, TF tree, and set of topics.
-Robots can detect each other with their sensors and physically interact through collisions.
+**多机器人仿真：**
+MVSim 原生支持在同一世界中使用多辆车辆。
+每辆车辆都有自己的 ROS 2 命名空间、TF 树和话题集。
+机器人可以通过传感器相互检测，并通过碰撞进行物理交互。
 
-**Property regions:**
-You can define regions in the world with different physical properties, such as varying friction coefficients
-or GPS-denied zones where GNSS sensors stop reporting positions.
+**属性区域：**
+你可以在世界中定义具有不同物理属性的区域，例如不同的摩擦系数，
+或 GNSS 传感器停止报告位置的 GPS 拒止区域。
 
-**Animated actors:**
-MVSim supports skeletal-animated 3D characters (e.g., pedestrians) that follow waypoint paths,
-useful for testing perception and planning in dynamic environments.
+**动画角色：**
+MVSim 支持骨架动画的 3D 角色（例如行人），它们沿着航点路径移动，
+适用于在动态环境中测试感知和规划。
 
-**Joints and articulated vehicles:**
-Vehicles can be connected using distance joints (ropes/cables) or revolute joints (hinges),
-enabling simulation of trailers, tow ropes, and articulated systems.
+**关节和铰接车辆：**
+车辆可以使用距离关节（绳索/缆绳）或旋转关节（铰链）连接，
+从而支持挂车、拖绳和铰接系统的仿真。
 
-**XML advanced features:**
-World files support ``<include>`` directives, variable substitution, mathematical expressions,
-``<for>`` loops, and ``<if>`` conditionals, making it possible to procedurally generate complex environments.
+**XML 高级特性：**
+世界文件支持 ``<include>`` 指令、变量替换、数学表达式、
+``<for>`` 循环和 ``<if>`` 条件，使得程序化生成复杂环境成为可能。
 
-**Headless and faster-than-real-time:**
-MVSim can run without a GUI and at configurable simulation speed,
-which is useful for automated testing and reinforcement learning workflows.
+**无头模式和超实时：**
+MVSim 可以在没有 GUI 的情况下运行，并支持可配置的仿真速度，
+这对自动化测试和强化学习工作流很有用。
 
-Comparison with other simulators
---------------------------------
+与其他模拟器的比较
+------------------
 
-MVSim occupies a different niche compared to other simulators:
+与其他模拟器相比，MVSim 占据了一个不同的定位：
 
-**Strengths:**
+**优势：**
 
-- Very lightweight: low CPU and memory usage, fast startup times.
-- Focused vehicle dynamics with multiple friction and drivetrain models.
-- Simple XML-based world format, easy to get started.
-- Native multi-robot support with per-vehicle ROS 2 namespaces.
-- Faster-than-real-time simulation for batch testing.
-- Procedural world generation via XML loops and conditionals.
+- 非常轻量：CPU 和内存占用低，启动速度快。
+- 专注的车辆动力学，带多种摩擦和传动系模型。
+- 基于 XML 的简单世界格式，容易上手。
+- 原生多机器人支持，每辆车辆有独立的 ROS 2 命名空间。
+- 超实时仿真，适用于批量测试。
+- 通过 XML 循环和条件实现程序化世界生成。
 
-**Limitations:**
+**局限：**
 
-- Physics is 2D (Box2D): no full 3D rigid body dynamics.
-  Objects do not tip over or fly.
-  Elevation maps add terrain height but the physics remains fundamentally 2D.
-- Sensor simulation is less detailed than full 3D simulators: camera rendering and LiDAR models
-  are functional but not photorealistic.
-- Smaller ecosystem of pre-built models and environments compared to Gazebo.
-- Focused on wheeled mobile robots.
+- 物理是 2D（Box2D）：没有完整的 3D 刚体动力学。
+  物体不会倾倒或飞行。
+  高程地图增加了地形高度，但物理本质上仍然是 2D。
+- 传感器仿真不如完整的 3D 模拟器精细：相机渲染和激光雷达模型
+  可用但不逼真。
+- 与 Gazebo 相比，预构建模型和环境的生态系统较小。
+- 专注于轮式移动机器人。
 
-Further resources
------------------
+更多资源
+--------
 
-- `MVSim documentation <https://mvsimulator.readthedocs.io/>`__
-- `MVSim GitHub repository <https://github.com/MRPT/mvsim>`__
-- `MVSim paper (SoftwareX) <https://doi.org/10.1016/j.softx.2023.101443>`__
+- `MVSim 文档 <https://mvsimulator.readthedocs.io/>`__
+- `MVSim GitHub 仓库 <https://github.com/MRPT/mvsim>`__
+- `MVSim 论文（SoftwareX） <https://doi.org/10.1016/j.softx.2023.101443>`__

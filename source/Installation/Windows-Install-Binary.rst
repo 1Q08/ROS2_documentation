@@ -1,131 +1,131 @@
-Windows (binary)
-================
+Windows（二进制）
+=================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-This page explains how to install ROS 2 on Windows from a pre-built binary package.
+本文说明如何在 Windows 上从预构建二进制包安装 ROS 2。
 
 .. note::
 
-    The pre-built binary does not include all ROS 2 packages.
-    All packages in the `ROS base variant <https://reps.openrobotics.org/rep-2001/#ros-base>`_ are included, and only a subset of packages in the `ROS desktop variant <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_ are included.
-    The exact list of packages are described by the repositories listed in `this ros2.repos file <https://github.com/ros2/ros2/blob/{REPOS_FILE_BRANCH}/ros2.repos>`_.
+    预构建二进制包不包含所有 ROS 2 软件包。
+    它包含 `ROS base 变体 <https://reps.openrobotics.org/rep-2001/#ros-base>`_ 中的所有软件包，但只包含 `ROS desktop 变体 <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_ 中的一部分软件包。
+    确切的软件包列表由 `此 ros2.repos 文件 <https://github.com/ros2/ros2/blob/{REPOS_FILE_BRANCH}/ros2.repos>`_ 中列出的仓库描述。
 
-System requirements
--------------------
+系统要求
+--------
 
-Only Windows 10 is supported.
+仅支持 Windows 10。
 
 .. _windows-install-binary-installing-prerequisites:
 
 .. include:: _Windows-Install-Prerequisites.rst
 
-Downloading ROS 2
------------------
+下载 ROS 2
+----------
 
-* Go to the releases page: https://github.com/ros2/ros2/releases
-* Download the latest package for Windows, e.g., ``ros2-{DISTRO}-*-windows-release-amd64.zip``.
-
-.. note::
-
-    There may be more than one binary download option which might cause the file name to differ.
+* 前往 releases 页面：https://github.com/ros2/ros2/releases
+* 下载适用于 Windows 的最新软件包，例如 ``ros2-{DISTRO}-*-windows-release-amd64.zip``。
 
 .. note::
 
-    To install debug libraries for ROS 2, see `Extra Stuff for Debug`_.
-    Then continue on with downloading ``ros2-package-windows-debug-AMD64.zip``.
+    可能存在多个二进制下载选项，这会导致文件名有所不同。
 
-* Unpack the zip file somewhere (we'll assume ``C:\dev\ros2_{DISTRO}``\ ).
+.. note::
 
-Install additional DDS implementations (optional)
--------------------------------------------------
+    若要为 ROS 2 安装调试库，请参阅 `调试相关附加内容`_。
+    然后继续下载 ``ros2-package-windows-debug-AMD64.zip``。
 
-If you would like to use another DDS or RTPS vendor besides the default, Fast DDS, you can find instructions :doc:`here <RMW-Implementations>`.
+* 将 zip 文件解压到某个位置（我们假设为 ``C:\dev\ros2_{DISTRO}``\ ）。
 
-Environment setup
------------------
+安装额外 DDS 实现（可选）
+-------------------------
 
-Start a command shell and source the ROS 2 setup file to set up the workspace:
+如果你想使用除默认的 Fast DDS 之外的其他 DDS 或 RTPS 厂商，可以在此处找到说明：:doc:`这里 <RMW-Implementations>`。
+
+环境设置
+--------
+
+启动一个命令 shell，加载 ROS 2 安装脚本以配置工作空间：
 
 .. code-block:: console
 
    $ call C:\dev\ros2_{DISTRO}\local_setup.bat
 
-It is normal that the previous command, if nothing else went wrong, outputs ``The system cannot find the path specified.`` exactly once.
+如果其他一切正常，上一条命令恰好输出一次 ``The system cannot find the path specified.`` 是正常的。
 
-Try some examples
------------------
+尝试一些示例
+------------
 
-In a command shell, set up the ROS 2 environment as described above and then run a C++ ``talker``\ :
+在命令 shell 中按上述方式配置 ROS 2 环境，然后运行 C++ 的 ``talker``\ ：
 
 .. code-block:: console
 
    $ ros2 run demo_nodes_cpp talker
 
-Start another command shell and run a Python ``listener``\ :
+再启动另一个命令 shell，运行 Python 的 ``listener``\ ：
 
 .. code-block:: console
 
    $ ros2 run demo_nodes_py listener
 
-You should see the ``talker`` saying that it's ``Publishing`` messages and the ``listener`` saying ``I heard`` those messages.
-This verifies both the C++ and Python APIs are working properly.
-Hooray!
+你应该会看到 ``talker`` 输出 ``Publishing`` 消息，而 ``listener`` 输出 ``I heard`` 这些消息。
+这验证了 C++ 和 Python API 都能正常工作。
+太棒了！
 
 
-Next steps after installing
----------------------------
-Continue with the :doc:`tutorials and demos <../../Tutorials>` to configure your environment, create your own workspace and packages, and learn ROS 2 core concepts.
+安装后的后续步骤
+----------------
+继续学习 :doc:`教程和演示 <../../Tutorials>`，以配置你的环境、创建自己的工作空间和软件包，并了解 ROS 2 的核心概念。
 
-Additional RMW implementations (optional)
------------------------------------------
-The default middleware that ROS 2 uses is ``Fast DDS``, but the middleware (RMW) can be replaced at runtime.
-See the :doc:`guide <../How-To-Guides/Working-with-multiple-RMW-implementations>` on how to work with multiple RMWs.
+其他 RMW 实现（可选）
+---------------------
+ROS 2 使用的默认中间件是 ``Fast DDS``，但中间件（RMW）可以在运行时替换。
+请参阅关于如何使用多个 RMW 的 :doc:`指南 <../How-To-Guides/Working-with-multiple-RMW-implementations>`。
 
-Troubleshooting
----------------
+故障排查
+--------
 
-Troubleshooting techniques can be found :ref:`here <windows-troubleshooting>`.
+故障排查技巧可以在 :ref:`这里 <windows-troubleshooting>` 找到。
 
-Uninstall
----------
+卸载
+----
 
-1. If you installed your workspace with colcon as instructed above, "uninstalling" could be just a matter of opening a new terminal and not sourcing the workspace's ``setup`` file.
-   This way, your environment will behave as though there is no {DISTRO_TITLE} install on your system.
+1. 如果你按上面的说明使用 colcon 安装工作空间，那么“卸载”可能只需打开一个新终端，并且不要加载该工作空间的 ``setup`` 文件。
+   这样，你的环境就会表现得如同系统中没有安装 {DISTRO_TITLE}。
 
-2. If you're also trying to free up space, you can delete the entire workspace directory with:
+2. 如果你还想释放空间，可以用以下命令删除整个工作空间目录：
 
    .. code-block:: console
 
      $ rmdir /s /q \ros2_{DISTRO}
 
-Extra Stuff for Debug
----------------------
+调试相关附加内容
+----------------
 
-To download the ROS 2 debug libraries you'll need to download ``ros2-{DISTRO}-*-windows-debug-AMD64.zip``.
-Please note that debug libraries require some more additional configuration/setup to work as given below.
+要下载 ROS 2 调试库，你需要下载 ``ros2-{DISTRO}-*-windows-debug-AMD64.zip``。
+请注意，调试库需要如下所示的更多额外配置/设置才能工作。
 
-Python installation may require modification to enable debugging symbols and debug binaries:
+Python 安装可能需要修改以启用调试符号和调试版二进制文件：
 
-* Search in windows **Search Bar** and open **Apps and Features**.
-* Search for the installed Python version.
+* 在 Windows 的 **搜索栏** 中搜索并打开 **应用和功能**。
+* 搜索已安装的 Python 版本。
 
-* Click Modify.
+* 单击“修改”。
 
       .. image:: images/python_installation_modify.png
          :width: 500 px
 
-* Click Next to go to **Advanced Options**.
+* 单击“下一步”进入 **高级选项**。
 
       .. image:: images/python_installation_next.png
          :width: 500 px
 
-* Make sure **Download debugging symbols** and **Download debug binaries** are checked.
+* 确保勾选 **Download debugging symbols** 和 **Download debug binaries**。
 
       .. image:: images/python_installation_enable_debug.png
          :width: 500 px
 
-* Click Install.
+* 单击“安装”。
 

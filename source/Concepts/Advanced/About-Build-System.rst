@@ -2,150 +2,150 @@
 
    Concepts/About-Build-System
 
-The build system
-================
+构建系统
+========
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
 .. include:: ../../../global_substitutions.txt
 
-The build system is what allows developers to build their ROS 2 code as needed.
-ROS 2 relies heavily on the division of code into packages, with each package containing a manifest file (``package.xml``).
-This manifest file contains essential metadata about the package, including its dependencies on other packages.
-This manifest is required for the meta-build tool to function.
+构建系统能够让开发者按需构建 ROS 2 代码。
+ROS 2 在很大程度上依赖于将代码按包划分，每个包都包含一个清单文件（``package.xml``）。
+这个清单文件包含有关包的必要元数据，包括它与其他包的依赖关系。
+这个清单文件是元构建工具正常工作的前提。
 
-The ROS 2 build system consists of 3 major concepts.
+ROS 2 构建系统由 3 个主要概念组成。
 
-Build tool
-----------
+构建工具
+--------
 
-This is the software that controls the compilation and testing of a single package.
-In ROS 2 this is usually CMake for C++, and setuptools for Python, but other build tools are supported.
+这是控制单个包编译与测试的软件。
+在 ROS 2 中，通常使用 CMake 来构建 C++ 包，使用 setuptools 来构建 Python 包，但也支持其他构建工具。
 
-Build helpers
--------------
+构建辅助工具
+------------
 
-These are helper functions that hook into the build tool to improve the developer experience.
-ROS 2 packages typically rely on the ``ament`` series of packages for this.
-``ament`` consists of a few important repositories which are all in the `GitHub organization <https://github.com/ament>`_.
+这些是挂接到构建工具上的辅助函数，用于改善开发者体验。
+ROS 2 包通常依赖 ``ament`` 系列包来提供这些辅助能力。
+``ament`` 由若干重要仓库组成，这些仓库都位于 `GitHub 组织 <https://github.com/ament>`_。
 
-The ``ament_package`` package
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``ament_package`` 包
+~~~~~~~~~~~~~~~~~~~~
 
-Located on |GitHub|_ at `ament/ament_package <https://github.com/ament/ament_package>`_, this repository contains a single :term:`ament Python package` that provides various utilities for |ament packages|, e.g. templates for environment hooks.
+位于 |GitHub|_ 上的 `ament/ament_package <https://github.com/ament/ament_package>`_ 仓库中，包含一个单独的 :term:`ament Python package`，为 |ament packages| 提供各种实用工具，例如环境钩子的模板。
 
-All |ament packages| must contain a single :term:`package.xml` file at the root of the package regardless of their underlying build system.
-The :term:`package.xml` "manifest" file contains information that is required in order to process and operate on a |package|.
-This |package| information includes things like the |package|'s name, which is globally unique, and the package's dependencies.
-The :term:`package.xml` file also serves as the marker file which indicates the location of the |package| on the file system.
+所有 |ament packages| 的包根目录都必须包含一个单独的 :term:`package.xml` 文件，不论其底层构建系统为何。
+:term:`package.xml` “清单”文件中包含处理和操作 |package| 必需的信息。
+这些 |package| 信息包括 |package| 的全局唯一名称以及它的依赖关系。
+:term:`package.xml` 文件同时也是标记 |package| 在文件系统中位置的标记文件。
 
-Parsing of the :term:`package.xml` files is provided by ``catkin_pkg`` (as in ROS 1), while functionality to locate |packages| by searching the file system for these :term:`package.xml` files is provided by build tools such as ``colcon``.
+:term:`package.xml` 文件的解析由 ``catkin_pkg`` 提供（与 ROS 1 一样），而通过文件系统搜索这些 :term:`package.xml` 文件来定位 |packages| 的功能，则由 ``colcon`` 这样的构建工具提供。
 
 .. glossary::
 
    package.xml
-       Package manifest file which marks the root of a :term:`package` and contains meta information about the :term:`package` including its name, version, description, maintainer, license, dependencies, and more.
-       The contents of the manifest are in machine readable XML format and the contents are described in the |REPs| `127 <https://reps.openrobotics.org/rep-0127/>`_ and `140 <https://reps.openrobotics.org/rep-0140/>`_, with the possibility of further modifications in future |REPs|.
+       包清单文件，用于标记 :term:`package` 的根目录，并包含有关该 :term:`package` 的元信息，包括其名称、版本、描述、维护者、许可证、依赖关系等。
+       清单内容采用机器可读的 XML 格式，相关内容在 |REPs| `127 <https://reps.openrobotics.org/rep-0127/>`_ 和 `140 <https://reps.openrobotics.org/rep-0140/>`_ 中有说明，未来还可能通过进一步的 |REPs| 进行修改。
 
-So anytime some |package| is referred to as an :term:`ament package`, it means that it is a single unit of software (source code, build files, tests, documentation, and other resources) which is described using a :term:`package.xml` manifest file.
+因此，只要某个 |package| 被称为 :term:`ament package`，就意味着它是一个软件单元（包含源代码、构建文件、测试、文档和其他资源），并通过 :term:`package.xml` 清单文件来描述。
 
 .. glossary::
 
    ament package
-       Any |package| which contains a :term:`package.xml` and follows the packaging guidelines of ``ament``, regardless of the underlying build system.
+       任意一个包含 :term:`package.xml` 且遵循 ``ament`` 打包规范的 |package|，无论其底层构建系统是什么。
 
-Since the term :term:`ament package` is build system agnostic, there can be different kinds of |ament packages|, e.g. :term:`ament CMake package`, :term:`ament Python package`, etc.
+由于 :term:`ament package` 这一术语与构建系统无关，因此可能存在不同种类的 |ament packages|，例如 :term:`ament CMake package`、:term:`ament Python package` 等。
 
-Here is a list of common package types that you might run into in this software stack:
+下面列出你可能会在该软件栈中遇到的常见包类型：
 
 .. glossary::
 
     CMake package
-        Any |package| containing a plain CMake project and a :term:`package.xml` manifest file.
+        任意包含普通 CMake 项目和 :term:`package.xml` 清单文件的 |package|。
 
     ament CMake package
-        A :term:`CMake package` that also follows the ``ament`` packaging guidelines.
+        同时遵循 ``ament`` 打包规范的 :term:`CMake package`。
 
     Python package
-        Any |package| containing a `setuptools <https://pypi.org/project/setuptools/>`_ based Python project and a :term:`package.xml` manifest file.
+        任意包含基于 `setuptools <https://pypi.org/project/setuptools/>`_ 的 Python 项目和 :term:`package.xml` 清单文件的 |package|。
 
     ament Python package
-        A :term:`Python package` that also follows the ``ament`` packaging guidelines.
+        同时遵循 ``ament`` 打包规范的 :term:`Python package`。
 
-The ``ament_cmake`` repository
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``ament_cmake`` 仓库
+~~~~~~~~~~~~~~~~~~~~
 
-Located on |GitHub|_ at `ament/ament_cmake <https://github.com/ament/ament_cmake>`_, this repository contains many "ament CMake" and pure CMake packages which provide the infrastructure in CMake that is required to create "ament CMake" packages.
-In this context "ament CMake" packages means: ``ament`` packages that are built using CMake.
-So the |packages| in this repository provide the necessary CMake functions/macros and CMake Modules to facilitate creating more "ament CMake" (or ``ament_cmake``) packages.
-Packages of this type are identified with the ``<build_type>ament_cmake</build_type>`` tag in the ``<export>`` tag of the :term:`package.xml` file.
+位于 |GitHub|_ 上的 `ament/ament_cmake <https://github.com/ament/ament_cmake>`_ 仓库中，包含大量“ament CMake”与纯 CMake 包，这些包提供了构建“ament CMake”包所需的 CMake 基础设施。
+在这里，“ament CMake”包指的是使用 CMake 构建的 ``ament`` 包。
+因此，该仓库中的 |packages| 提供了必要的 CMake 函数/宏以及 CMake 模块，用于帮助创建更多“ament CMake”（或 ``ament_cmake``）包。
+这类包在 :term:`package.xml` 文件的 ``<export>`` 标签中，会通过 ``<build_type>ament_cmake</build_type>`` 标签加以标识。
 
-The |packages| in this repository are extremely modular, but there is a single "bottleneck" |package| called ``ament_cmake``.
-Anyone can depend on the ``ament_cmake`` |package| to get all of the aggregate functionality of the |packages| in this repository.
-Here a list of the |packages| in the repository along with a short description:
+该仓库中的 |packages| 非常模块化，但其中有一个单独的“瓶颈” |package|，名为 ``ament_cmake``。
+任何人都可以依赖 ``ament_cmake`` |package| 来获得该仓库中其他 |packages| 的聚合功能。
+下面列出该仓库中的若干 |packages| 及其简要说明：
 
 -  ``ament_cmake``
 
-   - aggregates all other |packages| in this repository, users need only to depend on this
+   - 聚合该仓库中的其他所有 |packages|，用户只需依赖本包即可
 
 -  ``ament_cmake_auto``
 
-   - provides convenience CMake functions which automatically handle a lot of the tedious parts of writing a |package|'s ``CMakeLists.txt`` file
+   - 提供便捷的 CMake 函数，自动处理编写 |package| 的 ``CMakeLists.txt`` 文件时大量繁琐细节
 
 -  ``ament_cmake_core``
 
-   - provides all built-in core concepts for ``ament``, e.g. environment hooks, resource indexing, symbolic linking install and others
+   - 提供 ``ament`` 的所有内置核心概念，例如环境钩子、资源索引、符号链接安装等
 
 -  ``ament_cmake_gmock``
 
-   - adds convenience functions for making gmock based unit tests
+   - 添加基于 gmock 的单元测试便捷函数
 
 -  ``ament_cmake_gtest``
 
-   - adds convenience functions for making gtest based automated tests
+   - 添加基于 gtest 的自动化测试便捷函数
 
 -  ``ament_cmake_nose``
 
-   - adds convenience functions for making nosetests based python automated tests
+   - 添加基于 nosetests 的 Python 自动化测试便捷函数
 
 -  ``ament_cmake_python``
 
-   - provides CMake functions for |packages| that contain Python code
-   - see the :doc:`ament_cmake_python user documentation <../../How-To-Guides/Ament-CMake-Python-Documentation>`
+   - 为包含 Python 代码的 |packages| 提供 CMake 函数
+   - 参见 :doc:`ament_cmake_python 用户文档 <../../How-To-Guides/Ament-CMake-Python-Documentation>`
 
 -  ``ament_cmake_test``
 
-   - aggregates different kinds of tests, e.g. gtest and nosetests, under a single target using `CTest <https://cmake.org/Wiki/CMake/Testing_With_CTest>`_
+   - 使用 `CTest <https://cmake.org/Wiki/CMake/Testing_With_CTest>`_ 汇总不同类型测试，例如 gtest 与 nosetests，并在单个目标下运行
 
-The ``ament_cmake_core`` |package| contains a lot of the CMake infrastructure that makes it possible to cleanly pass information between |packages| using conventional interfaces.
-This makes the |packages| have more decoupled build interfaces with other |packages|, promoting their reuse and encouraging conventions in the build systems of different |packages|.
-For instance, it provides a standard way to pass include directories, libraries, definitions, and dependencies between |packages| so that consumers of this information can access this information in a conventional way.
+``ament_cmake_core`` |package| 包含大量 CMake 基础设施，使得不同 |packages| 之间能够通过约定接口清晰地传递信息。
+这让 |packages| 与其他 |packages| 的构建接口耦合度更低，增强可复用性，并促进不同 |packages| 构建系统间的约定形成。
+例如，它提供了一种标准方式，在 |packages| 之间传递包含目录、库、定义和依赖关系，让使用这些信息的消费者能够以一致的方式获取它们。
 
-The ``ament_cmake_core`` |package| also provides features of the ``ament`` build system like symbolic link installation, which allows you to symbolically link files from either the source space or the build space into the install space rather than copying them.
-This allows you to install once and then edit non-generated resources like Python code and configuration files without having to rerun the install step for them to take effect.
-This feature essentially replaces the "devel space" from ``catkin`` because it has most of the advantages with few of the complications or drawbacks.
+``ament_cmake_core`` |package| 还提供了 ``ament`` 构建系统的若干特性，例如符号链接安装，这使得你可以将文件从源空间或构建空间符号链接到安装空间，而不是复制它们。
+这让你可以先安装一次，然后编辑非生成资源（如 Python 代码和配置文件），而无需重新执行安装步骤让它们生效。
+这个特性本质上取代了 ``catkin`` 的“devel space”，因为它具备大多数优点，但缺点较少。
 
-Another feature provided by ``ament_cmake_core`` is the |package| resource indexing which is a way for |packages| to indicate that they contain a resource of some type.
-The design of this feature makes it much more efficient to answer simple questions like what |packages| are in this prefix (e.g. ``/usr/local``) because it only requires that you list the files in a single possible location under that prefix.
-You can read more about this feature in the `design docs <https://github.com/ament/ament_cmake/blob/{REPOS_FILE_BRANCH}/ament_cmake_core/doc/resource_index.md>`_ for the resource index.
+``ament_cmake_core`` 提供的另一个特性是 |package| 资源索引，用于让 |packages| 表明自己包含某种类型的资源。
+该特性的设计可以更高效地回答类似“给定前缀（例如 ``/usr/local``）中有哪些 |packages|”这类简单问题，因为它只需要列出前缀中某一可能位置下的文件即可。
+有关资源索引的更多信息，可阅读其 `设计文档 <https://github.com/ament/ament_cmake/blob/{REPOS_FILE_BRANCH}/ament_cmake_core/doc/resource_index.md>`_。
 
-Like ``catkin``, ``ament_cmake_core`` also provides environment setup files and |package| specific environment hooks.
-The environment setup files, often named something like ``setup.bash``, are a place for |package| developers to define changes to the environment that are needed to utilize their |package|.
-The developers are able to do this using an "environment hook" which is basically an arbitrary bit of shell code that can set or modify environment variables, define shell functions, setup auto-completion rules, etc...
-This feature is how, for example, ROS 1 set the ``ROS_DISTRO`` environment variable without ``catkin`` knowing anything about the ROS distribution.
+与 ``catkin`` 类似，``ament_cmake_core`` 还提供环境设置文件和 |package| 特定环境钩子。
+环境设置文件通常命名为类似 ``setup.bash``，用于为 |package| 开发者定义利用该 |package| 所需的环境变量变更、shell 函数定义、自动补全规则设置等。
+开发者能够通过“环境钩子”这种方式，在任意 shell 代码中设置或修改环境变量、定义 shell 函数、设置自动补全规则等。
+例如，这正是 ROS 1 在 ``catkin`` 不知情的情况下设置 ``ROS_DISTRO`` 环境变量的方式。
 
-The ``ament_lint`` repository
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``ament_lint`` 仓库
+~~~~~~~~~~~~~~~~~~~
 
-Located on |GitHub|_ at `ament/ament_lint <https://github.com/ament/ament_lint>`_, this repository provides several |packages| which provide linting and testing services in a convenient and consistent manner.
-Currently there are |packages| to support C++ style linting using ``uncrustify``, static C++ code checks using ``cppcheck``, checking for copyright in source code, Python style linting using ``pep8``, and other things.
-The list of helper packages will likely grow in the future.
+位于 |GitHub|_ 上的 `ament/ament_lint <https://github.com/ament/ament_lint>`_ 仓库中，提供了多个 |packages|，以方便、一致地提供 linting 和测试服务。
+当前有 |packages| 分别支持使用 ``uncrustify`` 进行 C++ 风格检查、使用 ``cppcheck`` 进行静态 C++ 代码检查、检查源码中的版权声明、使用 ``pep8`` 进行 Python 风格检查，以及其他内容。
+未来这些辅助包列表还会继续增长。
 
-Meta-build tool
----------------
+元构建工具
+----------
 
-This is a piece of software that knows how to topologically order a group of packages, and build or test them in the correct dependency order.
-This software will call into the Build Tool to do the actual work of compiling, testing, and installing the package.
+这是一类知道如何按拓扑顺序组织一组包，并以正确的依赖顺序构建或测试它们的软件。
+这类软件会调用构建工具来完成真正的编译、测试与安装工作。
 
-In ROS 2, the tool named `colcon <https://colcon.readthedocs.io/en/released/>`__ is used for this.
+在 ROS 2 中，用于此目的的工具名为 `colcon <https://colcon.readthedocs.io/en/released/>`__。

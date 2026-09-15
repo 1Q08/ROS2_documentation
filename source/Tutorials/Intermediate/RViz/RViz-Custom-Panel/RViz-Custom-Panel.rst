@@ -1,23 +1,23 @@
-Building a Custom RViz Panel
-============================
+构建自定义 RViz 面板
+====================
 
-This tutorial is for people who would like to work within the RViz environment to either display or interact with some data in a two-dimensional environment.
+本教程面向希望在 RViz 环境中工作，以在二维环境中显示或交互某些数据的人。
 
-In this tutorial you will learn how to do three things within RViz:
+在本教程中，你将学习如何在 RViz 中做三件事：
 
-* Create a new QT panel within RViz.
-* Create a topic subscriber within RViz that can monitor messages published on that topic and display them within the RViz panel.
-* Create a topic publisher such button presses within RViz publish to an output topic in ROS.
+* 在 RViz 中创建一个新的 QT 面板。
+* 在 RViz 中创建一个话题订阅者，它可以监视该话题上发布的消息并在 RViz 面板中显示它们。
+* 创建一个话题发布者，例如 RViz 中的按钮按下会发布到 ROS 中的输出话题。
 
-All of the code for this tutorial can be found in `this repository <https://github.com/MetroRobots/rviz_panel_tutorial>`__.
+本教程的所有代码都可以在 `此仓库 <https://github.com/MetroRobots/rviz_panel_tutorial>`__ 中找到。
 
-Boilerplate Code
-----------------
+模板代码
+--------
 
-Header File
-^^^^^^^^^^^
+头文件
+^^^^^^
 
-Here are the contents of ``demo_panel.hpp``
+这是 ``demo_panel.hpp`` 的内容
 
 .. code-block:: c++
 
@@ -40,12 +40,12 @@ Here are the contents of ``demo_panel.hpp``
 
    #endif  // RVIZ_PANEL_TUTORIAL__DEMO_PANEL_HPP_
 
-* We're extending the `rviz_common::Panel <https://github.com/ros2/rviz/blob/9a94bdf2f5f92ccdac4037c9268b95940845d609/rviz_common/include/rviz_common/panel.hpp#L46>`__ class.
-* `For reasons outside the scope of this tutorial <https://doc.qt.io/qt-5/moc.html>`__, you need the ``Q_OBJECT`` macro in there to get the QT parts of the GUI to work.
-* We start by declaring just a constructor and destructor, implemented in the cpp file.
+* 我们扩展 `rviz_common::Panel <https://github.com/ros2/rviz/blob/9a94bdf2f5f92ccdac4037c9268b95940845d609/rviz_common/include/rviz_common/panel.hpp#L46>`__ 类。
+* `由于超出本教程范围的原因 <https://doc.qt.io/qt-5/moc.html>`__，你需要其中包含 ``Q_OBJECT`` 宏才能让 GUI 的 QT 部分工作。
+* 我们首先只声明一个构造函数和析构函数，在 cpp 文件中实现。
 
-Source File
-^^^^^^^^^^^
+源文件
+^^^^^^
 
 ``demo_panel.cpp``
 
@@ -65,13 +65,13 @@ Source File
    #include <pluginlib/class_list_macros.hpp>
    PLUGINLIB_EXPORT_CLASS(rviz_panel_tutorial::DemoPanel, rviz_common::Panel)
 
-* Overriding the constructor and deconstructor are not strictly necessary, but we can do more with them later.
-* In order for RViz to find our plugin, we need this ``PLUGINLIB`` invocation in our code (as well as other things below).
+* 重写构造函数和析构函数并不是严格必要的，但我们稍后可以用它们做更多事情。
+* 为了让 RViz 找到我们的插件，我们需要在代码中使用这个 ``PLUGINLIB`` 调用（以及下面的其他东西）。
 
 package.xml
 ^^^^^^^^^^^
 
-We need the following dependencies in our package.xml:
+我们的 package.xml 中需要以下依赖：
 
 .. code-block:: xml
 
@@ -89,17 +89,17 @@ rviz_common_plugins.xml
      </class>
    </library>
 
-* This is standard ``pluginlib`` code.
+* 这是标准的 ``pluginlib`` 代码。
 
-  * The library ``path`` is the name of the library we'll assign in the CMake.
-  * The class should match the ``PLUGINLIB`` invocation from above.
+  * 库 ``path`` 是我们在 CMake 中分配的库的名称。
+  * 类应与上面的 ``PLUGINLIB`` 调用匹配。
 
-* We'll come back to the description later, I promise.
+* 我们稍后会回到描述，我保证。
 
 CMakeLists.txt
 ^^^^^^^^^^^^^^
 
-Add the following lines to the top of the standard boilerplate.
+将以下行添加到标准模板的顶部。
 
 .. code-block:: cmake
 
@@ -138,47 +138,47 @@ Add the following lines to the top of the standard boilerplate.
    pluginlib_export_plugin_description_file(rviz_common rviz_common_plugins.xml)
 
 
-* To generate the proper Qt files, we need to
+* 为了生成正确的 Qt 文件，我们需要
 
-  * Turn ``CMAKE_AUTOMOC`` on.
-  * Wrap the headers by calling ``qt5_wrap_cpp`` with each header that has ``Q_OBJECT`` in it.
-  * Include the ``MOC_FILES`` in the library alongside our other cpp files.
+  * 打开 ``CMAKE_AUTOMOC``。
+  * 通过对每个包含 ``Q_OBJECT`` 的头文件调用 ``qt5_wrap_cpp`` 来包装头文件。
+  * 将 ``MOC_FILES`` 与我们其他 cpp 文件一起包含在库中。
 
-* A lot of the other code ensures that the plugin portion works.
-  Namely, calling ``pluginlib_export_plugin_description_file`` is essential to getting RViz to find your new plugin.
+* 许多其他代码确保插件部分工作。
+  也就是说，调用 ``pluginlib_export_plugin_description_file`` 对于让 RViz 找到你的新插件至关重要。
 
-Testing it out
-^^^^^^^^^^^^^^
+测试一下
+^^^^^^^^
 
-Compile your code, source your workspace and run ``rviz2``.
+编译你的代码，source 你的工作空间并运行 ``rviz2``。
 
-In the top Menu bar, there should be a "Panels" menu.
-Select "Add New Panel" from that menu.
+在顶部菜单栏中，应该有一个 "Panels" 菜单。
+从该菜单中选择 "Add New Panel"。
 
 .. image:: images/Select0.png
    :target: ../../../../_images/Select0.png
    :alt: screenshot of Add New Panel dialog
 
-A dialog will pop up showing all the panels accessible in your ROS environment, grouped into folders based on their ROS package.
-Create a new instance of your panel by either double clicking on its name, or selecting it and clicking OK.
+将弹出一个对话框，显示你的 ROS 环境中所有可访问的面板，根据它们的 ROS 包分组到文件夹中。
+通过双击面板名称，或选择它并点击 OK，来创建面板的新实例。
 
-This should create a new panel in your RViz window, albeit with nothing but a title bar with the name of your panel.
+这将在你的 RViz 窗口中创建一个新面板，尽管只有一个带有面板名称的标题栏。
 
 .. image:: images/RViz0.png
    :target: ../../../../_images/RViz0.png
    :alt: screenshot of the whole RViz window showing the new simple panel
 
-Filling in the Panel
---------------------
-We're going to update our panel with some very basic ROS/QT interaction.
-What we will do, roughly, is access the ROS node from within RViz that can both subscribe and publish to ROS topics.
-We will use our subscriber to monitor an ``/input`` topic within ROS and display the published ``String`` values in the widget.
-We use our publisher to map button presses within RViz to messages published on a ROS topic named ``/output`` .
+填充面板
+--------
+我们将用一些非常基本的 ROS/QT 交互来更新我们的面板。
+粗略地说，我们将做的是从 RViz 内部访问 ROS 节点，它既可以订阅也可以发布 ROS 话题。
+我们将使用我们的订阅者监视 ROS 内的 ``/input`` 话题，并在控件中显示发布的 ``String`` 值。
+我们使用我们的发布者将 RViz 内的按钮按下映射到发布在名为 ``/output`` 的 ROS 话题上的消息。
 
-Updated Header File
-^^^^^^^^^^^^^^^^^^^
+更新后的头文件
+^^^^^^^^^^^^^^
 
-Update ``demo_panel.hpp`` to include the following includes and class Body.
+更新 ``demo_panel.hpp`` 以包含以下包含项和类主体。
 
 .. code-block:: c++
 
@@ -214,16 +214,16 @@ Update ``demo_panel.hpp`` to include the following includes and class Body.
    };
    }  // namespace rviz_panel_tutorial
 
-* On the ROS side, we declare an abstract node pointer, which we will use to create interfaces to the wider ROS ecosystem.
-  We have a subscriber which will allow us to take information from ROS and use it in RViz.
-  The publisher allows us to publish information/events from within RViz and make them available in ROS.
-  We also have methods an initialization method for setting up the ROS components (``onInitialize``) and a callback for the subscriber (``topicCallback``).
-* On the QT side, we declare a label and a button, as well as a callback for the button (``buttonActivated``).
+* 在 ROS 侧，我们声明一个抽象节点指针，我们将使用它来创建与更广泛 ROS 生态系统的接口。
+  我们有一个订阅者，它将允许我们从 ROS 获取信息并在 RViz 中使用它。
+  发布者允许我们从 RViz 内发布信息/事件，并使它们在 ROS 中可用。
+  我们还有用于设置 ROS 组件的初始化方法（``onInitialize``）和订阅者的回调（``topicCallback``）。
+* 在 QT 侧，我们声明一个标签和一个按钮，以及按钮的回调（``buttonActivated``）。
 
-Updated Source File
-^^^^^^^^^^^^^^^^^^^
+更新后的源文件
+^^^^^^^^^^^^^^
 
-Update ``demo_panel.cpp`` to have the following contents:
+更新 ``demo_panel.cpp`` 使其具有以下内容：
 
 .. code-block:: c++
 
@@ -291,47 +291,47 @@ Update ``demo_panel.cpp`` to have the following contents:
 
    PLUGINLIB_EXPORT_CLASS(rviz_panel_tutorial::DemoPanel, rviz_common::Panel)
 
-Testing with ROS
-^^^^^^^^^^^^^^^^
-Compile and launch RViz2 with your panel again.
-You should see your label and button in the panel now.
+使用 ROS 测试
+^^^^^^^^^^^^^
+再次编译并用你的面板启动 RViz2。
+你现在应该能在面板中看到你的标签和按钮。
 
 .. image:: images/RViz1.png
    :target: ../../../../_images/RViz1.png
    :alt: screenshot of the RViz panel in its default state
 
-To change the label, we simply have to publish a message on the ``/input`` topic, which you can do with this command:
+要更改标签，我们只需在 ``/input`` 话题上发布一条消息，你可以使用此命令来做到：
 
 .. code-block:: console
 
    $ ros2 topic pub /input std_msgs/msg/String "{data: 'Please be kind.'}"
 
-Since the widget is subscribed to this topic, it will trigger the callback and change the text of the label.
+由于控件订阅了此话题，它将触发回调并更改标签的文本。
 
 .. image:: images/RViz2.png
    :target: ../../../../_images/RViz2.png
    :alt: screenshot of the RViz panel with custom string message displayed
 
 
-Pressing the button will publish a message, which you can see by echoing the ``/output`` topic, like with this command.
+按下按钮将发布一条消息，你可以通过回显 ``/output`` 话题看到它，就像这个命令一样。
 
 .. code-block:: console
 
    $ ros2 topic echo /output
 
 
-Cleanup
--------
+清理
+----
 
-Now its time to clean it up a bit.
-This makes things look nicer and be a little easier to use, but aren't strictly required.
+现在是时候把它清理一下了。
+这让事情看起来更漂亮，也更容易使用，但不是严格必需的。
 
-First, you should update the description of your plugin in ``rviz_common_plugins.xml``
+首先，你应该更新 ``rviz_common_plugins.xml`` 中插件的描述。
 
-We also add an icon for the plugin at ``icons/classes/DemoPanel.png``.
-The folder is hardcoded, and the filename should match the name from the plugin declaration (or the name of the class if not specified).
+我们还在 ``icons/classes/DemoPanel.png`` 为插件添加一个图标。
+文件夹是硬编码的，文件名应与插件声明中的名称匹配（如果未指定，则为类的名称）。
 
-We need to install the image file in the CMake.
+我们需要在 CMake 中安装图像文件。
 
 .. code-block:: cmake
 
@@ -339,13 +339,13 @@ We need to install the image file in the CMake.
            DESTINATION share/${PROJECT_NAME}/icons/classes
    )
 
-Now when you add the panel, it should show up with an icon and description.
+现在当你添加面板时，它应该带有一个图标和描述显示出来。
 
 .. image:: images/Select1.png
    :target: ../../../../_images/Select1.png
    :alt: screenshot of Add New Panel dialog with our custom icon and description
 
-The panel will also have an updated icon.
+面板也将有一个更新后的图标。
 
 .. image:: images/RViz3.png
    :target: ../../../../_images/RViz3.png

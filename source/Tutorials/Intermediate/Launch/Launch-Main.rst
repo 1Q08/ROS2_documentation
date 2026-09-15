@@ -5,10 +5,10 @@
 
 .. _LaunchFilesMain:
 
-Launch
-======
+启动
+====
 
-ROS 2 Launch files allow you to start up and configure a number of executables containing ROS 2 nodes simultaneously.
+ROS 2 launch 文件允许你同时启动并配置多个包含 ROS 2 节点的可执行文件。
 
 .. toctree::
    :hidden:
@@ -19,27 +19,27 @@ ROS 2 Launch files allow you to start up and configure a number of executables c
    Using-Event-Handlers
    Using-ROS2-Launch-For-Large-Projects
 
-#. :doc:`Creating a launch file <./Creating-Launch-Files>`.
+#. :doc:`创建一个 launch 文件 <./Creating-Launch-Files>`。
 
-   Learn how to create a launch file that will start up nodes and their configurations all at once.
+   了解如何创建一个 launch 文件，使其一次性启动节点及其配置。
 
-#. :doc:`Launching and monitoring multiple nodes <./Launch-system>`.
+#. :doc:`启动并监控多个节点 <./Launch-system>`。
 
-   Get a more advanced overview of how launch files work.
+   更深入地了解 launch 文件的工作原理。
 
-#. :doc:`Using substitutions <./Using-Substitutions>`.
+#. :doc:`使用替换 <./Using-Substitutions>`。
 
-   Use substitutions to provide more flexibility when describing reusable launch files.
+   使用替换来描述可复用的 launch 文件时提供更多灵活性。
 
-#. :doc:`Using event handlers <./Using-Event-Handlers>`.
+#. :doc:`使用事件处理器 <./Using-Event-Handlers>`。
 
-   Use event handlers to monitor the state of processes or to define a complex set of rules that can be used to dynamically modify the launch file.
+   使用事件处理器来监控进程状态，或定义一组复杂的规则，以动态修改 launch 文件。
 
-#. :doc:`Managing large projects <./Using-ROS2-Launch-For-Large-Projects>`.
+#. :doc:`管理大型项目 <./Using-ROS2-Launch-For-Large-Projects>`。
 
-   Structure launch files for large projects so they may be reused as much as possible in different situations.
-   See usage examples of different launch tools like parameters, YAML files, remappings, namespaces, default arguments, and RViz configs.
+   为大型项目组织 launch 文件，使它们在不同的场景中尽可能多地复用。
+   查看不同 launch 工具的使用示例，如参数、YAML 文件、重映射、命名空间、默认参数和 RViz 配置。
 
 .. note::
 
-   If you are coming from ROS 1, you can use the :doc:`ROS Launch Migration guide <../../../How-To-Guides/Migrating-from-ROS1/Migrating-Launch-Files>` to help you migrate your launch files to ROS 2.
+   如果你来自 ROS 1，可以使用 :doc:`ROS Launch 迁移指南 <../../../How-To-Guides/Migrating-from-ROS1/Migrating-Launch-Files>` 来帮助你将 launch 文件迁移到 ROS 2。

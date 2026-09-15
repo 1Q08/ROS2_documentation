@@ -1,9 +1,9 @@
 RViz
 ====
 
-RViz is a 3D visualizer for the Robot Operating System (ROS) framework.
+RViz 是机器人操作系统（ROS）框架的 3D 可视化工具。
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 0
    :local:
 

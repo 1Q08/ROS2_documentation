@@ -190,6 +190,22 @@ ogp_site_url = 'https://1Q08.github.io/ROS2_documentation/'
 ogp_site_name = 'ROS 2 Documentation'
 ogp_image = '_static/humble-small.png'
 
+# -- Options for the sitemap generator (plugins/sphinx_sitemap_ros.py) -----
+
+# The sitemap generator builds each URL as:
+#
+#   url = site_url + sitemap_url_scheme.format(lang=..., version=..., link=...)
+#
+# html_baseurl already carries the distribution name (see smv_rewrite_configs
+# below), so the scheme must only append the page link.  Anything else (e.g. the
+# plugin default "{lang}{version}{link}") duplicates the version segment and
+# produces URLs such as ".../ROS2_documentation/humbleen/About-ROS.html".
+sitemap_url_scheme = '/{link}'
+
+# Only emit <loc> entries; skip the meaningless hreflang alternates that the
+# plugin would otherwise generate for the single "en" locale.
+sitemap_locales = [None]
+
 class RedirectFrom(Directive):
 
     has_content = True

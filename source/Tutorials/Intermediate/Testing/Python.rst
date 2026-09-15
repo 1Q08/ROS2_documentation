@@ -1,34 +1,34 @@
 .. TestingPython:
 
-Writing Basic Tests with Python
-===============================
+使用 Python 编写基本测试
+========================
 
-Starting point: we'll assume you have a :ref:`basic ament_python package<CreatePkg>` set up already and you want to add some tests to it.
+起点：我们假设你已经创建好了 :ref:`基本的 ament_python 软件包<CreatePkg>`，并想为其添加一些测试。
 
-If you are using ament_cmake_python, refer to the :doc:`ament_cmake_python docs<../../../How-To-Guides/Ament-CMake-Python-Documentation>` for how to make tests discoverable.
-The test contents and invocation with ``colcon`` remain the same.
+如果你使用的是 ament_cmake_python，请参阅 :doc:`ament_cmake_python 文档<../../../How-To-Guides/Ament-CMake-Python-Documentation>`，了解如何让测试可被发现。
+测试的内容以及使用 ``colcon`` 调用测试的方式保持不变。
 
-Package Setup
--------------
+软件包设置
+----------
 
 setup.py
 ^^^^^^^^
 
-Your ``setup.py`` must have a test dependency on ``pytest`` within the call to ``setup(...)``:
+你的 ``setup.py`` 必须在 ``setup(...)`` 调用中包含对 ``pytest`` 的测试依赖：
 
 .. code-block:: python
 
     tests_require=['pytest'],
 
-Test Files and Folders
-^^^^^^^^^^^^^^^^^^^^^^
+测试文件和文件夹
+^^^^^^^^^^^^^^^^
 
-Your test code needs to go in a folder named ``tests`` in the root of your package.
+你的测试代码需要放在软件包根目录下名为 ``tests`` 的文件夹中。
 
-Any file that contains tests that you want to run must have the pattern ``test_FOO.py`` where ``FOO`` can be replaced with anything.
+任何包含你想要运行的测试的文件都必须符合 ``test_FOO.py`` 的命名模式，其中 ``FOO`` 可以替换为任意内容。
 
-Example package layout:
-"""""""""""""""""""""""
+示例软件包结构：
+""""""""""""""""
 
 .. code-block::
 
@@ -45,11 +45,11 @@ Example package layout:
         test_fozzie.py
 
 
-Test Contents
--------------
+测试内容
+--------
 
-You can now write tests to your heart's content.
-There are `plenty of resources on pytest <https://docs.pytest.org>`__, but in short, you can write functions with the ``test_`` prefix and include whatever assert statements you'd like.
+现在你可以尽情地编写测试。
+关于 pytest 有 `大量资源 <https://docs.pytest.org>`__，但简而言之，你可以编写以 ``test_`` 为前缀的函数，并加入你想要的任何断言语句。
 
 
 .. code-block:: python
@@ -57,16 +57,16 @@ There are `plenty of resources on pytest <https://docs.pytest.org>`__, but in sh
   def test_math():
       assert 2 + 2 == 5   # This should fail for most mathematical systems
 
-Running Tests
--------------
+运行测试
+--------
 
-See the :doc:`tutorial on how to run tests from the command line <CLI>` for more information on running the tests and inspecting the test results.
+有关运行测试和检查测试结果的更多信息，请参阅 :doc:`关于如何从命令行运行测试的教程 <CLI>`。
 
-Special Commands
-----------------
+特殊命令
+--------
 
-Beyond the :doc:`standard colcon testing commands <CLI>` you can also specify arguments to the ``pytest`` framework from the command line with the ``--pytest-args`` flag.
-For example, you can specify the name of the function to run with
+除了 :doc:`标准的 colcon 测试命令 <CLI>` 之外，你还可以在命令行上通过 ``--pytest-args`` 标志向 ``pytest`` 框架传递参数。
+例如，你可以用以下方式指定要运行的函数名：
 
 
 .. tabs::
@@ -83,7 +83,7 @@ For example, you can specify the name of the function to run with
 
          $ colcon test --merge-install --packages-select <name-of-pkg> --pytest-args -k name_of_the_test_function
 
-To see the pytest output while running the tests, use these flags:
+要在运行测试时查看 pytest 输出，请使用以下标志：
 
 .. code-block:: console
 

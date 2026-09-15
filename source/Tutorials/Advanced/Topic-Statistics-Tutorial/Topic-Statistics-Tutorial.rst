@@ -3,48 +3,48 @@
     Topic-Statistics-Tutorial
     Tutorials/Topics/Topic-Statistics-Tutorial
 
-Enabling topic statistics (C++)
-===============================
+启用话题统计（C++）
+===================
 
-**Goal:** Enable ROS 2 Topic Statistics and view the output statistics data.
+**目标：** 启用 ROS 2 话题统计，并查看输出的统计数据。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 10 minutes
+**时间：** 10 分钟
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
-Background
-----------
+背景
+----
 
-This is a short tutorial on how to enable topic statistics in ROS 2 and view the published statistics output using command line tools (:doc:`ros2 topic <../../Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics>`).
+这是一个简短的教程，介绍如何在 ROS 2 中启用话题统计，并使用命令行工具（:doc:`ros2 topic <../../Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics>`）查看发布的统计输出。
 
-ROS 2 provides the integrated measurement of statistics for messages received by any subscription,
-called Topic Statistics.
-With Topic Statistics enabled for your subscription, you can characterize the performance of your
-system or use the data to help diagnose any present issues.
+ROS 2 为任何订阅接收到的消息提供集成的统计测量，
+称为话题统计（Topic Statistics）。
+为你的订阅启用话题统计后，你可以刻画系统的性能特征，
+或使用这些数据来帮助诊断当前存在的问题。
 
-For more details please see the :doc:`Topic Statistics Concepts Page <../../../Concepts/Intermediate/About-Topic-Statistics>`.
+更多细节请参阅 :doc:`话题统计概念页面 <../../../Concepts/Intermediate/About-Topic-Statistics>`。
 
-Prerequisites
--------------
+前置条件
+--------
 
-An installation from either binaries or source.
+从二进制包或源码安装。
 
-In previous tutorials, you learned how to :doc:`create a workspace <../../Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace>`,
-:doc:`create a package <../../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>`, and create a :doc:`C++ <../../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber>` publisher and subscriber.
+在之前的教程中，你已经学习了如何 :doc:`创建工作空间 <../../Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace>`、
+:doc:`创建包 <../../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>`，以及创建 :doc:`C++ <../../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber>` 发布器和订阅器。
 
-This tutorial assumes that you still have your ``cpp_pubsub`` package from the :doc:`C++ <../../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber>` tutorial.
+本教程假设你仍然保留着 :doc:`C++ <../../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber>` 教程中的 ``cpp_pubsub`` 包。
 
-Tasks
------
+任务
+----
 
-1 Write the subscriber node with statistics enabled
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 编写启用统计的订阅器节点
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Navigate into the ``ros2_ws/src/cpp_pubsub/src`` folder, created in the :doc:`previous tutorial <../../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber>`, and
-download the example talker code by entering the following command:
+进入在 :doc:`上一教程 <../../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber>` 中创建的 ``ros2_ws/src/cpp_pubsub/src`` 文件夹，并
+输入以下命令下载示例 talker 代码：
 
 .. tabs::
 
@@ -62,12 +62,12 @@ download the example talker code by entering the following command:
 
    .. group-tab:: Windows
 
-      Right click this link and select Save As ``publisher_member_function.cpp``:
+      右键单击此链接并选择另存为 ``publisher_member_function.cpp``：
 
       https://raw.githubusercontent.com/ros2/examples/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_subscriber/member_function_with_topic_statistics.cpp
 
-Now there will be a new file named ``member_function_with_topic_statistics.cpp``.
-Open the file using your preferred text editor.
+现在将出现一个名为 ``member_function_with_topic_statistics.cpp`` 的新文件。
+使用你喜欢的文本编辑器打开该文件。
 
 .. code-block:: C++
 
@@ -119,13 +119,12 @@ Open the file using your preferred text editor.
       return 0;
     }
 
-1.1 Examine the code
-~~~~~~~~~~~~~~~~~~~~
+1.1 检查代码
+~~~~~~~~~~~~
 
-As in the :doc:`C++ <../../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber>` tutorial, we have a subscriber node which receives string messages from the
-``topic`` topic from the ``topic_callback`` function.
-However, we've now added options to configure the subscription to enable topic statistics with
-the ``rclcpp::SubscriptionOptions()`` options struct.
+与 :doc:`C++ <../../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber>` 教程一样，我们有一个订阅器节点，它通过 ``topic_callback`` 函数从
+``topic`` 话题接收字符串消息。
+不过，现在我们添加了选项，通过 ``rclcpp::SubscriptionOptions()`` 选项结构体来配置订阅以启用话题统计。
 
 .. code-block:: C++
 
@@ -133,8 +132,7 @@ the ``rclcpp::SubscriptionOptions()`` options struct.
     auto options = rclcpp::SubscriptionOptions();
     options.topic_stats_options.state = rclcpp::TopicStatisticsState::Enable;
 
-Optionally, fields such as the statistics collection/publish period and the topic used to publish
-statistics can be configured as well.
+可选地，诸如统计收集/发布周期以及用于发布统计的话题等字段也可以配置。
 
 .. code-block:: C++
 
@@ -144,22 +142,22 @@ statistics can be configured as well.
     // configure the topic name (default '/statistics')
     // options.topic_stats_options.publish_topic = "/my_topic"
 
-The configurable fields are described in the following table:
+可配置的字段如下表所述：
 
 ==================================  =============================================================================================
-Subscription Config Field            Purpose
+订阅配置字段                              用途                                                                                           
 ==================================  =============================================================================================
-topic_stats_options.state            Enable or disable topic statistics (default ``rclcpp::TopicStatisticsState::Disable``)
-topic_stats_options.publish_period   The period in which to collect statistics data and publish a statistics message (default ``1s``)
-topic_stats_options.publish_topic    The topic to use when publishing statistics data (default ``/statistics``)
+topic_stats_options.state           启用或禁用话题统计（默认 ``rclcpp::TopicStatisticsState::Disable``）                                      
+topic_stats_options.publish_period  收集统计数据并发布统计消息的周期（默认 ``1s``）                                                                  
+topic_stats_options.publish_topic   发布统计数据时使用的话题（默认 ``/statistics``）                                                             
 ==================================  =============================================================================================
 
 1.2 CMakeLists.txt
 ~~~~~~~~~~~~~~~~~~
 
-Now open the ``CMakeLists.txt`` file.
+现在打开 ``CMakeLists.txt`` 文件。
 
-Add the executable and name it ``listener_with_topic_statistics`` so you can run your node using ``ros2 run``:
+添加可执行文件并将其命名为 ``listener_with_topic_statistics``，这样你就可以使用 ``ros2 run`` 运行你的节点：
 
 .. code-block:: cmake
 
@@ -172,21 +170,20 @@ Add the executable and name it ``listener_with_topic_statistics`` so you can run
       listener_with_topic_statistics
       DESTINATION lib/${PROJECT_NAME})
 
-Make sure to save the file, and then your pub/sub system, with topic statistics enabled,
-should be ready for use.
+确保保存该文件，然后你的启用话题统计的 pub/sub 系统就可以使用了。
 
-2 Build and run
-^^^^^^^^^^^^^^^
+2 构建并运行
+^^^^^^^^^^^^
 
-To build, see the :ref:`Build and run <cpppubsub-build-and-run>` section in the pub/sub tutorial.
+要构建，请参阅 pub/sub 教程中的 :ref:`构建并运行 <cpppubsub-build-and-run>` 部分。
 
-Run the subscriber with statistics enabled node:
+运行启用统计的订阅器节点：
 
 .. code-block:: console
 
      $ ros2 run cpp_pubsub listener_with_topic_statistics
 
-Now run the talker node:
+现在运行 talker 节点：
 
 .. code-block:: console
 
@@ -197,7 +194,7 @@ Now run the talker node:
      [INFO] [minimal_publisher]: Publishing: "Hello World: 3"
      [INFO] [minimal_publisher]: Publishing: "Hello World: 4"
 
-The listener will start printing messages to the console, starting at whatever message count the publisher is on at that time, like so:
+listener 将开始在控制台打印消息，从发布器当时所在的任何消息计数开始，如下所示：
 
 .. code-block:: console
 
@@ -207,14 +204,14 @@ The listener will start printing messages to the console, starting at whatever m
   [INFO] [minimal_subscriber_with_topic_statistics]: I heard: "Hello World: 13"
   [INFO] [minimal_subscriber_with_topic_statistics]: I heard: "Hello World: 14"
 
-Now that the subscriber node is receiving messages, it will periodically publish statistics messages.
-We will observe these messages in the next section.
+现在订阅器节点正在接收消息，它将周期性地发布统计消息。
+我们将在下一节观察这些消息。
 
-3 Observe published statistic data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 观察发布的统计数据
+^^^^^^^^^^^^^^^^^^^^
 
-While the nodes are running, open a new terminal window.
-Execute the following command, which will list all currently active topics.
+当节点运行时，打开一个新的终端窗口。
+执行以下命令，它将列出所有当前活动的话题。
 
 .. code-block:: console
 
@@ -224,19 +221,17 @@ Execute the following command, which will list all currently active topics.
     /statistics
     /topic
 
-If you optionally changed the ``topic_stats_options.publish_topic`` field earlier in the tutorial,
-then you will see that name instead of ``/statistics``.
+如果你在本教程前面可选地更改了 ``topic_stats_options.publish_topic`` 字段，
+那么你将看到该名称而不是 ``/statistics``。
 
-The subscriber node you created is publishing statistics, for the topic ``topic``, to the output topic
-``/statistics``.
+你创建的订阅器节点正在为话题 ``topic`` 向输出话题 ``/statistics`` 发布统计信息。
 
-We can visualize this using :doc:`RQt <../../../Concepts/Intermediate/About-RQt>`
+我们可以使用 :doc:`RQt <../../../Concepts/Intermediate/About-RQt>` 将其可视化。
 
 .. image:: images/topic_stats_rqt.png
 
-Now we can view the statistics data published to this topic with the following command.
-The terminal should start publishing statistics messages every 10 seconds, because the
-``topic_stats_options.publish_period`` subscription configuration was optionally changed earlier in the tutorial:
+现在我们可以使用以下命令查看发布到此话题的统计数据。
+终端应该每 10 秒开始发布统计消息，因为 ``topic_stats_options.publish_period`` 订阅配置在本教程前面被可选地更改了：
 
 .. code-block:: console
 
@@ -285,32 +280,30 @@ The terminal should start publishing statistics messages every 10 seconds, becau
       data: 0.4463309283488427
     ---
 
-From the `message definition <https://github.com/ros2/rcl_interfaces/tree/{REPOS_FILE_BRANCH}/statistics_msgs>`__
-the ``data_types`` are as follows
+根据 `消息定义 <https://github.com/ros2/rcl_interfaces/tree/{REPOS_FILE_BRANCH}/statistics_msgs>`__，
+``data_types`` 如下所示：
 
 ===============    ===================
-data_type value     statistics
+data_type 值        统计                 
 ===============    ===================
-1                   average
-2                   minimum
-3                   maximum
-4                   standard deviation
-5                   sample count
+1                  平均值                
+2                  最小值                
+3                  最大值                
+4                  标准差                
+5                  样本数                
 ===============    ===================
 
-Here we see the two currently possible calculated statistics for the ``std_msgs::msg::String`` message published
-to ``/topic`` by the ``minimal_publisher``.
+这里我们看到了由 ``minimal_publisher`` 发布到 ``/topic`` 的 ``std_msgs::msg::String`` 消息当前可计算的两种统计数据。
 
-Summary
--------
+总结
+----
 
-You created a subscriber node with topic statistics enabled, which published statistics data from
-the :doc:`C++ <../../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Service-And-Client>`'s publisher node.
-You were able to compile and run this node.
-While running, you were able to observe the statistics data.
+你创建了一个启用话题统计的订阅器节点，它发布来自 :doc:`C++ <../../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Service-And-Client>` 发布器节点的统计数据。
+你能够编译并运行这个节点。
+在运行时，你能够观察到统计数据。
 
-Related content
----------------
+相关内容
+--------
 
-To observe how the ``message_age`` period is calculated please see the
-`ROS 2 Topic Statistics demo <https://github.com/ros2/demos/tree/{REPOS_FILE_BRANCH}/topic_statistics_demo>`__.
+要了解 ``message_age`` 周期是如何计算的，请参阅
+`ROS 2 Topic Statistics 演示 <https://github.com/ros2/demos/tree/{REPOS_FILE_BRANCH}/topic_statistics_demo>`__。

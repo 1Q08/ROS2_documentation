@@ -1,93 +1,87 @@
-How to use ros2_tracing to trace and analyze an application
-===========================================================
+如何使用 ros2_tracing 追踪和分析应用程序
+========================================
 
-This tutorial shows how to use `ros2_tracing <https://github.com/ros2/ros2_tracing>`_ to trace and analyze a ROS 2 application.
-For this tutorial, the application will be `performance_test <https://gitlab.com/ApexAI/performance_test>`_.
+本教程展示如何使用 `ros2_tracing <https://github.com/ros2/ros2_tracing>`_ 追踪和分析 ROS 2 应用程序。
+在本教程中，应用程序将是 `performance_test <https://gitlab.com/ApexAI/performance_test>`_。
 
-Overview
+概述
+----
+
+本教程涵盖：
+
+1. 运行并追踪一次 ``performance_test`` 运行
+2. 使用 `tracetools_analysis <https://github.com/ros-tracing/tracetools_analysis>`_ 分析追踪数据，使用 `Jupyter Notebook <https://jupyter.org/>`_ 绘制回调耗时图
+
+前置条件
 --------
 
-This tutorial covers:
+本教程面向实时 Linux 系统。
+请参阅 :doc:`实时系统设置教程 <../Miscellaneous/Building-Realtime-rt_preempt-kernel-for-ROS-2>`。
+不过，如果你使用的是非实时 Linux 系统，本教程同样适用。
 
-1. installing tracing-related tools and building ROS 2 with the core instrumentation enabled
-2. running and tracing a ``performance_test`` run
-3. analyzing the trace data using `tracetools_analysis <https://github.com/ros-tracing/tracetools_analysis>`_ to plot the callback durations using `Jupyter Notebook <https://jupyter.org/>`_
+安装与构建
+----------
 
-Prerequisites
--------------
-
-This tutorial is aimed at real-time Linux systems.
-See the :doc:`real-time system setup tutorial <../Miscellaneous/Building-Realtime-rt_preempt-kernel-for-ROS-2>`.
-However, the tutorial will work if you are using a non-real-time Linux system.
-
-Installing and building
------------------------
+按照 :doc:`安装说明 <../../Installation>` 在 Linux 上安装 ROS 2。
 
 .. note::
 
-  This tutorial should generally work with all supported Linux distributions.
-  However, you might need to adapt some commands.
+  本教程通常应该适用于所有受支持的 Linux 发行版。
+  但是，你可能需要调整一些命令。
 
-Install all dependencies for ROS 2 on Linux by following the :doc:`source installation instructions <../../Installation/Alternatives/Ubuntu-Development-Setup>`.
-Stop before the *Build the code in the workspace* section.
-
-Install `LTTng <https://lttng.org/docs/v2.13/>`_ and ``babeltrace``.
+安装 ``babeltrace`` 和 ``ros2trace``。
 
 .. code-block:: console
 
   $ sudo apt-get update
-  $ sudo apt-get install -y lttng-tools liblttng-ust-dev python3-lttng python3-babeltrace babeltrace
+  $ sudo apt-get install -y babeltrace ros-{DISTRO}-ros2trace ros-{DISTRO}-tracetools-analysis
 
-Then create a workspace, import the ROS 2 {DISTRO_TITLE} code, and clone ``performance_test`` and ``tracetools_analysis``.
+
+Source ROS 2 安装并验证追踪已启用：
+
+.. code-block:: console
+
+  $ source /opt/ros/{DISTRO}/setup.bash
+  $ ros2 run tracetools status
+  Tracing enabled
+
+然后创建一个工作空间，并克隆 ``performance_test`` 和 ``tracetools_analysis``。
 
 .. code-block:: console
 
   $ cd ~/
   $ mkdir -p tracing_ws/src
-  $ cd tracing_ws/
-  $ vcs import src/ --input https://raw.githubusercontent.com/ros2/ros2/{DISTRO}/ros2.repos
-  $ cd src/
+  $ cd tracing_ws/src/
   $ git clone https://gitlab.com/ApexAI/performance_test.git
   $ git clone https://github.com/ros-tracing/tracetools_analysis.git -b {DISTRO}
   $ cd ..
 
-Install dependencies with rosdep.
+使用 rosdep 安装依赖。
 
 .. code-block:: console
 
   $ rosdep update
-  $ rosdep install --rosdistro {DISTRO} --from-paths src --ignore-src -y --skip-keys "fastcdr rti-connext-dds-6.0.1 urdfdom_headers"
+  $ rosdep install --from-paths src --ignore-src -y --skip-keys test_tracetools
 
-Then build up to ``performance_test`` and configure it for ROS 2.
-See its `documentation <https://gitlab.com/ApexAI/performance_test/-/tree/master/performance_test#performance_test>`_.
-We also need to build ``ros2trace`` to set up tracing using the ``ros2 trace`` command and ``tracetools_analysis`` to analyze the data.
+然后构建并配置用于 ROS 2 的 ``performance_test``。
+请参阅其 `文档 <https://gitlab.com/ApexAI/performance_test/-/tree/master/performance_test#performance_test>`_。
 
 .. code-block:: console
 
-  $ colcon build --packages-up-to ros2trace ros2run tracetools_analysis performance_test --cmake-args -DPERFORMANCE_TEST_RCLCPP_ENABLED=ON
+  $ colcon build --packages-select performance_test --cmake-args -DPERFORMANCE_TEST_RCLCPP_ENABLED=ON
 
-Source the installation and verify that tracing is enabled:
+接下来，我们将运行一个 ``performance_test`` 实验并追踪它。
 
-.. code-block:: bash
+追踪
+----
 
-  $ source install/setup.bash
-  $ ros2 run tracetools status
-
-You should see ``Tracing enabled`` in the output.
-This confirms that LTTng was properly detected and that the instrumentation built into the ROS 2 core is enabled.
-
-Next, we will run a ``performance_test`` experiment and trace it.
-
-Tracing
--------
-
-Step 1: Trace
+第 1 步：追踪
 ^^^^^^^^^^^^^
 
-In one terminal, source the workspace and set up tracing.
-When running the command, a list of ROS 2 userspace events will be printed.
-It will also print the path to the directory that will contain the resulting trace (under ``~/.ros/tracing``).
-In Terminal 1 run:
+在一个终端中，source 工作空间并设置追踪。
+运行该命令时，将打印一个 ROS 2 用户空间事件列表。
+它还会打印将包含结果追踪数据的目录路径（在 ``~/.ros/tracing`` 下）。
+在终端 1 中运行：
 
 .. code-block:: console
 
@@ -95,31 +89,31 @@ In Terminal 1 run:
   $ source install/setup.bash
   $ ros2 trace --session-name perf-test --list
 
-Press enter to start tracing.
+按回车键开始追踪。
 
-Step 2: Run Application
-^^^^^^^^^^^^^^^^^^^^^^^
+第 2 步：运行应用程序
+^^^^^^^^^^^^^^^^^^^^^
 
-In a second terminal, source the workspace.
-In Terminal 2 run:
+在第二个终端中，source 工作空间。
+在终端 2 中运行：
 
 .. code-block:: console
 
   $ cd ~/tracing_ws
   $ source install/setup.bash
 
-Then run the ``performance_test`` experiment (or your own application).
-We simply create an experiment with a node publishing ~1 MB messages to another node as fast as possible for 60 seconds using the second highest real-time priority so that we don't interfere with critical kernel threads.
-We need to run ``performance_test`` as ``root`` to be able to use real-time priorities.
-In Terminal 2 run:
+然后运行 ``performance_test`` 实验（或你自己的应用程序）。
+我们简单地创建一个实验：一个节点以尽可能快的速度向另一个节点发布约 1 MB 的消息，持续 60 秒，使用第二高的实时优先级，以免干扰关键的内核线程。
+我们需要以 ``root`` 身份运行 ``performance_test``，才能使用实时优先级。
+在终端 2 中运行：
 
 .. code-block:: console
 
   $ sudo ./install/performance_test/lib/performance_test/perf_test -c rclcpp-single-threaded-executor -p 1 -s 1 -r 0 -m Array1m --reliability RELIABLE --max-runtime 60 --use-rt-prio 98
 
-If that last command doesn't work for you (with an error like: "error while loading shared libraries"), run the slightly-different command below.
-This is because, for security reasons, we need to manually pass ``*PATH`` environment variables for some shared libraries to be found (see `this explanation <https://unix.stackexchange.com/a/251374>`_).
-In Terminal 2 run:
+如果上面的最后一条命令对你不起作用（报错类似：“error while loading shared libraries”），请运行下面略有不同的命令。
+这是因为，出于安全原因，我们需要手动传递 ``*PATH`` 环境变量，以便找到某些共享库（参见 `此解释 <https://unix.stackexchange.com/a/251374>`_）。
+在终端 2 中运行：
 
 .. code-block:: console
 
@@ -127,70 +121,70 @@ In Terminal 2 run:
 
 .. note::
 
-  If you're not using a real-time kernel, simply run:
-  In Terminal 2 run:
+  如果你没有使用实时内核，只需运行：
+  在终端 2 中运行：
 
   .. code-block:: console
 
     $ ./install/performance_test/lib/performance_test/perf_test -c rclcpp-single-threaded-executor -p 1 -s 1 -r 0 -m Array1m --reliability RELIABLE --max-runtime 60
 
-Step 3: Validate Trace
-^^^^^^^^^^^^^^^^^^^^^^
+第 3 步：验证追踪数据
+^^^^^^^^^^^^^^^^^^^^^
 
-Once the experiment is done, in the first terminal, press enter again to stop tracing.
-Use ``babeltrace`` to quickly look at the resulting trace.
+实验完成后，在第一个终端中再次按回车键以停止追踪。
+使用 ``babeltrace`` 快速查看结果追踪数据。
 
 .. code-block:: console
 
   $ babeltrace ~/.ros/tracing/perf-test | less
 
-The output of the above command is a human-readable version of the raw Common Trace Format (CTF) data, which is a list of trace events.
-Each event has a timestamp, an event type, some information on the process that generated the event, and the values of the fields of the given event type.
+上述命令的输出是原始 Common Trace Format (CTF) 数据的可读版本，它是一个追踪事件列表。
+每个事件都有一个时间戳、一个事件类型、有关生成该事件的进程的一些信息，以及给定事件类型的字段值。
 
-Use the arrow keys to scroll, or press ``q`` to exit.
+使用方向键滚动，或按 ``q`` 退出。
 
-Next, we will analyze the trace.
+接下来，我们将分析追踪数据。
 
-Analysis
---------
+分析
+----
 
-`tracetools_analysis <https://github.com/ros-tracing/tracetools_analysis>`_ provides a Python API to easily analyze traces.
-We can use it in a `Jupyter notebook <https://jupyter.org/>`_ with `bokeh <https://docs.bokeh.org/en/latest/index.html>`_ to plot the data.
-The ``tracetools_analysis`` repository contains a `few sample notebooks <https://github.com/ros-tracing/tracetools_analysis/tree/{DISTRO}/tracetools_analysis/analysis>`_, including `one notebook to analyze subscription callback durations <https://github.com/ros-tracing/tracetools_analysis/blob/{DISTRO}/tracetools_analysis/analysis/callback_duration.ipynb>`_.
+`tracetools_analysis <https://github.com/ros-tracing/tracetools_analysis>`_ 提供了一个 Python API，用于轻松分析追踪数据。
+我们可以在 `Jupyter notebook <https://jupyter.org/>`_ 中使用 `bokeh <https://docs.bokeh.org/en/latest/index.html>`_ 来绘制数据。
+``tracetools_analysis`` 仓库包含 `一些示例 notebook <https://github.com/ros-tracing/tracetools_analysis/tree/{DISTRO}/tracetools_analysis/analysis>`_，包括 `一个分析订阅回调耗时的 notebook <https://github.com/ros-tracing/tracetools_analysis/blob/{DISTRO}/tracetools_analysis/analysis/callback_duration.ipynb>`_。
 
-For this tutorial, we will plot the durations of the subscription callback in the subscriber node.
+在本教程中，我们将绘制订阅者节点中订阅回调的耗时。
 
-Install bokeh and then open the sample notebook.
+安装 Jupyter notebook 和 bokeh，然后打开示例 notebook。
 
 .. code-block:: console
 
   $ pip3 install bokeh
   $ jupyter notebook ~/tracing_ws/src/tracetools_analysis/tracetools_analysis/analysis/callback_duration.ipynb
 
-This will open the notebook in the browser.
+这将在浏览器中打开 notebook。
 
-Replace the value for the ``path`` variable in the second cell to the path to the trace directory:
+将第二个单元格中 ``path`` 变量的值替换为追踪目录的路径：
 
 .. code-block:: python
 
   path = '~/.ros/tracing/perf-test'
 
-Run the notebook by clicking the *Run* button for each cell.
-Running the cell that does the trace processing might take a few minutes on the first run, but subsequent runs will be much quicker.
+通过点击每个单元格的 *Run* 按钮来运行 notebook。
+第一次运行时，执行追踪处理的那个单元格可能需要几分钟，但后续运行会快得多。
 
-You should get a plot that looks similar to this:
+你应该会得到一个与此类似的图：
 
 .. image:: ./images/ros2_tracing_guide_result_plot.png
   :alt: callback durations result plot
   :align: center
 
-We can see that most of the callbacks take less than 0.01 ms, but there are some outliers taking over 0.02 or 0.03 ms.
+我们可以看到，大多数回调耗时不到 0.01 ms，但有一些离群值超过 0.02 或 0.03 ms。
 
-Conclusion
-----------
+结论
+----
 
-This tutorial showed how to install tracing-related tools and build ROS 2 with tracing instrumentation.
-Then it showed how to trace a `performance_test <https://gitlab.com/ApexAI/performance_test>`_ experiment using `ros2_tracing <https://github.com/ros2/ros2_tracing>`_ and plot the callback durations using `tracetools_analysis <https://github.com/ros-tracing/tracetools_analysis>`_.
+本教程展示了如何安装追踪相关的工具。
+然后展示了如何使用 `ros2_tracing <https://github.com/ros2/ros2_tracing>`_ 追踪一个 `performance_test <https://gitlab.com/ApexAI/performance_test>`_ 实验，并使用 `tracetools_analysis <https://github.com/ros-tracing/tracetools_analysis>`_ 绘制回调耗时图。
 
-For more trace analyses, take a look at the `other sample notebooks <https://github.com/ros-tracing/tracetools_analysis/tree/{DISTRO}/tracetools_analysis/analysis>`_ and the `tracetools_analysis API documentation <https://ros-tracing.gitlab.io/tracetools_analysis-api/master/tracetools_analysis/>`_.
-The `ros2_tracing design document <https://github.com/ros2/ros2_tracing/blob/{DISTRO}/doc/design_ros_2.md>`_ also contains a lot of information.
+如需更多追踪分析，请查看 `其他示例 notebook <https://github.com/ros-tracing/tracetools_analysis/tree/{DISTRO}/tracetools_analysis/analysis>`_ 和 `tracetools_analysis API 文档 <https://docs.ros.org/en/{DISTRO}/p/tracetools_analysis/>`_。
+`ros2_tracing 设计文档 <https://github.com/ros2/ros2_tracing/blob/{DISTRO}/doc/design_ros_2.md>`_ 也包含大量信息。

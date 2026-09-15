@@ -4,43 +4,43 @@
 
 .. _URDFPlusRSPCPP:
 
-Using URDF with ``robot_state_publisher`` (C++)
-===============================================
+将 URDF 与 ``robot_state_publisher`` 结合使用（C++）
+====================================================
 
-**Goal:** Simulate a walking robot modeled in URDF and view it in Rviz.
+**目标：** 模拟一个在 URDF 中建模的行走机器人，并在 Rviz 中查看它。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 15 minutes
+**时间：** 15 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-This tutorial will show you how to model a walking robot, publish the state as a tf2 message and view the simulation in Rviz.
-First, we create the URDF model describing the robot assembly.
-Next we write a node which simulates the motion and publishes the JointState and transforms.
-We then use ``robot_state_publisher`` to publish the entire robot state to ``/tf``.
+本教程将展示如何建模一个行走机器人，将状态发布为 tf2 消息，并在 Rviz 中查看仿真。
+首先，我们创建描述机器人装配的 URDF 模型。
+接下来，我们编写一个节点来模拟运动并发布 JointState 和变换。
+然后我们使用 ``robot_state_publisher`` 将整个机器人状态发布到 ``/tf``。
 
 .. image:: images/r2d2_rviz_demo.gif
 
-Prerequisites
--------------
+先决条件
+--------
 
 - `rviz2 <https://index.ros.org/p/rviz2/>`__
 
-As always, don't forget to source ROS 2 in :doc:`every new terminal you open <../../Beginner-CLI-Tools/Configuring-ROS2-Environment>`.
+和往常一样，别忘了在 :doc:`你打开的每个新终端 <../../Beginner-CLI-Tools/Configuring-ROS2-Environment>` 中 source ROS 2。
 
-Tasks
------
+任务
+----
 
-1 Create a package
-^^^^^^^^^^^^^^^^^^
+1 创建一个包
+^^^^^^^^^^^^
 
-Go to your ROS 2 workspace and create a package named ``urdf_tutorial_cpp``:
+前往你的 ROS 2 工作区，创建一个名为 ``urdf_tutorial_cpp`` 的包：
 
 .. code-block:: console
 
@@ -48,13 +48,13 @@ Go to your ROS 2 workspace and create a package named ``urdf_tutorial_cpp``:
     $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 urdf_tutorial_cpp --dependencies rclcpp geometry_msgs sensor_msgs tf2_ros tf2_geometry_msgs
     $ cd urdf_tutorial_cpp
 
-You should now see a ``urdf_tutorial_cpp`` folder.
-Next you will make several changes to it.
+你现在应该看到一个 ``urdf_tutorial_cpp`` 文件夹。
+接下来你将对它进行几处修改。
 
-2 Create the URDF File
-^^^^^^^^^^^^^^^^^^^^^^
+2 创建 URDF 文件
+^^^^^^^^^^^^^^^^
 
-Create the directory where we will store some assets:
+创建我们将存放一些资源文件的目录：
 
 .. tabs::
 
@@ -76,17 +76,17 @@ Create the directory where we will store some assets:
 
       $ md urdf
 
-Download the :download:`URDF file <documents/r2d2.urdf.xml>` and save it as ``urdf_tutorial_cpp/urdf/r2d2.urdf.xml``.
-Download the :download:`Rviz configuration file <documents/r2d2.rviz>` and save it as ``urdf_tutorial_cpp/urdf/r2d2.rviz``.
+下载 :download:`URDF 文件 <documents/r2d2.urdf.xml>` 并将其保存为 ``urdf_tutorial_cpp/urdf/r2d2.urdf.xml``。
+下载 :download:`Rviz 配置文件 <documents/r2d2.rviz>` 并将其保存为 ``urdf_tutorial_cpp/urdf/r2d2.rviz``。
 
-3 Publish the state
-^^^^^^^^^^^^^^^^^^^
+3 发布状态
+^^^^^^^^^^
 
-Now we need a method for specifying what state the robot is in.
+现在我们需要一种方法来指定机器人处于什么状态。
 
-To do this, we must specify all three joints and the overall robot geometry.
+为此，我们必须指定所有三个关节和整体机器人几何体。
 
-Fire up your favorite editor and paste the following code into
+打开你喜欢的编辑器，将以下代码粘贴到
 
 ``urdf_tutorial_cpp/src/urdf_tutorial.cpp``
 
@@ -194,25 +194,25 @@ Fire up your favorite editor and paste the following code into
       return 0;
   }
 
-This node does two things:
-- Publishes ``JointState`` message to the ``/joint_states`` topic so that ``robot_state_publisher`` can compute all the per-joint transforms and broadcasts them via ``/tf``.
-- Broadcasts a single root transform that places the robot model (``axis`` frame) in the world (``odom`` frame), making the whole robot walk in a circle.
+这个节点做了两件事：
+- 将 ``JointState`` 消息发布到 ``/joint_states`` 主题，以便 ``robot_state_publisher`` 可以计算所有逐关节的变换，并通过 ``/tf`` 广播它们。
+- 广播一个单一的根变换，将机器人模型（``axis`` 坐标系）放置在世界中（``odom`` 坐标系），使整个机器人走一个圈。
 
-4 Create a launch file
+4 创建一个 launch 文件
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Create a new ``urdf_tutorial_cpp/launch`` folder.
-Open your editor and paste the following code, saving it as ``urdf_tutorial_cpp/launch/launch.py``
+创建一个新的 ``urdf_tutorial_cpp/launch`` 文件夹。
+打开你的编辑器，粘贴以下代码，并将其保存为 ``urdf_tutorial_cpp/launch/launch.py``
 
 .. literalinclude:: launch/launch.py
   :language: python
 
 
-5 Edit the CMakeLists.txt file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 编辑 CMakeLists.txt 文件
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You must tell the **colcon** build tool how to install your cpp package.
-Edit the ``CMakeLists.txt`` file as follows:
+你必须告诉 **colcon** 构建工具如何安装你的 cpp 包。
+如下编辑 ``CMakeLists.txt`` 文件：
 
 .. code-block:: cmake
 
@@ -258,18 +258,18 @@ Edit the ``CMakeLists.txt`` file as follows:
 
   ament_package()
 
-The ``install(DIRECTORY urdf ...)`` rule copies both ``r2d2.urdf.xml`` and ``r2d2.rviz`` into the install tree so they can be found at runtime.
+``install(DIRECTORY urdf ...)`` 规则会将 ``r2d2.urdf.xml`` 和 ``r2d2.rviz`` 复制到安装树中，以便在运行时可以找到它们。
 
-6 Build the package
-^^^^^^^^^^^^^^^^^^^^^
+6 构建包
+^^^^^^^^
 
-Return to your workspace root and build:
+回到你的工作区根目录并构建：
 
 .. code-block:: console
 
     $ colcon build --symlink-install --packages-select urdf_tutorial_cpp
 
-Source the setup files:
+Source 安装文件：
 
 .. tabs::
 
@@ -292,27 +292,27 @@ Source the setup files:
       $ call install/setup.bat
 
 
-7 View the results
-^^^^^^^^^^^^^^^^^^
+7 查看结果
+^^^^^^^^^^
 
-To launch your new package run the following command:
+要启动你的新包，运行以下命令：
 
 .. code-block:: console
 
   $ ros2 launch urdf_tutorial_cpp launch.py
 
-To visualize your results you will need to open a new terminal and run Rviz using your rviz configuration file.
+要可视化你的结果，你需要打开一个新终端，并使用你的 rviz 配置文件运行 Rviz。
 
 .. code-block:: console
 
   $ rviz2 -d install/urdf_tutorial_cpp/share/urdf_tutorial_cpp/urdf/r2d2.rviz
 
-See the `User Guide <http://wiki.ros.org/rviz/UserGuide>`__ for details on how to use Rviz.
+有关如何使用 Rviz 的详细信息，请参阅 `用户指南 <http://wiki.ros.org/rviz/UserGuide>`__。
 
-``install/urdf_tutorial_cpp/share/urdf_tutorial_cpp/urdf/r2d2.rviz`` is the dir where the ``r2d2.rviz`` stored.
+``install/urdf_tutorial_cpp/share/urdf_tutorial_cpp/urdf/r2d2.rviz`` 是存储 ``r2d2.rviz`` 的目录。
 
-Summary
--------
+总结
+----
 
-Congratulations!
-You have created a ``JointState`` publisher node and coupled it with ``robot_state_publisher`` to simulate a walking robot.
+恭喜！
+你创建了一个 ``JointState`` 发布器节点，并将其与 ``robot_state_publisher`` 结合使用，以模拟一个行走的机器人。

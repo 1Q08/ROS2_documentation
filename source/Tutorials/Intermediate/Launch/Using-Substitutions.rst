@@ -3,64 +3,64 @@
     Tutorials/Launch-Files/Using-Substitutions
     Tutorials/Launch/Using-Substitutions
 
-Using substitutions
-===================
+使用替换
+========
 
-**Goal:** Learn about substitutions in ROS 2 launch files.
+**目标：** 了解 ROS 2 launch 文件中的替换。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 15 minutes
+**时间：** 15 分钟
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-Launch files are used to start nodes, services and execute processes.
-This set of actions may have arguments, which affect their behavior.
-Substitutions can be used in arguments to provide more flexibility when describing reusable launch files.
-Substitutions are variables that are only evaluated during execution of the launch description and can be used to acquire specific information like a launch configuration, an environment variable, or to evaluate an arbitrary Python expression.
+launch 文件用于启动节点、服务并执行进程。
+这组 action 可以有影响其行为的参数。
+替换可以用在参数中，以在描述可复用的 launch 文件时提供更多灵活性。
+替换是只在执行 launch 描述期间才被求值的变量，可用于获取特定信息，如 launch 配置、环境变量，或求值一个任意的 Python 表达式。
 
-This tutorial shows usage examples of substitutions in ROS 2 launch files.
+本教程展示了 ROS 2 launch 文件中替换的使用示例。
 
-Prerequisites
--------------
+先决条件
+--------
 
-This tutorial uses the :doc:`turtlesim <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>` package.
-This tutorial also assumes you are familiar with :doc:`creating packages <../../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>`.
+本教程使用 :doc:`turtlesim <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>` 包。
+本教程还假设你熟悉 :doc:`创建包 <../../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>`。
 
-As always, don't forget to source ROS 2 in :doc:`every new terminal you open <../../Beginner-CLI-Tools/Configuring-ROS2-Environment>`.
+和往常一样，别忘了在 :doc:`你打开的每个新终端 <../../Beginner-CLI-Tools/Configuring-ROS2-Environment>` 中 source ROS 2。
 
-Using substitutions
--------------------
+使用替换
+--------
 
-1 Create and setup the package
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 创建和设置包
+^^^^^^^^^^^^^^
 
-First, create a new package with the name ``launch_tutorial``:
+首先，创建一个名为 ``launch_tutorial`` 的新包：
 
 .. tabs::
 
-  .. group-tab:: Python package
+  .. group-tab:: Python 包
 
-    Create a new package of build_type ``ament_python``:
+    创建一个 build_type 为 ``ament_python`` 的新包：
 
     .. code-block:: console
 
       $ ros2 pkg create --build-type ament_python --license Apache-2.0 launch_tutorial
 
-  .. group-tab:: C++ package
+  .. group-tab:: C++ 包
 
-    Create a new package of build_type ``ament_cmake``:
+    创建一个 build_type 为 ``ament_cmake`` 的新包：
 
     .. code-block:: console
 
       $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 launch_tutorial
 
-Inside of that package, create a directory called ``launch``:
+在该包内，创建一个名为 ``launch`` 的目录：
 
 .. tabs::
 
@@ -82,13 +82,13 @@ Inside of that package, create a directory called ``launch``:
 
       $ md launch_tutorial/launch
 
-Finally, make sure to install the launch files:
+最后，确保安装 launch 文件：
 
 .. tabs::
 
-  .. group-tab:: Python package
+  .. group-tab:: Python 包
 
-    Add in following changes to the ``setup.py`` of the package:
+    对包的 ``setup.py`` 添加以下更改：
 
     .. code-block:: python
 
@@ -107,9 +107,9 @@ Finally, make sure to install the launch files:
           ]
       )
 
-  .. group-tab:: C++ package
+  .. group-tab:: C++ 包
 
-    Append following code to the ``CMakeLists.txt`` just before ``ament_package()``:
+    将以下代码追加到 ``CMakeLists.txt`` 中，位置在 ``ament_package()`` 之前：
 
     .. code-block:: cmake
 
@@ -120,32 +120,32 @@ Finally, make sure to install the launch files:
 
 
 
-2 Parent launch file
-^^^^^^^^^^^^^^^^^^^^
+2 父 launch 文件
+^^^^^^^^^^^^^^^^
 
-Let's create a launch file that will call and pass arguments to another launch file.
-This launch file can either be in YAML, XML, or in Python.
+让我们创建一个会调用另一个 launch 文件并向其传递参数的 launch 文件。
+这个 launch 文件可以是 YAML、XML 或 Python。
 
-To do this, create following file in the ``launch`` folder of the ``launch_tutorial`` package.
+为此，在 ``launch_tutorial`` 包的 ``launch`` 文件夹中创建以下文件。
 
 .. tabs::
 
   .. group-tab:: XML
 
-    Copy and paste the complete code into the ``launch/example_main_launch.xml`` file:
+    将完整代码复制并粘贴到 ``launch/example_main_launch.xml`` 文件中：
 
     .. literalinclude:: launch/example_main_launch.xml
       :language: xml
 
-    The ``$(find-pkg-share launch_tutorial)`` substitution is used to find the path to the ``launch_tutorial`` package.
-    The path substitution is then joined with the ``example_substitutions_launch.xml`` file name.
+    ``$(find-pkg-share launch_tutorial)`` 替换用于查找 ``launch_tutorial`` 包的路径。
+    然后将路径替换与 ``example_substitutions_launch.xml`` 文件名拼接。
 
     .. literalinclude:: launch/example_main_launch.xml
       :language: xml
       :lines: 4
 
-    The ``background_r`` variable with ``turtlesim_ns`` and ``use_provided_red`` arguments is passed to the ``include`` action.
-    The ``$(var background_r)`` substitution is used to define the ``new_background_r`` argument with the value of the ``background_r`` variable.
+    带有 ``turtlesim_ns`` 和 ``use_provided_red`` 参数的 ``background_r`` 变量被传递给 ``include`` action。
+    ``$(var background_r)`` 替换用于使用 ``background_r`` 变量的值来定义 ``new_background_r`` 参数。
 
     .. literalinclude:: launch/example_main_launch.xml
       :language: xml
@@ -153,20 +153,20 @@ To do this, create following file in the ``launch`` folder of the ``launch_tutor
 
   .. group-tab:: YAML
 
-    Copy and paste the complete code into the ``launch/example_main_launch.yaml`` file:
+    将完整代码复制并粘贴到 ``launch/example_main_launch.yaml`` 文件中：
 
     .. literalinclude:: launch/example_main_launch.yaml
       :language: yaml
 
-    The ``$(find-pkg-share launch_tutorial)`` substitution is used to find the path to the ``launch_tutorial`` package.
-    The path substitution is then joined with the ``example_substitutions_launch.yaml`` file name.
+    ``$(find-pkg-share launch_tutorial)`` 替换用于查找 ``launch_tutorial`` 包的路径。
+    然后将路径替换与 ``example_substitutions_launch.yaml`` 文件名拼接。
 
     .. literalinclude:: launch/example_main_launch.yaml
       :language: yaml
       :lines: 8
 
-    The ``background_r`` variable with ``turtlesim_ns`` and ``use_provided_red`` arguments is passed to the ``include`` action.
-    The ``$(var background_r)`` substitution is used to define the ``new_background_r`` argument with the value of the ``background_r`` variable.
+    带有 ``turtlesim_ns`` 和 ``use_provided_red`` 参数的 ``background_r`` 变量被传递给 ``include`` action。
+    ``$(var background_r)`` 替换用于使用 ``background_r`` 变量的值来定义 ``new_background_r`` 参数。
 
     .. literalinclude:: launch/example_main_launch.yaml
       :language: yaml
@@ -175,67 +175,67 @@ To do this, create following file in the ``launch`` folder of the ``launch_tutor
 
   .. group-tab:: Python
 
-    Copy and paste the complete code into the ``launch/example_main.launch.py`` file:
+    将完整代码复制并粘贴到 ``launch/example_main.launch.py`` 文件中：
 
     .. literalinclude:: launch/example_main_launch.py
       :language: python
 
-    The ``FindPackageShare`` substitution is used to find the path to the ``launch_tutorial`` package.
-    The ``PathJoinSubstitution`` substitution is then used to join the path to that package path with the ``example_substitutions.launch.py`` file name.
+    ``FindPackageShare`` 替换用于查找 ``launch_tutorial`` 包的路径。
+    然后使用 ``PathJoinSubstitution`` 替换将该包路径与 ``example_substitutions.launch.py`` 文件名拼接。
 
     .. literalinclude:: launch/example_main_launch.py
       :language: python
       :lines: 14-18
 
-    The ``launch_arguments`` dictionary with ``turtlesim_ns`` and ``use_provided_red`` arguments is passed to the ``IncludeLaunchDescription`` action.
+    带有 ``turtlesim_ns`` 和 ``use_provided_red`` 参数的 ``launch_arguments`` 字典被传递给 ``IncludeLaunchDescription`` action。
 
     .. literalinclude:: launch/example_main_launch.py
       :language: python
       :lines: 19-23
 
 
-3 Substitutions example launch file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 替换示例 launch 文件
+^^^^^^^^^^^^^^^^^^^^^^
 
-Now create the substitution launch file in the same folder:
+现在在同一个文件夹中创建替换 launch 文件：
 
 .. tabs::
 
   .. group-tab:: XML
 
-    Create the file ``launch/example_substitutions_launch.xml`` and insert the following code:
+    创建文件 ``launch/example_substitutions_launch.xml`` 并插入以下代码：
 
     .. literalinclude:: launch/example_substitutions_launch.xml
       :language: xml
 
-    The ``turtlesim_ns``, ``use_provided_red``, and ``new_background_r`` launch configurations are defined.
-    They are used to store values of launch arguments in the above variables and to pass them to required actions.
-    The launch configuration arguments can later be used with the ``$(var <name>)`` substitution to acquire the value of the launch argument in any part of the launch description.
+    定义了 ``turtlesim_ns``、``use_provided_red`` 和 ``new_background_r`` launch 配置。
+    它们用于将 launch 参数的值存储在上述变量中，并将它们传递给所需的 action。
+    launch 配置参数之后可以在 launch 描述的任何部分使用 ``$(var <name>)`` 替换来获取 launch 参数的值。
 
-    The ``arg`` tag is used to define the launch argument that can be passed from the above launch file or from the console.
+    ``arg`` 标签用于定义可以从上面的 launch 文件或从控制台传递的 launch 参数。
 
     .. literalinclude:: launch/example_substitutions_launch.xml
       :language: xml
       :lines: 3-5
 
-    The ``turtlesim_node`` node with the ``namespace`` set to the ``turtlesim_ns`` launch configuration value using the ``$(var <name>)`` substitution is defined.
+    定义了 ``turtlesim_node`` 节点，其 ``namespace`` 使用 ``$(var <name>)`` 替换设置为 ``turtlesim_ns`` launch 配置值。
 
     .. literalinclude:: launch/example_substitutions_launch.xml
       :language: xml
       :lines: 7
 
-    Afterwards, an ``executable`` action is defined with the corresponding ``cmd`` tag.
-    This command makes a call to the spawn service of the turtlesim node.
+    之后，使用相应的 ``cmd`` 标签定义了一个 ``executable`` action。
+    该命令调用 turtlesim 节点的 spawn 服务。
 
-    Additionally, the ``$(var <name>)`` substitution is used to get the value of the ``turtlesim_ns`` launch argument to construct a command string.
+    此外，使用 ``$(var <name>)`` 替换获取 ``turtlesim_ns`` launch 参数的值，以构造命令字符串。
 
     .. literalinclude:: launch/example_substitutions_launch.xml
       :language: xml
       :lines: 8
 
-    The same approach is used for the ``ros2 param`` ``executable`` actions that change the turtlesim background's red color parameter.
-    The difference is that the second action inside of the timer is only executed if the provided ``new_background_r`` argument equals ``200`` and the ``use_provided_red`` launch argument is set to ``True``.
-    The evaluation of the ``if`` predicate is done using the ``$(eval <python-expression>)`` substitution.
+    对于更改 turtlesim 背景红色参数的 ``ros2 param`` ``executable`` action，使用了相同的方法。
+    不同之处在于，只有提供的 ``new_background_r`` 参数等于 ``200`` 且 ``use_provided_red`` launch 参数设置为 ``True`` 时，定时器内的第二个 action 才会执行。
+    ``if`` 谓词的求值使用 ``$(eval <python-expression>)`` 替换完成。
 
     .. literalinclude:: launch/example_substitutions_launch.xml
       :language: xml
@@ -243,39 +243,39 @@ Now create the substitution launch file in the same folder:
 
   .. group-tab:: YAML
 
-    Create the file ``launch/example_substitutions_launch.yaml`` and insert the following code:
+    创建文件 ``launch/example_substitutions_launch.yaml`` 并插入以下代码：
 
     .. literalinclude:: launch/example_substitutions_launch.yaml
       :language: yaml
 
-    The ``turtlesim_ns``, ``use_provided_red``, and ``new_background_r`` launch configurations are defined.
-    They are used to store values of launch arguments in the above variables and to pass them to required actions.
-    The launch configuration arguments can later be used with the ``$(var <name>)`` substitution to acquire the value of the launch argument in any part of the launch description.
+    定义了 ``turtlesim_ns``、``use_provided_red`` 和 ``new_background_r`` launch 配置。
+    它们用于将 launch 参数的值存储在上述变量中，并将它们传递给所需的 action。
+    launch 配置参数之后可以在 launch 描述的任何部分使用 ``$(var <name>)`` 替换来获取 launch 参数的值。
 
-    The ``arg`` tag is used to define the launch argument that can be passed from the above launch file or from the console.
+    ``arg`` 标签用于定义可以从上面的 launch 文件或从控制台传递的 launch 参数。
 
     .. literalinclude:: launch/example_substitutions_launch.yaml
       :language: yaml
       :lines: 4-12
 
-    The ``turtlesim_node`` node with the ``namespace`` set to the ``turtlesim_ns`` launch configuration value using the ``$(var <name>)`` substitution is defined.
+    定义了 ``turtlesim_node`` 节点，其 ``namespace`` 使用 ``$(var <name>)`` 替换设置为 ``turtlesim_ns`` launch 配置值。
 
     .. literalinclude:: launch/example_substitutions_launch.yaml
       :language: yaml
       :lines: 14-18
 
-    Afterwards, an ``executable`` action is defined with the corresponding ``cmd`` tag.
-    This command makes a call to the spawn service of the turtlesim node.
+    之后，使用相应的 ``cmd`` 标签定义了一个 ``executable`` action。
+    该命令调用 turtlesim 节点的 spawn 服务。
 
-    Additionally, the ``$(var <name>)`` substitution is used to get the value of the ``turtlesim_ns`` launch argument to construct a command string.
+    此外，使用 ``$(var <name>)`` 替换获取 ``turtlesim_ns`` launch 参数的值，以构造命令字符串。
 
     .. literalinclude:: launch/example_substitutions_launch.yaml
       :language: yaml
       :lines: 19-20
 
-    The same approach is used for the ``ros2 param`` ``executable`` actions that change the turtlesim background's red color parameter.
-    The difference is that the second action inside of the timer is only executed if the provided ``new_background_r`` argument equals ``200`` and the ``use_provided_red`` launch argument is set to ``True``.
-    The evaluation of the ``if`` predicate is done using the ``$(eval <python-expression>)`` substitution.
+    对于更改 turtlesim 背景红色参数的 ``ros2 param`` ``executable`` action，使用了相同的方法。
+    不同之处在于，只有提供的 ``new_background_r`` 参数等于 ``200`` 且 ``use_provided_red`` launch 参数设置为 ``True`` 时，定时器内的第二个 action 才会执行。
+    ``if`` 谓词的求值使用 ``$(eval <python-expression>)`` 替换完成。
 
     .. literalinclude:: launch/example_substitutions_launch.yaml
       :language: yaml
@@ -283,58 +283,58 @@ Now create the substitution launch file in the same folder:
 
   .. group-tab:: Python
 
-    Create the file ``launch/example_substitutions.launch.py`` and insert the following code:
+    创建文件 ``launch/example_substitutions.launch.py`` 并插入以下代码：
 
     .. literalinclude:: launch/example_substitutions_launch.py
       :language: python
 
-    The ``turtlesim_ns``, ``use_provided_red``, and ``new_background_r`` launch configurations are defined.
-    They are used to represent values of launch arguments in the above variables and to pass them to required actions.
-    These ``LaunchConfiguration`` substitutions allow us to acquire the value of the launch argument in any part of the launch description.
+    定义了 ``turtlesim_ns``、``use_provided_red`` 和 ``new_background_r`` launch 配置。
+    它们用于在上述变量中表示 launch 参数的值，并将它们传递给所需的 action。
+    这些 ``LaunchConfiguration`` 替换允许我们在 launch 描述的任何部分获取 launch 参数的值。
 
-    ``DeclareLaunchArgument`` is used to define the launch argument that can be passed from the above launch file or from the console.
+    ``DeclareLaunchArgument`` 用于定义可以从上面的 launch 文件或从控制台传递的 launch 参数。
 
     .. literalinclude:: launch/example_substitutions_launch.py
       :language: python
       :lines: 14-25
 
-    The ``turtlesim_node`` node with the ``namespace`` set to ``turtlesim_ns`` ``LaunchConfiguration`` substitution is defined.
+    定义了 ``turtlesim_node`` 节点，其 ``namespace`` 设置为 ``turtlesim_ns`` ``LaunchConfiguration`` 替换。
 
     .. literalinclude:: launch/example_substitutions_launch.py
       :language: python
       :lines: 26-31
 
-    The next action, ``ExecuteProcess``,  is defined with the corresponding ``cmd`` argument to call the spawn service of the turtlesim node.
+    下一个 action ``ExecuteProcess`` 使用相应的 ``cmd`` 参数定义，用于调用 turtlesim 节点的 spawn 服务。
 
-    Additionally, the ``LaunchConfiguration`` substitution is used to provide the value of the ``turtlesim_ns`` launch argument in the command string.
+    此外，使用 ``LaunchConfiguration`` 替换在命令字符串中提供 ``turtlesim_ns`` launch 参数的值。
 
     .. literalinclude:: launch/example_substitutions_launch.py
       :language: python
       :lines: 32-41
 
-    The same approach is used for the ``change_background_r`` and ``change_background_r_conditioned`` actions that change the turtlesim background's red color parameter.
-    The difference is that the next action is only executed if the provided ``new_background_r`` argument equals ``200`` and the ``use_provided_red`` launch argument is set to ``True``.
-    The evaluation inside the ``IfCondition`` is done using the ``PythonExpression`` substitution.
+    对于更改 turtlesim 背景红色参数的 ``change_background_r`` 和 ``change_background_r_conditioned`` action，使用了相同的方法。
+    不同之处在于，只有提供的 ``new_background_r`` 参数等于 ``200`` 且 ``use_provided_red`` launch 参数设置为 ``True`` 时，下一个 action 才会执行。
+    ``IfCondition`` 内部的求值使用 ``PythonExpression`` 替换完成。
 
     .. literalinclude:: launch/example_substitutions_launch.py
       :language: python
       :lines: 51-72
 
-4 Build the package
-^^^^^^^^^^^^^^^^^^^
+4 构建包
+^^^^^^^^
 
-Go to the root of the workspace, and build the package:
+进入工作空间的根目录，并构建包：
 
 .. code-block:: console
 
   $ colcon build
 
-Also remember to source the workspace after building.
+另外，请记住在构建后 source 工作空间。
 
-Launching example
------------------
+启动示例
+--------
 
-Now you can launch using the ``ros2 launch`` command.
+现在你可以使用 ``ros2 launch`` 命令来启动。
 
 .. tabs::
 
@@ -356,22 +356,22 @@ Now you can launch using the ``ros2 launch`` command.
 
         $ ros2 launch launch_tutorial example_main.launch.py
 
-This will do the following:
+这将执行以下操作：
 
-#. Start a turtlesim node with a blue background
-#. Spawn the second turtle
-#. Change the color to purple
-#. Change the color to pink after two seconds if the provided ``background_r`` argument is ``200`` and ``use_provided_red`` argument is ``True``
+#. 启动一个蓝色背景的 turtlesim 节点
+#. 生成第二只乌龟
+#. 将颜色改为紫色
+#. 如果提供的 ``background_r`` 参数为 ``200`` 且 ``use_provided_red`` 参数为 ``True``，则在两秒后将颜色改为粉色
 
-Modifying launch arguments
---------------------------
+修改 launch 参数
+----------------
 
 .. tabs::
 
   .. group-tab:: YAML
 
-    If you want to change the provided launch arguments, you can either update the ``background_r`` variable in the ``example_main.launch.yaml`` or launch the ``example_substitutions.launch.yaml`` with preferred arguments.
-    To see arguments that may be given to the launch file, run the following command:
+    如果你想更改提供的 launch 参数，可以更新 ``example_main.launch.yaml`` 中的 ``background_r`` 变量，或使用首选参数启动 ``example_substitutions.launch.yaml``。
+    要查看可以传给 launch 文件的参数，运行以下命令：
 
     .. code-block:: console
 
@@ -379,8 +379,8 @@ Modifying launch arguments
 
   .. group-tab:: XML
 
-    If you want to change the provided launch arguments, you can either update the ``background_r`` variable in the ``example_main_launch.xml`` or launch the ``example_substitutions_launch.xml`` with preferred arguments.
-    To see arguments that may be given to the launch file, run the following command:
+    如果你想更改提供的 launch 参数，可以更新 ``example_main_launch.xml`` 中的 ``background_r`` 变量，或使用首选参数启动 ``example_substitutions_launch.xml``。
+    要查看可以传给 launch 文件的参数，运行以下命令：
 
     .. code-block:: console
 
@@ -388,14 +388,14 @@ Modifying launch arguments
 
   .. group-tab:: Python
 
-    If you want to change the provided launch arguments, you can either update them in ``launch_arguments`` dictionary in the ``example_main.launch.py`` or launch the ``example_substitutions.launch.py`` with preferred arguments.
-    To see arguments that may be given to the launch file, run the following command:
+    如果你想更改提供的 launch 参数，可以更新 ``example_main.launch.py`` 中 ``launch_arguments`` 字典里的参数，或使用首选参数启动 ``example_substitutions.launch.py``。
+    要查看可以传给 launch 文件的参数，运行以下命令：
 
     .. code-block:: console
 
         $ ros2 launch launch_tutorial example_substitutions.launch.py --show-args
 
-This will show the arguments that may be given to the launch file and their default values.
+这将显示可以传给 launch 文件的参数及其默认值。
 
 .. code-block:: console
 
@@ -413,7 +413,7 @@ This will show the arguments that may be given to the launch file and their defa
             no description given
             (default: '200')
 
-Now you can pass the desired arguments to the launch file as follows:
+现在你可以按如下方式将所需的参数传给 launch 文件：
 
 .. tabs::
 
@@ -435,15 +435,15 @@ Now you can pass the desired arguments to the launch file as follows:
 
         $ ros2 launch launch_tutorial example_substitutions.launch.py turtlesim_ns:='turtlesim3' use_provided_red:='True' new_background_r:=200
 
-Documentation
--------------
+文档
+----
 
-`The launch documentation <https://docs.ros.org/en/{DISTRO}/p/launch/doc/source/architecture.html>`_ provides detailed information about available substitutions.
+`launch 文档 <https://docs.ros.org/en/{DISTRO}/p/launch/doc/source/architecture.html>`_ 提供了关于可用替换的详细信息。
 
-Summary
--------
+总结
+----
 
-In this tutorial, you learned about using substitutions in launch files.
-You learned about their possibilities and capabilities to create reusable launch files.
+在本教程中，你学习了在 launch 文件中使用替换。
+你了解了它们创建可复用 launch 文件的可能性和能力。
 
-You can now learn more about :doc:`using event handlers in launch files <./Using-Event-Handlers>` which are used to define a complex set of rules which can be used to dynamically modify the launch file.
+你现在可以进一步了解 :doc:`在 launch 文件中使用事件处理器 <./Using-Event-Handlers>`，事件处理器用于定义一组复杂的规则，可用于动态修改 launch 文件。

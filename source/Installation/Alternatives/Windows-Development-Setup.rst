@@ -4,100 +4,100 @@
 
 .. _windows-latest:
 
-Windows (source)
-================
+Windows（源码）
+===============
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-This guide is about how to setup a development environment for ROS 2 on Windows.
+本指南说明如何在 Windows 上搭建 ROS 2 开发环境。
 
-System requirements
--------------------
+系统要求
+--------
 
-Only Windows 10 is supported.
+仅支持 Windows 10。
 
-Language support
-^^^^^^^^^^^^^^^^
+语言支持
+^^^^^^^^
 
-Make sure you have a locale which supports ``UTF-8``.
-For example, for a Chinese-language Windows 10 installation, you may need to install an `English language pack <https://support.microsoft.com/en-us/windows/language-packs-for-windows-a5094319-a92d-18de-5b53-1cfc697cfca8>`_.
+确保你的语言环境支持 ``UTF-8``。
+例如，在中文 Windows 10 安装环境中，你可能需要安装一个 `英文语言包 <https://support.microsoft.com/en-us/windows/language-packs-for-windows-a5094319-a92d-18de-5b53-1cfc697cfca8>`_。
 
 .. include:: ../_Windows-Install-Prerequisites.rst
 
-Additional prerequisites
-------------------------
+额外前置条件
+------------
 
-When building from source you'll need a few additional prerequisites installed.
+从源码构建时，你需要安装一些额外前置条件。
 
-Install additional prerequisites from Chocolatey
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+从 Chocolatey 安装额外前置条件
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: console
 
    $ choco install -y cppcheck curl git winflexbison3
 
-You will need to append the Git cmd folder ``C:\Program Files\Git\cmd`` to the PATH (you can do this by clicking the Windows icon, typing "Environment Variables", then clicking on "Edit the system environment variables".
-In the resulting dialog, click "Environment Variables", the click "Path" on the bottom pane, then click "Edit" and add the path).
+你需要把 Git cmd 文件夹 ``C:\Program Files\Git\cmd`` 加到 PATH 中（可以通过单击 Windows 图标，输入“Environment Variables”，然后单击“Edit the system environment variables”完成。
+在弹出的对话框中，单击“Environment Variables”，然后在底部窗格中单击“Path”，再单击“Edit”并加入该路径）。
 
 
-Install Python prerequisites
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+安装 Python 前置条件
+^^^^^^^^^^^^^^^^^^^^
 
-Installing additional Python dependencies:
+安装额外 Python 依赖：
 
 .. code-block:: bash
 
    $ pip install -U colcon-common-extensions coverage flake8 flake8-blind-except flake8-builtins flake8-class-newline flake8-comprehensions flake8-deprecated flake8-docstrings flake8-import-order flake8-quotes mock mypy==0.931 pep8 pydocstyle pytest pytest-mock vcstool
 
-Install miscellaneous prerequisites
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+安装杂项前置条件
+^^^^^^^^^^^^^^^^
 
-Next install xmllint:
+接下来安装 xmllint：
 
-* Download the `64 bit binary archives <https://www.zlatkovic.com/pub/libxml/64bit/>`__ of ``libxml2`` (and its dependencies ``iconv`` and ``zlib``) from https://www.zlatkovic.com/projects/libxml/
-* Unpack all archives into e.g. ``C:\xmllint``
-* Add ``C:\xmllint\bin`` to the ``PATH``.
+* 从 https://www.zlatkovic.com/projects/libxml/ 下载 ``libxml2`` （及其依赖 ``iconv`` 和 ``zlib``）的 `64 位二进制归档包 <https://www.zlatkovic.com/pub/libxml/64bit/>`__
+* 将所有归档包解压到例如 ``C:\xmllint``
+* 将 ``C:\xmllint\bin`` 添加到 ``PATH``。
 
-Get the ROS 2 code
-------------------
+获取 ROS 2 源码
+---------------
 
-Now that we have the development tools we can get the ROS 2 source code.
+现在我们已经有了开发工具，可以获取 ROS 2 源码。
 
-First setup a development folder, for example ``C:\{DISTRO}``:
+先创建一个开发目录，例如 ``C:\{DISTRO}``：
 
 .. note::
 
-   It is very important that the chosen path is short, due to the short default Windows path limits (260 characters).
-   To allow longer paths, see `maximum-file-path-limitation <https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry>`__.
+   由于 Windows 默认的路径长度限制较短（260 个字符），所选路径必须尽可能短，这一点非常重要。
+   若要允许更长的路径，请参阅 `maximum-file-path-limitation <https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry>`__。
 
 .. code-block:: bash
 
    $ md \{DISTRO}\src
    $ cd \{DISTRO}
 
-Get the ``ros2.repos`` file which defines the repositories to clone from:
+获取定义了要克隆的仓库的 ``ros2.repos`` 文件：
 
 .. code-block:: console
 
    $ vcs import --input https://raw.githubusercontent.com/ros2/ros2/{REPOS_FILE_BRANCH}/ros2.repos src
 
-Install additional DDS implementations (optional)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+安装额外 DDS 实现（可选）
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fast DDS is bundled with the ROS 2 source and will always be built unless you put an ``COLCON_IGNORE`` file in the ``src\eProsima`` folder.
+Fast DDS 与 ROS 2 源码捆绑在一起，除非你在 ``src\eProsima`` 文件夹中放置一个 ``COLCON_IGNORE`` 文件，否则它总会被构建。
 
-If you would like to use another DDS or RTPS vendor besides the default, you can find instructions :doc:`here <../RMW-Implementations>`.
+如果你想使用除默认外的其他 DDS 或 RTPS 厂商，可以在此处找到说明：:doc:`这里 <../RMW-Implementations>`。
 
-Build the ROS 2 code
---------------------
+构建 ROS 2 代码
+---------------
 
 .. _windows-dev-build-ros2:
 
-To build ROS 2 you will need a Visual Studio Command Prompt ("x64 Native Tools Command Prompt for VS 2019") running as Administrator.
+要构建 ROS 2，你需要以管理员身份运行 Visual Studio 命令提示符（“x64 Native Tools Command Prompt for VS 2019”）。
 
-To build the ``\{DISTRO}`` folder tree:
+要构建 ``\{DISTRO}`` 文件夹树：
 
 .. code-block:: console
 
@@ -105,37 +105,37 @@ To build the ``\{DISTRO}`` folder tree:
 
 .. note::
 
-   We're using ``--merge-install`` here to avoid a ``PATH`` variable that is too long at the end of the build.
-   If you're adapting these instructions to build a smaller workspace then you might be able to use the default behavior which is isolated install, i.e. where each package is installed to a different folder.
+   这里我们使用 ``--merge-install``，以避免构建结束时 ``PATH`` 变量过长。
+   如果你把这些说明改用于构建更小的工作空间，那么你也许可以使用默认行为，即隔离安装（每个软件包安装到不同的文件夹）。
 
 .. note::
 
-   If you are doing a debug build use ``python_d path\to\colcon_executable`` ``colcon``.
-   See `Extra stuff for debug mode`_ for more info on running Python code in debug builds on Windows.
+   如果你在做调试构建，请使用 ``python_d path\to\colcon_executable`` ``colcon``。
+   关于在 Windows 上以调试构建方式运行 Python 代码的更多信息，请参阅 `调试模式的额外内容`_。
 
 .. note::
 
-   Source installation can take a long time given the large number of packages being pulled into the workspace.
+   由于会有大量软件包被拉入工作空间，源码安装可能会花费很长时间。
 
-Setup environment
------------------
+配置环境
+--------
 
-Start a command shell and source the ROS 2 setup file to set up the workspace:
+启动一个命令行 shell，并加载 ROS 2 安装文件以配置工作空间：
 
 .. code-block:: console
 
    $ call C:\{DISTRO}\install\local_setup.bat
 
-This will automatically set up the environment for any DDS vendors that support was built for.
+这将自动为所有已构建支持的 DDS 厂商配置好环境。
 
-It is normal that the previous command, if nothing else went wrong, outputs ``The system cannot find the path specified.`` exactly once.
+如果没有其他问题，上一条命令恰好输出一次 ``The system cannot find the path specified.`` 是正常的。
 
-Test and run
-------------
+测试与运行
+----------
 
-Note that the first time you run any executable you will have to allow access to the network through a Windows Firewall popup.
+请注意，第一次运行任何可执行文件时，你都需要在 Windows 防火墙弹窗中允许其通过网络访问。
 
-You can run the tests using this command:
+你可以使用以下命令运行测试：
 
 .. code-block:: console
 
@@ -143,75 +143,75 @@ You can run the tests using this command:
 
 .. note::
 
-   ``--merge-install`` should only be used if it was also used in the build step.
+   仅当构建步骤也使用了 ``--merge-install`` 时，才应使用它。
 
-Afterwards you can get a summary of the tests using this command:
+之后，你可以使用以下命令获取测试结果摘要：
 
 .. code-block:: console
 
    $ colcon test-result
 
-To run the examples, first open a clean new ``cmd.exe`` and set up the workspace by sourcing the ``local_setup.bat`` file.
-Then, run a C++ ``talker``\ :
+要运行示例，先打开一个干净的新 ``cmd.exe``，并通过加载 ``local_setup.bat`` 文件来配置工作空间。
+然后运行 C++ 的 ``talker``\ :
 
 .. code-block:: console
 
    $ call install\local_setup.bat
    $ ros2 run demo_nodes_cpp talker
 
-In a separate shell you can do the same, but instead run a Python ``listener``\ :
+在另一个 shell 中，你可以做同样的操作，但改为运行 Python 的 ``listener``\ :
 
 .. code-block:: console
 
    $ call install\local_setup.bat
    $ ros2 run demo_nodes_py listener
 
-You should see the ``talker`` saying that it's ``Publishing`` messages and the ``listener`` saying ``I heard`` those messages.
-This verifies both the C++ and Python APIs are working properly.
-Hooray!
+你应该会看到 ``talker`` 输出 ``Publishing`` 消息，而 ``listener`` 输出 ``I heard`` 这些消息。
+这验证了 C++ 和 Python API 都能正常工作。
+太棒了！
 
 
 .. note::
 
-   It is not recommended to build in the same cmd prompt that you've sourced the ``local_setup.bat``.
+   不建议在你已经加载了 ``local_setup.bat`` 的同一个 cmd 提示符中进行构建。
 
-Next steps after installing
----------------------------
-Continue with the :doc:`tutorials and demos <../../Tutorials>` to configure your environment, create your own workspace and packages, and learn ROS 2 core concepts.
+安装后的后续步骤
+----------------
+继续学习 :doc:`教程和演示 <../../Tutorials>`，以配置你的环境、创建自己的工作空间和软件包，并了解 ROS 2 的核心概念。
 
-Additional RMW implementations (optional)
------------------------------------------
-The default middleware that ROS 2 uses is ``Fast DDS``, but the middleware (RMW) can be replaced at runtime.
-See the :doc:`guide <../../How-To-Guides/Working-with-multiple-RMW-implementations>` on how to work with multiple RMWs.
-
-
-Extra stuff for Debug mode
---------------------------
-
-If you want to be able to run all the tests in Debug mode, you'll need to install a few more things:
+其他 RMW 实现（可选）
+---------------------
+ROS 2 使用的默认中间件是 ``Fast DDS``，但中间件（RMW）可以在运行时替换。
+请参阅关于如何使用多个 RMW 的 :doc:`指南 <../../How-To-Guides/Working-with-multiple-RMW-implementations>`。
 
 
-* To be able to extract the Python source tarball, you can use PeaZip:
+调试模式的额外内容
+------------------
+
+如果你希望能够在调试模式下运行所有测试，还需要安装一些额外的东西：
+
+
+* 为了能够解压 Python 源码 tar 包，你可以使用 PeaZip：
 
 .. code-block:: bash
 
    choco install -y peazip
 
 
-* You'll also need SVN, since some of the Python source-build dependencies are checked out via SVN:
+* 你还需要 SVN，因为某些 Python 源码构建依赖是通过 SVN 检出的：
 
 .. code-block:: bash
 
    choco install -y svn hg
 
 
-* You'll need to quit and restart the command prompt after installing the above.
-* Get and extract the Python 3.8.3 source from the ``tgz``:
+* 安装上述软件后，你需要退出并重新启动命令提示符。
+* 从 ``tgz`` 获取并解压 Python 3.8.3 源码：
 
   * `Python-3.8.3 <https://www.python.org/ftp/python/3.8.3/Python-3.8.3.tgz>`__
-  * To keep these instructions concise, please extract it to ``C:\dev\Python-3.8.3``
+  * 为使这些说明简洁，请将其解压到 ``C:\dev\Python-3.8.3``
 
-* Now, build the Python source in debug mode from a Visual Studio command prompt:
+* 现在，在 Visual Studio 命令提示符中以调试模式构建 Python 源码：
 
 .. code-block:: bash
 
@@ -220,7 +220,7 @@ If you want to be able to run all the tests in Debug mode, you'll need to instal
    build.bat -p x64 -d
 
 
-* Finally, copy the build products into the Python38 installation directories, next to the Release-mode Python executable and DLL's:
+* 最后，将构建产物复制到 Python38 安装目录中，紧挨着 Release 模式的 Python 可执行文件和 DLL：
 
 .. code-block:: bash
 
@@ -234,57 +234,57 @@ If you want to be able to run all the tests in Debug mode, you'll need to instal
    for %I in (*_d.pyd) do copy %I C:\Python38\DLLs /Y
 
 
-* Now, from a fresh command prompt, make sure that ``python_d`` works:
+* 现在，从一个全新的命令提示符中，确认 ``python_d`` 可以正常工作：
 
 .. code-block:: bash
 
    python_d -c "import _ctypes ; import coverage"
 
-* Once you have verified the operation of ``python_d``, it is necessary to reinstall a few dependencies with the debug-enabled libraries:
+* 一旦你验证了 ``python_d`` 的运行，就需要用启用了调试的库重新安装几个依赖：
 
 .. code-block:: bash
 
    python_d -m pip install --force-reinstall https://github.com/ros2/ros2/releases/download/numpy-archives/numpy-1.18.4-cp38-cp38d-win_amd64.whl
    python_d -m pip install --force-reinstall https://github.com/ros2/ros2/releases/download/lxml-archives/lxml-4.5.1-cp38-cp38d-win_amd64.whl
 
-* To verify the installation of these dependencies:
+* 验证这些依赖的安装：
 
 .. code-block:: bash
 
    python_d -c "from lxml import etree ; import numpy"
 
-* When you wish to return to building release binaries, it is necessary to uninstall the debug variants and use the release variants:
+* 当你希望重新构建 release 二进制文件时，需要卸载调试变体并使用 release 变体：
 
 .. code-block:: bash
 
    python -m pip uninstall numpy lxml
    python -m pip install numpy lxml
 
-* To create executables python scripts(``.exe``), python_d should be used to invoke colcon
+* 要创建可执行的 Python 脚本（``.exe``），应使用 python_d 来调用 colcon
 
 .. code-block:: bash
 
    python_d path\to\colcon_executable build
 
-* Hooray, you're done!
+* 太棒了，你完成了！
 
-Stay up to date
----------------
+保持最新
+--------
 
-See :doc:`../Maintaining-a-Source-Checkout` to periodically refresh your source installation.
+请参阅 :doc:`../Maintaining-a-Source-Checkout`，以定期刷新你的源码安装。
 
-Troubleshooting
----------------
+故障排查
+--------
 
-Troubleshooting techniques can be found :ref:`here <windows-troubleshooting>`.
+故障排查技巧可以在 :ref:`这里 <windows-troubleshooting>` 找到。
 
-Uninstall
----------
+卸载
+----
 
-1. If you installed your workspace with colcon as instructed above, "uninstalling" could be just a matter of opening a new terminal and not sourcing the workspace's ``setup`` file.
-   This way, your environment will behave as though there is no {DISTRO_TITLE} install on your system.
+1. 如果你按上述方式使用 colcon 安装了工作空间，所谓“卸载”可能只需打开一个新终端，并且不加载该工作空间的 ``setup`` 文件。
+   这样，你的环境就会表现得如同系统中根本没安装过 {DISTRO_TITLE} 一样。
 
-2. If you're also trying to free up space, you can delete the entire workspace directory with:
+2. 如果你还想释放空间，可以用以下命令删除整个工作空间目录：
 
    .. code-block:: console
 

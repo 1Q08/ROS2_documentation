@@ -1,35 +1,35 @@
-Add Your Project
-================
+添加你的项目
+============
 
-Use the form below to generate the YAML entry for your organization or project.
-Once generated, you can copy the YAML snippet and submit a pull request to the
+使用下面的表单为你的组织或项目生成 YAML 条目。
+生成后，你可以复制 YAML 片段，并向 ``rolling`` 分支上的
 `adopters.yaml <https://github.com/ros2/ros2_documentation/blob/rolling/source/The-ROS2-Project/Adopters/adopters.yaml>`__
-file on the ``rolling`` branch.
+文件提交拉取请求。
 
-Policy
-------
+政策
+----
 
-This list is **self-reported and self-attested**.
-Entries are accepted with minimal scrutiny unless a complaint is received.
-Since contributions come via Pull Request, they are easy to audit and can be cleaned up later if necessary.
+该列表是 **自我报告且自我证明** 的。
+除非收到投诉，否则条目会以最小的审查力度被接受。
+由于贡献是通过拉取请求提交的，它们易于审计，如有必要日后也可以清理。
 
-How to contribute
------------------
+如何贡献
+--------
 
-1. Fill in the form below.
-2. Click **Generate YAML** to produce the snippet.
-3. Click **Open PR on GitHub** to open the file in GitHub's web editor (the YAML is copied to your clipboard automatically).
-4. Paste the generated YAML at the end of the ``adopters:`` list in the file.
-5. Commit the change and open a pull request.
+1. 填写下面的表单。
+2. 单击 **Generate YAML** 生成片段。
+3. 单击 **Open PR on GitHub** 在 GitHub 的网页编辑器中打开该文件（YAML 会自动复制到你的剪贴板）。
+4. 将生成的 YAML 粘贴到文件中 ``adopters:`` 列表的末尾。
+5. 提交更改并打开拉取请求。
 
 .. note::
 
-   All pull requests to the ROS 2 documentation repository require a
-   `Developer Certificate of Origin (DCO) <https://developercertificate.org/>`__ sign-off.
-   If you use the GitHub web editor, the
-   `DCO bot <https://github.com/apps/dco>`__ will comment on your PR with
-   instructions to add the sign-off if it is missing.
-   To sign off via the command line, use ``git commit --signoff``.
+   所有对 ROS 2 文档仓库的拉取请求都需要
+   `开发者原创声明（DCO） <https://developercertificate.org/>`__ 签署。
+   如果你使用 GitHub 网页编辑器，
+   `DCO 机器人 <https://github.com/apps/dco>`__ 会在你的 PR 上评论，
+   提示你在缺少签署时如何补充。
+   要通过命令行签署，请使用 ``git commit --signoff``。
 
 .. raw:: html
 

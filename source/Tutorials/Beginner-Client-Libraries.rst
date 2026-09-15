@@ -1,5 +1,5 @@
-Beginner: Client libraries
-==========================
+初学者：客户端库
+================
 
 .. toctree::
    :maxdepth: 1

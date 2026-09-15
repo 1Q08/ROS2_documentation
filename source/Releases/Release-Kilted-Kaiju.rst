@@ -1,41 +1,41 @@
 .. _kilted-release:
 
-Kilted Kaiju (codename 'kilted'; May, 2025)
-===========================================
+Kilted Kaiju（代号 ``kilted``；2025 年 5 月）
+=============================================
 
 .. toctree::
    :hidden:
 
    Kilted-Kaiju-Complete-Changelog
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-*Kilted Kaiju* is the eleventh release of ROS 2.
-What follows is highlights of the important changes and features in Kilted Kaiju since the last release.
-For a list of all of the changes since Jazzy, see the :doc:`long form changelog <Kilted-Kaiju-Complete-Changelog>`
+*Kilted Kaiju* 是 ROS 2 的第十一个发行版。
+以下内容介绍了自上一个发行版以来 Kilted Kaiju 中的重要变更和新特性。
+自 Jazzy 以来的全部变更列表，请参阅 :doc:`完整变更日志 <Kilted-Kaiju-Complete-Changelog>`
 
-Supported Platforms
--------------------
+支持的平台
+----------
 
-Kilted Kaiju supports the following platforms according to `the platform support tiers <../The-ROS2-Project/Platform-Support-Tiers>`:
+根据 `平台支持层级 <../The-ROS2-Project/Platform-Support-Tiers>`，Kilted Kaiju 支持以下平台：
 
-Tier 1 platforms:
+Tier 1 平台：
 
-* Ubuntu 24.04 (Noble): ``amd64`` and ``arm64``
-* Windows 10 (Visual Studio 2019): ``amd64``
+* Ubuntu 24.04 (Noble)：``amd64`` 和 ``arm64``
+* Windows 10 (Visual Studio 2019)：``amd64``
 
-Tier 2 platforms:
+Tier 2 平台：
 
-* RHEL 9: ``amd64``
+* RHEL 9：``amd64``
 
-Tier 3 platforms:
+Tier 3 平台：
 
-* macOS: ``amd64``
-* Debian Bookworm: ``amd64``
+* macOS：``amd64``
+* Debian Bookworm：``amd64``
 
-Targeted platforms:
+目标平台：
 
 +--------------+-------------------+---------------+-------------------+-----------+-----------------+----------------+
 | Architecture | Ubuntu Noble      | Windows 10    | RHEL 9            | macOS     | Debian Bookworm | OpenEmbedded / |
@@ -48,18 +48,15 @@ Targeted platforms:
 | arm32        | Tier 3 [s]        |               |                   |           | Tier 3 [s]      | Tier 3 [s]     |
 +--------------+-------------------+---------------+-------------------+-----------+-----------------+----------------+
 
-The following indicators show what delivery mechanisms are available for
-each platform.
+以下指标说明了每个平台可用的交付机制。
 
-\" \[d\] \" Distribution-specific (Debian, RPM, etc.) packages will be
-provided for this platform for packages submitted to the rosdistro.
+\" \[d\] \" 将为提交到 rosdistro 的软件包提供平台特定的（Debian、RPM 等）软件包。
 
-\" \[a\] \" Binary releases are provided as a single archive per
-platform containing all packages in the Jazzy ROS 2 repos file[^14].
+\" \[a\] \" 以每个平台一个压缩包的形式提供二进制发行包，其中包含 Jazzy ROS 2 repos 文件中的所有软件包[^14]。
 
-\" \[s\] \" Compilation from source.
+\" \[s\] \" 从源码编译。
 
-Middleware Implementation Support:
+中间件实现支持：
 
 +---------------------------+-------------------------+---------------+----------------------------+-------------------------------+
 | Middleware Library        | Middleware Provider     | Support Level | Platforms                  | Architectures                 |
@@ -77,18 +74,16 @@ Middleware Implementation Support:
 | rmw_gurumdds_cpp          | GurumNetworks GurumDDS  | Tier 3        | Ubuntu and Windows         | All Architectures except arm32|
 +---------------------------+-------------------------+---------------+----------------------------+-------------------------------+
 
-\" \* \" means default RMW implementation.
+\" \* \" 表示默认的 RMW 实现。
 
-Middleware implementation support is dependent upon the platform support
-tier. For example a Tier 1 middleware implementation on a Tier 2
-platform can only receive Tier 2 support.
+中间件实现支持取决于平台支持层级。例如，Tier 2 平台上的 Tier 1 中间件实现只能获得 Tier 2 级别的支持。
 
-Minimum language requirements:
+最低语言要求：
 
 - C++17
 - Python 3.9
 
-Dependency Requirements:
+依赖要求：
 
 +---------------+-------------------------------+-------------------------------------------------------------+
 |               | Required Support              | Recommended Support                                         |
@@ -130,109 +125,103 @@ Dependency Requirements:
 | Zenoh         | 1.0.4                                                                                       |
 +---------------+---------------------------------------------------------------------------------------------+
 
-\" \* \" means that this is not the upstream version (available on the
-official Operating System repositories) but a package distributed by
-OSRF or the community (package built and distributed on custom
-repositories).
+\" \* \" 表示这不是上游版本（即官方操作系统仓库中提供的版本），而是由 OSRF 或社区发行的软件包（在自定义仓库上构建并分发的软件包）。
 
-\" \*\* \" means that the dependency may see multiple version changes,
-because the dependency uses a package manager that continually updates
-the dependency without a stable API.
+\" \*\* \" 表示该依赖可能会经历多个版本变更，因为该依赖使用的包管理器会持续更新，而没有稳定的 API。
 
-\" \*\*\* \" webOS OSE provides this different version.
+\" \*\*\* \" webOS OSE 提供此不同版本。
 
-This document only captures the version at the first release of a ROS
-distribution and will not be updated as the dependencies move forward.
-These versions are thus a low watermark.
+本文档仅记录 ROS 发行版首次发布时的版本，不会随依赖的演进而更新。
+因此这些版本是一个最低水位线。
 
-Package manager use for dependencies:
+依赖使用的包管理器：
 
-- Ubuntu, Debian: apt, pip
-- Windows: pixi/conda, pip
-- macOS: Homebrew, pip
-- RHEL: dnf
-- OpenEmbedded: opkg
+- Ubuntu、Debian：apt、pip
+- Windows：pixi/conda、pip
+- macOS：Homebrew、pip
+- RHEL：dnf
+- OpenEmbedded：opkg
 
-Build System Support:
+构建系统支持：
 
 - ament_cmake
 - cargo
 - cmake
 - setuptools
 
-Installation
-------------
+安装
+----
 
-`Install Kilted Kaiju <../../kilted/Installation.html>`__
+`安装 Kilted Kaiju <../../kilted/Installation.html>`__
 
-Supported Gazebo Release
-------------------------
-For Kilted Kaiju, the recommended Gazebo release is `Ionic <https://gazebosim.org/docs/ionic/ros_installation>`__.
+支持的 Gazebo 发行版
+--------------------
+对于 Kilted Kaiju，推荐的 Gazebo 发行版是 `Ionic <https://gazebosim.org/docs/ionic/ros_installation>`__。
 
-New features in this ROS 2 release
-----------------------------------
+此 ROS 2 发行版中的新特性
+-------------------------
 
 ``ament_cmake_ros``
 ^^^^^^^^^^^^^^^^^^^
 
-Add rmw_test_fixture for supporting RMW-isolated testing
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+新增 rmw_test_fixture 以支持 RMW 隔离测试
+"""""""""""""""""""""""""""""""""""""""""
 
-Included two new packages which provide an extensible mechanism for creating a test fixture for RMW-based communication isolation.
-It is modeled closely after the rmw and rmw_implementation API.
+新增了两个软件包，提供了一种可扩展的机制，用于创建基于 RMW 的通信隔离测试夹具。
+它紧密参照 rmw 和 rmw_implementation API 建模。
 
-The ``rmw_test_fixture`` package currently provides only the API, which could be implemented by an RMW provider for configuring their RMW for a test to run.
+``rmw_test_fixture`` 软件包目前仅提供 API，RMW 提供方可以实现它，以便为待运行的测试配置其 RMW。
 
-The ``rmw_test_fixture_implementation`` package provides the entry point for discovering, loading, and invoking the appropriate extension.
+``rmw_test_fixture_implementation`` 软件包提供了用于发现、加载和调用相应扩展的入口点。
 
-See https://github.com/ros2/ament_cmake_ros/pull/21 for more details.
+更多详情请参阅 https://github.com/ros2/ament_cmake_ros/pull/21。
 
 ``common_interfaces``
 ^^^^^^^^^^^^^^^^^^^^^
 
-New nav_msgs/Goals message
-""""""""""""""""""""""""""
+新增 nav_msgs/Goals 消息
+""""""""""""""""""""""""
 
-A new message type, {interface(nav_msgs/msg/Goals)}, has been introduced to support an array of navigation goals within the nav_msgs package.
+引入了一种新的消息类型 {interface(nav_msgs/msg/Goals)}，用于在 nav_msgs 软件包中支持导航目标数组。
 
-See https://github.com/ros2/common_interfaces/pull/269 for more details.
+更多详情请参阅 https://github.com/ros2/common_interfaces/pull/269。
 
 ``ros2cli``
 ^^^^^^^^^^^
 
-Action introspection
-""""""""""""""""""""
+动作内省
+""""""""
 
-This allows to instrospect an action with the command line.
-Using ``ros2cli`` tools: ``ros2 action echo <action name>``.
+这允许通过命令行内省动作。
+使用 ``ros2cli`` 工具：``ros2 action echo <action name>``。
 
-See https://github.com/ros2/ros2cli/pull/978 for more information.
+更多信息请参阅 https://github.com/ros2/ros2cli/pull/978。
 
 ``rclcpp``
 ^^^^^^^^^^
 
-Action generic client
-"""""""""""""""""""""
+动作通用客户端
+""""""""""""""
 
-Support action generic client, this is used to support actions in rosbag2.
+支持动作通用客户端，它用于在 rosbag2 中支持动作。
 
-See https://github.com/ros2/rclcpp/pull/2759 for more details.
+更多详情请参阅 https://github.com/ros2/rclcpp/pull/2759。
 
 ``rclpy``
 ^^^^^^^^^
 
-Static Type Checking
-""""""""""""""""""""
+静态类型检查
+""""""""""""
 
-Added static type hints to ``ActionClient`` and ``ActionServer``.
+为 ``ActionClient`` 和 ``ActionServer`` 添加了静态类型提示。
 
-See https://github.com/ros2/rclpy/pull/1349 for more details.
+更多详情请参阅 https://github.com/ros2/rclpy/pull/1349。
 
-Add support for `generics <https://typing.python.org/en/latest/reference/generics.html>`_ in ``pub/sub/client/server/actions``, ``Future/Task``, and ``Parameter``.
+在 ``pub/sub/client/server/actions``、``Future/Task`` 和 ``Parameter`` 中添加对 `泛型 <https://typing.python.org/en/latest/reference/generics.html>`_ 的支持。
 
-``Publisher``, ``Subscription``, ``Server``, ``Task``, and ``Parameter`` should need no updates to add support for generics.
+``Publisher``、``Subscription``、``Server``、``Task`` 和 ``Parameter`` 无需任何更新即可添加对泛型的支持。
 
-``Client`` will need to be updated to resemble the following to get the improved type checking.
+``Client`` 则需要按如下方式更新，才能获得改进后的类型检查。
 
 .. code-block:: python
 
@@ -241,7 +230,7 @@ Add support for `generics <https://typing.python.org/en/latest/reference/generic
                                         GetParameters, '/get_parameters',
                                         qos_profile=qos_profile, callback_group=callback_group)
 
-``ActionClient`` will need to be updated to resemble the following to get the improved type checking.
+``ActionClient`` 则需要按如下方式更新，才能获得改进后的类型检查。
 
 .. code-block:: python
 
@@ -249,86 +238,85 @@ Add support for `generics <https://typing.python.org/en/latest/reference/generic
                      Fibonacci.Result,
                      Fibonacci.Feedback] = ActionClient(self.node, Fibonacci, 'fibonacci')
 
-``Future`` will need to be updated to resemble the following to get the improved type checking.
+``Future`` 则需要按如下方式更新，才能获得改进后的类型检查。
 
 .. code-block:: python
 
     log_msgs_future: Future[bool] = Future()
 
-See https://github.com/ros2/rclpy/pull/1239, https://github.com/ros2/rclpy/pull/1275, https://github.com/ros2/rclpy/pull/1246, and https://github.com/ros2/rclpy/pull/1254/files for more details.
+更多详情请参阅 https://github.com/ros2/rclpy/pull/1239、https://github.com/ros2/rclpy/pull/1275、https://github.com/ros2/rclpy/pull/1246 和 https://github.com/ros2/rclpy/pull/1254/files。
 
-Various other small improvements and corrections have also been made throughout all of ``rclpy``.
+此外还对整个 ``rclpy`` 做了各种其他小的改进和修正。
 
-Python types can be statically checked using `ament_mypy <https://github.com/ament/ament_lint/tree/kilted/ament_mypy>`_ which wraps `mypy <https://www.mypy-lang.org/>`_.
+可以使用封装了 `mypy <https://www.mypy-lang.org/>`_ 的 `ament_mypy <https://github.com/ament/ament_lint/tree/kilted/ament_mypy>`_ 对 Python 类型进行静态检查。
 
 EventsExecutor
 """"""""""""""
 
-Support an experimental events executor for ``rclpy``, which is a port of the original ``rclcpp`` events executor concept.
+为 ``rclpy`` 支持实验性的事件执行器，它是对原始 ``rclcpp`` 事件执行器概念的移植。
 
-See https://github.com/ros2/rclpy/pull/1391 for more details.
+更多详情请参阅 https://github.com/ros2/rclpy/pull/1391。
 
 ``Rosbag2``
 ^^^^^^^^^^^
 
-Action introspection Rosbag2 support
-""""""""""""""""""""""""""""""""""""
+Rosbag2 动作内省支持
+""""""""""""""""""""
 
-Allow to record and play actions from a rosbag.
+允许从 rosbag 中记录和播放动作。
 
-See https://github.com/ros2/rosbag2/pull/1955 for more information.
-Design document https://github.com/ros2/rosbag2/pull/1928.
+更多信息请参阅 https://github.com/ros2/rosbag2/pull/1955。
+设计文档 https://github.com/ros2/rosbag2/pull/1928。
 
-Progress bar for ``ros2 bag play``
-""""""""""""""""""""""""""""""""""
+``ros2 bag play`` 的进度条
+""""""""""""""""""""""""""
 
-Added a progress bar for ``ros2 bag play`` CLI, showing the bag time and duration, similar to
-what is seen in ROS 1.
+为 ``ros2 bag play`` CLI 添加了进度条，显示包时间和时长，与 ROS 1 中的体验类似。
 
-See https://github.com/ros2/rosbag2/pull/1836 for more details.
+更多详情请参阅 https://github.com/ros2/rosbag2/pull/1836。
 
-Added support for replaying multiple bags with ``ros2 bag play`` CLI
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+新增使用 ``ros2 bag play`` CLI 重放多个包的支持
+"""""""""""""""""""""""""""""""""""""""""""""""
 
-To replay multiple bags, use the new ``-i, --input`` CLI option:
+要重放多个包，请使用新的 ``-i, --input`` CLI 选项：
 
 .. code-block:: console
 
     $ ros2 bag play -i bag1 -i bag2 -i bag3 [storage_id]
 
-See https://github.com/ros2/rosbag2/pull/1848 for more information.
+更多信息请参阅 https://github.com/ros2/rosbag2/pull/1848。
 
-Added support for replaying messages chronologically based on their publication timestamp
+新增按其发布时间戳按时间顺序重放消息的支持
+""""""""""""""""""""""""""""""""""""""""""
+
+这通过 ``ros2 bag play`` 的新 ``--message-order {received,sent}`` 选项提供。
+默认行为是按消息接收顺序播放。
+
+更多信息请参阅 https://github.com/ros2/rosbag2/pull/1876。
+
+每次触发快照时写入新文件
+""""""""""""""""""""""""
+
+更多详情请参阅 https://github.com/ros2/rosbag2/pull/1842。
+
+``ros2 bag info`` 命令新增 ``--sort`` CLI 选项
+""""""""""""""""""""""""""""""""""""""""""""""
+
+使用新的 ``--sort`` CLI 选项，用户可以按名称、话题类型或记录的消息数量对话题、服务和动作进行排序。
+
+更多详情请参阅 https://github.com/ros2/rosbag2/pull/1804。
+
+使用 ``ros2 bag info`` 显示每个话题的大小占比
+"""""""""""""""""""""""""""""""""""""""""""""
+
+使用新的 ``--size-contribution`` 选项并结合 ``ros2 bag info -v``，用户可以查看 bag 文件中每个话题的大小占比。
+
+更多信息请参阅 https://github.com/ros2/rosbag2/pull/1726。
+
+为 ``ros2 bag play`` 和 ``ros2 bag record`` 添加 ``--log-level`` 选项，以允许输出调试消息
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-This is exposed through ``ros2 bag play`` with a new ``--message-order {received,sent}`` option.
-The default behavior is to play messages in the order they were received.
-
-See https://github.com/ros2/rosbag2/pull/1876 for more information.
-
-Make snapshot writing into a new file each time it is triggered
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-See https://github.com/ros2/rosbag2/pull/1842 for more details.
-
-New ``--sort`` CLI option in the ``ros2 bag info`` command
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-With new ``--sort`` CLI option user will be able to sort topics, services and actions by name, topic type or number of recorded messages.
-
-See https://github.com/ros2/rosbag2/pull/1804 for more details.
-
-Show size contribution of each topic with ``ros2 bag info``
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-With new ``--size-contribution`` option together with ``ros2 bag info -v`` user will be able to see the size contribution of each topic in the bag file.
-
-See https://github.com/ros2/rosbag2/pull/1726 for more information.
-
-Added ``--log-level`` option to ``ros2 bag play`` and ``ros2 bag record`` to allow printing debug messages
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-See https://github.com/ros2/rosbag2/pull/1625 for more details.
+更多详情请参阅 https://github.com/ros2/rosbag2/pull/1625。
 
 ``rosidl_rust``
 ^^^^^^^^^^^^^^^
@@ -336,108 +324,108 @@ See https://github.com/ros2/rosbag2/pull/1625 for more details.
 Added ``rosidl_rust``
 """""""""""""""""""""
 
-A Rust idl generator was added to the list of default code generators.
+在默认代码生成器列表中新增了一个 Rust IDL 生成器。
 
-See https://github.com/ros2/ros2/pull/1674 for more details.
+更多详情请参阅 https://github.com/ros2/ros2/pull/1674。
 
 ``ros2``
 ^^^^^^^^
 
-Switch to using Pixi/Conda for Windows
-""""""""""""""""""""""""""""""""""""""
+Windows 改用 Pixi/Conda
+"""""""""""""""""""""""
 
-This allows to easily manage dependencies, and to update them in the future.
-The installation process is significantly simplified.
-Instead of dozens of steps to install dependencies, it is just a couple of commands.
-It is much easier to update dependencies.
-The dependencies are installed in individual workspaces, with no “global” installation.
+这样可以轻松管理依赖并日后更新它们。
+安装过程得到了显著简化。
+无需几十个安装依赖的步骤，只需几条命令。
+更新依赖也变得容易得多。
+依赖安装在各自独立的工作空间中，没有“全局”安装。
 
-See https://github.com/ros2/ci/pull/802 and https://github.com/ros2/ros2/pull/1642 for more details.
-Visit :doc:`Windows source install instructions <../Installation/Alternatives/Windows-Development-Setup>` to install it on Windows.
+更多详情请参阅 https://github.com/ros2/ci/pull/802 和 https://github.com/ros2/ros2/pull/1642。
+请访问 :doc:`Windows 源码安装说明 <../Installation/Alternatives/Windows-Development-Setup>` 在 Windows 上安装它。
 
-Support topic instances in DDS topics
-"""""""""""""""""""""""""""""""""""""
+支持 DDS 话题中的话题实例
+"""""""""""""""""""""""""
 
-Topic instances are a way of multiplexing the transmission of updates of several objects of the same logical kind over the same resource, i.e. the topic.
+话题实例是一种将同一逻辑类型的多个对象的更新复用到同一资源（即话题）上传输的方式。
 
-See https://github.com/ros2/ros2/issues/1538 for more information.
-You can also check the documentation: https://github.com/ros2/design/pull/340/files.
+更多信息请参阅 https://github.com/ros2/ros2/issues/1538。
+你也可以查看相关文档：https://github.com/ros2/design/pull/340/files。
 
-Changes since the Jazzy release
--------------------------------
+自 Jazzy 发行版以来的变更
+-------------------------
 
 ``common_interfaces``
 ^^^^^^^^^^^^^^^^^^^^^
 
-Added NV12 to pixel formats
-"""""""""""""""""""""""""""
+为像素格式新增 NV12
+"""""""""""""""""""
 
-Added NV12 to pixel formats, which is a common output format of hardware-accelerated decoders.
+新增了 NV12 像素格式，它是硬件加速解码器的一种常见输出格式。
 
-See https://github.com/ros2/common_interfaces/pull/253 for more details.
+更多详情请参阅 https://github.com/ros2/common_interfaces/pull/253。
 
 ``rclcpp``
 ^^^^^^^^^^
 
-Consistent behavior for Subordinate nodes
-"""""""""""""""""""""""""""""""""""""""""
+从属节点行为一致化
+""""""""""""""""""
 
-Inconsistent behavior of subordinate nodes was fixed.
-The subordinate node is a secondary node associated with a primary node, that shares the same underlying context and resources while maintaining a separate name and namespace.
-The behavioral modification may affect existing applications relying on the previous implementation:
+修复了从属节点行为不一致的问题。
+从属节点是与主节点关联的次级节点，它共享相同的底层上下文和资源，同时保持独立的名称和命名空间。
+该行为变更可能会影响依赖先前实现的现有应用：
 
-1. Generic clients created from a subordinate node now correctly respect the subordinate node's sub-namespace
-2. Parameters obtained using a subordinate node now correctly use the (parent) node's ``rclcpp::node_interfaces::NodeParametersInterface``
+1. 由从属节点创建的通用客户端现在会正确地遵循从属节点的子命名空间
+2. 使用从属节点获取的参数现在会正确地使用（父）节点的 ``rclcpp::node_interfaces::NodeParametersInterface``
 
-See https://github.com/ros2/rclcpp/pull/2822 for more details.
+更多详情请参阅 https://github.com/ros2/rclcpp/pull/2822。
 
 ``rmw_connextdds_cpp``
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Version bumped to 7.3
-"""""""""""""""""""""
+版本升级到 7.3
+""""""""""""""
 
-The RTI Connext DDS version was bumped to 7.3.0.
+RTI Connext DDS 版本升级到 7.3.0。
 
-See https://github.com/ros2/ci/pull/811 for more details.
+更多详情请参阅 https://github.com/ros2/ci/pull/811。
 
 ``Connextmicro``
 ^^^^^^^^^^^^^^^^
 
-deprecated Connextmicro
-"""""""""""""""""""""""
+弃用 Connextmicro
+"""""""""""""""""
 
-The RTI Connext Micro RMW package, ``rmw_connextddsmicro``, is going to stop receiving updates in Kilted Kaiju, and be removed in a future ROS 2 release.
+RTI Connext Micro RMW 软件包 ``rmw_connextddsmicro`` 将在 Kilted Kaiju 中停止接收更新，并在未来的 ROS 2 发行版中被移除。
 
-See https://github.com/ros2/rmw_connextdds/pull/182 for more information.
+更多信息请参阅 https://github.com/ros2/rmw_connextdds/pull/182。
 
 ``rosidl_dynamic_typesupport``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Removing support for float128
-"""""""""""""""""""""""""""""
+移除对 float128 的支持
+""""""""""""""""""""""
 
-Removed support for float128 because there are inconsistencies in the definition.
+由于定义存在不一致，已移除对 float128 的支持。
 
-See https://github.com/ros2/rosidl_dynamic_typesupport/issues/11 for more details.
+更多详情请参阅 https://github.com/ros2/rosidl_dynamic_typesupport/issues/11。
 
 ``rmw_fastrtps_cpp``
 ^^^^^^^^^^^^^^^^^^^^
 
-Renaming package from fastrtps to fastdds
-"""""""""""""""""""""""""""""""""""""""""
+将软件包从 fastrtps 重命名为 fastdds
+""""""""""""""""""""""""""""""""""""
 
-``fastrtps`` was renamed to ``fastdds``.
-The names of the rmw implementations stay the same.
-XML Profile ENV strings will change.
+``fastrtps`` 已重命名为 ``fastdds``。
+rmw 实现的名称保持不变。
+XML Profile ENV 字符串将会变更。
 
-See https://github.com/ros2/ros2/pull/1641 for more details.
+更多详情请参阅 https://github.com/ros2/ros2/pull/1641。
 
-ament_target_dependencies is deprecated
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``ament_target_dependencies`` 已弃用
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The CMake macro ``ament_target_dependencies()`` has been deprecated in favor of ``target_link_libraries()`` with modern CMake targets.
-The macro still works, but it emits a CMake deprecation warning at build time like this:
+CMake 宏 ``ament_target_dependencies()`` 已被弃用，建议改为使用配合现代 CMake 目标的 ``target_link_libraries()``。
+该宏仍然可用，但在构建时会像下面这样发出 CMake 弃用警告：
 
 .. code-block::
 
@@ -449,9 +437,9 @@ The macro still works, but it emits a CMake deprecation warning at build time li
         [...]
         )
 
-Try replacing the ``ament_target_dependencies()`` call with the  ``target_link_libraries()`` call suggested by the warning.
+请尝试按警告的建议，用 ``target_link_libraries()`` 调用替换 ``ament_target_dependencies()`` 调用。
 
-For more information see `ament/ament_cmake#572 <https://github.com/ament/ament_cmake/pull/572>`__ and `ament/ament_cmake#292 <https://github.com/ament/ament_cmake/issues/292>`__.
+更多信息请参阅 `ament/ament_cmake#572 <https://github.com/ament/ament_cmake/pull/572>`__ 和 `ament/ament_cmake#292 <https://github.com/ament/ament_cmake/issues/292>`__。
 
 ``launch``
 ^^^^^^^^^^
@@ -459,20 +447,20 @@ For more information see `ament/ament_cmake#572 <https://github.com/ament/ament_
 ``PathJoinSubstitution``
 """"""""""""""""""""""""
 
-``PathJoinSubstitution`` now supports concatenating strings or substitutions into a single path component.
-For example:
+``PathJoinSubstitution`` 现在支持将字符串或替换拼接为单个路径组成部分。
+例如：
 
 .. code-block:: python
 
     PathJoinSubstitution(['robot_description', 'urdf', [LaunchConfiguration('model'), '.xacro']])
 
-If the ``model`` launch configuration was set to ``my_model``, this would result in a path equal to:
+如果 ``model`` launch 配置被设置为 ``my_model``，则得到的路径等于：
 
 .. code-block:: python
 
     'robot_description/urdf/my_model.xacro'
 
-For more information, see `ros2/launch#835 <https://github.com/ros2/launch/issues/835>`__ and `ros2/launch#838 <https://github.com/ros2/launch/pull/838>`__.
+更多信息请参阅 `ros2/launch#835 <https://github.com/ros2/launch/issues/835>`__ 和 `ros2/launch#838 <https://github.com/ros2/launch/pull/838>`__。
 
 ``rmw_zenoh_cpp``
 ^^^^^^^^^^^^^^^^^
@@ -480,63 +468,63 @@ For more information, see `ros2/launch#835 <https://github.com/ros2/launch/issue
 ``Tier 1``
 """"""""""
 
-The ``rmw_zenoh_cpp`` is now considered Tier 1.
-There are many PRs (summarized in `ros2/rmw_zenoh#265 <https://github.com/ros2/rmw_zenoh/issues/265>`__) in the ROS 2 core packages, such as:
+``rmw_zenoh_cpp`` 现在被视为 Tier 1。
+ROS 2 核心软件包中有许多 pull request（汇总于 `ros2/rmw_zenoh#265 <https://github.com/ros2/rmw_zenoh/issues/265>`__），例如：
 
-  * Make the rmw pass all core tests.
-  * Implement and document security
-  * Make it work in the Tier 1 platforms.
-  * Added Quality declarations
-  * Added to REP 2005
-  * A dedicated nightly CI job
-  * Among others
+  * 让该 rmw 通过所有核心测试。
+  * 实现并文档化安全性
+  * 使其在 Tier 1 平台上可用。
+  * 添加质量声明
+  * 加入 REP 2005
+  * 专门的每夜 CI 任务
+  * 以及其他方面
 
-For more information see https://github.com/ros2/rmw_zenoh/issues/265.
+更多信息请参阅 https://github.com/ros2/rmw_zenoh/issues/265。
 
-Development progress
---------------------
+开发进展
+--------
 
-For progress on the development of Kiltled Kaiju, see `this project board <https://github.com/orgs/ros2/projects/63>`__.
+有关 Kilted Kaiju 开发进展，请参阅 `此项目面板 <https://github.com/orgs/ros2/projects/63>`__。
 
-For the broad process followed by Kilted Kaiju, see the :doc:`process description page <Release-Process>`.
+有关 Kilted Kaiju 所遵循的整体流程，请参阅 :doc:`流程说明页面 <Release-Process>`。
 
-Release Timeline
-----------------
+发行时间线
+----------
 
-    December, 2024 - Platform decisions
-        REP 2000 is updated with the target platforms and major dependency versions.
+    2024 年 12 月 - 平台决策
+        REP 2000 更新了目标平台和主要依赖项的版本。
 
-    Mon. April 7, 2025 - Alpha + RMW freeze
-        Preliminary testing and stabilization of ROS Base [1]_ packages, and API and feature freeze for RMW provider packages.
+    2025 年 4 月 7 日（周一）- Alpha + RMW 冻结
+        对 ROS Base [1]_ 软件包进行初步测试和稳定化，并冻结 RMW 提供者软件包的 API 和特性。
 
-    Mon. April 14, 2025 - Freeze
-        API and feature freeze for ROS Base [1]_ packages in Rolling Ridley.
-        Only bug fix releases should be made after this point.
-        New packages can be released independently.
+    2025 年 4 月 14 日（周一）- 冻结
+        冻结 Rolling Ridley 中 ROS Base [1]_ 软件包的 API 和特性。
+        此后只应进行缺陷修复版本发布。
+        新软件包可以独立发布。
 
-    Mon. April 21, 2025 - Branch
-        Branch from Rolling Ridley.
-        ``rosdistro`` is reopened for Rolling PRs for ROS Base [1]_ packages.
-        Kilted development shifts from ``ros-rolling-*`` packages to ``ros-kilted-*`` packages.
+    2025 年 4 月 21 日（周一）- 分支
+        从 Rolling Ridley 分支。
+        ``rosdistro`` 对 ROS Base [1]_ 软件包的 Rolling PR 重新开放。
+        Kilted 开发从 ``ros-rolling-*`` 软件包转向 ``ros-kilted-*`` 软件包。
 
-    Mon. April 28, 2025 - Beta
-        Updated releases of ROS Desktop [2]_ packages available.
-        Call for general testing.
+    2025 年 4 月 28 日（周一）- Beta
+        ROS Desktop [2]_ 软件包的更新版本可用。
+        呼吁进行广泛测试。
 
-    Thu, May 1, 2025 - Kick off of Tutorial Party
-        Tutorials hosted at https://github.com/ros2/kilted_tutorial_party are open for community testing.
+    2025 年 5 月 1 日（周四）- 教程活动启动
+        托管在 https://github.com/ros2/kilted_tutorial_party 的教程开放供社区测试。
 
-    Mon. May 12, 2025 - Release Candidate
-        Release Candidate packages are built.
-        Updated releases of ROS Desktop [2]_ packages available.
+    2025 年 5 月 12 日（周一）- 候选发行版
+        构建候选发行版软件包。
+        ROS Desktop [2]_ 软件包的更新版本可用。
 
-    Mon. May 19, 2025 - Distro Freeze
-        Freeze all Kilted branches on all `ROS 2 desktop packages <https://reps.openrobotics.org/rep-2001/#kilted-kaiju-may-2025-november-2026>`__ and ``rosdistro``.
-        No pull requests for any ``kilted`` branch or targeting ``kilted/distribution.yaml`` in ``rosdistro`` repo will be merged.
+    2025 年 5 月 19 日（周一）- 发行版冻结
+        冻结所有 `ROS 2 desktop packages <https://reps.openrobotics.org/rep-2001/#kilted-kaiju-may-2025-november-2026>`__ 上的所有 Kilted 分支以及 ``rosdistro``。
+        不会合并 ``rosdistro`` 仓库中针对任何 ``kilted`` 分支或针对 ``kilted/distribution.yaml`` 的 PR。
 
-    Fri. May 23, 2025 - General Availability
-        Release announcement.
-        `ROS 2 desktop packages <https://reps.openrobotics.org/rep-2001/#kilted-kaiju-may-2025-november-2026>`__ source freeze is lifted and ``rosdistro`` is reopened for Kilted pull requests.
+    2025 年 5 月 23 日（周五）- 正式发布
+        发布公告。
+        `ROS 2 desktop packages <https://reps.openrobotics.org/rep-2001/#kilted-kaiju-may-2025-november-2026>`__ 源码冻结解除，``rosdistro`` 对 Kilted PR 重新开放。
 
-.. [1] The ``ros_base`` variant is described in `REP 2001 (ros-base) <https://reps.openrobotics.org/rep-2001/#ros-base>`_.
-.. [2] The ``desktop`` variant is described in `REP 2001 (desktop-variants) <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_.
+.. [1] ``ros_base`` 变体在 `REP 2001 (ros-base) <https://reps.openrobotics.org/rep-2001/#ros-base>`_ 中描述。
+.. [2] ``desktop`` 变体在 `REP 2001 (desktop-variants) <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_ 中描述。

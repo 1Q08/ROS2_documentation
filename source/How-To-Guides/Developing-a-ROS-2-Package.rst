@@ -4,37 +4,35 @@
     Guides/Developing-a-ROS-2-Package
     Tutorials/Developing-a-ROS-2-Package
 
-Developing a ROS 2 package
-##########################
+开发 ROS 2 软件包
+#################
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-This tutorial will teach you how to create your first ROS 2 application.
-It is intended for developers who want to learn how to create custom packages in ROS 2, not for people who want to use ROS 2 with its existing packages.
+本教程将教你如何创建你的第一个 ROS 2 应用程序。
+它面向希望学习如何在 ROS 2 中创建自定义软件包的开发者，而不是那些想使用 ROS 2 及其现有软件包的人。
 
-Prerequisites
--------------
+前提条件
+--------
 
-- :doc:`Install ROS <../../Installation>`
+- :doc:`安装 ROS <../../Installation>`
 
-- `Install colcon <https://colcon.readthedocs.io/en/released/user/installation.html>`__
+- `安装 colcon <https://colcon.readthedocs.io/en/released/user/installation.html>`__
 
-- Setup your workspace by sourcing your ROS 2 installation.
+- 通过 source 你的 ROS 2 安装来设置工作空间。
 
-Creating a package
-------------------
+创建软件包
+----------
 
-All ROS 2 packages begin by running the command
+所有 ROS 2 软件包都从在你的工作空间（通常是 ``~/ros2_ws/src``）中运行以下命令开始
 
 .. code-block:: console
 
    $ ros2 pkg create --license Apache-2.0 <pkg-name> --dependencies [deps]
 
-in your workspace (usually ``~/ros2_ws/src``).
-
-To create a package for a specific client library:
+要为特定的客户端库创建软件包：
 
 .. tabs::
 
@@ -50,22 +48,22 @@ To create a package for a specific client library:
 
        $ ros2 pkg create  --build-type ament_python --license Apache-2.0 <pkg-name> --dependencies [deps]
 
-You can then update the ``package.xml`` with your package info such as dependencies, descriptions, and authorship.
+然后你可以更新 ``package.xml``，填入软件包信息，例如依赖项、描述和作者信息。
 
-C++ Packages
-^^^^^^^^^^^^
+C++ 软件包
+^^^^^^^^^^
 
-You will mostly use the ``add_executable()`` CMake macro along with
+你主要会使用 ``add_executable()`` CMake 宏以及
 
 .. code-block:: cmake
 
    ament_target_dependencies(<executable-name> [dependencies])
 
-to create executable nodes and link dependencies.
+来创建可执行节点并链接依赖项。
 
-To install your launch files and nodes, you can use the ``install()`` macro placed towards the end of the file but before the ``ament_package()`` macro.
+要安装启动文件和节点，你可以使用 ``install()`` 宏，将其放在文件末尾但在 ``ament_package()`` 宏之前。
 
-An example for launch files and nodes:
+启动文件和节点的示例：
 
 .. code-block:: cmake
 
@@ -81,14 +79,14 @@ An example for launch files and nodes:
      DESTINATION lib/${PROJECT_NAME}
    )
 
-Python Packages
-^^^^^^^^^^^^^^^
+Python 软件包
+^^^^^^^^^^^^^
 
-ROS 2 follows Python's standard module distribution process that uses ``setuptools``.
-For Python packages, the ``setup.py`` file complements a C++ package's ``CMakeLists.txt``.
-More details on distribution can be found in the `official documentation <https://docs.python.org/3/distributing/index.html#distributing-index>`_.
+ROS 2 遵循 Python 使用 ``setuptools`` 的标准模块分发流程。
+对于 Python 软件包，``setup.py`` 文件相当于 C++ 软件包的 ``CMakeLists.txt``。
+有关分发的更多细节可参阅 `官方文档 <https://docs.python.org/3/distributing/index.html#distributing-index>`_。
 
-In your ROS 2 package, you should have a ``setup.cfg`` file which looks like:
+在你的 ROS 2 软件包中，应该有一个如下所示的 ``setup.cfg`` 文件：
 
 .. code-block:: ini
 
@@ -97,7 +95,7 @@ In your ROS 2 package, you should have a ``setup.cfg`` file which looks like:
    [install]
    install_scripts=$base/lib/<package-name>
 
-and a ``setup.py`` file that looks like:
+以及一个如下所示的 ``setup.py`` 文件：
 
 .. code-block:: python
 
@@ -147,8 +145,8 @@ and a ``setup.py`` file that looks like:
    )
 
 
-Combined C++ and Python Packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C++ 与 Python 混合软件包
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-When writing a package with both C++ and Python code, the ``setup.py`` file and ``setup.cfg`` file are not used.
-Instead, use :doc:`ament_cmake_python <./Ament-CMake-Python-Documentation>`.
+编写同时包含 C++ 和 Python 代码的软件包时，不使用 ``setup.py`` 文件和 ``setup.cfg`` 文件。
+而应使用 :doc:`ament_cmake_python <./Ament-CMake-Python-Documentation>`。

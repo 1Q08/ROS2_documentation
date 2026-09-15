@@ -1,29 +1,28 @@
-Building a Custom RViz Display
-==============================
+构建自定义 RViz 显示
+====================
 
-Background
-----------
-There are many types of data that have existing visualizations in RViz.
-However, if there is a message type that does
-not yet have a plugin to display it, there are two choices to see it in RViz.
+背景
+----
+有许多类型的数据在 RViz 中已有可视化。
+但是，如果有一种消息类型还没有插件来显示它，在 RViz 中看到它有两种选择。
 
- 1. Convert the message to another type, such as ``visualization_msgs/Marker``.
- 2. Write a Custom RViz Display.
+ 1. 将消息转换为另一种类型，例如 ``visualization_msgs/Marker``。
+ 2. 编写一个自定义 RViz 显示。
 
-With the first option, there is more network traffic and limitations to how the data can be represented.
-It is also quick and flexible.
-The latter option is explained in this tutorial.
-It takes a bit of work, but can lead to much richer visualizations.
+使用第一种选择，会有更多的网络流量，并且数据的表示方式也有局限。
+但它也快速且灵活。
+后一种选择在本教程中解释。
+它需要一些工作，但可以带来更丰富的可视化。
 
-All of the code for this tutorial can be found in `this repository <https://github.com/MetroRobots/rviz_plugin_tutorial>`__.
-In order to see the incremental progress of the plugin written in this tutorial,
-the repository has different branches (``step2``, ``step3``...) that can each be compiled and run as you go.
+本教程的所有代码都可以在 `此仓库 <https://github.com/MetroRobots/rviz_plugin_tutorial>`__ 中找到。
+为了看到本教程中编写的插件的渐进式进展，
+该仓库有不同的分支（``step2``、``step3``...），每个分支都可以在你进行时编译和运行。
 
 
-Point2D Message
----------------
+Point2D 消息
+------------
 
-We'll be playing with a toy message defined in the ``rviz_plugin_tutorial_msgs`` package: ``Point2D.msg``:
+我们将使用 ``rviz_plugin_tutorial_msgs`` 包中定义的一个玩具消息：``Point2D.msg``：
 
 .. code-block::
 
@@ -31,16 +30,16 @@ We'll be playing with a toy message defined in the ``rviz_plugin_tutorial_msgs``
    float64 x
    float64 y
 
-Boilerplate for Basic Plugin
-----------------------------
+基础插件的模板
+--------------
 
-Strap in, there's a lot of code.
-You can view the full version of this code with the branch name ``step1``.
+系好安全带，有很多代码。
+你可以在分支名称为 ``step1`` 下查看此代码的完整版本。
 
-Header File
-^^^^^^^^^^^
+头文件
+^^^^^^
 
-Here are the contents of ``point_display.hpp``
+这是 ``point_display.hpp`` 的内容
 
 .. code-block:: c++
 
@@ -64,13 +63,13 @@ Here are the contents of ``point_display.hpp``
 
    #endif  // RVIZ_PLUGIN_TUTORIAL__POINT_DISPLAY_HPP_
 
-* We're implementing the `MessageFilterDisplay <https://github.com/ros2/rviz/blob/0ef2b56373b98b5536f0f817c11dc2b5549f391d/rviz_common/include/rviz_common/message_filter_display.hpp#L43>`__ class which can be used with any message with a ``std_msgs/Header``.
-* The class is templated with our ``Point2D`` message type.
-* `For reasons outside the scope of this tutorial <https://doc.qt.io/qt-5/moc.html>`__, you need the ``Q_OBJECT`` macro in there to get the QT parts of the GUI to work.
-* ``processMessage`` is the only method that needs to be implemented, which we'll do in the cpp file.
+* 我们正在实现 `MessageFilterDisplay <https://github.com/ros2/rviz/blob/0ef2b56373b98b5536f0f817c11dc2b5549f391d/rviz_common/include/rviz_common/message_filter_display.hpp#L43>`__ 类，它可以用于任何带有 ``std_msgs/Header`` 的消息。
+* 该类使用我们的 ``Point2D`` 消息类型作为模板参数。
+* `由于超出本教程范围的原因 <https://doc.qt.io/qt-5/moc.html>`__，你需要其中包含 ``Q_OBJECT`` 宏才能让 GUI 的 QT 部分工作。
+* ``processMessage`` 是唯一需要实现的方法，我们将在 cpp 文件中实现它。
 
-Source File
-^^^^^^^^^^^
+源文件
+^^^^^^
 
 ``point_display.cpp``
 
@@ -91,13 +90,13 @@ Source File
    PLUGINLIB_EXPORT_CLASS(rviz_plugin_tutorial::PointDisplay, rviz_common::Display)
 
 
-* The logging is not strictly necessary, but helps with debugging.
-* In order for RViz to find our plugin, we need this ``PLUGINLIB`` invocation in our code (as well as other things below).
+* 日志记录并不是严格必要的，但有助于调试。
+* 为了让 RViz 找到我们的插件，我们需要在代码中使用这个 ``PLUGINLIB`` 调用（以及下面的其他东西）。
 
 package.xml
 ^^^^^^^^^^^
 
-We need the following three dependencies in our package.xml:
+我们的 package.xml 中需要以下三个依赖：
 
 .. code-block:: xml
 
@@ -117,17 +116,17 @@ rviz_common_plugins.xml
    </library>
 
 
-* This is standard ``pluginlib`` code.
+* 这是标准的 ``pluginlib`` 代码。
 
-  * The library ``path`` is the name of the library we'll assign in the CMake.
-  * The class should match the ``PLUGINLIB`` invocation from above.
+  * 库 ``path`` 是我们在 CMake 中分配的库的名称。
+  * 类应与上面的 ``PLUGINLIB`` 调用匹配。
 
-* We'll come back to the description later, I promise.
+* 我们稍后会回到描述，我保证。
 
 CMakeLists.txt
 ^^^^^^^^^^^^^^
 
-Add the following lines to the top of the standard boilerplate.
+将以下行添加到标准模板的顶部。
 
 .. code-block:: cmake
 
@@ -168,26 +167,26 @@ Add the following lines to the top of the standard boilerplate.
    pluginlib_export_plugin_description_file(rviz_common rviz_common_plugins.xml)
 
 
-* To generate the proper Qt files, we need to
+* 为了生成正确的 Qt 文件，我们需要
 
-  * Turn ``CMAKE_AUTOMOC`` on.
-  * Wrap the headers by calling ``qt5_wrap_cpp`` with each header that has ``Q_OBJECT`` in it.
-  * Include the ``MOC_FILES`` in the library alongside our other cpp files.
+  * 打开 ``CMAKE_AUTOMOC``。
+  * 通过对每个包含 ``Q_OBJECT`` 的头文件调用 ``qt5_wrap_cpp`` 来包装头文件。
+  * 将 ``MOC_FILES`` 与我们其他 cpp 文件一起包含在库中。
 
-* Note that if you do NOT wrap your header files, you may get an error message when attempting to load the plugin at runtime, along the lines of:
+* 注意，如果你不包装你的头文件，你可能会在运行时尝试加载插件时收到一条错误消息，大致如下：
 
   .. code-block::
 
      [rviz2]: PluginlibFactory: The plugin for class 'rviz_plugin_tutorial::PointDisplay' failed to load. Error: Failed to load library /home/ros/ros2_ws/install/rviz_plugin_tutorial/lib/libpoint_display.so. Make sure that you are calling the PLUGINLIB_EXPORT_CLASS macro in the library code, and that names are consistent between this macro and your XML. Error string: Could not load library LoadLibrary error: /home/ros/ros2_ws/install/rviz_plugin_tutorial/lib/libpoint_display.so: undefined symbol: _ZTVN20rviz_plugin_tutorial12PointDisplayE, at /tmp/binarydeb/ros-foxy-rcutils-1.1.4/src/shared_library.c:84
 
-* A lot of the other code ensures that the plugin portion works.
-  Namely, calling ``pluginlib_export_plugin_description_file`` is essential to getting RViz to find your new plugin.
+* 许多其他代码确保插件部分工作。
+  也就是说，调用 ``pluginlib_export_plugin_description_file`` 对于让 RViz 找到你的新插件至关重要。
 
-Testing it out
-^^^^^^^^^^^^^^
+测试一下
+^^^^^^^^
 
-Compile your code and run ``rviz2``.
-You should be able to add your new plugin by clicking ``Add`` in the bottom left, and then selecting your package/plugin.
+编译你的代码并运行 ``rviz2``。
+你应该能够通过点击左下角的 ``Add``，然后选择你的包/插件来添加你的新插件。
 
 
 .. image:: images/Step1A.png
@@ -195,44 +194,44 @@ You should be able to add your new plugin by clicking ``Add`` in the bottom left
    :alt: screenshot of adding display
 
 
-Initially, the display will be in an error state because you have yet to assign a topic.
+最初，显示将处于错误状态，因为你还没有分配话题。
 
 .. image:: images/Step1B.png
    :target: ../../../../_images/Step1B.png
    :alt: screenshot of error state
 
 
-If we put the topic ``/point`` in, it should load fine but not display anything.
+如果我们输入话题 ``/point``，它应该能正常加载，但不会显示任何东西。
 
 .. image:: images/Step1C.png
    :target: ../../../../_images/Step1C.png
    :alt: screenshot of functioning empty display
 
 
-You can publish messages with the following command:
+你可以使用以下命令发布消息：
 
 .. code-block:: console
 
    $ ros2 topic pub /point rviz_plugin_tutorial_msgs/msg/Point2D "{header: {frame_id: map}, x: 1, y: 2}" -r 0.5
 
-That should result in the "We got a message" logging to appear in the ``stdout`` of RViz.
+那应该会导致 "We got a message" 日志出现在 RViz 的 ``stdout`` 中。
 
-Actual Visualization
---------------------
+实际可视化
+----------
 
-You can view the full version of this step with the branch name ``step2``.
+你可以在分支名称为 ``step2`` 下查看此步骤的完整版本。
 
-First, you need to add a dependency in ``CMakeLists.txt`` and ``package.xml`` on the package ``rviz_rendering``.
+首先，你需要在 ``CMakeLists.txt`` 和 ``package.xml`` 中添加对 ``rviz_rendering`` 包的依赖。
 
-We need to add three lines to the header file:
+我们需要在头文件中添加三行：
 
 
-* ``#include <rviz_rendering/objects/shape.hpp>`` - There's `lots of options in the rviz_rendering package <https://github.com/ros2/rviz/tree/ros2/rviz_rendering/include/rviz_rendering/objects>`_ for objects to build your visualization on.
-  Here we're using a simple shape.
-* In the class, we'll add a new ``protected`` virtual method: ``void onInitialize() override;``
-* We also add a pointer to our shape object: ``std::unique_ptr<rviz_rendering::Shape> point_shape_;``
+* ``#include <rviz_rendering/objects/shape.hpp>`` - `rviz_rendering 包中有很多对象 <https://github.com/ros2/rviz/tree/ros2/rviz_rendering/include/rviz_rendering/objects>`_ 可以用于构建你的可视化。
+  这里我们使用一个简单的形状。
+* 在类中，我们将添加一个新的 ``protected`` 虚方法：``void onInitialize() override;``
+* 我们还为我们的形状对象添加一个指针：``std::unique_ptr<rviz_rendering::Shape> point_shape_;``
 
-Then in the cpp file, we define the ``onInitialize`` method:
+然后在 cpp 文件中，我们定义 ``onInitialize`` 方法：
 
 .. code-block:: c++
 
@@ -245,10 +244,10 @@ Then in the cpp file, we define the ``onInitialize`` method:
    }
 
 
-* ``MFDClass`` is `aliased <https://github.com/ros2/rviz/blob/0ef2b56373b98b5536f0f817c11dc2b5549f391d/rviz_common/include/rviz_common/message_filter_display.hpp#L57>`_ to the templated parent class for convenience.
-* The shape object must be constructed here in the ``onInitialize`` method rather than the constructor because otherwise ``scene_manager_`` and ``scene_node_`` would not be ready.
+* 为了方便，``MFDClass`` 被 `别名化 <https://github.com/ros2/rviz/blob/0ef2b56373b98b5536f0f817c11dc2b5549f391d/rviz_common/include/rviz_common/message_filter_display.hpp#L57>`_ 为模板化的父类。
+* 形状对象必须在这里的 ``onInitialize`` 方法中构造，而不是在构造函数中，因为否则 ``scene_manager_`` 和 ``scene_node_`` 还没有准备好。
 
-We also update our ``processMessage`` method:
+我们还更新我们的 ``processMessage`` 方法：
 
 .. code-block:: c++
 
@@ -273,53 +272,53 @@ We also update our ``processMessage`` method:
    }
 
 
-* We need to get the proper frame for our message and transform the ``scene_node_`` accordingly.
-  This ensures that the visualization does not always appear relative to the fixed frame.
-* The actual visualization that we've been building up to is in the last four lines: we set the position of the visualization to match the message's position.
+* 我们需要为我们的消息获取正确的坐标系，并相应地变换 ``scene_node_``。
+  这确保可视化不会总是相对于固定坐标系出现。
+* 我们一直在构建的实际可视化在最后四行中：我们将可视化的位置设置为与消息的位置匹配。
 
-The result should look like this:
+结果应该看起来像这样：
 
 .. image:: images/Step2A.png
    :target: ../../../../_images/Step2A.png
    :alt: screenshot of functioning display
 
 
-If the box does not appear in that location, it might be because:
+如果方框没有出现在那个位置，可能是因为：
 
-* You are not publishing the topic at this time
-* The message hasn't been published in the last 2 seconds.
-* You did not properly set the topic in RViz.
+* 你此时没有发布该话题
+* 消息在过去 2 秒内没有被发布。
+* 你没有在 RViz 中正确设置话题。
 
-It's Nice to Have Options.
---------------------------
+有选项是很好的。
+----------------
 
-If you want to allow users to customize different properties of the visualization, you need to add `rviz_common::Property objects <https://github.com/ros2/rviz/tree/ros2/rviz_common/include/rviz_common/properties>`_.
+如果你想让用户自定义可视化的不同属性，你需要添加 `rviz_common::Property 对象 <https://github.com/ros2/rviz/tree/ros2/rviz_common/include/rviz_common/properties>`_。
 
-You can view the full version of this step with the branch name ``step3``.
+你可以在分支名称为 ``step3`` 下查看此步骤的完整版本。
 
-Header Updates
-^^^^^^^^^^^^^^
+头文件更新
+^^^^^^^^^^
 
 
 
-Include the header file for color properties: ``#include <rviz_common/properties/color_property.hpp>``.
-Color is but one of many properties you can set.
+包含颜色属性的头文件：``#include <rviz_common/properties/color_property.hpp>``。
+颜色只是你可以设置的众多属性之一。
 
-Add in the prototype for ``updateStyle``, which is called whenever the GUI is changed via Qt's SIGNAL/SLOT framework:
+添加 ``updateStyle`` 的原型，每当 GUI 通过 Qt 的 SIGNAL/SLOT 框架更改时都会调用它：
 
 .. code-block:: c++
 
   private Q_SLOTS:
     void updateStyle();
 
-Add in a new property to store the property itself: ``std::unique_ptr<rviz_common::properties::ColorProperty> color_property_;``
+添加一个新属性来存储属性本身：``std::unique_ptr<rviz_common::properties::ColorProperty> color_property_;``
 
-Cpp Updates
-^^^^^^^^^^^
+Cpp 更新
+^^^^^^^^
 
 
-* ``#include <rviz_common/properties/parse_color.hpp>`` - Contains helper function to convert property to OGRE color.
-* To our ``onInitialize`` we add
+* ``#include <rviz_common/properties/parse_color.hpp>`` - 包含将属性转换为 OGRE 颜色的辅助函数。
+* 在我们的 ``onInitialize`` 中，我们添加
 
 .. code-block:: c++
 
@@ -328,10 +327,10 @@ Cpp Updates
     updateStyle();
 
 
-* This constructs the object with its name, default value, description and the callback.
-* We call ``updateStyle`` directly so that the color is set at the beginning even before the property is changed.
+* 这使用其名称、默认值、描述和回调来构造对象。
+* 我们直接调用 ``updateStyle``，这样即使属性尚未更改，颜色也会在开始时被设置。
 
-* Then we define the callback.
+* 然后我们定义回调。
 
 .. code-block:: c++
 
@@ -341,28 +340,28 @@ Cpp Updates
       point_shape_->setColor(color);
     }
 
-The result should look like this:
+结果应该看起来像这样：
 
 .. image:: images/Step3A.png
    :target: ../../../../_images/Step3A.png
    :alt: screenshot with color property
 
 
-Ooh, pink!
+哦，粉色！
 
 .. image:: images/Step3B.png
    :target: ../../../../_images/Step3B.png
    :alt: screenshot with changed color
 
 
-Status Report
--------------
+状态报告
+--------
 
-You can view the full version of this step with the branch name ``step4``.
+你可以在分支名称为 ``step4`` 下查看此步骤的完整版本。
 
-You can also set the status of the display.
-As an arbitrary example, let's make our display show a warning when the x coordinate is negative, because why not?
-In ``processMessage``:
+你还可以设置显示的状态。
+作为一个任意的例子，让我们让我们的显示在 x 坐标为负时显示一个警告，因为为什么不呢？
+在 ``processMessage`` 中：
 
 .. code-block:: c++
 
@@ -374,8 +373,8 @@ In ``processMessage``:
      }
 
 
-* We're assuming a previous ``using rviz_common::properties::StatusProperty;`` declaration.
-* Think of the status as Key/Value pairs, with the key being some string (here we're using ``"Message"``\ ) and the values are the status level (error/warn/ok) and the description (some other string).
+* 我们假设之前有一个 ``using rviz_common::properties::StatusProperty;`` 声明。
+* 将状态想象为键/值对，键是某个字符串（这里我们使用 ``"Message"``\ ），值是状态级别（error/warn/ok）和描述（其他字符串）。
 
 
 .. image:: images/Step4A.png
@@ -389,14 +388,14 @@ In ``processMessage``:
    :alt: screenshot with warning status
 
 
-Cleanup
--------
+清理
+----
 
-Now its time to clean it up a bit.
-This makes things look nicer and be a little easier to use, but aren't strictly required.
-You can view the full version of this step with the branch name ``step5``.
+现在是时候把它清理一下了。
+这让事情看起来更漂亮，也更容易使用，但不是严格必需的。
+你可以在分支名称为 ``step5`` 下查看此步骤的完整版本。
 
-First, we update the plugin declaration.
+首先，我们更新插件声明。
 
 .. code-block:: xml
 
@@ -408,18 +407,18 @@ First, we update the plugin declaration.
    </library>
 
 
-* We add the ``name`` field to the ``class`` tag.
-  This changes the name that is displayed in RViz.
-  In code, it makes sense to call it a ``PointDisplay`` but in RViz, we want to simplify.
-* We put actual text into the description.
-  Don't be lazy.
-* By declaring the specific message type here, when you attempt to add a Display by Topic, it will suggest this plugin for the topics of that type.
+* 我们在 ``class`` 标签中添加 ``name`` 字段。
+  这会更改在 RViz 中显示的名称。
+  在代码中，把它叫做 ``PointDisplay`` 是有意义的，但在 RViz 中，我们想简化它。
+* 我们在描述中放入实际文本。
+  不要偷懒。
+* 通过在这里声明特定的消息类型，当你尝试按话题添加显示时，它会为那种类型的话题建议此插件。
 
-We also add an icon for the plugin at ``icons/classes/Point2D.png``.
-The folder is hardcoded, and the filename should match the name from the plugin declaration (or the name of the class if not specified).
-`[icon source] <https://commons.wikimedia.org/wiki/File:Free_software_icon.svg>`_
+我们还在 ``icons/classes/Point2D.png`` 为插件添加一个图标。
+文件夹是硬编码的，文件名应与插件声明中的名称匹配（如果未指定，则为类的名称）。
+`[图标来源] <https://commons.wikimedia.org/wiki/File:Free_software_icon.svg>`_
 
-We need to install the image file in the CMake.
+我们需要在 CMake 中安装图像文件。
 
 .. code-block:: cmake
 
@@ -427,7 +426,7 @@ We need to install the image file in the CMake.
            DESTINATION share/${PROJECT_NAME}/icons/classes
    )
 
-Now when you add the display, it should show up with an icon and description.
+现在当你添加显示时，它应该带有一个图标和描述显示出来。
 
 
 .. image:: images/Step5A.png
@@ -435,7 +434,7 @@ Now when you add the display, it should show up with an icon and description.
    :alt: screenshot with added icon and description
 
 
-Here is the display when attempting to add by topic:
+这是尝试按话题添加时的显示：
 
 
 .. image:: images/Step5B.png
@@ -443,7 +442,7 @@ Here is the display when attempting to add by topic:
    :alt: screenshot with add by topic dialog
 
 
-And finally, here's the icon in the standard interface:
+最后，这是标准界面中的图标：
 
 
 .. image:: images/Step5C.png
@@ -451,4 +450,4 @@ And finally, here's the icon in the standard interface:
    :alt: screenshot with icon in standard interface
 
 
-Note, if you change the plugins name, previous RViz configurations will no longer work.
+注意，如果你更改插件的名称，之前的 RViz 配置将不再起作用。

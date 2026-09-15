@@ -2,43 +2,43 @@
 
    Installation/Linux-Install-Binary
 
-Ubuntu (binary)
-===============
+Ubuntu（二进制）
+================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-This page explains how to install ROS 2 on Ubuntu Linux from a pre-built binary package.
+本文说明如何在 Ubuntu Linux 上从预构建二进制包安装 ROS 2。
 
 .. note::
 
-    The pre-built binary does not include all ROS 2 packages.
-    All packages in the `ROS base variant <https://reps.openrobotics.org/rep-2001/#ros-base>`_ are included, and only a subset of packages in the `ROS desktop variant <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_ are included.
-    The exact list of packages are described by the repositories listed in `this ros2.repos file <https://github.com/ros2/ros2/blob/{REPOS_FILE_BRANCH}/ros2.repos>`_.
+    预构建二进制包不包含所有 ROS 2 软件包。
+    它包含 `ROS base 变体 <https://reps.openrobotics.org/rep-2001/#ros-base>`_ 中的所有软件包，但只包含 `ROS desktop 变体 <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_ 中的一部分软件包。
+    确切的软件包列表由 `此 ros2.repos 文件 <https://github.com/ros2/ros2/blob/{REPOS_FILE_BRANCH}/ros2.repos>`_ 中列出的仓库描述。
 
-There are also :doc:`deb packages <../Ubuntu-Install-Debs>` available.
+此外还有 :doc:`deb 软件包 <../Ubuntu-Install-Debs>` 可用。
 
-System Requirements
+系统要求
+--------
+
+当前支持 Ubuntu Linux Jammy（22.04）64 位 x86 与 64 位 ARM。
+
+添加 ROS 2 apt 仓库
 -------------------
-
-We currently support Ubuntu Linux Jammy (22.04) 64-bit x86 and 64-bit ARM.
-
-Add the ROS 2 apt repository
-----------------------------
 
 .. include:: ../_Apt-Repositories.rst
 
-Downloading ROS 2
------------------
+下载 ROS 2
+----------
 
-* Go to the `releases page <https://github.com/ros2/ros2/releases>`_
-* Download the latest package for Ubuntu; let's assume that it ends up at ``~/Downloads/ros2-package-linux-x86_64.tar.bz2``.
+* 前往 `releases 页面 <https://github.com/ros2/ros2/releases>`_
+* 下载适用于 Ubuntu 的最新软件包；假设它最终位于 ``~/Downloads/ros2-package-linux-x86_64.tar.bz2``。
 
-  * Note: there may be more than one binary download option which might cause the file name to differ.
+  * 注意：可能存在多个二进制下载选项，这会导致文件名有所不同。
 
 *
-  Unpack it:
+  解压它：
 
   .. code-block:: console
 
@@ -46,8 +46,8 @@ Downloading ROS 2
        $ cd ~/ros2_{DISTRO}
        $ tar xf ~/Downloads/ros2-package-linux-x86_64.tar.bz2
 
-Installing and initializing rosdep
-----------------------------------
+安装并初始化 rosdep
+-------------------
 
 .. code-block:: console
 
@@ -58,12 +58,12 @@ Installing and initializing rosdep
 
 .. _linux-install-binary-install-missing-dependencies:
 
-Installing the missing dependencies
------------------------------------
+安装缺失的依赖项
+----------------
 
 .. include:: ../_Apt-Upgrade-Admonition.rst
 
-Set your rosdistro according to the release you downloaded.
+请根据你下载的发行版设置你的 rosdistro。
 
 .. code-block:: bash
 
@@ -71,27 +71,27 @@ Set your rosdistro according to the release you downloaded.
 
 .. include:: ../_rosdep_Linux_Mint.rst
 
-Install development tools (optional)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+安装开发工具（可选）
+^^^^^^^^^^^^^^^^^^^^
 
-If you are going to build ROS packages or otherwise do development, you can also install the development tools:
+如果你打算构建 ROS 软件包或进行其他开发工作，也可以安装开发工具：
 
 .. code-block:: bash
 
        sudo apt install ros-dev-tools
 
-Install additional DDS implementations (optional)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+安装额外 DDS 实现（可选）
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you would like to use another DDS or RTPS vendor besides the default, you can find instructions :doc:`here <../RMW-Implementations>`.
+如果你想使用除默认外的其他 DDS 或 RTPS 厂商，可以在此处找到说明：:doc:`这里 <../RMW-Implementations>`。
 
-Environment setup
------------------
+环境配置
+--------
 
-Source the setup script
-^^^^^^^^^^^^^^^^^^^^^^^
+加载安装脚本
+^^^^^^^^^^^^
 
-Set up your environment by sourcing the following file.
+通过加载以下文件来配置你的环境。
 
 .. code-block:: console
 
@@ -99,56 +99,56 @@ Set up your environment by sourcing the following file.
 
 .. note::
 
-   Replace ``.bash`` with your shell if you're not using bash.
-   Possible values are: ``setup.bash``, ``setup.sh``, ``setup.zsh``.
+   如果你不使用 bash，请将 ``.bash`` 替换为你所用的 shell。
+   可选值包括：``setup.bash``、``setup.sh``、``setup.zsh``。
 
-Try some examples
------------------
+尝试一些示例
+------------
 
-In one terminal, source the setup file and then run a C++ ``talker``:
+在一个终端中，加载安装脚本，然后运行 C++ 的 ``talker``：
 
 .. code-block:: console
 
    $ . ~/ros2_{DISTRO}/ros2-linux/setup.bash
    $ ros2 run demo_nodes_cpp talker
 
-In another terminal source the setup file and then run a Python ``listener``:
+在另一个终端中加载安装脚本，然后运行 Python 的 ``listener``：
 
 .. code-block:: console
 
    $ . ~/ros2_{DISTRO}/ros2-linux/setup.bash
    $ ros2 run demo_nodes_py listener
 
-You should see the ``talker`` saying that it's ``Publishing`` messages and the ``listener`` saying ``I heard`` those messages.
-This verifies both the C++ and Python APIs are working properly.
-Hooray!
+你应该会看到 ``talker`` 输出 ``Publishing`` 消息，而 ``listener`` 输出 ``I heard`` 这些消息。
+这验证了 C++ 和 Python API 都能正常工作。
+太棒了！
 
-Next steps after installing
----------------------------
-Continue with the :doc:`tutorials and demos <../../Tutorials>` to configure your environment, create your own workspace and packages, and learn ROS 2 core concepts.
+安装后的后续步骤
+----------------
+继续学习 :doc:`教程和演示 <../../Tutorials>`，以配置你的环境、创建自己的工作空间和软件包，并了解 ROS 2 的核心概念。
 
-Using the ROS 1 bridge
-----------------------
-The ROS 1 bridge can connect topics from ROS 1 to ROS 2 and vice-versa.
-See the dedicated `documentation <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__ on how to build and use the ROS 1 bridge.
-
-Additional RMW implementations (optional)
------------------------------------------
-The default middleware that ROS 2 uses is ``Fast DDS``, but the middleware (RMW) can be replaced at runtime.
-See the :doc:`guide <../../How-To-Guides/Working-with-multiple-RMW-implementations>` on how to work with multiple RMWs.
-
-Troubleshooting
+使用 ROS 1 桥接
 ---------------
+ROS 1 桥接可以将话题从 ROS 1 连接到 ROS 2，反之亦然。
+请参阅关于如何构建和使用 ROS 1 桥接的专门 `文档 <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__。
 
-Troubleshooting techniques can be found :doc:`here <../../How-To-Guides/Installation-Troubleshooting>`.
+其他 RMW 实现（可选）
+---------------------
+ROS 2 使用的默认中间件是 ``Fast DDS``，但中间件（RMW）可以在运行时替换。
+请参阅关于如何使用多个 RMW 的 :doc:`指南 <../../How-To-Guides/Working-with-multiple-RMW-implementations>`。
 
-Uninstall
----------
+故障排查
+--------
 
-1. If you installed your workspace with colcon as instructed above, "uninstalling" could be just a matter of opening a new terminal and not sourcing the workspace's ``setup`` file.
-   This way, your environment will behave as though there is no {DISTRO_TITLE} install on your system.
+故障排查技巧可以在 :doc:`这里 <../../How-To-Guides/Installation-Troubleshooting>` 找到。
 
-2. If you're also trying to free up space, you can delete the entire workspace directory with:
+卸载
+----
+
+1. 如果你按上面的说明使用 colcon 安装工作空间，那么“卸载”可能只需打开一个新终端，并且不要加载该工作空间的 ``setup`` 文件。
+   这样，你的环境就会表现得如同系统中没有安装 {DISTRO_TITLE}。
+
+2. 如果你还想释放空间，可以用以下命令删除整个工作空间目录：
 
    .. code-block:: console
 

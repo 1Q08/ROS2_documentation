@@ -1,46 +1,46 @@
-Getting Backtraces in ROS 2
-###########################
+在 ROS 2 中获取回溯
+###################
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
-**Goal:** Show various methods for getting backtraces in ROS 2
+**目标：** 展示在 ROS 2 中获取回溯的多种方法
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 15 minutes
+**时间：** 15 分钟
 
-The following steps show ROS 2 users how to get backtraces when they encounter a problem.
+以下步骤向 ROS 2 用户展示在遇到问题时如何获取回溯。
 
-Overview
---------
+概述
+----
 
-**What is a Backtrace ?**
+**什么是回溯？**
 
-- Imagine your program is like a stack of pancakes where each pancake represents a function it's currently executing.
-  A backtrace is like a photo of the collapsed pancake stack, showing you the order they were in, revealing how the program ended up with the failure.
-- It lists out the sequence of functions that were called, one on top of the other, leading up to the point of failure.
+- 把程序想象成一摞薄饼，每一张薄饼代表它当前正在执行的一个函数。
+  回溯就像是对这摞倒塌薄饼拍下的一张照片，展示它们原本的顺序，揭示程序是如何走到失败的。
+- 它列出了被调用的函数序列，一个叠在另一个之上，一直通向失败发生的位置。
 
-**Why is it Useful?**
+**为什么它很有用？**
 
-- **Pinpoints the Problem:** Instead of guessing where in your code an error occurred, the backtrace shows you the exact line number responsible for the crash.
-- **Reveals Context:** You can see the chain of events (functions calling other functions) that ultimately triggered the failure.
-  This helps you understand not just where things went wrong, but also why.
+- **精准定位问题：** 无需猜测代码中出错的位置，回溯会直接告诉你导致崩溃的确切行号。
+- **揭示上下文：** 你可以看到最终触发失败的事件链（函数调用其他函数）。
+  这不仅能帮助你理解出错的位置，还能理解出错的原因。
 
-**Visual Analogy**:  Stack of Pancakes
+**形象类比**：一摞薄饼
 
-1. Each Pancake is a Function: Imagine each pancake in a stack represents a function that your program is currently executing.
-   The pancake at the bottom is your main() function, where it all begins.
+1. 每张薄饼就是一个函数：把一摞薄饼中的每一张都想象成程序当前正在执行的一个函数。
+   最下面那张薄饼就是你的 main() 函数，一切都从这里开始。
 
-2. Adding Pancakes: Every time a function calls another function, a new pancake is placed on top of the stack.
+2. 不断添加薄饼：每当一个函数调用另一个函数时，就会有一张新的薄饼被放到这摞薄饼的最上面。
 
-3. The Crash: A crash is like the plate slipping out from the bottom of the stack – something went disastrously wrong in the function currently executing.
+3. 崩溃：崩溃就像盘子从这摞薄饼底部滑脱——当前正在执行的函数出了灾难性的问题。
 
-4. The Backtrace: The backtrace is like a photo of that fallen pancake stack.
-   It shows the order of pancakes (functions) from top to bottom, revealing how you ended up at the crash site.
+4. 回溯：回溯就像对那摞倒塌的薄饼拍下的一张照片。
+   它从下到上展示薄饼（函数）的顺序，揭示你是如何走到崩溃现场的。
 
 
-**Code Example:**
+**代码示例：**
 
 .. code-block:: cpp
 
@@ -61,7 +61,7 @@ Overview
       return 0;
   }
 
-**Backtrace from the Crash:**
+**崩溃产生的回溯：**
 
 .. code-block:: bash
 
@@ -70,116 +70,116 @@ Overview
   #2  functionA() at file.cpp:13
   #3  main() at file.cpp:18
 
-**How the Backtrace Helps:**
+**回溯如何提供帮助：**
 
-- **Crash Origin:** Shows you the exact line in ``functionC()`` that triggered the crash.
-- **Call Sequence:** Reveals that ``main()`` called ``functionA()``, which called ``functionB()``, which ultimately led to the error in ``functionC()``.
+- **崩溃源头：** 显示 ``functionC()`` 中触发崩溃的确切行。
+- **调用顺序：** 揭示 ``main()`` 调用了 ``functionA()``，后者调用了 ``functionB()``，最终导致 ``functionC()`` 中出错。
 
-The above example gave us a clear picture of what is a backtrace and how it can be useful.
-Now, the following steps show ROS 2 users how to get traces from specific nodes when they encounter a problem.
-This tutorial applies to both simulated and physical robots.
+上面的示例让我们清楚地了解了什么是回溯以及它有什么用。
+接下来，以下步骤将向 ROS 2 用户展示在遇到问题时如何从特定节点获取跟踪信息。
+本教程既适用于仿真机器人，也适用于实体机器人。
 
-This will cover how to get a backtrace from a specific node using ``ros2 run``, from a launch file representing a single node using ``ros2 launch``, and from a more complex orchestration of nodes.
-By the end of this tutorial, you should be able to get a backtrace when you notice a node crashing in ROS 2.
+内容将涵盖：如何使用 ``ros2 run`` 从特定节点获取回溯，如何使用 ``ros2 launch`` 从表示单个节点的启动文件获取回溯，以及如何从更复杂的节点编排中获取回溯。
+学完本教程后，当你在 ROS 2 中注意到某个节点崩溃时，应当能够获取回溯。
 
-Preliminaries
--------------
+预备知识
+--------
 
-GDB is the most popular debugger for C/C++ on Unix systems.
-It can be used to determine the reason for a crash and track threads.
-It may also be used to add breakpoints in your code to check values in memory at particular points in your software.
+GDB 是 Unix 系统上最流行的 C/C++ 调试器。
+它可用于确定崩溃原因并跟踪线程。
+它也可以用来在代码中添加断点，以便在软件的特定位置检查内存中的值。
 
-Using GDB is a critical skill for all software developers working on C/C++.
-While many IDEs have some kind of debugger or profiler built in, it is important to understand how to use these raw tools you have available rather than relying on an IDE to provide them.
-Understanding these tools is a fundamental skill of C/C++ development and leaving it up to your IDE can be problematic if you change roles and no longer have access to it or are doing development on the fly through an ssh session to a remote asset.
+对于所有从事 C/C++ 开发的软件开发者来说，使用 GDB 是一项关键技能。
+尽管许多 IDE 都内置了某种调试器或性能分析器，但重要的是要理解如何使用手头这些原始工具，而不是依赖 IDE 来提供它们。
+理解这些工具是 C/C++ 开发的基本功，把它完全交给 IDE 可能会带来麻烦：比如你换了岗位、不再能使用该 IDE，或者需要通过 ssh 会话对远程设备进行即时开发。
 
-Using GDB luckily is fairly simple after you have the basics under your belt.
-Here's how to ensure your ROS2 code is ready for debugging:
+掌握基础知识之后，使用 GDB 其实相当简单。
+下面说明如何确保你的 ROS 2 代码已为调试做好准备：
 
-- By using ``--cmake-args``: The easiest way to include debug symbols is by adding ``--cmake-args -DCMAKE_BUILD_TYPE=Debug`` to your ``colcon build`` command:
+- 通过使用 ``--cmake-args``：包含调试符号最简单的方法是在 ``colcon build`` 命令中添加 ``--cmake-args -DCMAKE_BUILD_TYPE=Debug``：
 
 .. code-block:: console
 
   $ colcon build --packages-up-to <package_name> --cmake-args -DCMAKE_BUILD_TYPE=Debug
 
-- By editing ``CMakeLists.txt`` : Another way is to add ``-g`` to your compiler flags for the ROS package you want to profile / debug.
-  This flag builds debug symbols that GDB can read to tell you specific lines of code in your project are failing and why.
-  If you do not set this flag, you can still get backtraces but it will not provide line numbers for failures.
+- 通过编辑 ``CMakeLists.txt``：另一种方法是为你想分析/调试的 ROS 软件包的编译器标志添加 ``-g``。
+  该标志会生成调试符号，GDB 可以读取它们，从而告诉你项目中具体哪几行代码失败以及原因。
+  如果不设置该标志，你仍然可以获得回溯，但不会提供失败位置的行号。
 
-Now you're ready to debug your code!
-If this was a non-ROS project, at this point you might do something like below.
-Here we're launching a GDB session and telling our program to immediately run.
-Once your program crashes, it will return a gdb session prompt denoted by ``(gdb)``.
-At this prompt you can access the information you're interested in.
-However, since this is a ROS project with lots of node configurations and other things going on, this isn't a great option for beginners or those that don't like tons of commandline work and understanding the filesystem.
+现在你可以开始调试代码了！
+如果这是一个非 ROS 项目，此时你可能会像下面这样做。
+这里我们启动一个 GDB 会话，并让程序立即运行。
+程序崩溃后，会返回一个由 ``(gdb)`` 表示的 gdb 会话提示符。
+在该提示符下，你可以访问自己感兴趣的信息。
+不过，由于这是一个 ROS 项目，涉及大量节点配置和其他事务，对于初学者，或者不喜欢大量命令行操作和文件系统知识的人来说，这并不是一个好选择。
 
 .. code-block:: console
 
   $ gdb ex run --args /path/to/exe/program
 
-Below are sections to describe the three major situations you could run into with ROS 2-based systems.
-Read the section that best describes the problem you're attempting to solve.
+以下各节描述了你在基于 ROS 2 的系统中可能遇到的三种主要情况。
+请阅读最贴合你所要解决问题的那一节。
 
-Debugging a specific node with GDB
-----------------------------------
+使用 GDB 调试特定节点
+---------------------
 
-To easily set up a GDB session before launching a ROS 2 node, leverage the ``--prefix`` option to easily set up a GDB session before launching a ROS 2 node.
-For GDB debugging, use it as follows:
+要在启动 ROS 2 节点之前方便地建立 GDB 会话，可以利用 ``--prefix`` 选项。
+用于 GDB 调试时，用法如下：
 
 .. note::
 
-  Keep in mind that a ROS 2 executable might contain multiple nodes.
-  The ``--prefix`` approach ensures you're debugging the correct node within the process.
+  请记住，一个 ROS 2 可执行文件可能包含多个节点。
+  ``--prefix`` 方法可确保你调试的是进程中正确的节点。
 
-**Why Direct GDB Usage Can Be Tricky**
+**为什么直接使用 GDB 可能会很棘手**
 
-``--prefix`` will execute some bits of code before our ROS 2 command allowing us to insert some information.
-If you attempted to do ``gdb ex run --args ros2 run <pkg> <node>`` as analog to our example in the preliminaries, you'd find that it couldn't find the ``ros2`` command.
-Additionally, trying to source your workspace within GDB would fail for similar reasons.
-This is because GDB, when launched this way, lacks the environment setup that normally makes the ``ros2`` command available.
+``--prefix`` 会在我们的 ROS 2 命令之前执行一些代码，从而让我们插入一些信息。
+如果你像预备知识中的示例那样尝试执行 ``gdb ex run --args ros2 run <pkg> <node>``，你会发现它找不到 ``ros2`` 命令。
+此外，在 GDB 内尝试 source 你的工作空间也会因类似原因失败。
+这是因为以这种方式启动的 GDB 缺少通常让 ``ros2`` 命令可用的环境设置。
 
-**Simplifying the Process with --prefix**
+**使用 --prefix 简化流程**
 
-Rather than having to revert to finding the install path of the executable and typing it all out, we can instead use ``--prefix``.
-This allows us to use the same ``ros2 run`` syntax you're used to without having to worry about some of the GDB details.
+我们不必退回到查找可执行文件的安装路径并把它完整敲出来，而是可以使用 ``--prefix``。
+这样就能沿用你熟悉的 ``ros2 run`` 语法，而无需操心 GDB 的一些细节。
 
 .. code-block:: console
 
   $ ros2 run --prefix 'gdb -ex run --args' <pkg> <node> --all-other-launch arguments
 
-**The GDB Experience**
+**GDB 使用体验**
 
-Just as before, this prefix will launch a GDB session and run the node you requested with all the additional command-line arguments.
-You should now have your node running and should be chugging along with some debug printing.
+和之前一样，该前缀会启动一个 GDB 会话，并带着所有附加命令行参数运行你请求的节点。
+现在你的节点应该已经运行起来，并伴随着一些调试打印信息继续工作。
 
-Reading the Stack Trace
------------------------
+阅读堆栈回溯
+------------
 
-After you obtain a backtrace using GDB, here's how to interpret it:
+使用 GDB 获得回溯之后，可以这样解读它：
 
-- Start at the Bottom: Backtraces list function calls in reverse chronological order.
-  The function at the bottom is where the crash originates.
+- 从底部开始：回溯按时间倒序列出函数调用。
+  最底部的函数就是崩溃的源头。
 
-- Follow the Stack Upwards: Each line above represents the function that called the function below it.
-  Trace upwards until you reach a line of code within your own project.
-  This often reveals where the problem initiated.
+- 沿堆栈向上追溯：上面的每一行都代表调用其下方函数的那个函数。
+  一直向上追溯，直到进入你自己项目中的某一行代码。
+  这通常能揭示问题最初发生在哪里。
 
-- Debugging Clues: Function names and their arguments can provide valuable clues about what went wrong.
+- 调试线索：函数名及其参数可以为你提供有关出错原因的宝贵线索。
 
-**How to Debug once your Node Crashes**
+**节点崩溃后如何调试**
 
-Once your node crashes, you'll see a prompt like below.
-At this point you can get a backtrace.
+节点崩溃后，你会看到类似下面的提示符。
+此时你就可以获取回溯了。
 
 .. code-block:: bash
 
   (gdb)
 
-In this session, type ``backtrace`` and it will provide you with a backtrace.
-Copy this for your needs.
+在该会话中输入 ``backtrace``，它就会给出回溯。
+按需复制下来即可。
 
 
-**Example backtrace**
+**回溯示例**
 
 .. code-block:: bash
 
@@ -200,40 +200,40 @@ Copy this for your needs.
   #10 0x0000555555559cfc in main (argc=1, argv=0x7fffffffc108)
       at /home/steve/Documents/nav2_ws/src/gdb_test_pkg/src/main.cpp:25
 
-In this example you should read this in the following way, starting at the bottom:
+在这个示例中，你应该从底部开始，按以下方式解读：
 
-- In the main function, on line 25 we call a function VectorCrash.
+- 在 main 函数中，第 25 行我们调用了 VectorCrash 函数。
 
-- In VectorCrash, on line 44, we crashed in the Vector's ``at()`` method with input ``100``.
+- 在 VectorCrash 中，第 44 行我们在 Vector 的 ``at()`` 方法中、以输入 ``100`` 发生了崩溃。
 
-- It crashed in ``at()`` on STL vector line 1091 after throwing an exception from a range check failure.
+- 它在 ``at()`` 中因范围检查失败抛出异常后，于 STL vector 第 1091 行崩溃。
 
-These traces take some time to get used to reading, but in general, start at the bottom and follow it up the stack until you see the line it crashed on.
-Then you can deduce why it crashed.
-When you are done with GDB, type ``quit`` and it will exit the session and kill any processes still up.
-It may ask you if you want to kill some threads at the end, say yes.
+阅读这些回溯需要一些时间来适应，但总体而言，从底部开始沿堆栈向上看，直到找到发生崩溃的那一行。
+然后就可以推断出崩溃的原因。
+GDB 使用完毕后，输入 ``quit``，它会退出会话并终止仍在运行的进程。
+最后它可能会询问你是否要终止某些线程，回答是即可。
 
-From a Launch File
-------------------
+从启动文件启动
+--------------
 
-Just as in our non-ROS example, we need to setup a GDB session before launching our ROS 2 launch file.
-While we could set this up through the commandline, we can instead make use of the same mechanics that we did in the ``ros2 run`` node example, now using a launch file.
+和我们的非 ROS 示例一样，在启动 ROS 2 启动文件之前，我们需要先建立 GDB 会话。
+虽然可以通过命令行来设置，但我们也可以沿用 ``ros2 run`` 节点示例中的相同机制，只不过这里用的是启动文件。
 
-In your launch file, find the node that you're interested in debugging.
-For this section, we assume that your launch file contains only a single node (and potentially other information as well).
-The ``Node`` function used in the ``launch_ros`` package will take in a field prefix taking a list of prefix arguments.
-We will insert the GDB snippet here.
+在你的启动文件中，找到你想调试的节点。
+本节假设你的启动文件只包含一个节点（也可能包含其他信息）。
+``launch_ros`` 软件包中使用的 ``Node`` 函数会接收一个 prefix 字段，其值为一个前缀参数列表。
+我们将在该处插入 GDB 片段。
 
-**Consider the following approaches, depending on your setup:**
+**请根据你的环境考虑以下方法：**
 
-- **Local Debugging with GUI :**  If you are debugging locally and have a GUI system available, use:
+- **带 GUI 的本地调试：** 如果你在本地调试并且有可用的 GUI 系统，请使用：
 
 .. code-block:: python
 
   prefix=['xterm -e gdb -ex run --args']
 
-This will provide a more interactive debugging experience.
-Example usecase for debugging building upon ``'start_sync_slam_toolbox_node'`` -
+这会提供更具交互性的调试体验。
+以下是基于 ``'start_sync_slam_toolbox_node'`` 的调试示例用法 -
 
 .. code-block:: python
 
@@ -248,14 +248,14 @@ Example usecase for debugging building upon ``'start_sync_slam_toolbox_node'`` -
     prefix=['xterm -e gdb -ex run --args'],  # For interactive GDB in a separate window/GUI
     output='screen')
 
-- **Remote Debugging (without GUI):** If debugging without GUI, omit ``xterm -e`` :
+- **远程调试（无 GUI）：** 如果在没有 GUI 的情况下调试，请省略 ``xterm -e``：
 
 .. code-block:: bash
 
   prefix=['gdb -ex run --args']
 
-GDB's output and interaction will happen within the terminal session where you launched the ROS 2 application.
-Here's an similar example for the ``'start_sync_slam_toolbox_node'`` -
+GDB 的输出和交互会发生在你启动 ROS 2 应用程序的那个终端会话中。
+以下是 ``'start_sync_slam_toolbox_node'`` 的类似示例 -
 
 .. code-block:: python
 
@@ -270,74 +270,74 @@ Here's an similar example for the ``'start_sync_slam_toolbox_node'`` -
     prefix=['gdb -ex run --args'],  # For GDB within the launch terminal
     output='screen')
 
-Just as before, this prefix will launch a GDB session, now in ``xterm`` and run the launch file you requested with all the additional launch arguments defined.
+和之前一样，该前缀会启动一个 GDB 会话（此时位于 ``xterm`` 中），并带着所有已定义的附加启动参数运行你请求的启动文件。
 
-Once your node crashes, you'll see a prompt like below, now in the ``xterm`` session.
-At this point you can now get a backtrace, and read it using the instructions in `Reading the Stack Trace`_.
+节点崩溃后，你会看到类似下面的提示符，此时位于 ``xterm`` 会话中。
+此时你就可以获取回溯，并按 `阅读堆栈回溯`_ 中的说明来阅读它。
 
-From a Large Project
---------------------
-Working with launch files with multiple nodes is a little different so you can interact with your GDB session without being bogged down by other logging in the same terminal.
-For this reason, when working with larger launch files, it is a good idea to pull out the specific node you're interested in and launch it separately.
+从大型项目启动
+--------------
+处理包含多个节点的启动文件稍有不同，这样你与 GDB 会话交互时就不会被同一终端中的其他日志淹没。
+因此，在处理较大的启动文件时，最好把你关注的特定节点单独提出来并单独启动。
 
-If your node of interest is being launched from a nested launch file (e.g. an included launch file) you may want to do the following:
+如果你关注的节点是从嵌套启动文件（例如被包含的启动文件）中启动的，你可能需要这样做：
 
-- Comment out the launch file inclusion from the parent launch file
+- 在父启动文件中注释掉对该启动文件的包含
 
-- Recompile the package of interest with ``-g`` flag for debug symbols
+- 使用 ``-g`` 标志重新编译你关注的软件包以获得调试符号
 
-- Launch the parent launch file in a terminal
+- 在一个终端中启动父启动文件
 
-- Launch the node's launch file in another terminal following the instructions in `From a Launch File`_.
+- 按照 `从启动文件启动`_ 中的说明，在另一个终端中启动该节点的启动文件
 
-Alternatively, if your node of interest is being launched in these files directly (e.g. you see a ``Node``, ``LifecycleNode``, or inside a ``ComponentContainer``), you will need to separate this from the others:
+或者，如果你关注的节点是在这些文件中直接启动的（例如你看到 ``Node``、``LifecycleNode``，或者它在 ``ComponentContainer`` 内部），则需要把它与其他部分分开：
 
-- Comment out the node's inclusion from the parent launch file
+- 在父启动文件中注释掉对该节点的包含
 
-- Recompile the package of interest with ``-g`` flag for debug symbols
+- 使用 ``-g`` 标志重新编译你关注的软件包以获得调试符号
 
-- Launch the parent launch file in a terminal
+- 在一个终端中启动父启动文件
 
-- Launch the node in another terminal following the instructions in `Debugging a specific node with GDB`_.
+- 按照 `使用 GDB 调试特定节点`_ 中的说明，在另一个终端中启动该节点
 
 .. note::
 
-  In this case you may need to remap or provide parameter files to this node if it was previously provided by the launch file.
-  Using ``--ros-args`` you can give it the path to the new parameters file, remaps, or names.
-  See :doc:`this tutorial <../../How-To-Guides/Node-arguments>` for the commandline arguments required.
+  在这种情况下，如果该节点此前是由启动文件提供的，你可能需要为其重映射或提供参数文件。
+  使用 ``--ros-args`` 可以为其指定新的参数文件路径、重映射或名称。
+  所需的命令行参数请参见 :doc:`本教程 <../../How-To-Guides/Node-arguments>`。
 
-  We understand this can be a pain, so it might encourage you to rather have each node possible as a separately included launch file to make debugging easier.
-  An example set of arguments might be ``--ros-args -r __node:=<node_name> --params-file /absolute/path/to/params.yaml`` (as a template).
+  我们理解这可能很麻烦，因此建议你尽可能让每个节点都作为单独包含的启动文件，以便更轻松地调试。
+  一组示例参数可以是 ``--ros-args -r __node:=<node_name> --params-file /absolute/path/to/params.yaml`` （作为模板）。
 
-Once your node crashes, you'll see a prompt like below in the terminal of the specific node.
-At this point you can now get a backtrace, and read it using the instructions in `Reading the Stack Trace`_.
+节点崩溃后，你会在该特定节点的终端中看到类似下面的提示符。
+此时你就可以获取回溯，并按 `阅读堆栈回溯`_ 中的说明来阅读它。
 
-Debugging tests with GDB
-------------------------
+使用 GDB 调试测试
+-----------------
 
-If a C++ test is failing, GDB can be used directly on the test executable in the build directory.
-Ensure to build the code in debug mode.
-Since the previous build type may be cached by CMake, clean the cache and rebuild.
+如果某个 C++ 测试失败，可以直接对构建目录中的测试可执行文件使用 GDB。
+请确保以调试模式构建代码。
+由于先前的构建类型可能已被 CMake 缓存，需要清理缓存并重新构建。
 
 .. code-block:: console
 
   $ colcon build --cmake-clean-cache --mixin debug
 
-In order for GDB to load debug symbols for any shared libraries called, make sure to source your environment.
-This configures the value of ``LD_LIBRARY_PATH``.
+为了让 GDB 能为所调用的任何共享库加载调试符号，请务必 source 你的环境。
+这会配置 ``LD_LIBRARY_PATH`` 的值。
 
 .. code-block:: console
 
   $ source install/setup.bash
 
-Finally, run the test directly through GDB.
-For example:
+最后，直接通过 GDB 运行该测试。
+例如：
 
 .. code-block:: console
 
   $ gdb -ex run ./build/rcl/test/test_logging
 
-If the code is throwing an unhandled exception, you can catch it in GDB before gtest handles it.
+如果代码抛出了未处理的异常，你可以在 gtest 处理它之前先在 GDB 中捕获它。
 
 .. code-block:: console
 
@@ -345,9 +345,9 @@ If the code is throwing an unhandled exception, you can catch it in GDB before g
   $ catch throw
   $ run
 
-Automatic backtrace on crash
-----------------------------
+崩溃时自动获取回溯
+------------------
 
-The `backward-cpp <https://github.com/pal-robotics/backward_ros>`_ library provides beautiful stack traces, and the `backward_ros <https://github.com/pal-robotics/backward_ros>`_ wrapper simplifies its integration.
+`backward-cpp <https://github.com/pal-robotics/backward_ros>`_ 库可以提供漂亮的堆栈回溯，而 `backward_ros <https://github.com/pal-robotics/backward_ros>`_ 封装则简化了它的集成。
 
-Just add it as a dependency and ``find_package`` it in your CMakeLists and the backward libraries will be injected in all your executables and libraries.
+只需将它添加为依赖项，并在你的 CMakeLists 中调用 ``find_package``，backward 库就会被注入到你所有的可执行文件和库中。

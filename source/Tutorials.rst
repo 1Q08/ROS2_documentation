@@ -1,13 +1,13 @@
 .. _Tutorials:
 
-Tutorials
-=========
+教程
+====
 
-The tutorials are a collection of step-by-step instructions meant to steadily build skills in ROS 2.
+教程是一系列循序渐进的说明，旨在稳步培养 ROS 2 技能。
 
-The best way to approach the tutorials is to walk through them for the first time in order, as they build off of each other and are not meant to be comprehensive documentation.
+学习这些教程的最佳方式是首次按顺序依次完成，因为它们层层递进，且并非旨在成为全面的文档。
 
-For quick solutions to more specific questions, see the :doc:`How-To-Guides`.
+如需快速解决更具体的问题，请参阅 :doc:`操作指南 <How-To-Guides>`。
 
 .. toctree::
    :maxdepth: 2
@@ -20,7 +20,7 @@ For quick solutions to more specific questions, see the :doc:`How-To-Guides`.
    Tutorials/Demos
    Tutorials/Miscellaneous
 
-Examples
---------
+示例
+----
 
-* `Python and C++ minimal examples <https://github.com/ros2/examples>`__.
+* `Python 和 C++ 最小示例 <https://github.com/ros2/examples>`__。

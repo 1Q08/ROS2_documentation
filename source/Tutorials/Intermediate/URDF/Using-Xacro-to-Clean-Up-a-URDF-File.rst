@@ -4,44 +4,44 @@
 
 .. _URDFXacro:
 
-Using Xacro to clean up your code
-=================================
+使用 Xacro 清理你的代码
+=======================
 
-**Goal:** Learn some tricks to reduce the amount of code in a URDF file using Xacro
+**目标：** 学习一些技巧，使用 Xacro 减少 URDF 文件中的代码量
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 20 minutes
+**时间：** 20 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-By now, if you're following all these steps at home with your own robot design, you might be sick of doing all sorts of math to get very simple robot descriptions to parse correctly.
-Fortunately, you can use the `xacro <https://index.ros.org/p/xacro>`_ package to make your life simpler.
-It does three things that are very helpful.
+到目前为止，如果你在家里用自己的机器人设计按这些步骤来，你可能已经厌倦了为了正确地解析非常简单的机器人描述而做各种各样的数学运算。
+幸运的是，你可以使用 `xacro <https://index.ros.org/p/xacro>`_ 包让你的生活更简单。
+它做了三件非常有帮助的事。
 
- * Constants
- * Simple Math
- * Macros
+ * 常量
+ * 简单数学
+ * 宏
 
-In this tutorial, we take a look at all these shortcuts to help reduce the overall size of the URDF file and make it easier to read and maintain.
+在本教程中，我们看看所有这些捷径，以帮助减少 URDF 文件的整体大小，并使其更易于阅读和维护。
 
-Using Xacro
------------
-As its name implies, `xacro <https://index.ros.org/p/xacro>`_ is a macro language for XML.
-The xacro program runs all of the macros and outputs the result.
-Typical usage looks something like this:
+使用 Xacro
+----------
+顾名思义，`xacro <https://index.ros.org/p/xacro>`_ 是一种用于 XML 的宏语言。
+xacro 程序运行所有宏并输出结果。
+典型用法看起来像这样：
 
 .. code-block:: console
 
    $ xacro model.xacro > model.urdf
 
-You can also automatically generate the urdf in a launch file.
-This is convenient because it stays up to date and doesn't use up hard drive space.
-However, it does take time to generate, so be aware that your launch file might take longer to start up.
+你也可以在 launch 文件中自动生成 urdf。
+这很方便，因为它保持最新且不占用硬盘空间。
+但是，生成确实需要时间，所以请注意你的 launch 文件可能需要更长时间才能启动。
 
-To run xacro within your launch file, you need to put the ``Command`` substitution as a parameter to the ``robot_state_publisher``.
+要在你的 launch 文件中运行 xacro，你需要将 ``Command`` 替换作为 ``robot_state_publisher`` 的参数。
 
 .. code-block:: python
 
@@ -56,22 +56,22 @@ To run xacro within your launch file, you need to put the ``Command`` substituti
         }]
     )
 
-An easier way to load the robot model is to use the `urdf_launch <https://github.com/ros/urdf_launch>`_ package to automatically load the xacro/urdf.
+加载机器人模型的更简单方法是使用 `urdf_launch <https://github.com/ros/urdf_launch>`_ 包来自动加载 xacro/urdf。
 
 .. literalinclude:: launch/urdf_display_launch.py
     :language: python
 
-At the top of the URDF file, you must specify a namespace in order for the file to parse properly.
-For example, these are the first two lines of a valid xacro file:
+在 URDF 文件的顶部，你必须指定一个命名空间，文件才能正确解析。
+例如，下面是一个有效的 xacro 文件的前两行：
 
 .. code-block:: xml
 
     <?xml version="1.0"?>
     <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
 
-Constants
----------
-Let's take a quick look at our base_link in R2D2.
+常量
+----
+让我们快速看看 R2D2 中的 base_link。
 
 .. code-block:: xml
 
@@ -89,12 +89,12 @@ Let's take a quick look at our base_link in R2D2.
     </collision>
   </link>
 
-The information here is a little redundant.
-We specify the length and radius of the cylinder twice.
-Worse, if we want to change that, we need to do so in two different places.
+这里的信息有点冗余。
+我们把圆柱体的长度和半径指定了两次。
+更糟糕的是，如果我们想改变它，需要在两个不同的地方改。
 
-Fortunately, xacro allows you to specify properties which act as constants.
-Instead, of the above code, we can write this.
+幸运的是，xacro 允许你指定充当常量的属性。
+我们可以不写上面的代码，而写这个。
 
 .. code-block:: xml
 
@@ -114,47 +114,47 @@ Instead, of the above code, we can write this.
         </collision>
     </link>
 
-* The two values are specified in the first two lines.
-  They can be defined just about anywhere (assuming valid XML), at any level, before or after they are used.
-  Usually they go at the top.
-* Instead of specifying the actual radius in the geometry element, we use a dollar sign and curly brackets to signify the value.
-* This code will generate the same code shown above.
+* 这两个值在前两行中指定。
+  它们几乎可以在任何地方定义（假设是有效的 XML）、在任何层级、在使用之前或之后。
+  通常它们放在顶部。
+* 我们不用在 geometry 元素中指定实际半径，而是用美元符号和花括号来表示值。
+* 这段代码将生成与上面相同的代码。
 
-The value of the contents of the ${} construct are then used to replace the ${}.
-This means you can combine it with other text in the attribute.
+${} 构造的内容值随后被用来替换 ${}。
+这意味着你可以将它与属性中的其他文本组合。
 
 .. code-block:: xml
 
     <xacro:property name="robotname" value="marvin" />
     <link name="${robotname}s_leg" />
 
-This will generate
+这将生成
 
 .. code-block:: xml
 
     <link name="marvins_leg" />
 
-However, the contents in the ${} don't have to only be a property, which brings us to our next point...
+然而，${} 中的内容不一定只是一个属性，这就引出了我们的下一个话题...
 
-Math
+数学
 ----
-You can build up arbitrarily complex expressions in the ${} construct using the four basic operations (+,-,*,/), the unary minus, and parenthesis.
-Examples:
+你可以使用四种基本运算（+、-、\*、/）、一元负号和括号，在 ${} 构造中构建任意复杂的表达式。
+示例：
 
 .. code-block:: xml
 
     <cylinder radius="${wheeldiam/2}" length="0.1"/>
     <origin xyz="${reflect*(width+.02)} 0 0.25" />
 
-You can also use more than the basic mathematical operations, like ``sin`` and ``cos``.
+你还可以使用比基本数学运算更多的东西，比如 ``sin`` 和 ``cos``。
 
-Macros
-------
-Here's the biggest and most useful component to the xacro package.
+宏
+--
+这是 xacro 包最大且最有用的组成部分。
 
-Simple Macro
-^^^^^^^^^^^^
-Let's take a look at a simple useless macro.
+简单宏
+^^^^^^
+让我们看一个简单无用的宏。
 
 .. code-block:: xml
 
@@ -163,24 +163,24 @@ Let's take a look at a simple useless macro.
     </xacro:macro>
     <xacro:default_origin />
 
-(This is useless, since if the origin is not specified, it has the same value as this.)
-This code will generate the following.
+（这没用，因为如果不指定 origin，它的值与此相同。）
+这段代码将生成以下内容。
 
 .. code-block:: xml
 
     <origin rpy="0 0 0" xyz="0 0 0"/>
 
-* The name is not technically a required element, but you need to specify it to be able to use it.
-* Every instance of the ``<xacro:$NAME />`` is replaced with the contents of the ``xacro:macro`` tag.
-* Note that even though its not exactly the same (the two attributes have switched order), the generated XML is equivalent.
-* If the xacro with a specified name is not found, it will not be expanded and will NOT generate an error.
+* 名称在技术上不是必需的元素，但你需要指定它才能使用它。
+* 每个 ``<xacro:$NAME />`` 实例都会被替换为 ``xacro:macro`` 标签的内容。
+* 注意，即使它们不完全相同（两个属性的顺序颠倒了），生成的 XML 是等价的。
+* 如果找不到指定名称的 xacro，它不会被展开，也不会生成错误。
 
-Parameterized Macro
-^^^^^^^^^^^^^^^^^^^
-You can also parameterize macros so that they don't generate the same exact text every time.
-When combined with the math functionality, this is even more powerful.
+参数化宏
+^^^^^^^^
+你还可以对宏进行参数化，这样它们不会每次生成完全相同的文本。
+当与数学功能结合时，这会更强大。
 
-First, let's take an example of a simple macro used in R2D2.
+首先，我们看一个 R2D2 中使用的简单宏的例子。
 
 .. code-block:: xml
 
@@ -193,15 +193,15 @@ First, let's take an example of a simple macro used in R2D2.
         </inertial>
     </xacro:macro>
 
-This can be used with the code
+这可以与以下代码一起使用
 
 .. code-block:: xml
 
     <xacro:default_inertial mass="10"/>
 
-The parameters act just like properties, and you can use them in expressions
+参数的作用和属性一样，你可以在表达式中使用它们
 
-You can also use entire blocks as parameters too.
+你也可以使用整个块作为参数。
 
 .. code-block:: xml
 
@@ -225,27 +225,27 @@ You can also use entire blocks as parameters too.
         <cylinder radius=".42" length=".01" />
     </xacro:blue_shape>
 
-* To specify a block parameter, include an asterisk before its parameter name.
-* A block can be inserted using the insert_block command
-* Insert the block as many times as you wish.
+* 要指定块参数，在参数名前加一个星号。
+* 可以使用 insert_block 命令插入块
+* 想插入多少次就插入多少次。
 
-Practical Usage
----------------
-The xacro language is rather flexible in what it allows you to do.
-Here are a few useful ways that xacro is used in the `R2D2 model <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/08-macroed.urdf.xacro>`_, in addition to the default inertial macro shown above.
+实际用法
+--------
+Xacro 语言在允许你做的事情上相当灵活。
+除了上面展示的默认惯性宏之外，这里还有一些 xacro 在 `R2D2 模型 <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/08-macroed.urdf.xacro>`_ 中使用的有用方式。
 
-To see the model generated by a xacro file, run the same command as with previous tutorials:
+要查看 xacro 文件生成的模型，运行与之前教程相同的命令：
 
 .. code-block:: console
 
   $ ros2 launch urdf_tutorial display.launch.py model:=urdf/08-macroed.urdf.xacro
 
-(The launch file has been running the xacro command this whole time, but since there were no macros to expand, it didn't matter)
+（launch 文件一直都在运行 xacro 命令，但由于没有宏需要展开，所以没有影响）
 
-Leg macro
-^^^^^^^^^
-Often you want to create multiple similar looking objects in different locations.
-You can use a macro and some simple math to reduce the amount of code you have to write, like we do with R2's two legs.
+腿宏
+^^^^
+通常你想在不同位置创建多个外观相似的对象。
+你可以使用宏和一些简单的数学来减少需要编写的代码量，就像我们对 R2 的两条腿所做的那样。
 
 .. code-block:: xml
 
@@ -277,8 +277,8 @@ You can use a macro and some simple math to reduce the amount of code you have t
     <xacro:leg prefix="right" reflect="1" />
     <xacro:leg prefix="left" reflect="-1" />
 
-* Common Trick 1: Use a name prefix to get two similarly named objects.
-* Common Trick 2: Use math to calculate joint origins.
-  In the case that you change the size of your robot, changing a property with some math to calculate the joint offset will save a lot of trouble.
-* Common Trick 3: Using a reflect parameter, and setting it to 1 or -1.
-  See how we use the reflect parameter to put the legs on either side of the body in the base_to_${prefix}_leg origin.
+* 常见技巧 1：使用名称前缀来获得两个名称相似的对象。
+* 常见技巧 2：使用数学来计算关节原点。
+  在你改变机器人尺寸的情况下，更改一个属性并用一些数学来计算关节偏移会省去很多麻烦。
+* 常见技巧 3：使用 reflect 参数，并将其设置为 1 或 -1。
+  看看我们如何在 base_to_${prefix}_leg origin 中使用 reflect 参数将腿放在身体的两侧。

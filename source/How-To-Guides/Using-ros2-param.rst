@@ -1,25 +1,25 @@
-Using the ``ros2 param`` command-line tool
-==========================================
+使用 ``ros2 param`` 命令行工具
+==============================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 1
    :local:
 
-Parameters in ROS 2 can be get, set, listed, and described through a set of services as described in :doc:`the concept document <../Concepts/Basic/About-Parameters>`.
-The ``ros2 param`` command-line tool is a wrapper around these service calls that makes it easy to manipulate parameters from the command-line.
+ROS 2 中的参数可以通过一组服务来获取、设置、列出和描述，如 :doc:`概念文档 <../Concepts/Basic/About-Parameters>` 中所述。
+``ros2 param`` 命令行工具是对这些服务调用的封装，使从命令行操作参数变得非常容易。
 
 ``ros2 param list``
 -------------------
 
-This command will list all of the available parameters on a given node, or on all discoverable nodes if no node is given.
+此命令将列出给定节点上所有可用的参数，如果未给出节点，则列出所有可发现节点上的参数。
 
-To get all of the parameters on a given node:
+获取给定节点上的所有参数：
 
 .. code-block:: console
 
   $ ros2 param list /my_node
 
-To get all of the parameters on all nodes in the system (this can take a long time on a complicated network):
+获取系统中所有节点上的所有参数（在复杂的网络中这可能会花费很长时间）：
 
 .. code-block:: console
 
@@ -28,9 +28,9 @@ To get all of the parameters on all nodes in the system (this can take a long ti
 ``ros2 param get``
 ------------------
 
-This command will get the value of a particular parameter on a particular node.
+此命令将获取特定节点上特定参数的值。
 
-To get the value of a parameter on a node:
+获取节点上某个参数的值：
 
 .. code-block:: console
 
@@ -39,39 +39,39 @@ To get the value of a parameter on a node:
 ``ros2 param set``
 ------------------
 
-This command will set the value of a particular parameter on a particular node.
-For most parameters, the type of the new value must be the same as the existing type.
+此命令将设置特定节点上特定参数的值。
+对于大多数参数，新值的类型必须与现有类型相同。
 
-To set the value of a parameter on a node:
+设置节点上某个参数的值：
 
 .. code-block:: console
 
   $ ros2 param set /my_node use_sim_time false
 
-The value that is passed on the command-line is in YAML, which allows arbitrary YAML expressions to be used.
-However, it also means that certain expressions will be interpreted differently than might be expected.
-For instance, if the parameter ``my_string`` on node ``my_node`` is of type string, the following will not work:
+命令行中传递的值采用 YAML 格式，因此可以使用任意 YAML 表达式。
+然而，这也意味着某些表达式会以与预期不同的方式被解释。
+例如，如果节点 ``my_node`` 上的参数 ``my_string`` 是字符串类型，则以下操作将不会生效：
 
 .. code-block:: console
 
   $ ros2 param set /my_node my_string off
 
-That's because YAML is interpreting "off" as a boolean, and ``my_string`` is a string type.
-This can be worked around by using the YAML syntax for explicitly setting strings, e.g.:
+这是因为 YAML 将 "off" 解释为布尔值，而 ``my_string`` 是字符串类型。
+可以通过使用 YAML 语法显式设置字符串来规避此问题，例如：
 
 .. code-block:: console
 
   $ ros param set /my_node my_string '!!str off'
 
-Additionally, YAML supports heterogeneous lists, containing (say) a string, a boolean, and an integer.
-However, ROS 2 parameters do not support heterogeneous lists, so any YAML list that has multiple types will be interpreted as a string.
-Assuming that the parameter ``my_int_array`` on node ``my_node`` is of type integer array, the following will not work:
+此外，YAML 支持异构列表，其中可以包含（比如）一个字符串、一个布尔值和一个整数。
+然而，ROS 2 参数不支持异构列表，因此任何具有多种类型的 YAML 列表都会被解释为字符串。
+假设节点 ``my_node`` 上的参数 ``my_int_array`` 是整数数组类型，则以下操作将不会生效：
 
 .. code-block:: console
 
   $ ros param set /my_node my_int_array '[foo,off,1]'
 
-The following string typed parameter would work:
+而以下字符串类型的参数则会生效：
 
 .. code-block:: console
 
@@ -80,9 +80,9 @@ The following string typed parameter would work:
 ``ros2 param delete``
 ---------------------
 
-This command will remove a parameter from a particular node.
-However, note that this can only remove dynamic parameters (not declared parameters).
-See :doc:`the concept document <../Concepts/Basic/About-Parameters>` for more information.
+此命令将从特定节点上移除一个参数。
+但请注意，它只能移除动态参数（而非已声明的参数）。
+更多信息请参阅 :doc:`概念文档 <../Concepts/Basic/About-Parameters>`。
 
 .. code-block:: console
 
@@ -91,7 +91,7 @@ See :doc:`the concept document <../Concepts/Basic/About-Parameters>` for more in
 ``ros2 param describe``
 -----------------------
 
-This command will provide a textual description of a particular parameter on a particular node:
+此命令将提供特定节点上特定参数的文本描述：
 
 .. code-block:: console
 
@@ -100,8 +100,8 @@ This command will provide a textual description of a particular parameter on a p
 ``ros2 param dump``
 -------------------
 
-This command will print out all of the parameters on a particular node in a YAML file format.
-The output of this command can then be used to re-run the node with the same parameters later:
+此命令将以 YAML 文件格式打印出特定节点上的所有参数。
+随后可以使用此命令的输出以相同的参数重新运行该节点：
 
 .. code-block:: console
 
@@ -110,8 +110,8 @@ The output of this command can then be used to re-run the node with the same par
 ``ros2 param load``
 -------------------
 
-This command will load the values of the parameters from a YAML file into a particular node.
-That is, this command can reload values at runtime that were dumped out by ``ros2 param dump``:
+此命令将从 YAML 文件加载参数值到特定节点中。
+也就是说，此命令可以在运行时重新加载由 ``ros2 param dump`` 导出的值：
 
 .. code-block:: console
 

@@ -1,57 +1,57 @@
-RHEL (binary)
-=============
+RHEL（二进制）
+==============
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-This page explains how to install ROS 2 on RHEL from a pre-built binary package.
+本文说明如何在 RHEL 上从预构建二进制包安装 ROS 2。
 
 .. note::
 
-    The pre-built binary does not include all ROS 2 packages.
-    All packages in the `ROS base variant <https://reps.openrobotics.org/rep-2001/#ros-base>`_ are included, and only a subset of packages in the `ROS desktop variant <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_ are included.
-    The exact list of packages are described by the repositories listed in `this ros2.repos file <https://github.com/ros2/ros2/blob/{REPOS_FILE_BRANCH}/ros2.repos>`_.
+    预构建二进制包不包含所有 ROS 2 软件包。
+    它包含 `ROS base 变体 <https://reps.openrobotics.org/rep-2001/#ros-base>`_ 中的所有软件包，但只包含 `ROS desktop 变体 <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_ 中的一部分软件包。
+    确切的软件包列表由 `此 ros2.repos 文件 <https://github.com/ros2/ros2/blob/{REPOS_FILE_BRANCH}/ros2.repos>`_ 中列出的仓库描述。
 
-There are also :doc:`RPM packages <../RHEL-Install-RPMs>` available.
+此外还有 :doc:`RPM 软件包 <../RHEL-Install-RPMs>` 可用。
 
-System Requirements
--------------------
+系统要求
+--------
 
-We currently support RHEL 8 64-bit.
+目前支持 RHEL 8 64 位。
 
-Enable required repositories
-----------------------------
+启用所需仓库
+------------
 
-The rosdep database contains packages from the EPEL and PowerTools repositories, which are not enabled by default.
-They can be enabled by running:
+rosdep 数据库中包含来自 EPEL 和 PowerTools 仓库的软件包，而这两个仓库默认未启用。
+可以通过运行以下命令启用它们：
 
 .. code-block:: console
 
    $ sudo dnf install 'dnf-command(config-manager)' epel-release -y
    $ sudo dnf config-manager --set-enabled powertools
 
-.. note:: This step may be slightly different depending on the distribution you are using.
-          `Check the EPEL documentation <https://docs.fedoraproject.org/en-US/epel/#_quickstart>`_
+.. note:: 此步骤可能因你所使用的发行版而略有不同。
+          请查看 `EPEL 文档 <https://docs.fedoraproject.org/en-US/epel/#_quickstart>`_
 
-Installing prerequisites
-------------------------
+安装前置条件
+------------
 
-There are a few packages that must be installed in order to get and unpack the binary release.
+在获取并解压二进制发布包之前，必须先安装几个软件包。
 
 .. code-block:: console
 
    $ sudo dnf install tar bzip2 wget -y
 
-Downloading ROS 2
------------------
+下载 ROS 2
+----------
 
-* Go to the `releases page <https://github.com/ros2/ros2/releases>`_
-* Download the latest package for RHEL; let's assume that it ends up at ``~/Downloads/ros2-package-linux-x86_64.tar.bz2``.
+* 前往 `releases 页面 <https://github.com/ros2/ros2/releases>`_
+* 下载适用于 RHEL 的最新软件包；假设它最终位于 ``~/Downloads/ros2-package-linux-x86_64.tar.bz2``。
 
-  * Note: there may be more than one binary download option which might cause the file name to differ.
+  * 注意：可能存在多个二进制下载选项，这会导致文件名有所不同。
 
-* Unpack it:
+* 解压它：
 
   .. code-block:: console
 
@@ -59,8 +59,8 @@ Downloading ROS 2
        $ cd ~/ros2_{DISTRO}
        $ tar xf ~/Downloads/ros2-package-linux-x86_64.tar.bz2
 
-Installing and initializing rosdep
-----------------------------------
+安装并初始化 rosdep
+-------------------
 
 .. code-block:: console
 
@@ -70,29 +70,29 @@ Installing and initializing rosdep
 
 .. _rhel-install-binary-install-missing-dependencies:
 
-Installing the missing dependencies
------------------------------------
+安装缺失的依赖项
+----------------
 
 .. include:: ../_Dnf-Update-Admonition.rst
 
-Set your rosdistro according to the release you downloaded.
+请根据你下载的发行版设置你的 rosdistro。
 
 .. code-block:: bash
 
        rosdep install --from-paths ~/ros2_{DISTRO}/ros2-linux/share --ignore-src -y --skip-keys "asio cyclonedds fastcdr fastrtps ignition-cmake2 ignition-math6 python3-babeltrace python3-mypy rti-connext-dds-6.0.1 urdfdom_headers"
 
-Install additional DDS implementations (optional)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+安装额外 DDS 实现（可选）
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you would like to use another DDS or RTPS vendor besides the default, you can find instructions :doc:`here <../RMW-Implementations>`.
+如果你想使用除默认外的其他 DDS 或 RTPS 厂商，可以在此处找到说明：:doc:`这里 <../RMW-Implementations>`。
 
-Environment setup
------------------
+环境配置
+--------
 
-Source the setup script
-^^^^^^^^^^^^^^^^^^^^^^^
+加载安装脚本
+^^^^^^^^^^^^
 
-Set up your environment by sourcing the following file.
+通过加载以下文件来配置你的环境。
 
 .. code-block:: console
 
@@ -100,51 +100,51 @@ Set up your environment by sourcing the following file.
 
 .. note::
 
-   Replace ``.bash`` with your shell if you're not using bash.
-   Possible values are: ``setup.bash``, ``setup.sh``, ``setup.zsh``.
+   如果你不使用 bash，请将 ``.bash`` 替换为你所用的 shell。
+   可选值包括：``setup.bash``、``setup.sh``、``setup.zsh``。
 
-Try some examples
------------------
+尝试一些示例
+------------
 
-In one terminal, source the setup file and then run a C++ ``talker``:
+在一个终端中，加载安装脚本，然后运行 C++ 的 ``talker``：
 
 .. code-block:: console
 
    $ . ~/ros2_{DISTRO}/ros2-linux/setup.bash
    $ ros2 run demo_nodes_cpp talker
 
-In another terminal source the setup file and then run a Python ``listener``:
+在另一个终端中加载安装脚本，然后运行 Python 的 ``listener``：
 
 .. code-block:: console
 
    $ . ~/ros2_{DISTRO}/ros2-linux/setup.bash
    $ ros2 run demo_nodes_py listener
 
-You should see the ``talker`` saying that it's ``Publishing`` messages and the ``listener`` saying ``I heard`` those messages.
-This verifies both the C++ and Python APIs are working properly.
-Hooray!
+你应该会看到 ``talker`` 输出 ``Publishing`` 消息，而 ``listener`` 输出 ``I heard`` 这些消息。
+这验证了 C++ 和 Python API 都能正常工作。
+太棒了！
 
-Next steps after installing
----------------------------
-Continue with the :doc:`tutorials and demos <../../Tutorials>` to configure your environment, create your own workspace and packages, and learn ROS 2 core concepts.
+安装后的后续步骤
+----------------
+继续学习 :doc:`教程和演示 <../../Tutorials>`，以配置你的环境、创建自己的工作空间和软件包，并了解 ROS 2 的核心概念。
 
-Additional RMW implementations (optional)
------------------------------------------
-The default middleware that ROS 2 uses is ``Fast DDS``, but the middleware (RMW) can be replaced at runtime.
-See the :doc:`guide <../../How-To-Guides/Working-with-multiple-RMW-implementations>` on how to work with multiple RMWs.
+其他 RMW 实现（可选）
+---------------------
+ROS 2 使用的默认中间件是 ``Fast DDS``，但中间件（RMW）可以在运行时替换。
+请参阅关于如何使用多个 RMW 的 :doc:`指南 <../../How-To-Guides/Working-with-multiple-RMW-implementations>`。
 
-Troubleshooting
----------------
+故障排查
+--------
 
-Troubleshooting techniques can be found :doc:`here <../../How-To-Guides/Installation-Troubleshooting>`.
+故障排查技巧可以在 :doc:`这里 <../../How-To-Guides/Installation-Troubleshooting>` 找到。
 
-Uninstall
----------
+卸载
+----
 
-1. If you installed your workspace with colcon as instructed above, "uninstalling" could be just a matter of opening a new terminal and not sourcing the workspace's ``setup`` file.
-   This way, your environment will behave as though there is no {DISTRO_TITLE} install on your system.
+1. 如果你按上面的说明使用 colcon 安装工作空间，那么“卸载”可能只需打开一个新终端，并且不要加载该工作空间的 ``setup`` 文件。
+   这样，你的环境就会表现得如同系统中没有安装 {DISTRO_TITLE}。
 
-2. If you're also trying to free up space, you can delete the entire workspace directory with:
+2. 如果你还想释放空间，可以用以下命令删除整个工作空间目录：
 
    .. code-block:: console
 

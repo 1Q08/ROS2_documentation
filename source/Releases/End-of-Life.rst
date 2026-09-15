@@ -1,7 +1,7 @@
-End-of-Life Distributions
-=========================
+已终止支持的发行版
+==================
 
-Below is a list of historic ROS 2 distributions that are no longer supported.
+下面是已不再受支持的历史 ROS 2 发行版列表。
 
 .. toctree::
    :maxdepth: 1

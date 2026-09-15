@@ -1,62 +1,62 @@
-Writing Basic Integration Tests with launch_testing
-===================================================
+使用 launch_testing 编写基础集成测试
+====================================
 
-**Goal:** Create and run integration tests on the ROS 2 turtlesim node.
+**目标：** 在 ROS 2 turtlesim 节点上创建并运行集成测试。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 20 minutes
+**时间：** 20 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Prerequisites
--------------
-
-Before starting this tutorial, it is recommended to have completed the following tutorials on launching nodes:
-
-* :doc:`Launching Multiple Nodes <../../Beginner-CLI-Tools/Launching-Multiple-Nodes/Launching-Multiple-Nodes>`
-* :doc:`Creating Launch files <../../Intermediate/Launch/Creating-Launch-Files>`
-
-Background
-----------
-
-Where unit tests focus on validating a very specific piece of functionality, integration tests focus on validating the interaction between pieces of code.
-In ROS 2 this is often accomplished by launching a system of one or several nodes, for example the `Gazebo simulator <https://gazebosim.org/home>`__ and the `Nav2 navigation <https://github.com/ros-planning/navigation2.git>`__ stack.
-As a result, these tests are more complex both to set up and to run.
-
-A key aspect of ROS 2 integration testing is that nodes that are part of different tests shouldn't communicate with each other, even when run in parallel.
-This will be achieved here using a specific test runner that picks unique :doc:`ROS domain IDs <../../../Concepts/Intermediate/About-Domain-ID>`.
-In addition, integration tests have to fit in the overall testing workflow.
-A standardized approach is to ensure each test outputs an XUnit file, which are easily parsed using common test tooling.
-
-Overview
+先决条件
 --------
 
-The main tool in use here is the `launch_testing <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_ package
-(`launch_testing repository <https://github.com/ros2/launch/tree/{REPOS_FILE_BRANCH}/launch_testing>`_).
-This ROS-agnostic functionality can extend a Python launch file with both active tests (that run while the nodes are also running) and post-shutdown tests (which run once after all nodes have exited).
-``launch_testing`` relies on the Python standard module `unittest <https://docs.python.org/3/library/unittest.html>`_ for the actual testing.
-To get our integration tests run as part of ``colcon test``, we register the launch file in the ``CMakeLists.txt``.
+在开始本教程之前，建议先完成以下关于启动节点的教程：
 
-Steps
------
+* :doc:`启动多个节点 <../../Beginner-CLI-Tools/Launching-Multiple-Nodes/Launching-Multiple-Nodes>`
+* :doc:`创建启动文件 <../../Intermediate/Launch/Creating-Launch-Files>`
 
-1 Describe the test in the test launch file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+背景
+----
 
-Both the nodes under test and the tests themselves are launched using a Python launch file, which resembles a ROS 2 Python launch file.
-It is customary to make the integration test launch file names follow the pattern ``test/test_*.py``.
+单元测试侧重于验证非常特定的功能，而集成测试侧重于验证代码片段之间的交互。
+在 ROS 2 中，这通常通过启动一个或几个节点组成的系统来完成，例如 `Gazebo 仿真器 <https://gazebosim.org/home>`__ 和 `Nav2 导航 <https://github.com/ros-planning/navigation2.git>`__ 栈。
+因此，这些测试在设置和运行上都更复杂。
 
-There are two common types of tests in integration testing: active tests, which run while the nodes under test are running, and post-shutdown tests, which are run after exiting the nodes.
-We will cover both in this tutorial.
+ROS 2 集成测试的一个关键方面是，不同测试的一部分节点不应相互通信，即使并行运行时也是如此。
+这里将通过使用一个特定的测试运行器来实现，该运行器会选择唯一的 :doc:`ROS 域 ID <../../../Concepts/Intermediate/About-Domain-ID>`。
+此外，集成测试必须适应整体测试工作流。
+一种标准化的方法是确保每个测试输出一个 XUnit 文件，这些文件可以很容易地使用常见的测试工具解析。
 
-1.1 Imports
-~~~~~~~~~~~
+概述
+----
 
-We first start by importing the Python modules we will be using.
-Only two modules are specific to testing: the general-purpose ``unittest``, and ``launch_testing``.
+这里使用的主要工具是 `launch_testing <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_ 包
+（`launch_testing 仓库 <https://github.com/ros2/launch/tree/{REPOS_FILE_BRANCH}/launch_testing>`_）。
+这种与 ROS 无关的功能可以用主动测试（在节点也运行时运行）和关机后测试（在所有节点退出后运行一次）来扩展 Python 启动文件。
+``launch_testing`` 依赖 Python 标准模块 `unittest <https://docs.python.org/3/library/unittest.html>`_ 来进行实际测试。
+为了让我们的集成测试作为 ``colcon test`` 的一部分运行，我们在 ``CMakeLists.txt`` 中注册启动文件。
+
+步骤
+----
+
+1 在测试启动文件中描述测试
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+被测节点和测试本身都使用一个 Python 启动文件来启动，它类似于 ROS 2 Python 启动文件。
+习惯上让集成测试启动文件名称遵循 ``test/test_*.py`` 模式。
+
+集成测试中有两种常见类型的测试：主动测试（在被测节点运行时运行）和关机后测试（在节点退出后运行）。
+我们将在本教程中介绍这两种。
+
+1.1 导入
+~~~~~~~~
+
+我们首先从导入我们将使用的 Python 模块开始。
+只有两个模块是测试特有的：通用的 ``unittest`` 和 ``launch_testing``。
 
 .. code-block:: python
 
@@ -71,13 +71,13 @@ Only two modules are specific to testing: the general-purpose ``unittest``, and 
   import rclpy
   from turtlesim.msg import Pose
 
-1.2 Generate the test description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1.2 生成测试描述
+~~~~~~~~~~~~~~~~
 
-The function ``generate_test_description`` describes what to launch, similar to ``generate_launch_description`` in a ROS 2 Python launch file.
-In the example below, we launch the turtlesim node and half a second later our tests.
+函数 ``generate_test_description`` 描述要启动什么，类似于 ROS 2 Python 启动文件中的 ``generate_launch_description``。
+在下面的示例中，我们启动 turtlesim 节点，半秒后启动我们的测试。
 
-In more complex integration test setups, you will probably want to launch a system of several nodes, together with additional nodes that perform mocking or must otherwise interact with the nodes under test.
+在更复杂的集成测试设置中，你可能想启动一个由多个节点组成的系统，连同执行模拟或必须以其他方式与被测节点交互的额外节点。
 
 .. code-block:: python
 
@@ -99,22 +99,22 @@ In more complex integration test setups, you will probably want to launch a syst
           ), {},
       )
 
-1.3 Active tests
-~~~~~~~~~~~~~~~~
+1.3 主动测试
+~~~~~~~~~~~~
 
-The active tests interact with the running nodes.
-In this tutorial, we will check whether the turtlesim node publishes pose messages (by listening to the node's 'turtle1/pose' topic) and whether it logs that it spawned the turtle (by listening to stderr).
+主动测试与正在运行的节点交互。
+在本教程中，我们将检查 turtlesim 节点是否发布 pose 消息（通过监听节点的 'turtle1/pose' 话题）以及它是否记录它生成了 turtle（通过监听 stderr）。
 
-The active tests are defined as methods of a class inheriting from `unittest.TestCase <https://docs.python.org/3/library/unittest.html#unittest.TestCase>`_.
-The child class, here ``TestTurtleSim``, contains the following methods:
+主动测试被定义为继承自 `unittest.TestCase <https://docs.python.org/3/library/unittest.html#unittest.TestCase>`_ 的类的方法。
+子类，这里是 ``TestTurtleSim``，包含以下方法：
 
-- ``test_*``: the test methods, each performing some ROS communication with the nodes under test and/or listening to the process output (passed in through ``proc_output``).
-  They are executed sequentially.
-- ``setUp``, ``tearDown``: respectively run before (to prepare the test fixture) and after executing each test method.
-  By creating the node in the ``setUp`` method, we use a different node instance for each test to reduce the risk of tests communicating with each other.
-- ``setUpClass``, ``tearDownClass``: these class methods respectively run once before and after executing all the test methods.
+- ``test_*``：测试方法，每个方法与被测节点执行一些 ROS 通信和/或监听进程输出（通过 ``proc_output`` 传入）。
+  它们按顺序执行。
+- ``setUp``、``tearDown``：分别在执行每个测试方法之前（准备测试固定装置）和之后运行。
+  通过在 ``setUp`` 方法中创建节点，我们为每个测试使用不同的节点实例，以减少测试之间相互通信的风险。
+- ``setUpClass``、``tearDownClass``：这些类方法分别在所有测试方法执行之前和之后运行一次。
 
-It's highly recommended to go through `launch_testing's detailed documentation on this topic <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_.
+强烈建议阅读 `launch_testing 关于此主题的详细文档 <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_。
 
 .. code-block:: python
 
@@ -157,20 +157,20 @@ It's highly recommended to go through `launch_testing's detailed documentation o
               'Spawning turtle [turtle1] at x=',
               timeout=5, stream='stderr')
 
-Note that the way we listen to the 'turtle1/pose' topic in ``test_publishes_pose`` differs from :doc:`the usual approach <../../Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber>`.
-Instead of calling the blocking ``rclpy.spin``, we trigger the ``spin_once`` method - which executes the first available callback (our subscriber callback if a message arrived within 1 second) - until we have gathered all messages published over the last 10 seconds.
-The package `launch_testing_ros <https://docs.ros.org/en/{DISTRO}/p/launch_testing_ros/index.html>`_ provides some convenience functions to achieve similar behavior,
-such as `WaitForTopics <https://docs.ros.org/en/{DISTRO}/p/launch_testing_ros/launch_testing_ros.wait_for_topics.html>`_.
+注意，我们在 ``test_publishes_pose`` 中监听 'turtle1/pose' 话题的方式与 :doc:`通常的做法 <../../Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber>` 不同。
+我们不调用阻塞的 ``rclpy.spin``，而是触发 ``spin_once`` 方法——它执行第一个可用的回调（如果 1 秒内收到消息，就是我们的订阅者回调）——直到我们收集了过去 10 秒内发布的所有消息。
+包 `launch_testing_ros <https://docs.ros.org/en/{DISTRO}/p/launch_testing_ros/index.html>`_ 提供了一些便利函数来实现类似的行为，
+例如 `WaitForTopics <https://docs.ros.org/en/{DISTRO}/p/launch_testing_ros/launch_testing_ros.wait_for_topics.html>`_。
 
-If you want to go further, you can implement a third test that publishes a twist message, asking the turtle to move, and subsequently checks that it moved by asserting that the pose message changed.
-This effectively automates part of the :doc:`Turtlesim introduction tutorial <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>`.
+如果你想更进一步，你可以实现第三个测试，发布一个 twist 消息，要求 turtle 移动，随后通过断言 pose 消息发生变化来检查它确实移动了。
+这有效地自动化了 :doc:`Turtlesim 介绍教程 <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>` 的一部分。
 
-1.4 Post-shutdown tests
-~~~~~~~~~~~~~~~~~~~~~~~
+1.4 关机后测试
+~~~~~~~~~~~~~~
 
-The classes marked with the ``launch_testing.post_shutdown_test`` decorator are run after letting the nodes under test exit.
-A typical test here is whether the nodes exited cleanly, for which ``launch_testing`` provides the method
-`asserts.assertExitCodes <https://docs.ros.org/en/{DISTRO}/p/launch_testing/launch_testing.asserts.html#launch_testing.asserts.assertExitCodes>`_.
+用 ``launch_testing.post_shutdown_test`` 装饰器标记的类会在让被测节点退出后运行。
+这里的一个典型测试是节点是否干净退出，为此 ``launch_testing`` 提供了方法
+`asserts.assertExitCodes <https://docs.ros.org/en/{DISTRO}/p/launch_testing/launch_testing.asserts.html#launch_testing.asserts.assertExitCodes>`_。
 
 .. code-block:: python
 
@@ -181,18 +181,18 @@ A typical test here is whether the nodes exited cleanly, for which ``launch_test
           """Check if the processes exited normally."""
           launch_testing.asserts.assertExitCodes(proc_info)
 
-2 Register the test in the CMakeLists.txt
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 在 CMakeLists.txt 中注册测试
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Registering the test in the ``CMakeLists.txt`` fulfills two functions:
+在 ``CMakeLists.txt`` 中注册测试实现两个功能：
 
-- it integrates it in the ``CTest`` framework ROS 2 CMake-based packages rely on
-  (and hence it will be called when running ``colcon test``).
-- it allows to specify *how* the test is to be run -
-  in this case, with a unique domain id to ensure test isolation.
+- 将其集成到 ROS 2 基于 CMake 的包所依赖的 ``CTest`` 框架中
+  （因此运行 ``colcon test`` 时会调用它）。
+- 允许指定测试 *如何* 运行——
+  在本例中，使用唯一的域 id 来确保测试隔离。
 
-This latter aspect is realized using the special test runner `run_test_isolated.py <https://github.com/ros2/ament_cmake_ros/blob/{REPOS_FILE_BRANCH}/ament_cmake_ros/cmake/run_test_isolated.py>`_.
-To ease adding several integration tests, we define the CMake function ``add_ros_isolated_launch_test`` such that each additional test requires only a single line.
+后一个方面通过使用特殊的测试运行器 `run_test_isolated.py <https://github.com/ros2/ament_cmake_ros/blob/{REPOS_FILE_BRANCH}/ament_cmake_ros/cmake/run_test_isolated.py>`_ 实现。
+为了便于添加多个集成测试，我们定义 CMake 函数 ``add_ros_isolated_launch_test``，这样每个额外的测试只需要一行。
 
 .. code-block:: cmake
 
@@ -214,10 +214,10 @@ To ease adding several integration tests, we define the CMake function ``add_ros
     add_ros_isolated_launch_test(test/test_integration.py)
   endif()
 
-3 Dependencies and package organization
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 依赖与包组织
+^^^^^^^^^^^^^^
 
-Finally, add the following dependencies to your ``package.xml``:
+最后，将以下依赖添加到你的 ``package.xml``：
 
 .. code-block:: XML
 
@@ -229,7 +229,7 @@ Finally, add the following dependencies to your ``package.xml``:
   <test_depend>rclpy</test_depend>
   <test_depend>turtlesim</test_depend>
 
-After following the above steps, your package (here named 'app') ought to look as follows:
+按照上述步骤后，你的包（这里命名为 'app'）应该如下所示：
 
 .. code-block::
 
@@ -239,35 +239,35 @@ After following the above steps, your package (here named 'app') ought to look a
     tests/
         test_integration.py
 
-Integration tests can be part of any ROS package.
-One can dedicate one or more packages to just integration testing, or alternatively add them to the package of which they test the functionality.
-In this tutorial, we go with the first option as we will test the existing turtlesim node.
+集成测试可以是任何 ROS 包的一部分。
+可以指定一个或多个包专门用于集成测试，或者将它们添加到它们所测试功能的包中。
+在本教程中，我们采用第一种方式，因为我们要测试现有的 turtlesim 节点。
 
-4 Running tests and report generation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 运行测试与报告生成
+^^^^^^^^^^^^^^^^^^^^
 
-For running the integration test and examining the results, see the tutorial :doc:`Running Tests in ROS 2 from the Command Line<../../Intermediate/Testing/CLI>`.
+要运行集成测试并检查结果，请参阅教程 :doc:`在 ROS 2 中从命令行运行测试<../../Intermediate/Testing/CLI>`。
 
-Summary
--------
+总结
+----
 
-In this tutorial, we explored the process of creating and running integration tests on the ROS 2 turtlesim node.
-We discussed the integration test launch file and covered writing active tests and post-shutdown tests.
-To recap, the four key elements of the integration test launch file are:
+在本教程中，我们探讨了在 ROS 2 turtlesim 节点上创建和运行集成测试的过程。
+我们讨论了集成测试启动文件，并介绍了编写主动测试和关机后测试。
+回顾一下，集成测试启动文件的四个关键元素是：
 
-* The function ``generate_test_description``: This launches our nodes under tests as well as our tests.
-* ``launch_testing.actions.ReadyToTest()``: This alerts the test framework that the tests should be run, and ensures that the active tests and the nodes are run together.
-* An undecorated class inheriting from ``unittest.TestCase``: This houses the active tests, including set up and teardown, and gives access to ROS logging through ``proc_output``.
-* A second class inheriting from ``unittest.TestCase`` decorated with ``@launch_testing.post_shutdown_test()``: These are tests that run after all nodes have shutdown; it is common to assert that the nodes exited cleanly.
+* 函数 ``generate_test_description``：它启动我们的被测节点以及我们的测试。
+* ``launch_testing.actions.ReadyToTest()``：它提醒测试框架应该运行测试，并确保主动测试和节点一起运行。
+* 一个继承自 ``unittest.TestCase`` 的未装饰类：它容纳主动测试，包括设置和拆除，并通过 ``proc_output`` 提供对 ROS 日志的访问。
+* 第二个继承自 ``unittest.TestCase`` 的类，用 ``@launch_testing.post_shutdown_test()`` 装饰：这些是在所有节点关闭后运行的测试；通常断言节点干净退出。
 
-The launch test is subsequently registered in the ``CMakeLists.txt`` using the custom cmake macro ``add_ros_isolated_launch_test`` which ensures that each launch test runs with a unique ``ROS_DOMAIN_ID``,
-avoiding undesired cross communication.
+启动测试随后使用自定义 cmake 宏 ``add_ros_isolated_launch_test`` 在 ``CMakeLists.txt`` 中注册，它确保每个启动测试以唯一的 ``ROS_DOMAIN_ID`` 运行，
+避免不希望出现的交叉通信。
 
-Related content
----------------
+相关内容
+--------
 
-* :doc:`Why automatic tests? <../../Intermediate/Testing/Testing-Main>`
-* :doc:`C++ unit testing with GTest <../../Intermediate/Testing/Cpp>`
-  and :doc:`Python unit testing with Pytest <../../Intermediate/Testing/Python>`
-* `launch_pytest documentation <https://docs.ros.org/en/{DISTRO}/p/launch_pytest/index.html>`_,
-  an alternative launch integration testing package to ``launch_testing``
+* :doc:`为什么需要自动测试？ <../../Intermediate/Testing/Testing-Main>`
+* :doc:`使用 GTest 进行 C++ 单元测试 <../../Intermediate/Testing/Cpp>`
+  和 :doc:`使用 Pytest 进行 Python 单元测试 <../../Intermediate/Testing/Python>`
+* `launch_pytest 文档 <https://docs.ros.org/en/{DISTRO}/p/launch_pytest/index.html>`_，
+  一个替代 ``launch_testing`` 的启动集成测试包

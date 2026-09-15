@@ -1,12 +1,12 @@
-Basic Concepts
-==============
+基础概念
+========
 
-ROS 2 is a middleware based on a strongly-typed, anonymous publish/subscribe mechanism that allows for message passing between different processes.
+ROS 2 是一个中间件，基于强类型、匿名的发布/订阅机制，允许在不同进程之间传递消息。
 
-At the heart of any ROS 2 system is the ROS graph.
-The ROS graph refers to the network of nodes in a ROS system and the connections between them by which they communicate.
+任何 ROS 2 系统的核心都是 ROS 图。
+ROS 图指的是 ROS 系统中节点构成的网络，以及它们之间用于通信的连接。
 
-These are the concepts that will help you get started understanding the basics of ROS 2.
+以下概念将帮助您入门，理解 ROS 2 的基础知识。
 
 .. toctree::
    :maxdepth: 1

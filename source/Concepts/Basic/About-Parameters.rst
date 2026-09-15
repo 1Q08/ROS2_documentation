@@ -3,117 +3,117 @@
     About-ROS-2-Parameters
     Concepts/About-ROS-2-Parameters
 
-Parameters
-==========
+参数
+====
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
-Overview
+概述
+----
+
+ROS 2 中的参数与单个节点相关联。
+参数用于在节点启动时（以及运行时）配置节点，而无需修改代码。
+参数的生命周期与节点的生命周期绑定在一起（尽管节点可以实现某种持久化机制，在重启后重新加载值）。
+
+参数通过节点名、节点命名空间、参数名以及参数命名空间来定位。
+提供参数命名空间是可选的。
+
+每个参数都由键、值和描述符组成。
+键是字符串，值可以是以下类型之一：``bool``、``int64``、``float64``、``string``、``byte[]``、``bool[]``、``int64[]``、``float64[]`` 或 ``string[]``。
+默认情况下，所有描述符都是空的，但也可以包含参数描述、取值范围、类型信息以及额外约束。
+
+有关 ROS 参数的实践教程，请参见 :doc:`../../Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters`。
+
+参数背景
 --------
 
-Parameters in ROS 2 are associated with individual nodes.
-Parameters are used to configure nodes at startup (and during runtime), without changing the code.
-The lifetime of a parameter is tied to the lifetime of the node (though the node could implement some sort of persistence to reload values after restart).
+声明参数
+^^^^^^^^
 
-Parameters are addressed by node name, node namespace, parameter name, and parameter namespace.
-Providing a parameter namespace is optional.
+默认情况下，一个节点需要在其整个生命周期内 *声明* 它将接受的所有参数。
+这样可以确保节点启动时参数的类型和名称被明确定义，从而减少后续配置错误的机会。
+请参见 :doc:`../../Tutorials/Beginner-Client-Libraries/Using-Parameters-In-A-Class-CPP` 或 :doc:`../../Tutorials/Beginner-Client-Libraries/Using-Parameters-In-A-Class-Python` 以获取在节点中声明和使用参数的教程。
 
-Each parameter consists of a key, a value, and a descriptor.
-The key is a string and the value is one of the following types: ``bool``, ``int64``, ``float64``, ``string``, ``byte[]``, ``bool[]``, ``int64[]``, ``float64[]`` or ``string[]``.
-By default all descriptors are empty, but can contain parameter descriptions, value ranges, type information, and additional constraints.
+对于某些类型的节点，并非所有参数都能提前得知。
+在这种情况下，可以在实例化节点时设置 ``allow_undeclared_parameters`` 为 ``true``，这允许节点在尚未声明参数时也可以读取和设置这些参数。
 
-For a hands-on tutorial with ROS parameters see :doc:`../../Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters`.
+参数类型
+^^^^^^^^
 
-Parameters background
----------------------
+ROS 2 节点上的每个参数都有一个如概述中所述的预定义参数类型。
+默认情况下，试图在运行时更改已声明参数的类型会失败。
+这可以防止常见错误，例如把布尔值放入整数参数。
 
-Declaring parameters
-^^^^^^^^^^^^^^^^^^^^
+如果一个参数需要支持多种不同类型，并且使用该参数的代码可以处理这种情况，那么可以更改默认行为。
+当参数被声明时，应使用 ``ParameterDescriptor`` 并将成员变量 ``dynamic_typing`` 设置为 ``true``。
 
-By default, a node needs to *declare* all of the parameters that it will accept during its lifetime.
-This is so that the type and name of the parameters are well-defined at node startup time, which reduces the chances of misconfiguration later on.
-See :doc:`../../Tutorials/Beginner-Client-Libraries/Using-Parameters-In-A-Class-CPP` or :doc:`../../Tutorials/Beginner-Client-Libraries/Using-Parameters-In-A-Class-Python` for tutorials on declaring and using parameters from a node.
+参数回调
+^^^^^^^^
 
-For some types of nodes, not all of the parameters will be known ahead of time.
-In these cases, the node can be instantiated with ``allow_undeclared_parameters`` set to ``true``, which will allow parameters to be get and set on the node even if they haven't been declared.
+ROS 2 节点可以注册两种不同类型的回调，以便在参数发生变化时得到通知。
+这两种回调都是可选的。
 
-Parameter types
-^^^^^^^^^^^^^^^
-
-Each parameter on a ROS 2 node has one of the pre-defined parameter types as mentioned in the Overview.
-By default, attempts to change the type of a declared parameter at runtime will fail.
-This prevents common mistakes, such as putting a boolean value into an integer parameter.
-
-If a parameter needs to be multiple different types, and the code using the parameter can handle it, this default behavior can be changed.
-When the parameter is declared, it should be declared using a ``ParameterDescriptor`` with the ``dynamic_typing`` member variable set to ``true``.
-
-Parameter callbacks
-^^^^^^^^^^^^^^^^^^^
-
-A ROS 2 node can register two different types of callbacks to be informed when changes are happening to parameters.
-Both of the callbacks are optional.
-
-The first is known as a "set parameter" callback, and can be set by calling ``add_on_set_parameters_callback`` from the node API.
-The callback is passed a list of immutable ``Parameter`` objects, and returns an ``rcl_interfaces/msg/SetParametersResult``.
-The main purpose of this callback is to give the user the ability to inspect the upcoming change to the parameter and explicitly reject the change.
+第一种称为“设置参数”回调，可以通过节点 API 中的 ``add_on_set_parameters_callback`` 来设置。
+回调接收一个不可变 ``Parameter`` 对象列表，并返回 ``rcl_interfaces/msg/SetParametersResult``。
+该回调的主要目的是让用户能够检查即将发生的参数变更并显式拒绝该变更。
 
 .. note::
-   It is important that "set parameter" callbacks have no side-effects.
-   Since multiple "set parameter" callbacks can be chained, there is no way for an individual callback to know if a later callback will reject the update.
-   If the individual callback were to make changes to the class it is in, for instance, it may get out-of-sync with the actual parameter.
-   To get a callback *after* a parameter has been successfully changed, see the next type of callback below.
+   需要注意的是，“设置参数”回调不能有副作用。
+   由于多个“设置参数”回调可以串联调用，因此单个回调无法知道后续回调是否会拒绝更新。
+   如果某个回调对其所在类进行了修改，例如可能导致它与实际参数失去同步。
+   若要在参数成功修改后获取回调，请参见下方第二种回调。
 
-The second type of callback is known as an "on parameter event" callback, and can be set by calling ``on_parameter_event`` from the parameter client APIs.
-The callback is passed an ``rcl_interfaces/msg/ParameterEvent`` object, and returns nothing.
-This callback will be called after all parameters in the input event have been declared, changed, or deleted.
-The main purpose of this callback is to give the user the ability to react to changes from parameters that have successfully been accepted.
+第二种回调称为“参数事件”回调，可以通过参数客户端 API 中的 ``on_parameter_event`` 来设置。
+回调接收一个 ``rcl_interfaces/msg/ParameterEvent`` 对象，不返回任何内容。
+当输入事件中的所有参数都已被声明、修改或删除后，会调用该回调。
+该回调的主要目的是让用户能够对已成功接受的参数变化作出响应。
 
-Interacting with parameters
----------------------------
+与参数交互
+----------
 
-ROS 2 nodes can perform parameter operations through node APIs as described in :doc:`../../Tutorials/Beginner-Client-Libraries/Using-Parameters-In-A-Class-CPP` or :doc:`../../Tutorials/Beginner-Client-Libraries/Using-Parameters-In-A-Class-Python`.
-External processes can perform parameter operations via parameter services that are created by default when a node is instantiated.
-The services that are created by default are:
+ROS 2 节点可以通过节点 API 执行参数操作，如 :doc:`../../Tutorials/Beginner-Client-Libraries/Using-Parameters-In-A-Class-CPP` 或 :doc:`../../Tutorials/Beginner-Client-Libraries/Using-Parameters-In-A-Class-Python` 中所述。
+外部进程可以通过参数服务执行参数操作；当节点实例化时，这些参数服务会默认创建。
+默认创建的服务有：
 
-* ``/node_name/describe_parameters``: Uses a service type of ``rcl_interfaces/srv/DescribeParameters``.
-  Given a list of parameter names, returns a list of descriptors associated with the parameters.
-* ``/node_name/get_parameter_types``: Uses a service type of ``rcl_interfaces/srv/GetParameterTypes``.
-  Given a list of parameter names, returns a list of parameter types associated with the parameters.
-* ``/node_name/get_parameters``: Uses a service type of ``rcl_interfaces/srv/GetParameters``.
-  Given a list of parameter names, returns a list of parameter values associated with the parameters.
-* ``/node_name/list_parameters``: Uses a service type of ``rcl_interfaces/srv/ListParameters``.
-  Given an optional list of parameter prefixes, returns a list of the available parameters with that prefix.
-  If the prefixes are empty, returns all parameters.
-* ``/node_name/set_parameters``: Uses a service type of ``rcl_interfaces/srv/SetParameters``.
-  Given a list of parameter names and values, attempts to set the parameters on the node.
-  Returns a list of results from trying to set each parameter; some of them may have succeeded and some may have failed.
-* ``/node_name/set_parameters_atomically``: Uses a service type of ``rcl_interfaces/srv/SetParametersAtomically``.
-  Given a list of parameter names and values, attempts to set the parameters on the node.
-  Returns a single result from trying to set all parameters, so if one failed, all of them failed.
+* ``/node_name/describe_parameters``：使用服务类型 ``rcl_interfaces/srv/DescribeParameters``。
+  给定参数名称列表，返回与这些参数关联的描述符列表。
+* ``/node_name/get_parameter_types``：使用服务类型 ``rcl_interfaces/srv/GetParameterTypes``。
+  给定参数名称列表，返回与这些参数关联的参数类型列表。
+* ``/node_name/get_parameters``：使用服务类型 ``rcl_interfaces/srv/GetParameters``。
+  给定参数名称列表，返回与这些参数关联的参数值列表。
+* ``/node_name/list_parameters``：使用服务类型 ``rcl_interfaces/srv/ListParameters``。
+  给定可选参数前缀列表，返回具有该前缀的可用参数列表。
+  如果前缀为空，则返回所有参数。
+* ``/node_name/set_parameters``：使用服务类型 ``rcl_interfaces/srv/SetParameters``。
+  给定参数名称和值列表，尝试在节点上设置这些参数。
+  返回尝试设置每个参数的结果列表；其中一些可能成功，另一些可能失败。
+* ``/node_name/set_parameters_atomically``：使用服务类型 ``rcl_interfaces/srv/SetParametersAtomically``。
+  给定参数名称和值列表，尝试在节点上设置这些参数。
+  返回一次尝试设置所有参数的单一结果；若有一个参数失败，则全部失败。
 
-Setting initial parameter values when running a node
-----------------------------------------------------
+在运行节点时设置初始参数值
+--------------------------
 
-Initial parameter values can be set when running the node either through individual command-line arguments, or through YAML files.
-See :ref:`NodeArgsParameters` for examples on how to set initial parameter values.
+可以在运行节点时通过单个命令行参数或 YAML 文件设置初始参数值。
+请参考 :ref:`NodeArgsParameters` 中的示例，以了解如何设置初始参数值。
 
-Setting initial parameter values when launching nodes
------------------------------------------------------
-
-Initial parameter values can also be set when running the node through the ROS 2 launch facility.
-See :doc:`this document <../../Tutorials/Intermediate/Launch/Using-ROS2-Launch-For-Large-Projects>` for information on how to specify parameters via launch.
-
-Manipulating parameter values at runtime
+通过 launch 方式启动节点时设置初始参数值
 ----------------------------------------
 
-The ``ros2 param`` command is the general way to interact with parameters for nodes that are already running.
-``ros2 param`` uses the parameter service API as described above to perform the various operations.
-See :doc:`this how-to guide <../../How-To-Guides/Using-ros2-param>` for details on how to use ``ros2 param``.
+同样也可以通过 ROS 2 的 launch 设施在运行节点时设置初始参数值。
+请参见 :doc:`本文档 <../../Tutorials/Intermediate/Launch/Using-ROS2-Launch-For-Large-Projects>`，了解如何通过 launch 指定参数。
 
-Migrating from ROS 1
---------------------
+在运行时操作参数值
+------------------
 
-The :doc:`Launch file migration guide <../../How-To-Guides/Migrating-from-ROS1/Migrating-Launch-Files>` explains how to migrate ``param`` and ``rosparam`` launch tags from ROS 1 to ROS 2.
+``ros2 param`` 命令是与已经运行节点交互参数的通用方式。
+``ros2 param`` 使用上文描述的参数服务 API 来执行各种操作。
+请参见 :doc:`this how-to guide <../../How-To-Guides/Using-ros2-param>`，以了解如何使用 ``ros2 param``。
 
-The :doc:`Migration guide <../../How-To-Guides/Migrating-from-ROS1/Migrating-Parameters>` explains how to migrate parameter from ROS 1 to ROS 2.
+从 ROS 1 迁移
+-------------
+
+:doc:`Launch 文件迁移指南 <../../How-To-Guides/Migrating-from-ROS1/Migrating-Launch-Files>` 说明了如何将 ROS 1 中的 ``param`` 与 ``rosparam`` launch 标签迁移到 ROS 2。
+
+:doc:`迁移指南 <../../How-To-Guides/Migrating-from-ROS1/Migrating-Parameters>` 说明了如何将 ROS 1 中的参数迁移到 ROS 2。

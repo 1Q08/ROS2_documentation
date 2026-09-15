@@ -4,86 +4,86 @@
 
 .. _Features:
 
-Features Status
-===============
+功能状态
+========
 
-The features listed below are available in the current ROS 2 release.
-Unless otherwise specified, the features are available for all supported platforms (Ubuntu 22.04 (Jammy), Windows 10), DDS implementations (eProsima Fast DDS, RTI Connext DDS, and Eclipse Cyclone DDS) and programming language client libraries (C++ and Python).
-For planned future development, see the :doc:`Roadmap <Roadmap>`.
+以下功能在当前 ROS 2 发布版本中可用。
+除非另有说明，这些功能适用于所有受支持的平台（Ubuntu 22.04 (Jammy)、Windows 10）、DDS 实现（eProsima Fast DDS、RTI Connext DDS 和 Eclipse Cyclone DDS）以及编程语言客户端库（C++ 和 Python）。
+有关未来计划中的开发，请参见 :doc:`Roadmap <Roadmap>`。
 
 .. list-table::
    :header-rows: 1
 
-   * - Functionality
-     - Link
-     - Fine print
-   * - Discovery, transport and serialization over DDS
-     - `Article <https://design.ros2.org/articles/ros_on_dds.html>`__
+   * - 功能项
+     - 链接
+     - 备注
+   * - 通过 DDS 进行发现、传输与序列化
+     - `文章 <https://design.ros2.org/articles/ros_on_dds.html>`__
      -
-   * - Support for :doc:`multiple DDS implementations <../Concepts/Intermediate/About-Different-Middleware-Vendors>`, chosen at runtime
-     - :doc:`Concept <../Concepts/Intermediate/About-Different-Middleware-Vendors>`, :doc:`How-to Guide <../How-To-Guides/Working-with-multiple-RMW-implementations>`
-     - Currently Eclipse Cyclone DDS, eProsima Fast DDS, and RTI Connext DDS are fully supported.
-   * - Common core client library that is wrapped by language-specific libraries
-     - :doc:`Details <../Concepts/Basic/About-Client-Libraries>`
+   * - 支持在运行时选择 :doc:`多个 DDS 实现 <../Concepts/Intermediate/About-Different-Middleware-Vendors>`
+     - :doc:`概念 <../Concepts/Intermediate/About-Different-Middleware-Vendors>`，:doc:`操作指南 <../How-To-Guides/Working-with-multiple-RMW-implementations>`
+     - 目前已完整支持 Eclipse Cyclone DDS、eProsima Fast DDS 和 RTI Connext DDS。
+   * - 由语言特定库包装的通用核心客户端库
+     - :doc:`详情 <../Concepts/Basic/About-Client-Libraries>`
      -
-   * - Publish/subscribe over topics
-     - `Sample code <https://github.com/ros2/examples>`__\ , `Article <https://design.ros2.org/articles/topic_and_service_names.html>`__
+   * - 基于主题的发布/订阅
+     - `示例代码 <https://github.com/ros2/examples>`__\ ，`文章 <https://design.ros2.org/articles/topic_and_service_names.html>`__
      -
-   * - Clients and services
-     - `Sample code <https://github.com/ros2/examples>`__
+   * - 客户端与服务
+     - `示例代码 <https://github.com/ros2/examples>`__
      -
-   * - Set/retrieve parameters
-     - `Sample code <https://github.com/ros2/demos/tree/0.5.1/demo_nodes_cpp/src/parameters>`__
+   * - 设置/检索参数
+     - `示例代码 <https://github.com/ros2/demos/tree/0.5.1/demo_nodes_cpp/src/parameters>`__
      -
-   * - ROS 1 - ROS 2 communication bridge
-     - `Tutorial <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__
-     - Available for topics and services, not yet available for actions.
-   * - Quality of service settings for handling non-ideal networks
-     - :doc:`Demo <../Tutorials/Demos/Quality-of-Service>`
+   * - ROS 1 - ROS 2 通信桥
+     - `教程 <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__
+     - 适用于主题和服务，但尚不支持动作。
+   * - 处理非理想网络的服务质量设置
+     - :doc:`示例 <../Tutorials/Demos/Quality-of-Service>`
      -
-   * - Inter- and intra-process communication using the same API
-     - :doc:`Demo <../Tutorials/Demos/Intra-Process-Communication>`
-     - Currently only in C++.
-   * - Composition of node components at compile, link, load, or run time
-     - :doc:`Demo <../Tutorials/Intermediate/Composition>`
-     - Currently only in C++.
-   * - Multiple executors (at level of callback groups) in same node
-     - `Demo <https://github.com/ros2/examples/tree/{DISTRO}/rclcpp/executors/cbg_executor>`__
-     - Only in C++.
-   * - Support for nodes with managed lifecycles
-     - :doc:`Demo <../Tutorials/Demos/Managed-Nodes>`
-     - Currently only in C++.
-   * - DDS-Security support
-     - `Demo <https://github.com/ros2/sros2>`__
+   * - 使用相同 API 的进程内与进程间通信
+     - :doc:`示例 <../Tutorials/Demos/Intra-Process-Communication>`
+     - 目前仅支持 C++。
+   * - 在编译、链接、加载或运行时组合节点组件
+     - :doc:`示例 <../Tutorials/Intermediate/Composition>`
+     - 目前仅支持 C++。
+   * - 同一节点内支持多个执行器（按回调组级别）
+     - `示例 <https://github.com/ros2/examples/tree/{DISTRO}/rclcpp/executors/cbg_executor>`__
+     - 仅支持 C++。
+   * - 支持具有受管理生命周期的节点
+     - :doc:`示例 <../Tutorials/Demos/Managed-Nodes>`
+     - 目前仅支持 C++。
+   * - DDS 安全支持
+     - `示例 <https://github.com/ros2/sros2>`__
      -
-   * - Command-line introspection tools using an extensible framework
-     - :doc:`Concept <../Concepts/Basic/About-Command-Line-Tools>`
+   * - 使用可扩展框架的命令行探查工具
+     - :doc:`概念 <../Concepts/Basic/About-Command-Line-Tools>`
      -
-   * - Launch system for coordinating multiple nodes
-     - :doc:`Tutorial <../Tutorials/Intermediate/Launch/Launch-system>`
+   * - 用于协调多个节点的启动系统
+     - :doc:`教程 <../Tutorials/Intermediate/Launch/Launch-system>`
      -
-   * - Namespace support for nodes and topics
-     - `Article <https://design.ros2.org/articles/topic_and_service_names.html>`__
+   * - 节点与主题的命名空间支持
+     - `文章 <https://design.ros2.org/articles/topic_and_service_names.html>`__
      -
-   * - Static remapping of ROS names
-     - :doc:`How-to Guide <../How-To-Guides/Node-arguments>`
+   * - ROS 名称的静态重映射
+     - :doc:`操作指南 <../How-To-Guides/Node-arguments>`
      -
-   * - Demos of an all-ROS 2 mobile robot
-     - `Demo <https://github.com/ros2/turtlebot2_demo>`__
+   * - 全 ROS 2 移动机器人演示
+     - `示例 <https://github.com/ros2/turtlebot2_demo>`__
      -
-   * - Preliminary support for real-time code
-     - :doc:`Demo <../Tutorials/Demos/Real-Time-Programming>`, :doc:`demo <../Tutorials/Advanced/Allocator-Template-Tutorial>`
-     - Linux only.
-       Not available for Fast RTPS.
-   * - Preliminary support for "bare-metal" microcontrollers
+   * - 对实时代码的初步支持
+     - :doc:`示例 <../Tutorials/Demos/Real-Time-Programming>`，:doc:`示例 <../Tutorials/Advanced/Allocator-Template-Tutorial>`
+     - 仅 Linux 支持。
+       不适用于 Fast RTPS。
+   * - 对“裸机”微控制器的初步支持
      - `Wiki <https://github.com/ros2/freertps/wiki>`__
      -
-   * - Content filtering subscription
-     - :doc:`Demo <../Tutorials/Demos/Content-Filtering-Subscription>`
-     - Currently only in C++.
+   * - 内容过滤订阅
+     - :doc:`示例 <../Tutorials/Demos/Content-Filtering-Subscription>`
+     - 目前仅支持 C++。
 
-Besides core features of the platform, the biggest impact of ROS comes from its available packages.
-The following are a few high-profile packages which are available in the latest release:
+除了平台核心功能外，ROS 最大的影响来自其可用软件包。
+以下是最新版本中几个高知名度的软件包：
 
 * `gazebo_ros_pkgs <https://index.ros.org/r/gazebo_ros_pkgs/>`__
 * `image_transport <https://index.ros.org/r/image_common>`__

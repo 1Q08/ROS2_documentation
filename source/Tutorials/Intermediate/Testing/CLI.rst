@@ -1,44 +1,44 @@
 .. TestingCLI:
 
-Running Tests in ROS 2 from the Command Line
-============================================
+从命令行运行 ROS 2 中的测试
+===========================
 
-Prerequisites
-^^^^^^^^^^^^^
+前提条件
+^^^^^^^^
 
-You will need a workspace setup with packages that have tests in them.
+你需要一个已设置好的工作空间，其中包含带有测试的软件包。
 
-Build and run your tests
-^^^^^^^^^^^^^^^^^^^^^^^^
+构建并运行测试
+^^^^^^^^^^^^^^
 
-To compile and run the tests, simply run the `test <https://colcon.readthedocs.io/en/released/reference/verb/test.html>`__ verb from ``colcon`` at the root of your workspace.
+要编译并运行测试，只需在工作空间根目录下运行来自 ``colcon`` 的 `test <https://colcon.readthedocs.io/en/released/reference/verb/test.html>`__ 动词（verb）。
 
 .. code-block:: console
 
   $ colcon test --ctest-args tests [package_selection_args]
 
-Where ``package_selection_args`` are optional package selection arguments for ``colcon`` to limit which packages are built and run.
-Find more info in the `colcon documentation on Package selection arguments <https://colcon.readthedocs.io/en/released/reference/package-selection-arguments.html>`__
+其中 ``package_selection_args`` 是可选的软件包选择参数，用于让 ``colcon`` 限定要构建和运行哪些软件包。
+更多信息请参阅 `colcon 关于软件包选择参数的文档 <https://colcon.readthedocs.io/en/released/reference/package-selection-arguments.html>`__
 
-:ref:`Sourcing the workspace <colcon-tutorial-source-the-environment>` before testing should not be necessary.
-``colcon test`` makes sure that the tests run with the right environment, have access to their dependencies, etc.
+在测试之前，:ref:`加载工作空间 <colcon-tutorial-source-the-environment>` 应该不是必需的。
+``colcon test`` 会确保测试在正确的环境中运行、能够访问其依赖项等等。
 
-Examine Test Results
-^^^^^^^^^^^^^^^^^^^^
+检查测试结果
+^^^^^^^^^^^^
 
-To see the results, simply run the `test-result <https://colcon.readthedocs.io/en/released/reference/verb/test-result.html>`__ verb from ``colcon``.
+要查看结果，只需运行来自 ``colcon`` 的 `test-result <https://colcon.readthedocs.io/en/released/reference/verb/test-result.html>`__ 动词（verb）。
 
 .. code-block:: console
 
   $ colcon test-result --all
 
-To see the exact test cases which fail, use the ``--verbose`` flag:
+要查看具体哪些测试用例失败，请使用 ``--verbose`` 标志：
 
 .. code-block:: console
 
   $ colcon test-result --all --verbose
 
-Debugging tests with GDB
-^^^^^^^^^^^^^^^^^^^^^^^^
+使用 GDB 调试测试
+^^^^^^^^^^^^^^^^^
 
-For detailed guidance on debugging tests using GDB, refer to the :doc:`GDB Tutorial <../../../How-To-Guides/Getting-Backtraces-in-ROS-2>`.
+有关使用 GDB 调试测试的详细指导，请参阅 :doc:`GDB 教程 <../../../How-To-Guides/Getting-Backtraces-in-ROS-2>`。

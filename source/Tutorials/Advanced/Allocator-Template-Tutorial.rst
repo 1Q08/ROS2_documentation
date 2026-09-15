@@ -3,45 +3,45 @@
     Allocator-Template-Tutorial
     Tutorials/Allocator-Template-Tutorial
 
-Implementing a custom memory allocator
-======================================
+实现自定义内存分配器
+====================
 
-**Goal:** This tutorial will show how to use a custom memory allocator when writing ROS 2 C++ code.
+**目标：** 本教程将展示在编写 ROS 2 C++ 代码时如何使用自定义内存分配器。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 20 minutes
+**时间：** 20 分钟
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-This tutorial will teach you how to integrate a custom allocator for publishers and subscribers so that the default heap allocator is never called while your ROS nodes are executing.
-The code for this tutorial is available `here <https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics/allocator_tutorial.cpp>`__.
+本教程将教你如何为发布者和订阅者集成自定义分配器，使默认的堆分配器在 ROS 节点执行期间永不被调用。
+本教程的代码可以在 `这里 <https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics/allocator_tutorial.cpp>`__ 找到。
 
-Background
-----------
+背景
+----
 
-Suppose you want to write real-time safe code, and you've heard about the many dangers of calling "new" during the real-time critical section, because the default heap allocator on most platforms is nondeterministic.
+假设你想编写实时安全（real-time safe）的代码，而且你听说过在实时关键段调用 “new” 的诸多危险，因为大多数平台上的默认堆分配器是不确定的。
 
-By default, many C++ standard library structures will implicitly allocate memory as they grow, such as ``std::vector``.
-However, these data structures also accept an "Allocator" template argument.
-If you specify a custom allocator to one of these data structures, it will use that allocator for you instead of the system allocator to grow or shrink the data structure.
-Your custom allocator could have a pool of memory preallocated on the stack, which might be better suited to real-time applications.
+默认情况下，许多 C++ 标准库结构在增长时会隐式分配内存，例如 ``std::vector``。
+然而，这些数据结构也接受一个 “Allocator” 模板参数。
+如果你为这些数据结构之一指定了自定义分配器，它将使用该分配器而不是系统分配器来增长或缩小数据结构。
+你的自定义分配器可以在栈上预先分配一块内存池，这可能更适用于实时应用。
 
-In the ROS 2 C++ client library (rclcpp), we are following a similar philosophy to the C++ standard library.
-Publishers, subscribers, and the executor accept an allocator template parameter that controls allocations made by that entity during execution.
+在 ROS 2 C++ 客户端库（rclcpp）中，我们遵循与 C++ 标准库相似的哲学。
+发布者、订阅者和 Executor 接受一个 Allocator 模板参数，该参数控制这些实体在执行期间进行的分配。
 
-Writing an allocator
---------------------
+编写一个分配器
+--------------
 
-To write an allocator compatible with ROS 2's allocator interface, your allocator must be compatible with the C++ standard library allocator interface.
+要编写一个与 ROS 2 分配器接口兼容的分配器，你的分配器必须与 C++ 标准库分配器接口兼容。
 
-The C++11 library provides something called ``allocator_traits``.
-The C++11 standard specifies that a custom allocator only needs to fulfil a minimal set of requirements to be used to allocate and deallocate memory in a standard way.
-``allocator_traits`` is a generic structure that fills out other qualities of an allocator based on an allocator written with the minimal requirements.
+C++11 标准库提供了一种称为 ``allocator_traits`` 的东西。
+C++11 标准规定，自定义分配器只需满足一组最低要求，就可以以标准方式分配和释放内存。
+``allocator_traits`` 是一个通用结构，它会根据以最低要求编写的分配器补齐分配器的其他特性。
 
-For example, the following declaration for a custom allocator would satisfy ``allocator_traits`` (of course, you would still need to implement the declared functions in this struct):
+例如，下面这个自定义分配器的声明满足 ``allocator_traits`` （当然，你仍然需要在这个结构体中实现声明的函数）：
 
 .. code-block:: c++
 
@@ -60,12 +60,12 @@ For example, the following declaration for a custom allocator would satisfy ``al
    template <class T, class U>
    constexpr bool operator!= (const custom_allocator<T>&, const custom_allocator<U>&) noexcept;
 
-You could then access other functions and members of the allocator filled in by ``allocator_traits`` like so: ``std::allocator_traits<custom_allocator<T>>::construct(...)``
+然后你就可以像这样访问由 ``allocator_traits`` 补齐的分配器的其他函数和成员：``std::allocator_traits<custom_allocator<T>>::construct(...)``
 
-To learn about the full capabilities of ``allocator_traits``, see https://en.cppreference.com/w/cpp/memory/allocator_traits .
+要了解 ``allocator_traits`` 的全部能力，请参见 https://en.cppreference.com/w/cpp/memory/allocator_traits 。
 
-However, some compilers that only have partial C++11 support, such as GCC 4.8, still require allocators to implement a lot of boilerplate code to work with standard library structures such as vectors and strings, because these structures do not use ``allocator_traits`` internally.
-Therefore, if you're using a compiler with partial C++11 support, your allocator will need to look more like this:
+然而，一些只提供部分 C++11 支持的编译器（例如 GCC 4.8）仍然要求分配器实现大量样板代码才能与向量和字符串等标准库结构一起使用，因为这些结构在内部不使用 ``allocator_traits``。
+因此，如果你使用的编译器只提供部分 C++11 支持，你的分配器需要看起来更像这样：
 
 .. code-block:: c++
 
@@ -114,10 +114,10 @@ Therefore, if you're using a compiler with partial C++11 support, your allocator
    constexpr bool operator!=(const MyAllocator<T> &,
      const MyAllocator<U> &) noexcept;
 
-Writing an example main
------------------------
+编写一个示例 main
+-----------------
 
-Once you have written a valid C++ allocator, you must pass it as a shared pointer to your publisher, subscriber, and executor.
+一旦你编写好了一个有效的 C++ 分配器，你必须将它作为共享指针传递给发布者、订阅者和 executor。
 
 .. code-block:: c++
 
@@ -141,13 +141,13 @@ Once you have written a valid C++ allocator, you must pass it as a shared pointe
      options.memory_strategy = memory_strategy;
      rclcpp::executors::SingleThreadedExecutor executor(options);
 
-You will also need to use your allocator to allocate any messages that you pass along the execution codepath.
+你还需要使用你的分配器来分配你在执行代码路径中传递的任何消息。
 
 .. code-block:: c++
 
      auto alloc = std::make_shared<MyAllocator<void>>();
 
-Once you've instantiated the node and added the executor to the node, it's time to spin:
+一旦你实例化了节点并将 executor 添加到节点，就该 spin 了：
 
 .. code-block:: c++
 
@@ -160,13 +160,13 @@ Once you've instantiated the node and added the executor to the node, it's time 
        executor.spin_some();
      }
 
-Passing an allocator to the intra-process pipeline
---------------------------------------------------
+将分配器传递给进程内管道
+------------------------
 
-Even though we instantiated a publisher and subscriber in the same process, we aren't using the intra-process pipeline yet.
+尽管我们在同一进程中实例化了发布者和订阅者，但我们还没有使用进程内（intra-process）管道。
 
-The IntraProcessManager is a class that is usually hidden from the user, but in order to pass a custom allocator to it we need to expose it by getting it from the rclcpp Context.
-The IntraProcessManager makes use of several standard library structures, so without a custom allocator it will call the default new.
+IntraProcessManager 是一个通常对用户隐藏的类，但为了向它传递自定义分配器，我们需要通过从 rclcpp Context 获取它来暴露它。
+IntraProcessManager 使用多种标准库结构，因此如果没有自定义分配器，它将调用默认的 ``new``。
 
 .. code-block:: c++
 
@@ -176,16 +176,16 @@ The IntraProcessManager makes use of several standard library structures, so wit
       .use_intra_process_comms(true);
     auto node = rclcpp::Node::make_shared("allocator_example", options);
 
-Make sure to instantiate publishers and subscribers AFTER constructing the node in this way.
+请确保在以此方式构造节点之后，再实例化发布者和订阅者。
 
-Testing and verifying the code
-------------------------------
+测试和验证代码
+--------------
 
-How do you know that your custom allocator is actually getting called?
+你怎么知道你的自定义分配器真的被调用了呢？
 
-The obvious thing to do would be to count the calls made to your custom allocator's ``allocate`` and ``deallocate`` functions and compare that to the calls to ``new`` and ``delete``.
+显而易见的做法是统计对你的自定义分配器的 ``allocate`` 和 ``deallocate`` 函数的调用次数，并与对 ``new`` 和 ``delete`` 的调用次数进行比较。
 
-Adding counting to the custom allocator is easy:
+给自定义分配器添加计数很容易：
 
 .. code-block:: c++
 
@@ -201,7 +201,7 @@ Adding counting to the custom allocator is easy:
        // ...
      }
 
-You can also override the global new and delete operators:
+你还可以重写全局 ``new`` 和 ``delete`` 运算符：
 
 .. code-block:: c++
 
@@ -225,16 +225,16 @@ You can also override the global new and delete operators:
      }
    }
 
-where the variables we are incrementing are just global static integers, and ``is_running`` is a global static boolean that gets toggled right before the call to ``spin``.
+其中我们递增的变量只是全局静态整数，而 ``is_running`` 是一个全局静态布尔变量，它在调用 ``spin`` 之前被切换。
 
-The `example executable <https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics/allocator_tutorial.cpp>`__ prints the value of the variables.
-To run the example executable, use:
+`示例可执行文件 <https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics/allocator_tutorial.cpp>`__ 会打印这些变量的值。
+要运行示例可执行文件，请使用：
 
 .. code-block:: bash
 
      $ ros2 run demo_nodes_cpp allocator_tutorial
 
-or, to run the example with the intra-process pipeline on:
+或者，运行开启了进程内管道的示例：
 
 .. code-block:: bash
 
@@ -244,26 +244,26 @@ or, to run the example with the intra-process pipeline on:
      Allocator new was called 27284 times during spin
      Allocator delete was called 27281 times during spin
 
-We've caught about 2/3 of the allocations/deallocations that happen on the execution path, but where do the remaining 1/3 come from?
+我们已经捕获了执行路径上发生的约 2/3 的分配/释放，但剩余 1/3 来自哪里呢？
 
-As a matter of fact, these allocations/deallocations originate in the underlying DDS implementation used in this example.
+事实上，这些分配/释放来源于本示例中使用的底层 DDS 实现。
 
-Proving this is out of the scope of this tutorial, but you can check out the test for the allocation path that gets run as part of the ROS 2 continuous integration testing, which backtraces through the code and figures out whether certain function calls originate in the rmw implementation or in a DDS implementation:
+证明这一点超出了本教程的范围，但你可以查看作为 ROS 2 持续集成测试一部分运行的分配路径测试，它通过代码回溯来确定某些函数调用是源自 rmw 实现还是 DDS 实现：
 
 https://github.com/ros2/realtime_support/blob/{REPOS_FILE_BRANCH}/tlsf_cpp/test/test_tlsf.cpp#L41
 
-Note that this test is not using the custom allocator we just created, but the TLSF allocator (see below).
+请注意，这个测试使用的不是我们刚创建的自定义分配器，而是 TLSF 分配器（见下文）。
 
-The TLSF allocator
-------------------
+TLSF 分配器
+-----------
 
-ROS 2 offers support for the TLSF (Two Level Segregate Fit) allocator, which was designed to meet real-time requirements:
+ROS 2 提供对 TLSF（Two Level Segregate Fit，两级分离适配）分配器的支持，它是为满足实时要求而设计的：
 
 https://github.com/ros2/realtime_support/tree/{REPOS_FILE_BRANCH}/tlsf_cpp
 
-For more information about TLSF, see `this page via Universitat Politècnica de València <http://www.gii.upv.es/tlsf/>`_.
+有关 TLSF 的更多信息，请参见 `瓦伦西亚理工大学提供的这个页面 <http://www.gii.upv.es/tlsf/>`_。
 
-Note that the TLSF allocator is licensed under a dual-GPL/LGPL license.
+请注意，TLSF 分配器采用双重 GPL/LGPL 许可证。
 
-A full working example using the TLSF allocator is here:
+使用 TLSF 分配器的完整可运行示例在这里：
 https://github.com/ros2/realtime_support/blob/{REPOS_FILE_BRANCH}/tlsf_cpp/example/allocator_example.cpp

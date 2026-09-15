@@ -4,255 +4,255 @@
 
 .. _ROSCon:
 
-ROSCon Talks
-============
+ROSCon 演讲
+===========
 
-The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2 and provide information about the workings of ROS 2 and various demos:
+以下这些 `ROSCon <https://roscon.ros.org>`__ 演讲均围绕 ROS 2 展开，介绍了 ROS 2 的工作原理以及各种演示：
 
 .. tabs::
   .. group-tab:: 2025
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
-       * - Advancing Robot Learning with ROS 2
+       * - 标题
+         - 链接
+       * - 使用 ROS 2 推进机器人学习
          - `video <https://vimeo.com/1136158846>`__
-       * - ROS Project Update
+       * - ROS 项目进展
          - `video <https://vimeo.com/1136205502>`__
-       * - ros-controls Project Update
+       * - ros-controls 项目进展
          - `video <https://vimeo.com/1136205235>`__
-       * - On Use of Nav2 Route Server
+       * - 关于 Nav2 路线服务器（Route Server）的使用
          - `video <https://vimeo.com/1136164030>`__
-       * - Seeing is Believing: Enhancing Robot Acceptance with Perception-Aware ...
+       * - 眼见为实：通过感知能力提升机器人接受度……
          - `video <https://vimeo.com/1136205031>`__
-       * - ⚡In-advance Lightning Talks⚡
+       * - ⚡会前闪电演讲⚡
          - `video <https://vimeo.com/1136158488>`__
-       * - rmw_what❓ Implementing the ROS 2 Middleware Interface
+       * - rmw_what❓ 实现 ROS 2 中间件接口
          - `video <https://vimeo.com/1136204122>`__
-       * - Zenoh Strikes Back: From a New Hope to Tier-1
+       * - Zenoh 反击：从「新希望」到 Tier-1
          - `video <https://vimeo.com/1136377715>`__
-       * - From DDS to Zenoh: Migrating the Dexory Autonomy ROS Stack—Configurati...
+       * - 从 DDS 到 Zenoh：迁移 Dexory 自主 ROS 技术栈——配置……
          - `video <https://vimeo.com/1136375669>`__
-       * - Enhancing ROS 2 Communications: What's New in Fast DDS v3
+       * - 增强 ROS 2 通信：Fast DDS v3 有哪些新特性
          - `video <https://vimeo.com/1136157825>`__
-       * - Agnocast: A ROS 2-Compatible Middleware Enabling True Zero-Copy IPC ...
+       * - Agnocast：一种兼容 ROS 2 的中间件，可实现真正的零拷贝 IPC……
          - `video <https://vimeo.com/1136159023>`__
-       * - Replay Testing: Fast, Iterative Robotics Testing
+       * - 回放测试：快速、迭代式的机器人测试
          - `video <https://vimeo.com/1136204393>`__
-       * - Rtest - Reliable ROS 2 Unit Tests Framework
+       * - Rtest——可靠的 ROS 2 单元测试框架
          - `video <https://vimeo.com/1136205163>`__
-       * - Formally Verifying Robot Behavior with Statistical Model Checking
+       * - 使用统计模型检验对机器人行为进行形式化验证
          - `video <https://vimeo.com/1136157972>`__
-       * - Cloudini: the Pointcloud Compression Library That You Missed in Your Life
+       * - Cloudini：你人生中错过的点云压缩库
          - `video <https://vimeo.com/1136159131>`__
-       * - Unlock FFmpeg in ROS 2: A Flexible Audio/Video Pipeline with...
+       * - 在 ROS 2 中解锁 FFmpeg：灵活的音频/视频流水线……
          - `video <https://vimeo.com/1136204514>`__
-       * - Smarter Vision Pipelines for ROS 2: Compress, Transport, and Sync at Scale
+       * - 更智能的 ROS 2 视觉流水线：大规模压缩、传输与同步
          - `video <https://vimeo.com/1136204802>`__
-       * - SWAGGER: Sparse WAypoint Graph Generation for Efficient Routing
+       * - SWAGGER：用于高效路由的稀疏路点图生成
          - `video <https://vimeo.com/1136204717>`__
-       * - Mapping Together: Collaborative SLAM for Distributed Robot Fleets
+       * - 协同建图：面向分布式机器人集群的协作 SLAM
          - `video <https://vimeo.com/1136163914>`__
-       * - Roadmap-Explorer: A fast and reliable robot exploration module
+       * - Roadmap-Explorer：快速可靠的机器人探索模块
          - `video <https://vimeo.com/1136177427>`__
-       * - Peer-2-Peer Agriculture Robotics Communication, Planning, Coverage ...
+       * - 点对点农业机器人通信、规划、覆盖……
          - `video <https://vimeo.com/1136163436>`__
-       * - From Sensors to Sensei: Mastering ROS Hardware with Analog Devices
+       * - 从传感器到导师：借助 Analog Devices 精通 ROS 硬件
          - `video <https://vimeo.com/1136158125>`__
-       * - Help Me with the Bags: Quick & Easy ROS 2 Data Handling
+       * - 帮我处理 bag：快速简便的 ROS 2 数据处理
          - `video <https://vimeo.com/1136377079>`__
-       * - Open-source robotics observability at scale!
+       * - 大规模的开源机器人可观测性！
          - `video <https://vimeo.com/1136163245>`__
-       * - Simplifying Diagnostics: A Ready to Use Robot Webserver
+       * - 简化诊断：一个开箱即用的机器人 Web 服务器
          - `video <https://vimeo.com/1136204915>`__
-       * - Detecting Complex Events in ROS Data
+       * - 检测 ROS 数据中的复杂事件
          - `video <https://vimeo.com/1136157744>`__
-       * - ROS 2 logging subsystem and alternative syslog implementation
+       * - ROS 2 日志子系统与替代的 syslog 实现
          - `video <https://vimeo.com/1136772381>`__
-       * - Traceability System for Autonomous Robots
+       * - 自主机器人的可追溯系统
          - `video <https://vimeo.com/1136377674>`__
-       * - ⚡Lightning Talks 1⚡
+       * - ⚡闪电演讲 1⚡
          - `video <https://vimeo.com/1136163574>`__
-       * - Open-RMF Project Update
+       * - Open-RMF 项目进展
          - `video <https://vimeo.com/1136163138>`__
-       * - Robots at Your Service: Deploying Open-RMF in Singapore’s Hospitality Industry
+       * - 为您服务的机器人：在新加坡酒店业中部署 Open-RMF
          - `video <https://vimeo.com/1136206211>`__
-       * - Optimizing Hospital Robotics Deployments with Open RMF
+       * - 借助 Open RMF 优化医院机器人部署
          - `video <https://vimeo.com/1136163298>`__
-       * - Orchestrating Interoperable Indoor Robots at Scale with Open-RMF...
+       * - 借助 Open-RMF 大规模编排可互操作的室内机器人……
          - `video <https://vimeo.com/1136163354>`__
-       * - Workflows for multi-agent orchestration
+       * - 多智能体编排的工作流
          - `video <https://vimeo.com/1136377685>`__
-       * - Gazebo Project Update
+       * - Gazebo 项目进展
          - `video <https://vimeo.com/1136158328>`__
-       * - Infrastructure Project Update
+       * - 基础设施项目进展
          - `video <https://vimeo.com/1136158416>`__
-       * - ⚡ Lightning Talks 2⚡
+       * - ⚡ 闪电演讲 2⚡
          - `video <https://vimeo.com/1136158629>`__
-       * - Our Ten Most Common ROS Questions Answered
+       * - 我们最常被问到的十个 ROS 问题解答
          - `video <https://vimeo.com/1136376218>`__
-       * - Practical guide for ROS 2 on Windows
+       * - Windows 上 ROS 2 实用指南
          - `video <https://vimeo.com/1136377428>`__
-       * - Solving ROS package management with Pixi and RoboStack
+       * - 用 Pixi 和 RoboStack 解决 ROS 包管理问题
          - `video <https://vimeo.com/1136377632>`__
-       * - Escape Velocity: Smarter, Cleaner ROS 2 Launch Patterns
+       * - 逃逸速度：更智能、更简洁的 ROS 2 启动模式
          - `video <https://vimeo.com/1136376252>`__
-       * - Build, Iterate, Deploy - A Modular ROS 2 Workflow that Scales
+       * - 构建、迭代、部署——可扩展的模块化 ROS 2 工作流
          - `video <https://vimeo.com/1136370578>`__
-       * - Toward Scalable Collaborative Robot Controllers: Internalizing ROS 2 with Zenoh
+       * - 迈向可扩展的协作机器人控制器：用 Zenoh 内化 ROS 2
          - `video <https://vimeo.com/1136204650>`__
-       * - Motions Made Easy: Simplifying Repetitive Robot Motions
+       * - 让动作变得简单：简化重复性机器人动作
          - `video <https://vimeo.com/1136163966>`__
-       * - Running ROS natively on an industrial robot's control box
+       * - 在工业机器人控制柜上原生运行 ROS
          - `video <https://vimeo.com/1136205077>`__
-       * - ros2_control goes Industrial
+       * - ros2_control 走向工业
          - `video <https://vimeo.com/1136205404>`__
-       * - Transforming Robotics with Auto Bots from Outer Space
+       * - 用来自外太空的 Auto Bots 变革机器人技术
          - `video <https://vimeo.com/1136204579>`__
-       * - Real-Time Meets Cloud Native - ROS 2 on RTOS and Linux with Kubernetes
+       * - 实时遇上云原生——在 RTOS 和 Linux 上用 Kubernetes 运行 ROS 2
          - `video <https://vimeo.com/1136204466>`__
-       * - ROS 2: The Backbone for Physical AI
+       * - ROS 2：物理 AI 的骨干
          - `video <https://vimeo.com/1136205583>`__
-       * - From Simulation to Soil: Lessons from a ROS 2-Powered Tractor
+       * - 从仿真到土壤：一台 ROS 2 驱动拖拉机的经验教训
          - `video <https://vimeo.com/1136158260>`__
-       * - Easy ROS-based AI Robot Development with genesis/libtorch
+       * - 用 genesis/libtorch 轻松开发基于 ROS 的 AI 机器人
          - `video <https://vimeo.com/1136370681>`__
-       * - PlanSys2, the ROS 2 Planning System: Past, present and future
+       * - PlanSys2，ROS 2 规划系统：过去、现在与未来
          - `video <https://vimeo.com/1136377384>`__
-       * - Building Foundation Models for Generalist Robots: Insights ...
+       * - 为通用机器人构建基础模型：洞见……
          - `video <https://vimeo.com/1136370637>`__
-       * - Introducing rclrs: the ROS 2 client library for Rust
+       * - 介绍 rclrs：面向 Rust 的 ROS 2 客户端库
          - `video <https://vimeo.com/1136376117>`__
-       * - Realistic Terrain Simulation in Gazebo
+       * - Gazebo 中的真实地形仿真
          - `video <https://vimeo.com/1136377469>`__
-       * - Evaluation of ROS 2 Simulators 2025
+       * - 2025 年 ROS 2 仿真器评估
          - `video <https://vimeo.com/1136157883>`__
-       * - Ray-Tracing Everywhere: Vendor Agnostic Ray Tracing in Gazebo
+       * - 无处不在的光线追踪：Gazebo 中的厂商无关光线追踪
          - `video <https://vimeo.com/1136163508>`__
-       * - Introducing the new ROS simulation standard
+       * - 介绍新的 ROS 仿真标准
          - `video <https://vimeo.com/1136376172>`__
-       * - From Off-the-Shelf Drones to Research Platforms
+       * - 从现成无人机到研究平台
          - `video <https://vimeo.com/1136158052>`__
 
   .. group-tab:: 2024
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
-       * - Saving lives sooner: leveraging ROS 2 for end-stage kidney disease
+       * - 标题
+         - 链接
+       * - 更快拯救生命：利用 ROS 2 应对终末期肾病
          - `video <https://vimeo.com/1024971800>`__
-       * - The State of ROS: Beneath the Kilt
+       * - ROS 现状：裙下风光
          - `video <https://vimeo.com/1024972452>`__
-       * - RMW Zenoh: An alternative middleware for ROS 2
+       * - RMW Zenoh：ROS 2 的另一种中间件
          - `video <https://vimeo.com/1024971621>`__
-       * - The State of the Infrastructure
+       * - 基础设施现状
          - `video <https://vimeo.com/1024972551>`__
-       * - In the Spot Light: Controlling Spot with ROS 2
+       * - 聚光灯下：用 ROS 2 控制 Spot
          - `video <https://vimeo.com/1024970544>`__
-       * - Panel: Successfully Deploying ROS 2 Into Production
+       * - 圆桌讨论：成功地将 ROS 2 部署到生产环境
          - `video <https://vimeo.com/1026020629>`__
-       * - Executors in ROS 2
+       * - ROS 2 中的执行器
          - `video <https://vimeo.com/1024970052>`__
-       * - The Multithreaded Events Executor
+       * - 多线程事件执行器
          - `video <https://vimeo.com/1024972104>`__
-       * - Accelerating Robotics Development with Embedded Linux
+       * - 用嵌入式 Linux 加速机器人开发
          - `video <https://vimeo.com/1024969135>`__
-       * - Real-time ROS 2 applications made easy with cactus-rt
+       * - 用 cactus-rt 轻松实现实时 ROS 2 应用
          - `video <https://vimeo.com/1024971584>`__
-       * - Something big is coming in ros2_control with ROS 2 Jazzy!
+       * - ros2_control 在 ROS 2 Jazzy 中有重大更新！
          - `video <https://vimeo.com/1024972003>`__
-       * - How to Use a Dragon's Algorithm: Integrating Drake with MoveIt 2
+       * - 如何使用「龙之算法」：将 Drake 与 MoveIt 2 集成
          - `video <https://vimeo.com/1024970427>`__
-       * - More than just an actuator -- Better ROS support for a manipulator
+       * - 不只是执行器——为机械臂提供更好的 ROS 支持
          - `video <https://vimeo.com/1024971285>`__
-       * - A ROS 2 Package for Dynamic Collision Avoidance Based On On-Board Prox...
+       * - 一个基于板载邻近传感器的动态避障 ROS 2 包……
          - `video <https://vimeo.com/1024969079>`__
-       * - GSplines: Generalized Splines for Motion Optimization and Smooth Colli...
+       * - GSplines：用于运动优化与平滑碰撞的广义样条……
          - `video <https://vimeo.com/1024970194>`__
-       * - KOI and EBIKE: Optimizing Kinematics Structures and IK Parameters by C...
+       * - KOI 与 EBIKE：通过……优化运动学结构与 IK 参数
          - `video <https://vimeo.com/1024970959>`__
-       * - A Fuzzy-Matching Trajectory Cache for MoveIt 2
+       * - 面向 MoveIt 2 的模糊匹配轨迹缓存
          - `video <https://vimeo.com/1024968990>`__
-       * - iceoryx2: A Journey to Becoming a First-Class RMW Alternative
+       * - iceoryx2：成为一流 RMW 替代方案之路
          - `video <https://vimeo.com/1026024533>`__
-       * - J1939 CAN Device Support in ROS 2
+       * - ROS 2 中的 J1939 CAN 设备支持
          - `video <https://vimeo.com/1026028313>`__
-       * - Integration of ETSI ITS messages for V2X communication in ROS
+       * - 在 ROS 中集成用于 V2X 通信的 ETSI ITS 消息
          - `video <https://vimeo.com/1026026851>`__
-       * - Unlocking the Potential of the Nicla Vision Board with ROS / ROS 2
+       * - 用 ROS / ROS 2 释放 Nicla Vision 板的潜力
          - `video <https://vimeo.com/1026030054>`__
-       * - We Hate Serial: Experiments using CAN-FD as a transport layer for micro-ROS
+       * - 我们讨厌串口：用 CAN-FD 作为 micro-ROS 传输层的实验
          - `video <https://vimeo.com/1026031720>`__
-       * - ROS 2 Gateway to Professional 24/7 Applications
+       * - 面向专业 7×24 应用的 ROS 2 网关
          - `video <https://vimeo.com/1026037209>`__
-       * - Optimizing Gazebo simulation: Challenges in building complex simulatio...
+       * - 优化 Gazebo 仿真：构建复杂仿真时面临的挑战……
          - `video <https://vimeo.com/1024971478>`__
-       * - Building Humanoid Robots: Mastering Design and Control with ROS
+       * - 构建人形机器人：用 ROS 掌握设计与控制
          - `video <https://vimeo.com/1024969444>`__
-       * - URDF Creator: Bridging the Gap Between Learning and Applying ROS 2
+       * - URDF Creator：弥合 ROS 2 学习与应用之间的鸿沟
          - `video <https://vimeo.com/1024972602>`__
-       * - Enabling ROS 2 Benchmarks: A Medical Robotics Perspective
+       * - 让 ROS 2 基准测试成为可能：医疗机器人视角
          - `video <https://vimeo.com/1024969888>`__
-       * - Scenario Execution for Robotics: A generic, backend-agnostic library f...
+       * - 机器人场景执行：一个通用、后端无关的库……
          - `video <https://vimeo.com/1024971964>`__
-       * - ⚡Lightning Talks⚡
+       * - ⚡闪电演讲⚡
          - `video <https://vimeo.com/1026038503>`__
-       * - Mobile Robotics Scale-up Leveraging ROS
+       * - 利用 ROS 扩展移动机器人规模
          - `video <https://vimeo.com/1024971160>`__
-       * - The State of Gazebo
+       * - Gazebo 现状
          - `video <https://vimeo.com/1024972138>`__
-       * - The State of Open-RMF
+       * - Open-RMF 现状
          - `video <https://vimeo.com/1024972217>`__
-       * - Migrating a Mobile Manipulator to ROS 2
+       * - 将移动操作平台迁移到 ROS 2
          - `video <https://vimeo.com/1024971060>`__
-       * - Jazzy Jalisco rosbag2 updates and new features
+       * - Jazzy Jalisco rosbag2 更新与新特性
          - `video <https://vimeo.com/1024970794>`__
-       * - ⚡ Lightning Talks ⚡
+       * - ⚡ 闪电演讲 ⚡
          - `video <https://vimeo.com/1024969633>`__
-       * - How is my robot?
-           - On the state of ROS Diagnostics
+       * - 我的机器人状况如何？
+           - 关于 ROS 诊断的现状
          - `video <https://vimeo.com/1024970271>`__
-       * - Accelerating the CI/CD-to-robot cycle by 10x for 1/10th the cost
+       * - 将 CI/CD 到机器人的周期加速 10 倍，成本仅为原来的 1/10
          - `video <https://vimeo.com/1024969227>`__
-       * - r2s: A Terminal User Interface for ROS 2
+       * - r2s：面向 ROS 2 的终端用户界面
          - `video <https://vimeo.com/1024971542>`__
-       * - The Lighthouse project: from Virtual Reality to Onboard Positioning for Robotics
+       * - Lighthouse 项目：从虚拟现实到机器人机载定位
          - `video <https://vimeo.com/1024972070>`__
-       * - Building system packages with colcon in your own compact buildfarm
+       * - 在你自己的紧凑构建农场中用 colcon 构建系统包
          - `video <https://vimeo.com/1024969541>`__
-       * - robot_folders -- your favorite meta-workspace manager
+       * - robot_folders——你最喜欢的元工作空间管理器
          - `video <https://vimeo.com/1024971677>`__
-       * - Scaling Open-RMF from a Test Bench → Lab → Controlled Environment → Production
+       * - 将 Open-RMF 从试验台扩展到实验室 → 受控环境 → 生产环境
          - `video <https://vimeo.com/1024971907>`__
-       * - Open-RMF and the Challenge of Resource Contention in Large-Scale Robot Fleets
+       * - Open-RMF 与大规模机器人集群中的资源争用挑战
          - `video <https://vimeo.com/1024971441>`__
-       * - ROS in Large-scale Factory Automation
+       * - ROS 在大规模工厂自动化中的应用
          - `video <https://vimeo.com/1024971718>`__
-       * - Enhancing Robotic Communication & Scalability with Topic Keys in ROS 2
+       * - 用 ROS 2 中的话题键增强机器人通信与可扩展性
          - `video <https://vimeo.com/1024969988>`__
-       * - ROS 2 (and DDS) Compatible Selective Large Data Transfer
+       * - 兼容 ROS 2（及 DDS）的选择性大数据传输
          - `video <https://vimeo.com/1024971699>`__
-       * - Agent-based AI Framework for ROS 2
+       * - 面向 ROS 2 的基于智能体的 AI 框架
          - `video <https://vimeo.com/1026029511>`__
-       * - ros2ai Next-Gen ROS 2 CLI empowered by OpenAI
+       * - ros2ai：由 OpenAI 赋能的新一代 ROS 2 CLI
          - `video <https://vimeo.com/1026034712>`__
-       * - Building Foundation Model-powered Robots with ROS: A Survey
+       * - 用 ROS 构建基础模型驱动的机器人：综述
          - `video <https://vimeo.com/1026027743>`__
-       * - Scenic for ROS: A Probabilistic Programming Language for World Modeling...
+       * - 面向 ROS 的 Scenic：一种用于世界建模的概率编程语言……
          - `video <https://vimeo.com/1026032775>`__
-       * - Software Platform Design and SDK Development for ROS 2-based LG AI Com...
+       * - 基于 ROS 2 的 LG AI 事业部软件平台设计与 SDK 开发……
          - `video <https://vimeo.com/1026030733>`__
-       * - Beluga AMCL: A modern Monte Carlo Localization implementation for ROS
+       * - Beluga AMCL：面向 ROS 的现代蒙特卡洛定位实现
          - `video <https://vimeo.com/1024969330>`__
-       * - Radar Tracks for Path Planning in the presence of Dynamic Obstacles
+       * - 动态障碍物场景下用于路径规划的雷达航迹
          - `video <https://vimeo.com/1024971565>`__
-       * - On Use of Nav2 Docking
+       * - 关于 Nav2 对接（Docking）的使用
          - `video <https://vimeo.com/1024971348>`__
-       * - ROS robot health monitoring: the Bonsai approach
+       * - ROS 机器人健康监测：Bonsai 方案
          - `video <https://vimeo.com/1024971769>`__
-       * - Navigation à la carte: choose navigation profile and strategy as you go
+       * - 按需导航：随用随选导航配置与策略
          - `video <https://vimeo.com/1024971326>`__
 
   .. group-tab:: 2023
@@ -260,116 +260,116 @@ The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
-       * - Building the iRobot® Create® 3 Robot: Challenges and Solutions for ROS...
+       * - 标题
+         - 链接
+       * - 打造 iRobot® Create® 3 机器人：ROS 面临的挑战与解决方案……
          - `video <https://vimeo.com/879000844/153752c34c>`__
-       * - The State of ROS: From the Iron Age to the Jazzy Age
+       * - ROS 现状：从 Iron 时代到 Jazzy 时代
          - `video <https://vimeo.com/879001905/d5ee7c2edf>`__
-       * - ROS 2 Types On-the-wire: Type Descriptions and Hashing in Iron and onwards
+       * - ROS 2 的线上类型：Iron 及以后的类型描述与哈希
          - `video <https://vimeo.com/879001665/27481b49b7>`__
-       * - Releasing a new ROS 2 distribution
+       * - 发布一个新的 ROS 2 发行版
          - `video <https://vimeo.com/879001580/48297314e8>`__
-       * - Panel: Getting Involved with ROS as an Organization
+       * - 圆桌讨论：作为组织如何参与 ROS
          - `video <https://vimeo.com/879001441/4f278b5543>`__
-       * - Licensing of ROS Packages: Changes to package.xml and new tool support
+       * - ROS 包的许可：package.xml 的变更与新的工具支持
          - `video <https://vimeo.com/879001224/d6461b638a>`__
-       * - SDFormat: A robot description format in constant evolution
+       * - SDFormat：一个不断演进的机器人描述格式
          - `video <https://vimeo.com/879001733/c2df0a1823>`__
-       * - Repeatable Reproducible Accessible ROS Development via Dev Containers
+       * - 通过 Dev Containers 实现可重复、可复现、易获取的 ROS 开发
          - `video <https://vimeo.com/879001614/2d1a22a0e1>`__
-       * - Colcon-in-container: say bye to the "it builds on my machine" syndrome
+       * - Colcon-in-container：向「在我机器上能构建」综合征说再见
          - `video <https://vimeo.com/879000903/bb474a0534>`__
-       * - ROS with Kubernetes/KubeEdge
+       * - ROS 与 Kubernetes/KubeEdge
          - `video <https://vimeo.com/879001688/33b2495a49>`__
-       * - A New ROS 2 Driver for FANUC Robots Utilizing Ethernet/IP
+       * - 一个利用 Ethernet/IP 的 FANUC 机器人新 ROS 2 驱动
          - `video <https://vimeo.com/879000528/3062efc119>`__
-       * - A ROS 2 Package for Online Cobots Impedance Modulation
+       * - 一个用于在线协作机器人阻抗调节的 ROS 2 包
          - `video <https://vimeo.com/879000599/2045e57716>`__
-       * - Real-Time Motion Control in ROS: Uniting HAL with Tormach's ZA6 Robot
+       * - ROS 中的实时运动控制：将 HAL 与 Tormach 的 ZA6 机器人结合
          - `video <https://vimeo.com/879001566/b20f712d4b>`__
-       * - A safe and secure ROS 2 multi-domain architecture for AMD embedded het...
+       * - 面向 AMD 嵌入式异构平台的安全可靠的 ROS 2 多域架构……
          - `video <https://vimeo.com/879000629/a2d2d1cf34>`__
-       * - Optimizing MoveIt - Costs, Constraints and Betterments
+       * - 优化 MoveIt——成本、约束与改进
          - `video <https://vimeo.com/879001424/7fdb9ef68b>`__
-       * - Leveraging a functional approach for more testable and maintainable ROS code
+       * - 利用函数式方法编写更易测试和维护的 ROS 代码
          - `video <https://vimeo.com/879001204/ad5a36bb36>`__
-       * - Real-time Data-flow extension for ROS 2
+       * - ROS 2 的实时数据流扩展
          - `video <https://vimeo.com/879001546/54514e92c0>`__
-       * - An Integrated Modelling and Testing Architecture for ROS Nodes
+       * - 面向 ROS 节点的集成建模与测试架构
          - `video <https://vimeo.com/879000742/0d9939e399>`__
-       * - Breaking Bots: Robustness Testing for ROS
+       * - 破解机器人：ROS 的鲁棒性测试
          - `video <https://vimeo.com/879000822/a658e675f4>`__
-       * - Rclex on Nerves: a bare minimum runtime platform for ROS 2 nodes in Elixir
+       * - Nerves 上的 Rclex：Elixir 中 ROS 2 节点的最小运行平台
          - `video <https://vimeo.com/879001529/b23eaacae8>`__
-       * - On Use of Nav2 MPPI Controller
+       * - 关于 Nav2 MPPI 控制器的使用
          - `video <https://vimeo.com/879001391/40d175c156>`__
-       * - Bidirectional navigation with Nav2
+       * - 使用 Nav2 进行双向导航
          - `video <https://vimeo.com/879000809/b32f8ebec4>`__
-       * - Autonomous Robot Navigation and Localization on 3D Mesh Surfaces in ROS
+       * - ROS 中 3D 网格表面上的自主机器人导航与定位
          - `video <https://vimeo.com/879000775/aa280cc0a4>`__
-       * - ROS 2 powered Android VHAL.
+       * - ROS 2 驱动的 Android VHAL。
          - `video <https://vimeo.com/879001655/c96bc5225b>`__
-       * - ⚡Lightning Talks⚡
+       * - ⚡闪电演讲⚡
          - `video <https://vimeo.com/879001275/172b83b7d2>`__
-       * - Up, Up, and Away: Adventures in Aerial Robotics
+       * - 向上，向上，飞向远方：空中机器人历险记
          - `video <https://vimeo.com/879001926/02a07b8277>`__
-       * - NEXUS: A ROS 2 framework for orchestrating industrial robotic lines and cells
+       * - NEXUS：用于编排工业机器人产线与单元工位的 ROS 2 框架
          - `video <https://vimeo.com/879001338/fb3bcc8741>`__
-       * - Aerostack2: A framework for developing Multi-Robot Aerial Systems
+       * - Aerostack2：开发多机器人空中系统的框架
          - `video <https://vimeo.com/879000655/24398f48ef>`__
-       * - Creating scalable customized robotic platforms
+       * - 创建可扩展的定制化机器人平台
          - `video <https://vimeo.com/879000942/31be900d11>`__
-       * - Create® 3 Robot in the Classroom: Teaching ROS 2 to Undergraduates
+       * - 课堂上的 Create® 3 机器人：面向本科生教授 ROS 2
          - `video <https://vimeo.com/879000913/524facf2e5>`__
-       * - ROS 2 On the Browser with WebAssembly for Teaching Robotics
+       * - 用 WebAssembly 在浏览器中运行 ROS 2 以教授机器人学
          - `video <https://vimeo.com/879001638/18ab3e5c71>`__
-       * - ⚡Lightning Talks⚡
+       * - ⚡闪电演讲⚡
          - `video <https://vimeo.com/879001243/0c3777a18d>`__
-       * - Octomap is dead: long life Bonxai
+       * - Octomap 已死：Bonxai 万岁
          - `video <https://vimeo.com/879001365/4e5a1c2e0a>`__
-       * - Parameters Should be Boring
+       * - 参数就该枯燥无味
          - `video <https://vimeo.com/879001499/558ba81bef>`__
-       * - Using Reference System to evaluate features and performance in a stand...
+       * - 使用参考系统评估……中的特性与性能
          - `video <https://vimeo.com/881734034/8f6282d0ee>`__
-       * - RosLibRust: Why we built it, why you might want to use it...
+       * - RosLibRust：我们为什么构建它，你可能为什么想用它……
          - `video <https://vimeo.com/879001716/ddf60792e8>`__
-       * - Leveraging Secure Discovery Server in ROS 2
+       * - 在 ROS 2 中利用安全发现服务器（Secure Discovery Server）
          - `video <https://vimeo.com/880191276/fd5fa3d2ca>`__
-       * - Simulate your World: A deeper look at extending Gazebo
+       * - 仿真你的世界：更深入地了解 Gazebo 的扩展
          - `video <https://vimeo.com/879001776/82b8a1d6d9>`__
-       * - Simulate robots like never before with Open 3D Engine
+       * - 用 Open 3D Engine 以前所未有的方式仿真机器人
          - `video <https://vimeo.com/879001753/80b62256e1>`__
-       * - Simulation of Highly Dynamic Omnidirectional Robots in Isaac Sim
+       * - Isaac Sim 中高动态全向机器人的仿真
          - `video <https://vimeo.com/879001799/0e54e12495>`__
-       * - An Integrated Distributed Simulation Environment weaving by Hakoniwa and mROS 2
+       * - 一个由 Hakoniwa 与 mROS 2 编织而成的集成分散式仿真环境
          - `video <https://vimeo.com/879000700/6e149a4a3a>`__
-       * - Multi-drone simulation with deep q-learning
+       * - 基于深度 Q 学习的多无人机仿真
          - `video <https://vimeo.com/879001334/4f57afe509>`__
-       * - Supporting Robotic Deliberation: The Deliberation Working Group and To...
+       * - 支持机器人审慎决策：审慎决策工作组与工……
          - `video <https://vimeo.com/879001877/4978646728>`__
-       * - FlexBE - The Flexible Behavior Engine: Collaborative Autonomy in ROS 2
+       * - FlexBE——灵活的行为引擎：ROS 2 中的协作自主
          - `video <https://vimeo.com/879001093/0590a625cf>`__
-       * - SkiROS2 - A skill-based Robot Control Platform for ROS
+       * - SkiROS2——一个基于技能的 ROS 机器人控制平台
          - `video <https://vimeo.com/879001825/2a0e9d5412>`__
-       * - Mastering your ROS system state with Petri nets
+       * - 用 Petri 网掌握你的 ROS 系统状态
          - `video <https://vimeo.com/879001315/270b755f56>`__
-       * - SpatialVision: Bringing Popping-Out RViz to Life with AirPods
+       * - SpatialVision：用 AirPods 让 RViz 跃然而出
          - `video <https://vimeo.com/879001856/e8a108481b>`__
-       * - What is Robotics Observability?
-           Scaling ROS from Prototype to Production
+       * - 什么是机器人可观测性？
+           将 ROS 从原型扩展到生产环境
          - `video <https://vimeo.com/879001947/f15b94d3a4>`__
-       * - Surviving the Flood (of Rosbags)
+       * - 在 rosbag 洪流中求生
          - `video <https://vimeo.com/879001892/66580b9633>`__
-       * - Improving Your Application's Algorithms and Optimizing Performance Usi...
+       * - 改进应用程序的算法并用……优化性能
          - `video <https://vimeo.com/879001159/7d588b2cc4>`__
-       * - ROSBag2NuScenes: Share the Bags, Spread the Joy - Autonomous Vehicle R...
+       * - ROSBag2NuScenes：分享 bag，传递快乐——自动驾驶车辆 R……
          - `video <https://vimeo.com/879001709/593416f29a>`__
-       * - PostgreSQL / PostGIS to ROS 2 Bridge for Spatial Data
+       * - 用于空间数据的 PostgreSQL / PostGIS 到 ROS 2 桥接
          - `video <https://vimeo.com/879001513/61784cb23e>`__
-       * - Efficient data recording and replaying in ROS 2
+       * - ROS 2 中高效的数据记录与回放
          - `video <https://vimeo.com/879001076/d2219656dd>`__
-       * - Developing on ROS while Scaling
+       * - 在规模扩张中持续开发 ROS
          - `video <https://vimeo.com/879000977/b6ddf83e60>`__
 
   .. group-tab:: 2022
@@ -377,61 +377,61 @@ The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
-       * - Panel: The ROS 2 Developer Experience
+       * - 标题
+         - 链接
+       * - 圆桌讨论：ROS 2 开发者体验
          - `video <https://vimeo.com/showcase/9954564/video/767155188>`__
-       * - Wearable ROS: Development of wearable robot system using ROS 2
+       * - 可穿戴 ROS：使用 ROS 2 开发可穿戴机器人系统
          - `video <https://vimeo.com/showcase/9954564/video/767140298>`__
-       * - Building ROS 2 enabled Android apps with C++
+       * - 用 C++ 构建支持 ROS 2 的 Android 应用
          - `video <https://vimeo.com/showcase/9954564/video/767161955>`__
-       * - Distributed Robotics Simulator with Unreal Engine
+       * - 使用 Unreal Engine 的分布式机器人仿真器
          - `video <https://vimeo.com/showcase/9954564/video/767139975>`__
-       * - Tools and processes for improving the certifiability of ROS 2
+       * - 提升 ROS 2 可认证性的工具与流程
          - `video <https://vimeo.com/showcase/9954564/video/767150613>`__
-       * - Failover ROS Framework : Consensus-based node redundancy
+       * - Failover ROS 框架：基于共识的节点冗余
          - `video <https://vimeo.com/showcase/9954564/video/767156308>`__
-       * - ROS 2 and Gazebo Integration Best Practices
+       * - ROS 2 与 Gazebo 集成最佳实践
          - `video <https://vimeo.com/showcase/9954564/video/767127300>`__
-       * - Chain-Aware ROS Evaluation Tool (CARET)
+       * - 链路感知 ROS 评估工具（CARET）
          - `video <https://vimeo.com/showcase/9954564/video/767150288>`__
-       * - ROS 2 network monitoring
+       * - ROS 2 网络监控
          - `video <https://vimeo.com/showcase/9954564/video/767140681>`__
-       * - How custom tasks are defined, assigned, and executed in Open-RMF
+       * - Open-RMF 中如何定义、分配和执行自定义任务
          - `video <https://vimeo.com/showcase/9954564/video/767157210>`__
-       * - A practitioner's guide to ros2_control
+       * - ros2_control 实践者指南
          - `video <https://vimeo.com/showcase/9954564/video/767139648>`__
-       * - Zenoh: How to Make ROS 2 Work at any Scale and Integrate with Anything
+       * - Zenoh：如何让 ROS 2 在任何规模下工作并与任何事物集成
          - `video <https://vimeo.com/769972405>`__
-       * - A case study in optics manufacturing with MoveIt2 and ros2_control
+       * - 使用 MoveIt2 和 ros2_control 的光学制造案例研究
          - `video <https://vimeo.com/showcase/9954564/video/767140351>`__
-       * - 20/20 Robot Vision - How to setup cameras in ROS 1 & ROS 2 using camera_aravis
+       * - 20/20 机器人视觉——如何使用 camera_aravis 在 ROS 1 和 ROS 2 中设置相机
          - `video <https://vimeo.com/showcase/9954564/video/767140329>`__
-       * - Filter your ROS 2 content
+       * - 过滤你的 ROS 2 内容
          - `video <https://vimeo.com/767166447>`__
-       * - Evolving Message Types, and Other Interfaces, Over Time
+       * - 关于消息类型及其他接口随时间的演进
          - `video <https://vimeo.com/showcase/9954564/video/767140015>`__
-       * - Migrating from ROS1 to ROS 2 - choosing the right bridge
+       * - 从 ROS1 迁移到 ROS 2——选择合适的桥接
          - `video <https://vimeo.com/showcase/9954564/video/767140113>`__
-       * - On Use of Nav2 Smac Planners
+       * - 关于 Nav2 Smac 规划器的使用
          - `video <https://vimeo.com/showcase/9954564/video/767157646>`__
-       * - Bazel and ROS 2 – building large scale safety applications
+       * - Bazel 与 ROS 2——构建大规模安全应用
          - `video <https://vimeo.com/showcase/9954564/video/767139879>`__
-       * - Native Rust components for ROS 2
+       * - 面向 ROS 2 的原生 Rust 组件
          - `video <https://vimeo.com/showcase/9954564/video/767140150>`__
-       * - The ROS build farm and you: How ROS packages you release become binary packages.
+       * - ROS 构建农场与你：你发布的 ROS 包如何变成二进制包
          - `video <https://vimeo.com/showcase/9954564/video/767169376>`__
-       * - mROS 2: yet another runtime environment onto embedded devices
+       * - mROS 2：又一个面向嵌入式设备的运行时环境
          - `video <https://vimeo.com/showcase/9954564/video/767150435>`__
-       * - ROS 2 & Edge Impulse: Embedded AI in robotics applications
+       * - ROS 2 与 Edge Impulse：机器人应用中的嵌入式 AI
          - `video <https://vimeo.com/showcase/9954564/video/767140724>`__
-       * - micro-ROS goes Automotive: supporting AUTOSAR-based microcontrollers
+       * - micro-ROS 走向汽车：支持基于 AUTOSAR 的微控制器
          - `video <https://vimeo.com/769963507>`__
-       * - An open architecture for Hardware Acceleration in ROS 2
+       * - 面向 ROS 2 硬件加速的开放架构
          - `video <https://vimeo.com/769967795>`__
-       * - ROS 2 and the Crazyflie: Aerial swarms and Autonomy with a tiny flying robot
+       * - ROS 2 与 Crazyflie：用微型飞行机器人实现空中集群与自主
          - `video <https://vimeo.com/showcase/9954564/video/767140197>`__
-       * - A Raspberry Pi image with ROS 2 + RT and a customizable image builder
+       * - 一个带有 ROS 2 + 实时能力的树莓派镜像以及可定制的镜像构建器
          - `video <https://vimeo.com/showcase/9954564/video/767139709>`__
 
   .. group-tab:: 2021
@@ -439,61 +439,61 @@ The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
+       * - 标题
+         - 链接
        * - SMACC2
          - `video <https://vimeo.com/649655394/f9b25be7f9>`__
-       * - rospy2: Convert a ROS1 node to ROS2 by changing only one line of code
+       * - rospy2：只改一行代码就能把 ROS1 节点转换为 ROS2
          - `video <https://vimeo.com/649655340/127d801385>`__
-       * - Hello Robot: Democratizing Mobile Manipulation with ROS
+       * - Hello Robot：用 ROS 让移动操作走向大众
          - `video <https://vimeo.com/649649087/b1a3a67369>`__
-       * - Challenges for ROS2 in Autonomous Agricultural Applications
+       * - ROS2 在自主农业应用中的挑战
          - `video <https://vimeo.com/649646777>`__
-       * - ESP32 microcontroller robot with Navigation 2 ROS 2 running in the Cloud
+       * - 在云端运行 Navigation 2 的 ESP32 微控制器机器人
          - `video <https://vimeo.com/649648283>`__
-       * - Middleware interconnecting ROS/ROS2 with the EtherCAT protocol
+       * - 以 EtherCAT 协议互连 ROS/ROS2 的中间件
          - `video <https://vimeo.com/649651918>`__
-       * - Build and Manage Cloud-enhanced ROS Robots with AWS IoT Greengrass 2.0
+       * - 用 AWS IoT Greengrass 2.0 构建并管理云端增强的 ROS 机器人
          - `video <https://vimeo.com/649647971/0f36010e6e>`__
-       * - Driving Autonomy in Mobile Robotics with ROS2 and PX4
+       * - 用 ROS2 与 PX4 推动移动机器人的自主性
          - `video <https://vimeo.com/649648867/c524ae57fd>`__
-       * - Integrating ROS 2 with existing DDS networks
+       * - 将 ROS 2 与现有 DDS 网络集成
          - `video <https://vimeo.com/649649793/31032f6fba>`__
-       * - VIPER: Volatiles Investigating Polar Exploration Rover
+       * - VIPER：挥发性物质极地探测巡视器
          - `video <https://vimeo.com/649657650/ce9245dc22>`__
-       * - Chronicles of Caching and Containerising CI for Nav2
+       * - 为 Nav2 缓存与容器化 CI 的编年史
          - `video <https://vimeo.com/649647161/5b0c278e6c>`__
-       * - A New Way to Interact with PointCloud2 Messages
+       * - 一种与 PointCloud2 消息交互的新方式
          - `video <https://vimeo.com/649643457/7ba0e85107>`__
-       * - ROS 2 Grasp Library – Acceleration for 3D Object Pose Detection
+       * - ROS 2 抓取库——加速 3D 物体位姿检测
          - `video <https://vimeo.com/649654728/25bef7e247>`__
-       * - ros2_control: The future of ros_control
+       * - ros2_control：ros_control 的未来
          - `video <https://vimeo.com/649654948>`__
        * - ROS 2 Rolling Ridley
          - `video <https://vimeo.com/649650919>`__
-       * - Hybrid Planning - Enabling Reactive Manipulation with MoveIt 2
+       * - 混合规划——用 MoveIt 2 实现反应式操作
          - `video <https://vimeo.com/649649286/17fb9b9f4d>`__
-       * - Apex.OS Cert: Taking ROS 2 from prototype into production
+       * - Apex.OS Cert：把 ROS 2 从原型带入生产
          - `video <https://vimeo.com/649645295/67e0a6569f>`__
-       * - Making a robot ROS 2 powered - a case study using the UR manipulators
+       * - 让机器人由 ROS 2 驱动——以 UR 机械臂为例的案例研究
          - `video <https://vimeo.com/649651707/46a3be27ed>`__
-       * - Online Trajectory Generation and Admittance Control in ROS2
+       * - ROS2 中的在线轨迹生成与导纳控制
          - `video <https://vimeo.com/649652452/682bd92e95>`__
-       * - VSCode, Docker and ROS2
+       * - VSCode、Docker 与 ROS2
          - `video <https://vimeo.com/649658020/9ef0b5ec32>`__
-       * - ROS 2 Content Filtered Topics
+       * - ROS 2 内容过滤话题
          - `video <https://vimeo.com/649654533/c8104829db>`__
-       * - Rosbag2 for Power Users
+       * - 面向高级用户的 Rosbag2
          - `video <https://vimeo.com/649655219/75630c8cff>`__
-       * - We Have Ignition: The Next Generation of Gazebo Simulation
+       * - 我们有了 Ignition：新一代 Gazebo 仿真
          - `video <https://vimeo.com/649658182>`__
-       * - Using NVIDIA Isaac Sim For Synthetic Data Generation & ROS Development
+       * - 使用 NVIDIA Isaac Sim 进行合成数据生成与 ROS 开发
          - `video <https://vimeo.com/649656932/3d8d5abb53>`__
-       * - Augmented Reality and Robotics
+       * - 增强现实与机器人学
          - `video <https://vimeo.com/649645502/9be46e9ff8>`__
-       * - Modeling sensors for simulation of ROS applications in Unity
+       * - 为 Unity 中的 ROS 应用仿真建模传感器
          - `video <https://vimeo.com/649652075/295c92d323>`__
-       * - Panel: Simulation Tools for ROS
+       * - 圆桌讨论：ROS 仿真工具
          - `video <https://vimeo.com/649653566/9d02eac6cb>`__
 
   .. group-tab:: 2020
@@ -501,21 +501,21 @@ The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
-       * - Accelerating Innovation with ROS: Lessons in Healthcare
+       * - 标题
+         - 链接
+       * - 用 ROS 加速创新：医疗领域的经验教训
          - `video <https://vimeo.com/showcase/7812155/video/480611811>`__
-       * - Panel: Software Quality in Robotics
+       * - 圆桌讨论：机器人领域中的软件质量
          - `video <https://vimeo.com/showcase/7812155/video/480586443>`__
-       * - Panel: ROS Agriculture
+       * - 圆桌讨论：ROS 农业
          - `video <https://vimeo.com/showcase/7812155/video/480592013>`__
-       * - Achieving Generality and Robustness in Semantic Segmentation
+       * - 在语义分割中实现通用性与鲁棒性
          - `video <https://vimeo.com/showcase/7812155/video/480600107>`__
-       * - Navigation2: The Next Generation Navigation System
+       * - Navigation2：下一代导航系统
          - `video <https://vimeo.com/showcase/7812155/video/480604621>`__
-       * - CHAMP Quadruped Control
+       * - CHAMP 四足控制
          - `video <https://vimeo.com/showcase/7812155/video/480603868>`__
-       * - Kiwibot: ROS2 in the atoms delivery industry
+       * - Kiwibot：原子配送行业中的 ROS2
          - `video <https://vimeo.com/showcase/7812155/video/480601709>`__
        * - MoveItWorld
          - `video <https://vimeo.com/showcase/7812155/video/480482977>`__
@@ -529,13 +529,13 @@ The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2
          - `video <https://vimeo.com/showcase/7812155/video/480477960>`__
        * - FIWARE
          - `video <https://vimeo.com/showcase/7812155/video/480473016>`__
-       * - Lightning Talks and Sponsor Videos 1
+       * - 闪电演讲与赞助商视频 1
          - `video <https://vimeo.com/showcase/7812155/video/480530126>`__
-       * - Lightning Talks and Sponsor Videos 2
+       * - 闪电演讲与赞助商视频 2
          - `video <https://vimeo.com/showcase/7812155/video/480435216>`__
-       * - Lightning Talks and Sponsor Videos 3
+       * - 闪电演讲与赞助商视频 3
          - `video <https://vimeo.com/showcase/7812155/video/480436954>`__
-       * - Lightning Talks and Sponsor Videos 4
+       * - 闪电演讲与赞助商视频 4
          - `video <https://vimeo.com/showcase/7812155/video/490004991>`__
 
   .. group-tab:: 2019
@@ -543,41 +543,41 @@ The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
-       * - Migrating a large ROS 1 codebase to ROS 2
+       * - 标题
+         - 链接
+       * - 将一个大型 ROS 1 代码库迁移到 ROS 2
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_migrating_a_large_ros_1_codebase_to_ros_2.pdf>`__ / `video <https://vimeo.com/378682692>`__
-       * - The New Architecture of Gazebo Wrappers for ROS 2
+       * - 面向 ROS 2 的新 Gazebo 封装架构
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_gazebo_ros2.pdf>`__ / `video <https://vimeo.com/378683414>`__
-       * - Migrating to ROS 2: Advice from Rover Robotics
+       * - 迁移到 ROS 2：来自 Rover Robotics 的建议
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_migrating_to_ros_2.pdf>`__ / `video <https://vimeo.com/378682068>`__
-       * - ROS 2 on VxWorks
+       * - VxWorks 上的 ROS 2
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_ros2onvxworks.pdf>`__ / `video <https://vimeo.com/378682144>`__
-       * - Navigation2 Overview
+       * - Navigation2 概览
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_navigation2_overview_final.pdf>`__ / `video <https://vimeo.com/378682188>`__
-       * - Launch Testing - Launch description and integration testing for ros2
+       * - 启动测试——面向 ros2 的启动描述与集成测试
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_launch_testing_presentation.pdf>`__ / `video <https://vimeo.com/378683186>`__
-       * - ROS 2 for Consumer Robotics: : The iRobot use-case
+       * - 面向消费级机器人的 ROS 2：iRobot 用例
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_irobot_usecase.pdf>`__ / `video <https://vimeo.com/378916114>`__
-       * - Composable Nodes in ROS2
+       * - ROS2 中的可组合节点
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_composablenodes.pdf>`__ / `video <https://vimeo.com/378916125>`__
-       * - Concurrency in ROS 1 and ROS 2
+       * - ROS 1 与 ROS 2 中的并发
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_concurrency.pdf>`__ / `video <https://vimeo.com/379127709>`__
-       * - A True Zero-Copy RMW Implementation for ROS2
+       * - 面向 ROS2 的真正零拷贝 RMW 实现
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_truezerocopy.pdf>`__ / `video <https://vimeo.com/379127778>`__
-       * - ROS2 Real-Time Behavior: Static Memory Allocation
+       * - ROS2 实时行为：静态内存分配
          - `video <https://vimeo.com/379127767>`__
-       * - PackML2: State Machine Based System Programming, Monitoring and Control in ROS2
+       * - PackML2：ROS2 中基于状态机的系统编程、监控与控制
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_packml2.pdf>`__ / `video <https://vimeo.com/378683073>`__
-       * - Quality of Service Policies for ROS2 Communications
+       * - ROS2 通信的服务质量策略
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_qos.pdf>`__ / `video <https://vimeo.com/379127762>`__
-       * - Micro-ROS: ROS2 on Microcontrollers
+       * - Micro-ROS：微控制器上的 ROS2
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_microros.pdf>`__ / `video <https://vimeo.com/379127756>`__
-       * - ROS2 on Large Scale Systems: Discovery Server
+       * - 大规模系统中的 ROS2：发现服务器
          - `video <https://vimeo.com/379127745>`__
-       * - Bridging Your Transitions from ROS 1 to ROS 2
+       * - 为从 ROS 1 到 ROS 2 的过渡架起桥梁
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_bridging_ros1_to_ros2.pdf>`__ / `video <https://vimeo.com/379127737>`__
-       * - Markup Extensions for ROS 2 Launch
+       * - ROS 2 启动的标记扩展
          - `slides <https://roscon.ros.org/2019/talks/roscon2019_markupextensionsforros2launch.pdf>`__ / `video <https://vimeo.com/379127678>`__
 
 
@@ -586,11 +586,11 @@ The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
-       * - Hands-on ROS 2: A Walkthrough
+       * - 标题
+         - 链接
+       * - 动手实践 ROS 2：逐步演练
          - `slides <https://roscon.ros.org/2018/presentations/ROSCon2018_ROS2HandsOn.pdf>`__ / `video <https://vimeo.com/292693129>`__
-       * - Launch for ROS 2
+       * - ROS 2 的启动系统
          - `slides <https://roscon.ros.org/2018/presentations/ROSCon2018_launch.pdf>`__ / `video <https://vimeo.com/292699162>`__
 
   .. group-tab:: 2017
@@ -598,9 +598,9 @@ The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
-       * - The ROS 2 vision for advancing the future of robotics development
+       * - 标题
+         - 链接
+       * - ROS 2 推进机器人开发未来的愿景
          - `slides <https://roscon.ros.org/2017/presentations/ROSCon%202017%20ROS2%20Vision.pdf>`__ / `video <https://vimeo.com/236161417>`__
 
   .. group-tab:: 2016
@@ -608,11 +608,11 @@ The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
-       * - ROS 2 Update - summary of alpha releases, architectural overview
+       * - 标题
+         - 链接
+       * - ROS 2 更新——alpha 版本汇总与架构概览
          - `slides <https://roscon.ros.org/2016/presentations/ROSCon%202016%20-%20ROS%202%20Update.pdf>`__ / `video <https://vimeo.com/187696091>`__
-       * - Evaluating the resilience of ROS2 communication layer
+       * - 评估 ROS2 通信层的韧性
          - `slides <https://roscon.ros.org/2016/presentations/rafal.kozik-ros2evaluation.pdf>`__ / `video <https://vimeo.com/187705229>`__
 
   .. group-tab:: 2015
@@ -620,13 +620,13 @@ The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
-       * - State of ROS 2 - demos and the technology behind
+       * - 标题
+         - 链接
+       * - ROS 2 现状——演示及其背后的技术
          - `slides <https://roscon.ros.org/2015/presentations/state-of-ros2.pdf>`__ / `video <https://vimeo.com/142151734>`__
-       * - ROS 2 on "small" embedded systems
+       * - 「小型」嵌入式系统上的 ROS 2
          - `slides <https://roscon.ros.org/2015/presentations/ros2_on_small_embedded_systems.pdf>`__ / `video <https://vimeo.com/142150576>`__
-       * - Real-time control in ROS and ROS 2
+       * - ROS 与 ROS 2 中的实时控制
          - `slides <https://roscon.ros.org/2015/presentations/RealtimeROS2.pdf>`__ / `video <https://vimeo.com/142621778>`__
 
   .. group-tab:: 2014
@@ -634,9 +634,9 @@ The following `ROSCon <https://roscon.ros.org>`__ talks have been given on ROS 2
     .. list-table::
        :header-rows: 1
 
-       * - Title
-         - Links
-       * - Why you want to use ROS 2
+       * - 标题
+         - 链接
+       * - 为什么你会想使用 ROS 2
          - `slides <https://www.osrfoundation.org/wordpress2/wp-content/uploads/2015/04/ROSCON-2014-Why-you-want-to-use-ROS-2.pdf>`__ / `video <https://vimeo.com/107531013>`__
-       * - Next-generation ROS: Building on DDS
+       * - 下一代 ROS：构建于 DDS 之上
          - `slides <https://roscon.ros.org/2014/wp-content/uploads/2014/07/ROSCON-2014-Next-Generation-of-ROS-on-top-of-DDS.pdf>`__ / `video <https://vimeo.com/106992622>`__

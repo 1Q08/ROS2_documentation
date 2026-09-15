@@ -1,5 +1,5 @@
-ROS 2 packages are built on frequently updated Ubuntu systems.
-It is always recommended that you ensure your system is up to date before installing new packages.
+ROS 2 软件包是在频繁更新的 Ubuntu 系统上构建的。
+在安装新软件包之前，始终建议确保你的系统已更新到最新状态。
 
 .. code-block:: console
 

@@ -2,30 +2,30 @@
 
   Guides/Ament-CMake-Python-Documentation
 
-ament_cmake_python user documentation
-=====================================
+ament_cmake_python 用户文档
+===========================
 
-``ament_cmake_python`` is a package that provides CMake functions for packages of the ``ament_cmake`` build type that contain Python code.
-See the :doc:`ament_cmake user documentation <Ament-CMake-Documentation>` for more information.
+``ament_cmake_python`` 是一个软件包，它为包含 Python 代码的 ``ament_cmake`` 构建类型软件包提供 CMake 函数。
+更多信息请参阅 :doc:`ament_cmake 用户文档 <Ament-CMake-Documentation>`。
 
 .. note::
 
-   Pure Python packages should use the ``ament_python`` build type in most cases.
-   To create an ``ament_python`` package, see :doc:`Creating your first ROS 2 package <../Tutorials/Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>`.
-   ``ament_cmake_python`` should only be used in cases where that is not possible, like when mixing C/C++ and Python code.
+   在大多数情况下，纯 Python 软件包应使用 ``ament_python`` 构建类型。
+   要创建 ``ament_python`` 软件包，请参阅 :doc:`创建你的第一个 ROS 2 软件包 <../Tutorials/Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>`。
+   只有在无法这样做的情况下（例如混合 C/C++ 和 Python 代码时）才应使用 ``ament_cmake_python``。
 
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Basics
-------
+基础
+----
 
-Basic project outline
-^^^^^^^^^^^^^^^^^^^^^
+基本项目结构
+^^^^^^^^^^^^
 
-The outline of a package called "my_project" with the ``ament_cmake`` build type that uses ``ament_cmake_python`` looks like:
+一个名为 "my_project"、构建类型为 ``ament_cmake`` 且使用 ``ament_cmake_python`` 的软件包，其结构如下：
 
 .. code-block::
 
@@ -37,19 +37,19 @@ The outline of a package called "my_project" with the ``ament_cmake`` build type
            ├── __init__.py
            └── my_script.py
 
-The ``__init__.py`` file can be empty, but it is needed to `make Python treat the directory containing it as a package <https://docs.python.org/3/tutorial/modules.html#packages>`__.
-There can also be a ``src`` or ``include`` directory alongside the ``CMakeLists.txt`` which holds C/C++ code.
+``__init__.py`` 文件可以为空，但它是 `让 Python 把包含该文件的目录视为软件包 <https://docs.python.org/3/tutorial/modules.html#packages>`__ 所必需的。
+在 ``CMakeLists.txt`` 旁边还可以有一个 ``src`` 或 ``include`` 目录，用于存放 C/C++ 代码。
 
-Using ament_cmake_python
-^^^^^^^^^^^^^^^^^^^^^^^^
+使用 ament_cmake_python
+^^^^^^^^^^^^^^^^^^^^^^^
 
-The package must declare a dependency on ``ament_cmake_python`` in its ``package.xml``.
+该软件包必须在其 ``package.xml`` 中声明对 ``ament_cmake_python`` 的依赖。
 
 .. code-block:: xml
 
    <buildtool_depend>ament_cmake_python</buildtool_depend>
 
-The ``CMakeLists.txt`` should contain:
+``CMakeLists.txt`` 中应包含：
 
 .. code-block:: cmake
 
@@ -57,34 +57,34 @@ The ``CMakeLists.txt`` should contain:
    # ...
    ament_python_install_package(${PROJECT_NAME})
 
-The argument to ``ament_python_install_package()`` is the name of the directory alongside the ``CMakeLists.txt`` that contains the Python file.
-In this case, it is ``my_project``, or ``${PROJECT_NAME}``.
+``ament_python_install_package()`` 的参数是与 ``CMakeLists.txt`` 同级、包含该 Python 文件的目录名称。
+在此例中，它是 ``my_project``，即 ``${PROJECT_NAME}``。
 
 .. warning::
 
-   Calling ``rosidl_generate_interfaces`` and ``ament_python_install_package`` in the same CMake project does not work.
-   See this `Github issue <https://github.com/ros2/rosidl_python/issues/141>`_ for more info.
-   It is best practice to instead separate out the message generation into a separate package.
+   在同一个 CMake 项目中同时调用 ``rosidl_generate_interfaces`` 和 ``ament_python_install_package`` 是无法工作的。
+   更多信息请参阅这个 `Github 问题 <https://github.com/ros2/rosidl_python/issues/141>`_ 。
+   最佳做法是将消息生成拆分到单独的软件包中。
 
-Then, another Python package that correctly depends on ``my_project`` can use it as a normal Python module:
+然后，另一个正确依赖 ``my_project`` 的 Python 软件包就可以像使用普通 Python 模块一样使用它：
 
 .. code-block:: python
 
    from my_project.my_script import my_function
 
-Assuming ``my_script.py`` contains a function called ``my_function()``.
+假设 ``my_script.py`` 中包含一个名为 ``my_function()`` 的函数。
 
-Using ament_cmake_pytest
-^^^^^^^^^^^^^^^^^^^^^^^^
+使用 ament_cmake_pytest
+^^^^^^^^^^^^^^^^^^^^^^^
 
-The package ``ament_cmake_pytest`` is used to make tests discoverable to ``cmake``.
-The package must declare a test dependency on ``ament_cmake_pytest`` in its ``package.xml``.
+软件包 ``ament_cmake_pytest`` 用于使测试可被 ``cmake`` 发现。
+该软件包必须在其 ``package.xml`` 中声明对 ``ament_cmake_pytest`` 的测试依赖。
 
 .. code-block:: xml
 
    <test_depend>ament_cmake_pytest</test_depend>
 
-Say the package has a file structure like below, with tests in the ``tests`` folder.
+假设该软件包具有如下所示的文件结构，测试位于 ``tests`` 文件夹中。
 
 .. code-block::
 
@@ -97,7 +97,7 @@ Say the package has a file structure like below, with tests in the ``tests`` fol
        ├── test_a.py
        └── test_b.py
 
-The ``CMakeLists.txt`` should contain:
+``CMakeLists.txt`` 中应包含：
 
 .. code-block:: cmake
 
@@ -118,7 +118,7 @@ The ``CMakeLists.txt`` should contain:
      endforeach()
    endif()
 
-Compared to the usage of ament_python, which supports automatic test discovery, ament_cmake_pytest must be called with the path to each test file.
-The timeout can be reduced as needed.
+与支持自动测试发现的 ament_python 用法相比，ament_cmake_pytest 必须传入每个测试文件的路径。
+可以根据需要缩短超时时间。
 
-Now, you can invoke your tests with the :doc:`standard colcon testing commands <../Tutorials/Intermediate/Testing/CLI>`.
+现在，你可以使用 :doc:`标准的 colcon 测试命令 <../Tutorials/Intermediate/Testing/CLI>` 来调用你的测试。

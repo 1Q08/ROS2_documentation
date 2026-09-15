@@ -1,39 +1,39 @@
-Marker: Display types
-=====================
+Marker：显示类型
+================
 
-**Goal:** This tutorial explains the basic Marker types and how to use them.
+**目标：** 本教程解释基本的 Marker 类型以及如何使用它们。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 15 Minutes
+**时间：** 15 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
 
-Background
-----------
-The Markers display allows programmatic addition of various primitive shapes to the 3D view by sending a
-`visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ or
-`visualization_msgs/msg/MarkerArray <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/MarkerArray.msg>`_ message.
+背景
+----
+Markers 显示项允许通过发送
+`visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ 或
+`visualization_msgs/msg/MarkerArray <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/MarkerArray.msg>`_ 消息，以编程方式向 3D 视图添加各种基本形状。
 
 .. image:: images/marker_overview.png
 
-Start with :doc:`Marker: Sending Basic Shapes <../Marker-Sending-Basic-Shapes/Marker-Sending-Basic-Shapes>` for a minimal publisher example that introduces the marker message used throughout this page.
+从 :doc:`Marker：发送基本形状 <../Marker-Sending-Basic-Shapes/Marker-Sending-Basic-Shapes>` 开始，了解一个引入本页全程使用的标记消息的最小发布者示例。
 
-The Marker Message
-------------------
-1 Example Usage (C++)
-^^^^^^^^^^^^^^^^^^^^^
-First we will create a simple publisher node that publishes ``Marker`` messages from the ``visualization_messages`` package to the ``visualization_marker`` topic:
+Marker 消息
+-----------
+1 示例用法（C++）
+^^^^^^^^^^^^^^^^^
+首先，我们将创建一个简单的发布者节点，将 ``visualization_messages`` 包中的 ``Marker`` 消息发布到 ``visualization_marker`` 话题：
 
 .. code-block:: C++
 
     auto marker_pub = node->create_publisher<visualization_msgs::msg::Marker>("visualization_marker", 1);
 
-After that it is as simple as filling out a `visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_
-message and publishing it:
+之后，就只是填充一个 `visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_
+消息并发布它这么简单了：
 
 .. code-block:: C++
 
@@ -73,246 +73,246 @@ message and publishing it:
 
     marker_pub->publish(marker);
 
-There is also a `visualization_msgs/msg/MarkerArray <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/MarkerArray.msg>`_ message, which lets you publish many markers at once.
+还有一条 `visualization_msgs/msg/MarkerArray <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/MarkerArray.msg>`_ 消息，它可以让你一次发布多个标记。
 
-2 Message Parameters
-^^^^^^^^^^^^^^^^^^^^
+2 消息参数
+^^^^^^^^^^
 
-The Marker message type is defined in `ROS 2 Common Interfaces <https://github.com/ros2/common_interfaces/tree/{DISTRO}/visualization_msgs/msg>`_ package.
-The messages in this package include comments that are helpful in understanding each of the fields in the message.
+Marker 消息类型定义在 `ROS 2 Common Interfaces <https://github.com/ros2/common_interfaces/tree/{DISTRO}/visualization_msgs/msg>`_ 包中。
+该包中的消息包含有助于理解消息中每个字段的注释。
 
-* ``ns``:
+* ``ns``：
 
-    Namespace for these markers.
-    This plus the id form a unique identifier.
+    这些标记的 namespace。
+    它加上 id 构成唯一标识符。
 
-* ``id``:
+* ``id``：
 
-    Unique id assigned to this marker.
-    It is your responsibility to keep these unique within your namespace.
+    分配给此标记的唯一 id。
+    你有责任在你的 namespace 内保持它们唯一。
 
-* ``type``:
+* ``type``：
 
-    Type of marker (Arrow, Sphere, ...).
-    The available types are specified in the message definition.
+    标记的类型（Arrow、Sphere、...）。
+    可用类型在消息定义中指定。
 
-* ``action``:
+* ``action``：
 
-    0 = add/modify, 1 = (deprecated), 2 = delete, 3 = deleteall
+    0 = 添加/修改，1 =（已弃用），2 = 删除，3 = 全部删除
 
-* ``pose``:
+* ``pose``：
 
-    Pose marker, specified as x/y/z position and x/y/z/w quaternion orientation.
+    标记的位姿，指定为 x/y/z 位置和 x/y/z/w 四元数方向。
 
-* ``scale``:
+* ``scale``：
 
-    Scale of the marker.
-    Applied before the position/orientation.
-    A scale of [1, 1, 1] means the object will be 1m by 1m by 1m.
+    标记的缩放。
+    在位置/方向之前应用。
+    缩放为 [1, 1, 1] 意味着对象将是 1m × 1m × 1m。
 
-* ``color``:
+* ``color``：
 
-    Color of the object, specified as r/g/b/a, with values in the range of [0, 1].
-    The, ``a`` or alpha value, denotes the opacity of the marker with 1 indicating opaque and 0 indicating completely transparent.
-    The default value is 0, or completely transparent.
-    **You must set the a value of your marker to a non-zero value or it will be transparent by default!**
+    对象的颜色，指定为 r/g/b/a，值在 [0, 1] 范围内。
+    ``a`` 或 Alpha 值表示标记的不透明度，1 表示不透明，0 表示完全透明。
+    默认值为 0，即完全透明。
+    **你必须将标记的 a 值设置为非零值，否则默认情况下它将是透明的！**
 
-* ``points``:
+* ``points``：
 
-    Only used for markers of type ``Points``, ``Line strips``, and ``Line`` / ``Cube`` / ``Sphere`` -lists.
-    It's also used for the Arrow type, if you want to specify the arrow start and end points.
-    This entry represents a list of ``geometry_msgs/Point`` types for the center or each marker object you would like rendered.
+    仅用于 ``Points``、``Line strips`` 和 ``Line`` / ``Cube`` / ``Sphere`` -list 类型的标记。
+    如果你想要指定箭头的起点和终点，它也用于 Arrow 类型。
+    此项表示你想要渲染的每个标记对象中心或每个点的 ``geometry_msgs/Point`` 类型列表。
 
-* ``colors``:
+* ``colors``：
 
-    This field is only used for markers that use the points member.
-    This field specifies per-vertex color r/g/b/ color  (no alpha yet) for each entry in ``points``.
+    此字段仅用于使用 points 成员的标记。
+    此字段为 ``points`` 中的每个条目指定每个顶点的 r/g/b 颜色（尚无 Alpha）。
 
-* ``lifetime``:
+* ``lifetime``：
 
-    A `duration message value <{interface_link(builtin_interfaces/msg/Duration)}>`_ used to automatically delete the marker after this period of time.
-    The countdown resets if another marker of the same ``namespace`` / ``id`` is received.
+    一个 `duration 消息值 <{interface_link(builtin_interfaces/msg/Duration)}>`_，用于在此时间段后自动删除标记。
+    如果收到具有相同 ``namespace`` / ``id`` 的另一个标记，倒计时会重置。
 
-* ``frame_locked``:
+* ``frame_locked``：
 
-    Without the ``frame_locked`` parameter the marker will be placed based on the current transform and will stay there even if the given transform changes later.
-    Setting this parameter tells RViz to retransform the marker to the new current location of the specified frame on every update cycle.
+    没有 ``frame_locked`` 参数时，标记将基于当前变换放置，即使给定的变换后来改变，它也会保持在那里。
+    设置此参数告诉 RViz 在每个更新周期将标记重新变换到指定坐标系的新当前位置。
 
-* ``text``:
+* ``text``：
 
-    The text string used for the ``TEXT_VIEW_FACING`` marker type
+    用于 ``TEXT_VIEW_FACING`` 标记类型的文本字符串
 
-* ``mesh_resource``:
+* ``mesh_resource``：
 
-    The resource location for the ``MESH_RESOURCE`` marker type.
-    Can be any mesh type supported by RViz (``.stl`` or Ogre ``.mesh`` in 1.0, with the addition of COLLADA in 1.1).
-    The format is the URI-form used by `resource_retriever <https://github.com/ros/resource_retriever/tree/{DISTRO}>`_, including the package:// syntax.
+    ``MESH_RESOURCE`` 标记类型的资源位置。
+    可以是 RViz 支持的任何网格类型（1.0 中为二进制 ``.stl`` 或 Ogre ``.mesh``，1.1 中增加了 COLLADA）。
+    格式是 `resource_retriever <https://github.com/ros/resource_retriever/tree/{DISTRO}>`_ 使用的 URI 形式，包括 package:// 语法。
 
-3 Object types
-^^^^^^^^^^^^^^
+3 对象类型
+^^^^^^^^^^
 
 .. _RVizMarkerObjectTypes:
 
-3.1 Arrow (ARROW=0)
+3.1 箭头（ARROW=0）
 ~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/ArrowMarker.png
 
-The arrow type provides two different ways of specifying where the arrow should begin/end:
+箭头类型提供了两种指定箭头起止位置的不同方式：
 
-* ``Position/Orientation``:
+* ``位置/方向``：
 
-    Pivot point is around the tip of its tail.
-    Identity orientation points it along the +X axis.
-    ``scale.x`` is the arrow length, ``scale.y`` is the arrow width and ``scale.z`` is the arrow height.
+    枢轴点在其尾尖周围。
+    单位方向使它沿 +X 轴指向。
+    ``scale.x`` 是箭头长度，``scale.y`` 是箭头宽度，``scale.z`` 是箭头高度。
 
-* ``Start/End Points``:
+* ``起点/终点``：
 
-    You can also specify a start/end point for the arrow, using the points member.
-    If you put points into the points member, it will assume you want to do things this way.
+    你还可以使用 points 成员为箭头指定起点/终点。
+    如果你将点放入 points 成员，它会假设你想这样做。
 
-    * The point at index 0 is assumed to be the start point, and the point at index 1 is assumed to be the end.
-    * ``scale.x`` is the shaft diameter, and ``scale.y`` is the head diameter.
-      If ``scale.z`` is not zero, it specifies the head length.
+    * 索引 0 处的点被假设为起点，索引 1 处的点被假设为终点。
+    * ``scale.x`` 是杆直径，``scale.y`` 是头部直径。
+      如果 ``scale.z`` 不为零，它指定头部长度。
 
-3.2 Cube (CUBE=1)
-~~~~~~~~~~~~~~~~~
+3.2 立方体（CUBE=1）
+~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/CubeMarker.png
 
-Pivot point is at the center of the cube.
+枢轴点在立方体的中心。
 
-3.3 Sphere (SPHERE=2)
-~~~~~~~~~~~~~~~~~~~~~
+3.3 球体（SPHERE=2）
+~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/SphereMarker.png
 
-Pivot point is at the center of the sphere.
+枢轴点在球体的中心。
 
-``scale.x`` is diameter in x direction, ``scale.y`` in y direction, ``scale.z`` in z direction.
-By setting these to different values you get an ellipsoid instead of a sphere.
+``scale.x`` 是 x 方向的直径，``scale.y`` 是 y 方向的直径，``scale.z`` 是 z 方向的直径。
+通过将它们设置为不同的值，你会得到椭球体而不是球体。
 
-3.4 Cylinder (CYLINDER=3)
-~~~~~~~~~~~~~~~~~~~~~~~~~
+3.4 圆柱体（CYLINDER=3）
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/CylinderMarker.png
 
-Pivot point is at the center of the cylinder.
+枢轴点在圆柱体的中心。
 
-``scale.x`` is diameter in x direction, ``scale.y`` in y direction, by setting these to different values you get an ellipse instead of a circle.
-Use ``scale.z`` to specify the height.
+``scale.x`` 是 x 方向的直径，``scale.y`` 是 y 方向的直径，通过将它们设置为不同的值，你会得到椭圆而不是圆。
+使用 ``scale.z`` 指定高度。
 
-3.5 Line Strip (LINE_STRIP=4)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3.5 线带（LINE_STRIP=4）
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/LineStripMarker.png
 
-Line strips use the points member of the `visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ message.
-It will draw a line between every two consecutive points, so 0-1, 1-2, 2-3, 3-4, 4-5...
+线带使用 `visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ 消息的 points 成员。
+它会在每两个连续点之间绘制一条线，即 0-1、1-2、2-3、3-4、4-5...
 
-Line strips also have some special handling for scale: only ``scale.x`` is used and it controls the width of the line segments.
+线带对缩放也有一些特殊处理：只使用 ``scale.x``，它控制线段的宽度。
 
-Note that ``pose`` is still used (the points in the line will be transformed by them), and the lines will be correct relative to the ``frame id`` specified in the header.
+注意，``pose`` 仍然会被使用（线中的点会被它们变换），并且线相对于 header 中指定的 ``frame id`` 会是正确的。
 
-3.6 Line List (LINE_LIST=5)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3.6 线列表（LINE_LIST=5）
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/LineListMarker.png
 
-Line lists use the points member of the `visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ message.
-It will draw a line between each pair of points, so 0-1, 2-3, 4-5, ...
+线列表使用 `visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ 消息的 points 成员。
+它会在每对点之间绘制一条线，即 0-1、2-3、4-5、...
 
-Line lists also have some special handling for scale: only ``scale.x`` is used and it controls the width of the line segments.
+线列表对缩放也有一些特殊处理：只使用 ``scale.x``，它控制线段的宽度。
 
-Note that ``pose`` is still used (the points in the line will be transformed by them), and the lines will be correct relative to the ``frame id`` specified in the header.
+注意，``pose`` 仍然会被使用（线中的点会被它们变换），并且线相对于 header 中指定的 ``frame id`` 会是正确的。
 
-3.7 Cube List (CUBE_LIST=6)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3.7 立方体列表（CUBE_LIST=6）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/CubeListMarker.png
 
-A cube list is a list of cubes with all the same properties except their positions.
-Using this object type instead of a `visualization_msgs/msg/MarkerArray <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/MarkerArray.msg>`_ allows RViz to batch-up rendering,
-which causes them to render much faster.
-The caveat is that they all must have the same scale.
+立方体列表是一系列除位置外所有属性都相同的立方体。
+使用此对象类型而不是 `visualization_msgs/msg/MarkerArray <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/MarkerArray.msg>`_ 可以让 RViz 批量渲染，
+这会使它们渲染得快得多。
+代价是它们都必须具有相同的缩放。
 
-The ``points`` member of the `visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ message is used for the position of each cube.
+`visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ 消息的 ``points`` 成员用于每个立方体的位置。
 
-3.8 Sphere List (SPHERE_LIST=7)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3.8 球体列表（SPHERE_LIST=7）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/SphereListMarker.png
 
-A sphere list is a list of spheres with all the same properties except their positions.
-Using this object type instead of a `visualization_msgs/msg/MarkerArray <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/MarkerArray.msg>`_ allows RViz to batch-up rendering,
-which causes them to render much faster.
-The caveat is that they all must have the same scale.
+球体列表是一系列除位置外所有属性都相同的球体。
+使用此对象类型而不是 `visualization_msgs/msg/MarkerArray <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/MarkerArray.msg>`_ 可以让 RViz 批量渲染，
+这会使它们渲染得快得多。
+代价是它们都必须具有相同的缩放。
 
-The ``points`` member of the `visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ message is used for the position of each sphere.
+`visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ 消息的 ``points`` 成员用于每个球体的位置。
 
-Note that ``pose`` is still used (the ``points`` in the line will be transformed by them), and the lines will be correct relative to the ``frame id`` specified in the header.
+注意，``pose`` 仍然会被使用（线中的 ``points`` 会被它们变换），并且线相对于 header 中指定的 ``frame id`` 会是正确的。
 
-3.9 Points (POINTS=8)
-~~~~~~~~~~~~~~~~~~~~~
+3.9 点（POINTS=8）
+~~~~~~~~~~~~~~~~~~
 
 .. image:: images/PointsMarker.png
 
-Uses the ``points`` member of the `visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ message.
+使用 `visualization_msgs/msg/Marker <https://github.com/ros2/common_interfaces/blob/{DISTRO}/visualization_msgs/msg/Marker.msg>`_ 消息的 ``points`` 成员。
 
-``Points`` have some special handling for scale: ``scale.x`` is point width, ``scale.y`` is point height
+``Points`` 对缩放有一些特殊处理：``scale.x`` 是点宽，``scale.y`` 是点高
 
-Note that ``pose`` is still used (the ``points`` in the line will be transformed by them), and the lines will be correct relative to the ``frame id`` specified in the header.
+注意，``pose`` 仍然会被使用（线中的 ``points`` 会被它们变换），并且线相对于 header 中指定的 ``frame id`` 会是正确的。
 
-3.10 View-Oriented Text (TEXT_VIEW_FACING=9)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3.10 面向视图的文本（TEXT_VIEW_FACING=9）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/text_view_facing_marker.png
 
-This marker displays text in a 3D spot in the world.
-The text always appears oriented correctly for the RViZ user to see the included text.
-Uses the ``text`` field in the marker.
+此标记在世界中的一个 3D 位置显示文本。
+文本总是以正确的方向出现，以便 RViZ 用户看到包含的文本。
+使用标记中的 ``text`` 字段。
 
-Only ``scale.z`` is used.
-``scale.z`` specifies the height of an uppercase "A".
+只使用 ``scale.z``。
+``scale.z`` 指定大写字母 "A" 的高度。
 
-3.11 Mesh Resource (MESH_RESOURCE=10)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3.11 网格资源（MESH_RESOURCE=10）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/mesh_resource_marker.png
 
-Uses the ``mesh_resource`` field in the marker.
-Can be any mesh type supported by RViz (binary ``.stl`` or Ogre ``.mesh`` in 1.0, with the addition of COLLADA (``.dae``) in 1.1).
-The format is the URI-form used by `resource_retriever <https://github.com/ros/resource_retriever/tree/{DISTRO}>`_, including the ``package://`` syntax.
+使用标记中的 ``mesh_resource`` 字段。
+可以是 RViz 支持的任何网格类型（1.0 中为二进制 ``.stl`` 或 Ogre ``.mesh``，1.1 中增加了 COLLADA（``.dae``））。
+格式是 `resource_retriever <https://github.com/ros/resource_retriever/tree/{DISTRO}>`_ 使用的 URI 形式，包括 ``package://`` 语法。
 
-An example of a mesh an its use is:
+网格及其用法的一个示例是：
 
 .. code-block:: C++
 
     marker.type = visualization_msgs::Marker::MESH_RESOURCE;
     marker.mesh_resource = "package://pr2_description/meshes/base_v0/base.dae";
 
-Scale on a mesh is relative.
-A scale of (1.0, 1.0, 1.0) means the mesh will display as the exact size specified in the mesh file.
-A scale of (1.0, 1.0, 2.0) means the mesh will show up twice as tall, but the same width/depth.
+网格上的缩放是相对的。
+缩放 (1.0, 1.0, 1.0) 意味着网格将按网格文件中指定的确切大小显示。
+缩放 (1.0, 1.0, 2.0) 意味着网格将显示为两倍高，但宽度/深度相同。
 
-If the ``mesh_use_embedded_materials`` flag is set to true and the mesh is of a type which supports embedded materials (such as COLLADA),
-the material defined in that file will be used instead of the color defined in the marker.
+如果 ``mesh_use_embedded_materials`` 标志设置为 true，并且网格是支持嵌入材质（如 COLLADA）的类型，
+那么该文件中定义的材质将被使用，而不是标记中定义的颜色。
 
-Since version [1.8], even when ``mesh_use_embedded_materials`` is true,
-if the marker ``color`` is set to anything other than ``r=0``, ``g=0``, ``b=0``, ``a=0`` the marker ``color`` and ``alpha`` will be used to tint the mesh with the embedded material.
+自版本 [1.8] 起，即使 ``mesh_use_embedded_materials`` 为 true，
+如果标记 ``color`` 设置为除 ``r=0``、``g=0``、``b=0``、``a=0`` 之外的任何值，标记 ``color`` 和 ``alpha`` 将用于给带嵌入材质的网格着色。
 
-3.12 Triangle List (TRIANGLE_LIST=11)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3.12 三角形列表（TRIANGLE_LIST=11）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/triangle_list_marker.png
 
-Uses the points and optionally colors members.
-Every set of 3 points is treated as a triangle, so indices 0-1-2, 3-4-5, etc.
+使用 points 成员，可选地使用 colors 成员。
+每 3 个点被当作一个三角形，即索引 0-1-2、3-4-5 等。
 
-Note that ``pose`` and ``scale`` are still used (the points in the line will be transformed by them),
-and the lines will be correct relative to the ``frame id`` specified in the header.
+注意，``pose`` 和 ``scale`` 仍然会被使用（线中的点会被它们变换），
+并且线相对于 header 中指定的 ``frame id`` 会是正确的。
 
-4 Rendering Complexity Notes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-A single marker is always less expensive to render than many markers.
-For example, a single cube list can handle thousands of cubes, where we will not be able to render thousands of individual cube markers.
+4 渲染复杂度说明
+^^^^^^^^^^^^^^^^
+单个标记总是比许多标记渲染成本更低。
+例如，单个立方体列表可以处理数千个立方体，而我们无法渲染数千个单独的立方体标记。

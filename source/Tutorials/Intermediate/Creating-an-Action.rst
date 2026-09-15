@@ -4,36 +4,35 @@
 
 .. _ActionCreate:
 
-Creating an action
-==================
+创建一个 action
+===============
 
-**Goal:** Define an action in a ROS 2 package.
+**目标：** 在 ROS 2 软件包中定义一个 action。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 5 minutes
+**时间：** 5 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-You learned about actions previously in the :doc:`../Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions` tutorial.
-Like the other communication types and their respective interfaces (topics/msg and services/srv),
-you can also custom-define actions in your packages.
-This tutorial shows you how to define and build an action that you can use
-with the action server and action client you will write in the next tutorial.
+你之前在 :doc:`../Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions` 教程中学习过 action。
+与其他通信类型及其各自的接口（topics/msg 和 services/srv）一样，
+你也可以在自己的软件包中自定义 action。
+本教程展示如何定义并构建一个 action，以便在下一个教程中与你要编写的 action 服务器和 action 客户端一起使用。
 
-Prerequisites
--------------
+前提条件
+--------
 
-You should have :doc:`ROS 2 <../../Installation>` and `colcon <https://colcon.readthedocs.org>`__ installed.
+你应该已安装 :doc:`ROS 2 <../../Installation>` 和 `colcon <https://colcon.readthedocs.org>`__。
 
-Set up a :doc:`workspace <../Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace>` and create a package named ``action_tutorials_interfaces``:
+设置一个 :doc:`工作空间 <../Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace>` 并创建一个名为 ``action_tutorials_interfaces`` 的软件包：
 
-(Remember to :doc:`source your ROS 2 installation <../Beginner-CLI-Tools/Configuring-ROS2-Environment>` first.)
+（请记得先 :doc:`source 你的 ROS 2 安装 <../Beginner-CLI-Tools/Configuring-ROS2-Environment>`。）
 
 .. tabs::
 
@@ -41,7 +40,7 @@ Set up a :doc:`workspace <../Beginner-Client-Libraries/Creating-A-Workspace/Crea
 
     .. code-block:: console
 
-      $ mkdir -p ros2_ws/src # you can reuse an existing workspace with this naming convention
+      $ mkdir -p ros2_ws/src # 你可以复用符合此命名约定的现有工作空间
       $ cd ros2_ws/src
       $ ros2 pkg create --build-type ament_cmake action_tutorials_interfaces
 
@@ -61,43 +60,43 @@ Set up a :doc:`workspace <../Beginner-Client-Libraries/Creating-A-Workspace/Crea
       $ cd ros2_ws\src
       $ ros2 pkg create --build-type ament_cmake action_tutorials_interfaces
 
-``custom_action_interfaces`` is the name of the new package.
-Note that it is, and can only be, a CMake package, but this doesn't restrict in which type of packages you can use your actions.
-The ``--build-type ament_cmake`` flag is largely optional when creating a new ROS 2 package but we are including it here for completeness.
-You can create your own custom interfaces in a CMake package, and then use it in a C++ or Python node.
+``action_tutorials_interfaces`` 是新软件包的名称。
+请注意，它只能是（也只能是）一个 CMake 软件包，但这并不限制你可以在哪些类型的软件包中使用你的 action。
+创建新 ROS 2 软件包时，``--build-type ament_cmake`` 标志在很大程度上是可选的，但为了完整起见我们在这里包含它。
+你可以在 CMake 软件包中创建自己的自定义接口，然后在 C++ 或 Python 节点中使用它。
 
 .. note::
 
-  It is good practice to keep ``.msg``, ``.srv``, and ``.action`` files in separate packages from the nodes that use them.
-  This makes it easier to reuse the interface definitions across different packages.
+  将 ``.msg``、``.srv`` 和 ``.action`` 文件放在与使用它们的节点分开的软件包中是一个好习惯。
+  这样可以更轻松地跨不同软件包复用接口定义。
 
-Tasks
------
+任务
+----
 
-1 Defining an action
-^^^^^^^^^^^^^^^^^^^^
+1 定义一个 action
+^^^^^^^^^^^^^^^^^
 
-Actions are defined in ``.action`` files of the form:
+action 定义在 ``.action`` 文件中，格式如下：
 
 .. code-block:: bash
 
-    # Request
+    # 请求
     ---
-    # Result
+    # 结果
     ---
-    # Feedback
+    # 反馈
 
-An action definition is made up of three message definitions separated by ``---``.
+一个 action 定义由三个使用 ``---`` 分隔的消息定义组成。
 
-- A *request* message is sent from an action client to an action server initiating a new goal.
-- A *result* message is sent from an action server to an action client when a goal is done.
-- *Feedback* messages are periodically sent from an action server to an action client with updates about a goal.
+- 一个 *请求* 消息由 action 客户端发送给 action 服务器，用于启动一个新目标。
+- 一个 *结果* 消息在目标完成时由 action 服务器发送给 action 客户端。
+- *反馈* 消息定期由 action 服务器发送给 action 客户端，携带有关目标的最新信息。
 
-An instance of an action is typically referred to as a *goal*.
+一个 action 的实例通常被称为一个 *目标*。
 
-Say we want to define a new action "Fibonacci" for computing the `Fibonacci sequence <https://en.wikipedia.org/wiki/Fibonacci_number>`__.
+假设我们想为计算 `斐波那契数列 <https://en.wikipedia.org/wiki/Fibonacci_number>`__ 定义一个新的 action “Fibonacci”。
 
-Create an ``action`` directory in our ROS 2 package ``action_tutorials_interfaces``:
+在我们的 ROS 2 软件包 ``action_tutorials_interfaces`` 中创建一个 ``action`` 目录：
 
 .. tabs::
 
@@ -122,7 +121,7 @@ Create an ``action`` directory in our ROS 2 package ``action_tutorials_interface
       $ cd action_tutorials_interfaces
       $ md action
 
-Within the ``action`` directory, create a file called ``Fibonacci.action`` with the following contents:
+在 ``action`` 目录中创建一个名为 ``Fibonacci.action`` 的文件，内容如下：
 
 .. code-block:: bash
 
@@ -132,14 +131,14 @@ Within the ``action`` directory, create a file called ``Fibonacci.action`` with 
   ---
   int32[] partial_sequence
 
-The goal request is the ``order`` of the Fibonacci sequence we want to compute, the result is the final ``sequence``, and the feedback is the ``partial_sequence`` computed so far.
+目标请求是我们想要计算的斐波那契数列的 ``order``，结果是最终的 ``sequence``，反馈是到目前为止计算出的 ``partial_sequence``。
 
-2 Building an action
-^^^^^^^^^^^^^^^^^^^^
+2 构建一个 action
+^^^^^^^^^^^^^^^^^
 
-Before we can use the new Fibonacci action type in our code, we must pass the definition to the rosidl code generation pipeline.
+在代码中使用新的 Fibonacci action 类型之前，我们必须把定义交给 rosidl 代码生成流程。
 
-This is accomplished by adding the following lines to our ``CMakeLists.txt`` before the ``ament_package()`` line, in the ``action_tutorials_interfaces``:
+这可以通过在 ``action_tutorials_interfaces`` 的 ``CMakeLists.txt`` 中、``ament_package()`` 这一行之前添加以下行来实现：
 
 .. code-block:: cmake
 
@@ -149,7 +148,7 @@ This is accomplished by adding the following lines to our ``CMakeLists.txt`` bef
       "action/Fibonacci.action"
     )
 
-We should also add the required dependencies to our ``package.xml``:
+我们还应该向 ``package.xml`` 添加所需的依赖项：
 
 .. code-block:: xml
 
@@ -159,44 +158,44 @@ We should also add the required dependencies to our ``package.xml``:
 
     <member_of_group>rosidl_interface_packages</member_of_group>
 
-Note, we need to depend on ``action_msgs`` since action definitions include additional metadata (e.g. goal IDs).
+注意，我们需要依赖 ``action_msgs``，因为 action 定义包含额外的元数据（例如目标 ID）。
 
-We should now be able to build the package containing the ``Fibonacci`` action definition:
-
-.. code-block:: console
-
-    $ cd ~/ros2_ws # Change to the root of the workspace
-    $ colcon build # Build
-
-We're done!
-
-By convention, action types will be prefixed by their package name and the word ``action``.
-So when we want to refer to our new action, it will have the full name ``action_tutorials_interfaces/action/Fibonacci``.
-
-We can check that our action built successfully with the command line tool:
-
+现在我们应该能够构建包含 ``Fibonacci`` action 定义的软件包了：
 
 .. code-block:: console
 
-   $ . install/setup.bash  # Source our workspace. On Windows: call install/setup.bat
-   $ ros2 interface show action_tutorials_interfaces/action/Fibonacci  # Check that our action definition exists
+    $ cd ~/ros2_ws # 切换到工作空间的根目录
+    $ colcon build # 构建
+
+完成！
+
+按照惯例，action 类型会以其软件包名称和单词 ``action`` 作为前缀。
+因此当我们引用这个新 action 时，它的全名将是 ``action_tutorials_interfaces/action/Fibonacci``。
+
+我们可以用命令行工具检查 action 是否构建成功：
 
 
-You should see the Fibonacci action definition printed to the screen.
+.. code-block:: console
 
-Summary
--------
+   $ . install/setup.bash  # source 我们的工作空间。在 Windows 上：call install/setup.bat
+   $ ros2 interface show action_tutorials_interfaces/action/Fibonacci  # 检查我们的 action 定义是否存在
 
-In this tutorial, you learned the structure of an action definition.
-You also learned how to correctly build a new action interface using ``CMakeLists.txt`` and ``package.xml``,
-and how to verify a successful build.
 
-Next steps
-----------
+你应该会看到 Fibonacci action 定义被打印到屏幕上。
 
-Next, let's utilize your newly defined action interface by creating an action service and client (in :doc:`Python <Writing-an-Action-Server-Client/Py>` or :doc:`C++ <Writing-an-Action-Server-Client/Cpp>`).
+小结
+----
 
-Related content
----------------
+在本教程中，你学习了 action 定义的结构。
+你还学习了如何使用 ``CMakeLists.txt`` 和 ``package.xml`` 正确构建新的 action 接口，
+以及如何验证构建是否成功。
 
-For more detailed information about ROS actions, please refer to the `design article <http://design.ros2.org/articles/actions.html>`__.
+后续步骤
+--------
+
+接下来，让我们通过创建 action 服务器和客户端来使用你新定义的 action 接口（使用 :doc:`Python <Writing-an-Action-Server-Client/Py>` 或 :doc:`C++ <Writing-an-Action-Server-Client/Cpp>`）。
+
+相关内容
+--------
+
+有关 ROS action 的更多详细信息，请参阅 `设计文章 <http://design.ros2.org/articles/actions.html>`__。

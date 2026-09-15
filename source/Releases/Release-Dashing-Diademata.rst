@@ -1,92 +1,87 @@
-Dashing Diademata (``dashing``)
-===============================
+Dashing Diademata（``dashing``）
+================================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-*Dashing Diademata* is the fourth release of ROS 2.
+*Dashing Diademata* 是 ROS 2 的第四个发行版。
 
-Supported Platforms
--------------------
+支持的平台
+----------
 
-Dashing Diademata supports the following platforms according to `the platform support tiers <../The-ROS2-Project/Platform-Support-Tiers>`:
+根据 `平台支持层级 <../The-ROS2-Project/Platform-Support-Tiers>`，Dashing Diademata 支持以下平台：
 
-Tier 1 platforms:
+第 1 层级平台：
 
-* Ubuntu 18.04 (Bionic): ``amd64`` and ``arm64``
-* Mac macOS 10.12 (Sierra)
-* Windows 10 (Visual Studio 2019)
+* Ubuntu 18.04（Bionic）：``amd64`` 和 ``arm64``
+* Mac macOS 10.12（Sierra）
+* Windows 10（Visual Studio 2019）
 
-Tier 2 platforms:
+第 2 层级平台：
 
-* Ubuntu 18.04 (Bionic): ``arm32``
+* Ubuntu 18.04（Bionic）：``arm32``
 
-Tier 3 platforms:
+第 3 层级平台：
 
-* Debian Stretch (9): ``amd64``, ``arm64`` and ``arm32``
-* OpenEmbedded Thud (2.6) / webOS OSE: ``arm32`` and ``x86``
+* Debian Stretch（9）：``amd64``、``arm64`` 和 ``arm32``
+* OpenEmbedded Thud（2.6） / webOS OSE：``arm32`` 和 ``x86``
 
-Targeted platforms:
+目标平台：
 
 +--------------+----------------------+----------------------+--------------------+--------------------+----------------+
-| Architecture | Ubuntu Bionic        | MacOS Sierra         | Windows 10         | Debian Stretch     | OpenEmbedded / |
+|     架构     | Ubuntu Bionic        | MacOS Sierra         | Windows 10         | Debian Stretch     | OpenEmbedded / |
 |              | (18.04)              | (10.12)              | (VS2019)           | (9)                | webOS OSE      |
 +==============+======================+======================+====================+====================+================+
-| amd64        | Tier 1 [d][a][s]     | Tier 1 [a][s]        | Tier 1 [a][s]      | Tier 3 [s]         |                |
+| amd64        | 第 1 层级 [d][a][s]  |   第 1 层级 [a][s]   |  第 1 层级 [a][s]  |   第 3 层级 [s]    |                |
 +--------------+----------------------+----------------------+--------------------+--------------------+----------------+
-| arm64        | Tier 1 [d][a][s]     |                      |                    | Tier 3 [s]         | Tier 3 [s]     |
+| arm64        | 第 1 层级 [d][a][s]  |                      |                    |   第 3 层级 [s]    | 第 3 层级 [s]  |
 +--------------+----------------------+----------------------+--------------------+--------------------+----------------+
-| arm32        | Tier 2 [a][s]        |                      |                    | Tier 3 [s]         | Tier 3 [s]     |
+| arm32        |   第 2 层级 [a][s]   |                      |                    |   第 3 层级 [s]    | 第 3 层级 [s]  |
 +--------------+----------------------+----------------------+--------------------+--------------------+----------------+
 
 
-The following indicators show what delivery mechanisms are available for
-each platform.
+以下指标说明每个平台可用的交付机制。
 
-\" \[d\] \" Debian packages will be provided for this platform for
-packages submitted to the rosdistro.
+\" \[d\] \" 对于提交到 rosdistro 的软件包，将为此平台提供 Debian 软件包。
 
-\" \[a\] \" Binary releases are provided as a single archive per
-platform containing all packages in the Dashing ROS 2 repos file[^6].
+\" \[a\] \" 以每个平台一个压缩包的形式提供二进制发行版，其中包含 Dashing ROS 2 repo 文件[^6]中的所有软件包。
 
-\" \[s\] \" Compilation from source.
+\" \[s\] \" 从源码编译。
 
-Middleware Implementation Support:
+中间件实现支持：
 
 +--------------------------+---------------------+---------------+--------------------------+--------------------------+
-| Middleware Library       | Middleware Provider | Support Level | Platforms                | Architectures            |
+|         中间件库         |    中间件供应商     |   支持层级    |           平台           |           架构           |
 +==========================+=====================+===============+==========================+==========================+
-| rmw_fastrtps_cpp*        | eProsima Fast-RTPS  | Tier 1        | All Platforms            | All Architectures        |
+| rmw_fastrtps_cpp*        | eProsima Fast-RTPS  |   第 1 层级   |         所有平台         |         所有架构         |
 +--------------------------+---------------------+---------------+--------------------------+--------------------------+
-| rmw_connext_cpp          | RTI Connext         | Tier 1        | All Platforms except     | All Architectures except |
-|                          |                     |               | Debian and OpenEmbedded  | arm64/arm32              |
+| rmw_connext_cpp          | RTI Connext         |   第 1 层级   | 除 Debian 和             | 除 arm64/arm32 外的      |
+|                          |                     |               | OpenEmbedded 外的所有平台| 所有架构                 |
 +--------------------------+---------------------+---------------+--------------------------+--------------------------+
-| rmw_cyclonedds_cpp       | Eclipse Cyclone DDS | Tier 2        | All Platforms            | All Architectures        |
+| rmw_cyclonedds_cpp       | Eclipse Cyclone DDS |   第 2 层级   |         所有平台         |         所有架构         |
 +--------------------------+---------------------+---------------+--------------------------+--------------------------+
-| rmw_opensplice_cpp       | ADLink OpenSplice   | Tier 2        | All Platforms except     | All Architectures        |
-|                          |                     |               | Debian and OpenEmbedded  |                          |
+| rmw_opensplice_cpp       | ADLink OpenSplice   |   第 2 层级   | 除 Debian 和             | 所有架构                 |
+|                          |                     |               | OpenEmbedded 外的所有平台|                          |
 +--------------------------+---------------------+---------------+--------------------------+--------------------------+
-| rmw_fastrtps_dynamic_cpp | eProsima Fast-RTPS  | Tier 2        | All Platforms            | All Architectures        |
+| rmw_fastrtps_dynamic_cpp | eProsima Fast-RTPS  |   第 2 层级   |         所有平台         |         所有架构         |
 +--------------------------+---------------------+---------------+--------------------------+--------------------------+
 
-\" \* \" means default RMW implementation.
+\" \* \" 表示默认 RMW 实现。
 
-Middleware implementation support is dependent upon the platform support
-tier. For example a Tier 1 middleware implementation on a Tier 2
-platform can only receive Tier 2 support.
+中间件实现支持取决于平台支持层级。例如，第 2 层级平台上的第 1 层级中间件实现，只能获得第 2 层级的支持。
 
-Minimum language requirements:
+最低语言要求：
 
 - C++14
 - Python 3.5
 
-Dependency Requirements:
+依赖项要求：
 
 +--------------+-----------------+-----------------+-----------------+-----------------+-----------------------+
-|              | Required Support                                    | Recommended Support                     |
+|              |                      必需支持                       |                推荐支持                 |
 +--------------+-----------------+-----------------+-----------------+-----------------+-----------------------+
-| Package      | Ubuntu Bionic   | MacOS**         | Windows 10**    | Debian Stretch  | OpenEmbedded**        |
+|    软件包    | Ubuntu Bionic   | MacOS**         | Windows 10**    | Debian Stretch  | OpenEmbedded**        |
 +==============+=================+=================+=================+=================+=======================+
 | CMake        | 3.10.2          | 3.14.4          | 3.14.4          | 3.7.2           | 3.16.1 / 3.12.2***    |
 +--------------+-----------------+-----------------+-----------------+-----------------+-----------------------+
@@ -106,11 +101,11 @@ Dependency Requirements:
 +--------------+-----------------+-----------------+-----------------+-----------------+-----------------------+
 | Qt           | 5.9.5           | 5.12.3          | 5.10.0          | 5.7.1           | 5.14.1 / 5.12.5***    |
 +--------------+-----------------+-----------------+-----------------+-----------------+-----------------------+
-|              |                 | **Linux only**                    |                                         |
+|              |                 |         **仅 Linux 平台**         |                                         |
 +--------------+-----------------+-----------------+-----------------+-----------------+-----------------------+
 | PCL          | 1.8.1           | N/A             | N/A             | 1.8.0           | 1.8.1                 |
 +--------------+-----------------+-----------------+-----------------+-----------------+-----------------------+
-| **RMW DDS Middleware Providers**                                                                             |
+|                                           **RMW DDS 中间件供应商**                                           |
 +--------------+-----------------+-----------------+-----------------+-----------------+-----------------------+
 | Connext DDS  | 5.3.1                                               | N/A                                     |
 +--------------+-----------------+-----------------+-----------------+-----------------+-----------------------+
@@ -121,143 +116,137 @@ Dependency Requirements:
 | OpenSplice   | 6.9.190403OSS                                                         | N/A                   |
 +--------------+-----------------+-----------------+-----------------+-----------------+-----------------------+
 
-\" \* \" means that this is not the upstream version (available on the
-official Operating System repositories) but a package distributed by
-OSRF or the community (package built and distributed on custom
-repositories).
+\" \* \" 表示这不是上游版本（可在官方操作系统软件仓库中获取），而是由
+OSRF 或社区分发的软件包（构建并分发在自定义软件仓库中的软件包）。
 
-\" \*\* \" Rolling distributions will see multiple version changes of
-these dependencies during their lifetime. The versions shown for
-OpenEmbedded are those provided by the 3.1 Dunfell release series; the
-versions provided by the other supported release series are listed here:
-<https://github.com/ros/meta-ros/wiki/Package-Version-Differences> .
-Note that the OpenEmbedded releases series for which a ROS distro has
-support will change during its support time frame, as per the
-OpenEmbedded support policy shown here:
+\" \*\* \" 滚动发行版在其生命周期内会看到这些依赖项的多次版本变更。
+此处显示的 OpenEmbedded 版本是 3.1 Dunfell 发布系列所提供的版本；
+其他受支持的发布系列所提供的版本在此列出：
+<https://github.com/ros/meta-ros/wiki/Package-Version-Differences>。
+请注意，某个 ROS 发行版所支持的 OpenEmbedded 发布系列会在其支持时间范围内发生变化，
+依据此处所示的 OpenEmbedded 支持策略：
 <https://github.com/ros/meta-ros/wiki/Policies#openembedded-release-series-support>
-. However, it will always be supported by least one stable OpenEmbedded
-release series.
+。但是，它始终会至少由一个稳定的 OpenEmbedded 发布系列提供支持。
 
-\" \*\*\* \" webOS OSE provides this different version.
+\" \*\*\* \" webOS OSE 提供了这一不同版本。
 
-This document only captures the version at the first release of a ROS
-distribution and will not be updated as the dependencies move forward.
-These versions are thus a low watermark.
+本文档仅记录 ROS 发行版首次发布时的版本，且不会随依赖项的发展而更新。
+因此这些版本是一个下限。
 
-Package manager use for dependencies:
+依赖项使用的软件包管理器：
 
-- Ubuntu, Debian: apt
-- MacOS: Homebrew, pip
-- Windows: Chocolatey, pip
-- OpenEmbedded: opkg
+- Ubuntu、Debian：apt
+- MacOS：Homebrew、pip
+- Windows：Chocolatey、pip
+- OpenEmbedded：opkg
 
-Build System Support:
+构建系统支持：
 
 - ament_cmake
 - cmake
 - setuptools
 
-Installation
-------------
+安装
+----
 
-`Install Dashing Diademata <../../dashing/Installation.html>`__
+`安装 Dashing Diademata <../../dashing/Installation.html>`__
 
-New features in this ROS 2 release
-----------------------------------
+此 ROS 2 发行版中的新功能
+-------------------------
 
-A few features and improvements we would like to highlight:
+我们想重点介绍一些特性和改进：
 
-* :doc:`Components <../Tutorials/Intermediate/Composition>` are now the recommended way to write your node.
-  They can be used standalone as well as being composed within a process and both ways are fully support from ``launch`` files.
-* The :doc:`intra-process communication <../Tutorials/Demos/Intra-Process-Communication>` (C++ only) has been improved - both in terms of latency as well as minimizing copies.
-* The Python client library has been updated to match most of the C++ equivalent and some important bug fixes and improvements have landed related to memory usage and performance.
-* Parameters are now a complete alternative to ``dynamic_reconfigure`` from ROS 1 including constraints like ranges or being read-only.
-* By relying on (a subset of) `IDL 4.2 <https://www.omg.org/spec/IDL/4.2>`__ for the message generation pipeline it is now possible to use ``.idl`` files (beside ``.msg`` / ``.srv`` / ``.action`` files).
-  This change comes with support for optional UTF-8 encoding for ordinary strings as well as UTF-16 encoded multi-byte strings (see `wide strings design article <https://design.ros2.org/articles/wide_strings.html>`__).
-* Command line tools related to ``actions`` and ``components``.
-* Support for Deadline, Lifespan & Liveliness quality of service settings.
-* MoveIt 2 `alpha release <https://github.com/AcutronicRobotics/moveit2/releases/tag/moveit_2_alpha>`__.
+* :doc:`组件 <../Tutorials/Intermediate/Composition>` 现在是编写节点的推荐方式。
+  它们既可以独立运行，也可以在一个进程内被组合，并且这两种方式都完全支持从 ``launch`` 文件启动。
+* :doc:`进程内通信 <../Tutorials/Demos/Intra-Process-Communication>` （仅 C++）已得到改进——无论是在延迟方面还是在尽量减少拷贝方面。
+* Python 客户端库已更新，以与 C++ 版本的大部分功能保持一致，并且一些与内存使用和性能相关的重要缺陷修复和改进也已完成。
+* 参数现在可以完全替代 ROS 1 的 ``dynamic_reconfigure``，包括范围或只读等约束。
+* 通过在消息生成流水线中依赖（`IDL 4.2 <https://www.omg.org/spec/IDL/4.2>`__ 的一个子集），现在可以使用 ``.idl`` 文件（除了 ``.msg`` / ``.srv`` / ``.action`` 文件之外）。
+  这一变更带来了对普通字符串的可选 UTF-8 编码以及对 UTF-16 编码的多字节字符串的支持（参见 `宽字符串设计文章 <https://design.ros2.org/articles/wide_strings.html>`__）。
+* 与 ``actions`` 和 ``components`` 相关的命令行工具。
+* 支持 Deadline、Lifespan 和 Liveliness 服务质量设置。
+* MoveIt 2 `alpha 版本 <https://github.com/AcutronicRobotics/moveit2/releases/tag/moveit_2_alpha>`__。
 
-Please see the `Dashing meta ticket <https://github.com/ros2/ros2/issues/607>`__ on GitHub, which contains more information as well as references to specific tickets with additional details.
+请参阅 GitHub 上的 `Dashing 元工单 <https://github.com/ros2/ros2/issues/607>`__，其中包含更多信息以及对提供更多细节的具体工单的引用。
 
 
-Changes since the Crystal release
----------------------------------
+自 Crystal 发行版以来的变更
+---------------------------
 
-Declaring Parameters
-^^^^^^^^^^^^^^^^^^^^
+声明参数
+^^^^^^^^
 
-There have been some changes to the behavior of parameters starting in Dashing, which have also lead to some new API's and the deprecation of other API's.
-See the ``rclcpp`` and ``rclpy`` sections below for more information about API changes.
+从 Dashing 开始，参数的行为发生了一些变化，这也带来了若干新 API 以及其他 API 的弃用。
+有关 API 变更的更多信息，请参见下文的 ``rclcpp`` 和 ``rclpy`` 小节。
 
-Getting and Setting Undeclared Parameters
-"""""""""""""""""""""""""""""""""""""""""
+获取和设置未声明的参数
+""""""""""""""""""""""
 
-As of Dashing, parameters now need to be declared before being accessed or set.
+从 Dashing 开始，参数在访问或设置之前必须先声明。
 
-Before Dashing, you could call ``get_parameter(name)`` and get either a value, if it had been previously set, or a parameter of type ``PARAMETER_NOT_SET``.
-You could also call ``set_parameter(name, value)`` at any point, even if the parameter was previously unset.
+在 Dashing 之前，你可以调用 ``get_parameter(name)``，如果之前设置过该参数，则得到它的值，否则得到类型为 ``PARAMETER_NOT_SET`` 的参数。
+你也可以在任何时候调用 ``set_parameter(name, value)``，即使该参数之前未设置过。
 
-Since Dashing, you need to first declare a parameter before getting or setting it.
-If you try to get or set an undeclared parameter you will either get an exception thrown, e.g. ParameterNotDeclaredException, or in certain cases you will get an unsuccessful result communicated in a variety of ways (see specific functions for more details).
+从 Dashing 开始，你需要先声明参数，然后才能获取或设置它。
+如果你尝试获取或设置未声明的参数，要么会抛出异常，例如 ParameterNotDeclaredException，要么在某些情况下会以多种方式返回不成功的结果（有关详细信息，请参见具体的函数）。
 
-However, you can get the old behavior (mostly, see the note in the next paragraph) by using the ``allow_undeclared_parameters`` option when creating your node.
-You might want to do this in order to avoid code changes for now, or in order to fulfill some uncommon use cases.
-For example, a "global parameter server" or "parameter blackboard" may want to allow external nodes to set new parameters on itself without first declaring them, so it may use the ``allow_undeclared_parameters`` option to accomplish that.
-In most cases, however, this option is not recommended because it makes the rest of the parameter API less safe to bugs like parameter name typos and "use before set" logical errors.
+不过，你可以在创建节点时使用 ``allow_undeclared_parameters`` 选项来获得旧行为（大体上如此，参见下一段中的说明）。
+你可能想这样做，以便暂时避免修改代码，或为了满足某些不常见的用例。
+例如，“全局参数服务器”或“参数黑板”可能希望允许外部节点在未先声明参数的情况下就向自身设置新参数，因此它可以使用 ``allow_undeclared_parameters`` 选项来实现这一点。
+然而在大多数情况下，并不推荐使用此选项，因为它会使参数 API 的其余部分更容易出现参数名拼写错误以及“先使用后设置”这类逻辑错误。
 
-Note that using ``allow_undeclared_parameters`` will get you most of the old behavior specifically for "get" and "set" methods, but it will not revert all the behavior changes related to parameters back to how it was for ROS Crystal.
-For that you need to also set the ``automatically_declare_parameters_from_overrides`` option to ``true``, which is described below in :ref:`Parameter Configuration using a YAML File <parameter-configuration-using-a-yaml-file>`.
+请注意，使用 ``allow_undeclared_parameters`` 可以让你在 “get” 和 “set” 方法上获得大部分旧行为，但它不会把所有与参数相关的行为变更都恢复为 ROS Crystal 时的样子。
+为此，你还需要将 ``automatically_declare_parameters_from_overrides`` 选项设置为 ``true``，下文 :ref:`使用 YAML 文件配置参数 <parameter-configuration-using-a-yaml-file>` 中对此有说明。
 
-Declaring a Parameter with a ParameterDescriptor
-""""""""""""""""""""""""""""""""""""""""""""""""
+使用 ParameterDescriptor 声明参数
+"""""""""""""""""""""""""""""""""
 
-Another benefit to declaring your parameters before using them, is that it allows you to declare a parameter descriptor at the same time.
+在使用参数之前声明参数的另一个好处是，它允许你同时声明参数描述符。
 
-Now when declaring a parameter you may include a custom ``ParameterDescriptor`` as well as a name and default value.
-The ``ParameterDescriptor`` is defined as a message in ``rcl_interfaces/msg/ParameterDescriptor`` and contains meta data like ``description`` and constraints like ``read_only`` or ``integer_range``.
-These constraints can be used to reject invalid values when setting parameters and/or as hints to external tools about what values are valid for a given parameter.
-The ``read_only`` constraint will prevent the parameter's value from changing after being declared, as well as prevent if from being undeclared.
+现在，在声明参数时，你除了可以提供名称和默认值之外，还可以包含自定义的 ``ParameterDescriptor``。
+``ParameterDescriptor`` 在 ``rcl_interfaces/msg/ParameterDescriptor`` 中定义为一种消息，其中包含 ``description`` 之类的元数据，以及 ``read_only`` 或 ``integer_range`` 之类的约束。
+这些约束可用于在设置参数时拒绝无效值，和/或作为对工具的提示，说明某个参数允许哪些值。
+``read_only`` 约束会阻止参数的值在声明后被更改，也会阻止该参数被取消声明。
 
-For reference, here's a link to the ``ParameterDescriptor`` message as of the time of writing this:
+作为参考，以下是撰写本文时 ``ParameterDescriptor`` 消息的链接：
 
 https://github.com/ros2/rcl_interfaces/blob/0aba5a142878c2077d7a03977087e7d74d40ee68/rcl_interfaces/msg/ParameterDescriptor.msg#L1
 
 .. _parameter-configuration-using-a-yaml-file:
 
-Parameter Configuration using a YAML File
-"""""""""""""""""""""""""""""""""""""""""
+使用 YAML 文件配置参数
+""""""""""""""""""""""
 
-As of Dashing, parameters in a YAML configuration file, e.g. passed to the node via the command line argument ``__params:=``, are only used to override a parameter's default value when declaring the parameter.
+从 Dashing 开始，YAML 配置文件中的参数（例如通过命令行参数 ``__params:=`` 传递给节点的参数）仅在声明参数时用于覆盖参数的默认值。
 
-Before Dashing, any parameters you passed via a YAML file would be implicitly set on the node.
+在 Dashing 之前，通过 YAML 文件传递的任何参数都会被隐式地设置到节点上。
 
-Since Dashing, this is no longer the case, as parameters need to be declared in order to appear on the node to external observers, like ``ros2 param list``.
+从 Dashing 开始，情况不再如此，因为参数需要先声明，才能对外部观察者（例如 ``ros2 param list``）显示在节点上。
 
-The old behavior may be achieved using the ``automatically_declare_parameters_from_overrides`` option when creating a node.
-This option, if set to ``true``, will automatically declare all parameters in the input YAML file when the node is constructed.
-This may be used to avoid major changes to your existing code or to serve specific use cases.
-For example, a "global parameter server" may want to be seeded with arbitrary parameters on launch, which it could not have declared ahead of time.
-Most of the time, however, this option is not recommended, as it may lead to setting a parameter in a YAML file with the assumption that the node will use it, even if the node does not actually use it.
+在创建节点时使用 ``automatically_declare_parameters_from_overrides`` 选项可以获得旧行为。
+如果将此选项设置为 ``true``，则在构造节点时会自动声明输入 YAML 文件中的所有参数。
+这可用于避免对现有代码做重大修改，或服务于特定的用例。
+例如，“全局参数服务器”可能希望在启动时预先填充任意参数，而这些参数它无法提前声明。
+然而在大多数情况下，并不推荐使用此选项，因为它可能导致你在 YAML 文件中设置某个参数时假定节点会使用它，即使节点实际上并不使用。
 
-In the future we hope to have a checker that will warn you if you pass a parameter to a node that it was not expecting.
+将来我们希望有一个检查器，当你向节点传递了它不期望的参数时能够给出警告。
 
-The parameters in the YAML file will continue to influence the value of parameters when they are first declared.
+当参数首次被声明时，YAML 文件中的参数仍会影响其值。
 
 ament_cmake
 ^^^^^^^^^^^
 
-The CMake function ``ament_index_has_resource`` was returning either ``TRUE`` or ``FALSE``.
-As of `this release <https://github.com/ament/ament_cmake/pull/155>`_ it returns either the prefix path in case the resource was found or ``FALSE``.
+CMake 函数 ``ament_index_has_resource`` 过去返回 ``TRUE`` 或 ``FALSE``。
+从 `此次发布 <https://github.com/ament/ament_cmake/pull/155>`_ 开始，如果找到资源，它返回前缀路径，否则返回 ``FALSE``。
 
-If you are using the return value in a CMake condition like this:
+如果你在类似下面的 CMake 条件中使用该返回值：
 
 .. code-block:: cmake
 
    ament_index_has_resource(var ...)
    if(${var})
 
-you need to update the condition to ensure it considers a string value as ``TRUE``:
+你需要更新该条件，以确保它将字符串值视为 ``TRUE``：
 
 .. code-block:: cmake
 
@@ -266,18 +255,18 @@ you need to update the condition to ensure it considers a string value as ``TRUE
 rclcpp
 ^^^^^^
 
-Behavior Change for ``Node::get_node_names()``
-""""""""""""""""""""""""""""""""""""""""""""""
+``Node::get_node_names()`` 的行为变更
+"""""""""""""""""""""""""""""""""""""
 
-The function ``NodeGraph::get_node_names()``, and therefore also ``Node::get_node_names()``, now returns a ``std::vector<std::string>`` containing fully qualified node names with their namespaces included, instead of just the node names.
+函数 ``NodeGraph::get_node_names()`` （因此也包括 ``Node::get_node_names()``）现在返回 ``std::vector<std::string>``，其中包含带命名空间的完全限定节点名，而不再只是节点名。
 
-Changed the Way that Options are Passed to Nodes
-""""""""""""""""""""""""""""""""""""""""""""""""
+向节点传递选项的方式已变更
+""""""""""""""""""""""""""
 
-Extended arguments (beyond name and namespace) to the ``rclcpp::Node()`` constructor have been replaced with a ``rclcpp::NodeOptions`` structure.
-See `ros2/rclcpp#622 <https://github.com/ros2/rclcpp/pull/622/files>`__ for details about the structure and default values of the options.
+``rclcpp::Node()`` 构造函数中的扩展参数（名称和命名空间之外的参数）已被 ``rclcpp::NodeOptions`` 结构取代。
+有关该结构以及各选项默认值的详细信息，请参见 `ros2/rclcpp#622 <https://github.com/ros2/rclcpp/pull/622/files>`__。
 
-If you are using any of the extended arguments to ``rclcpp::Node()`` like this:
+如果你像下面这样使用 ``rclcpp::Node()`` 的任一扩展参数：
 
 .. code-block:: cpp
 
@@ -286,7 +275,7 @@ If you are using any of the extended arguments to ``rclcpp::Node()`` like this:
   std::vector<rclcpp::Parameter> params = { rclcpp::Parameter("use_sim_time", true) };
   auto node = std::make_shared<rclcpp::Node>("foo_node", "bar_namespace", context, args, params);
 
-You need to update to use the ``NodeOptions`` structure
+你需要改为使用 ``NodeOptions`` 结构
 
 .. code-block:: cpp
 
@@ -297,36 +286,36 @@ You need to update to use the ``NodeOptions`` structure
   node_options.parameter_overrides(params);
   auto node = std::make_shared<rclcpp::Node>("foo_node", "bar_namespace", node_options);
 
-Changes to Creating Publishers and Subscriptions
-""""""""""""""""""""""""""""""""""""""""""""""""
+创建发布者和订阅的变更
+""""""""""""""""""""""
 
-There have been a few changes to creating publishers and subscriptions which are new in Dashing:
+Dashing 中对发布者和订阅的创建方式做了一些新的变更：
 
-- QoS settings are now passed using the new ``rclcpp::QoS`` class, and the API encourages the user to specify at least the history depth.
-- Options are now passed as an object, i.e. ``rclcpp::PublisherOptions`` and ``rclcpp::SubscriptionOptions``.
+- QoS 设置现在使用新的 ``rclcpp::QoS`` 类传递，并且该 API 鼓励用户至少指定历史深度。
+- 选项现在以对象形式传递，即 ``rclcpp::PublisherOptions`` 和 ``rclcpp::SubscriptionOptions``。
 
-All changes are backwards compatible (no code changes are required), but several existing call styles have been deprecated.
-Users are encouraged to update to the new signatures.
-
-----
-
-In the past, when creating a publisher or subscription, you could either not specify any QoS settings (e.g. just provide topic name for a publisher) or you could specify a "qos profile" data structure (of type ``rmw_qos_profile_t``) with all the settings already set.
-Now you must use the new ``rclcpp::QoS`` object to specify your QoS and at least the history settings for your QoS.
-This encourages the user to specify a history depth when using ``KEEP_LAST``, rather than defaulting it to a value that may or may not be appropriate.
-
-In ROS 1, this was known as the ``queue_size`` and it was required in both C++ and Python.
-We're changing the ROS 2 API to bring this requirement back.
+所有变更都是向后兼容的（无需修改代码），但若干现有的调用方式已被弃用。
+建议用户更新为新的签名。
 
 ----
 
-Also, any options which could previously be passed during creation of a publisher or subscription have now been encapsulated in an ``rclcpp::PublisherOptions`` and ``rclcpp::SubscriptionOptions`` class respectively.
-This allows for shorter signatures, more convenient use, and for adding new future options without breaking API.
+过去，在创建发布者或订阅时，你可以不指定任何 QoS 设置（例如只为发布者提供话题名），也可以指定一个已经设置好所有设置的 “qos profile” 数据结构（类型为 ``rmw_qos_profile_t``）。
+现在你必须使用新的 ``rclcpp::QoS`` 对象来指定你的 QoS，并且至少要指定 QoS 的历史设置。
+这鼓励用户在使用 ``KEEP_LAST`` 时指定历史深度，而不是将其默认设置为一个可能合适也可能不合适的值。
+
+在 ROS 1 中，这被称为 ``queue_size``，并且在 C++ 和 Python 中都是必需的。
+我们正在修改 ROS 2 API，以重新引入这一要求。
 
 ----
 
-Some signatures for creating publishers and subscribers are now deprecated, and new signatures have been added to allow you to use the new ``rclcpp::QoS`` and publisher/subscription option classes.
+此外，以前在创建发布者或订阅时可以传递的任何选项，现在分别被封装在 ``rclcpp::PublisherOptions`` 和 ``rclcpp::SubscriptionOptions`` 类中。
+这使得签名更短、使用更方便，并且可以在不破坏 API 的情况下添加新的选项。
 
-These are the new and recommended API's:
+----
+
+创建发布者和订阅者的一些签名现在已被弃用，并新增了新的签名，以允许你使用新的 ``rclcpp::QoS`` 以及发布者/订阅选项类。
+
+以下是新的推荐 API：
 
 .. code-block:: cpp
 
@@ -360,7 +349,7 @@ These are the new and recommended API's:
     >::SharedPtr
     msg_mem_strat = nullptr);
 
-And these are the deprecated ones:
+以下是已被弃用的 API：
 
 .. code-block:: cpp
 
@@ -430,27 +419,27 @@ And these are the deprecated ones:
 
 ----
 
-The change to how QoS is passed is most likely to impact users.
+QoS 传递方式的变更最有可能影响到用户。
 
-A typical change for a publisher looks like this:
+发布者的典型变更如下所示：
 
 .. code-block:: diff
 
   - pub_ = create_publisher<std_msgs::msg::String>("chatter");
   + pub_ = create_publisher<std_msgs::msg::String>("chatter", 10);
 
-And for a subscription:
+订阅的变更如下：
 
 .. code-block:: diff
 
   - sub_ = create_subscription<std_msgs::msg::String>("chatter", callback);
   + sub_ = create_subscription<std_msgs::msg::String>("chatter", 10, callback);
 
-If you have no idea what depth to use and don't care right now (maybe just prototyping), then we recommend using ``10``, as that was the default before and should preserve existing behavior.
+如果你不知道要使用什么深度且目前并不在意（也许只是在做原型），那么我们建议使用 ``10``，因为这是之前的默认值，应该可以保持现有行为。
 
-More in depth documentation about how to select an appropriate depth is forthcoming.
+有关如何选择合适深度的更深入的文档即将推出。
 
-This is an example of a slightly more involved change to avoid the newly deprecated API's:
+下面是一个稍微复杂一些的变更示例，用于避免使用新近弃用的 API：
 
 .. code-block:: diff
 
@@ -467,23 +456,23 @@ This is an example of a slightly more involved change to avoid the newly depreca
   +   // Transient local is similar to latching in ROS 1.
   +   rclcpp::QoS(1).transient_local());
 
-See the pull request (and connected pull requests) that introduced the QoS change for more examples and details:
+有关更多示例和细节，请参见引入 QoS 变更的拉取请求（以及相关的拉取请求）：
 
 - https://github.com/ros2/rclcpp/pull/713
 
   - https://github.com/ros2/demos/pull/332
   - https://github.com/ros2/robot_state_publisher/pull/19
-  - and others...
+  - 以及其他……
 
 
-Changes Due to Declare Parameter Change
-"""""""""""""""""""""""""""""""""""""""
+由声明参数变更引起的变更
+""""""""""""""""""""""""
 
-For details about the actual behavior change, see `Declaring Parameters`_ above.
+有关实际行为变更的详细信息，请参见上文的 `声明参数`_。
 
-There are several new API calls in the ``rclcpp::Node``'s interface:
+``rclcpp::Node`` 接口中有若干新的 API 调用：
 
-- Methods that declare parameters given a name, optional default value, optional descriptor, and return the value actually set:
+- 用于声明参数的方法，接受名称、可选默认值和可选描述符，并返回实际设置的值：
 
   .. code-block:: c++
 
@@ -517,7 +506,7 @@ There are several new API calls in the ``rclcpp::Node``'s interface:
         std::pair<ParameterT, rcl_interfaces::msg::ParameterDescriptor>
       > & parameters);
 
-- A method to undeclare parameters and to check if a parameter has been declared:
+- 用于取消声明参数以及检查参数是否已声明的方法：
 
   .. code-block:: c++
 
@@ -527,7 +516,7 @@ There are several new API calls in the ``rclcpp::Node``'s interface:
     bool
     rclcpp::Node::has_parameter(const std::string & name) const;
 
-- Some convenience methods that did not previously exist:
+- 一些以前不存在的便捷方法：
 
   .. code-block:: c++
 
@@ -540,7 +529,7 @@ There are several new API calls in the ``rclcpp::Node``'s interface:
     rcl_interfaces::msg::ParameterDescriptor
     rclcpp::Node::describe_parameter(const std::string & name) const;
 
-- A new method to set the callback which is called anytime a parameter will be changed, giving you the opportunity to reject it:
+- 一个新的方法，用于设置每当参数将要被更改时调用的回调，让你有机会拒绝该更改：
 
   .. code-block:: c++
 
@@ -551,7 +540,7 @@ There are several new API calls in the ``rclcpp::Node``'s interface:
     rclcpp::Node::set_on_parameters_set_callback(
       OnParametersSetCallbackType callback);
 
-There were also several deprecated methods:
+还有一些已被弃用的方法：
 
   .. code-block:: c++
 
@@ -582,23 +571,23 @@ There were also several deprecated methods:
     void
     rclcpp::Node::register_param_change_callback(CallbackT && callback);
 
-Memory Strategy
-"""""""""""""""
+内存策略
+""""""""
 
-The interface ``rclcpp::memory_strategy::MemoryStrategy`` was using the typedef ``WeakNodeVector`` in various method signatures.
-As of Dashing the typedef has been been changed to ``WeakNodeList`` and with it the type of the parameter in various methods.
-Any custom memory strategy needs to be updated to match the modified interface.
+接口 ``rclcpp::memory_strategy::MemoryStrategy`` 过去在多个方法签名中使用 typedef ``WeakNodeVector``。
+从 Dashing 开始，该 typedef 已改为 ``WeakNodeList``，各方法中相应参数的类型也随之改变。
+任何自定义内存策略都需要更新，以匹配修改后的接口。
 
-The relevant API change can be found in `ros2/rclcpp#741 <https://github.com/ros2/rclcpp/pull/741>`__.
+相关的 API 变更可在 `ros2/rclcpp#741 <https://github.com/ros2/rclcpp/pull/741>`__ 中找到。
 
 rclcpp_components
 ^^^^^^^^^^^^^^^^^
 
-The correct way to implement composition in Dashing is by utilizing the ``rclcpp_components`` package.
+在 Dashing 中实现组合（composition）的正确方式是使用 ``rclcpp_components`` 软件包。
 
-The following changes must be made to nodes in order to correctly implement runtime composition:
+为了正确实现运行时组合，必须对节点做以下修改：
 
-The Node must have a constructor that takes ``rclcpp::NodeOptions``:
+节点必须有一个接受 ``rclcpp::NodeOptions`` 的构造函数：
 
 .. code-block:: cpp
 
@@ -609,8 +598,8 @@ The Node must have a constructor that takes ``rclcpp::NodeOptions``:
     }
   };
 
-C++ registration macros (if present) need to be updated to use the ``rclcpp_components`` equivalent.
-If not present, registration macros must be added in one translation unit.
+C++ 注册宏（如果存在）需要更新为 ``rclcpp_components`` 中等价的宏。
+如果不存在，则必须在一个翻译单元中添加注册宏。
 
 .. code-block:: cpp
 
@@ -619,26 +608,26 @@ If not present, registration macros must be added in one translation unit.
   // Use fully-qualifed name in registration
   RCLCPP_COMPONENTS_REGISTER_NODE(composition::Listener);
 
-CMake registration macros (if present) need to be updated.
-If not present, registration macros must be added to the project's CMake.
+CMake 注册宏（如果存在）需要更新。
+如果不存在，则必须将注册宏添加到项目的 CMake 中。
 
 .. code-block:: cmake
 
   add_library(listener src/listener.cpp)
   rclcpp_components_register_nodes(listener "composition::Listener")
 
-For more information on composition, see `the tutorial <../Tutorials/Intermediate/Writing-a-Composable-Node>`
+有关组合的更多信息，请参见 `教程 <../Tutorials/Intermediate/Writing-a-Composable-Node>`
 
 rclpy
 ^^^^^
 
-Changes to Creating Publishers, Subscriptions, and QoS Profiles
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+创建发布者、订阅和 QoS 配置文件的变更
+"""""""""""""""""""""""""""""""""""""
 
-Prior to Dashing, you could optionally provide a ``QoSProfile`` object when creating a publisher or subscription.
-In an effort to encourage users to specify a history depth for message queues, we now **require** that a depth value or ``QoSProfile`` object is given when creating publishers or subscriptions.
+在 Dashing 之前，你可以在创建发布者或订阅时选择性地提供一个 ``QoSProfile`` 对象。
+为了鼓励用户为消息队列指定历史深度，我们现在 **要求** 在创建发布者或订阅时给出深度值或 ``QoSProfile`` 对象。
 
-To create a publisher, previously you would have written:
+以前创建发布者时，你会这样写：
 
 .. code-block:: python
 
@@ -646,7 +635,7 @@ To create a publisher, previously you would have written:
   # Or using a keyword argument for QoSProfile
   node.create_publisher(Empty, 'chatter', qos_profile=qos_profile_sensor_data)
 
-In Dashing, prefer the following API that provides a depth value or ``QoSProfile`` object as a third positional argument:
+在 Dashing 中，推荐使用以下 API，它通过第三个位置参数提供深度值或 ``QoSProfile`` 对象：
 
 .. code-block:: python
 
@@ -655,7 +644,7 @@ In Dashing, prefer the following API that provides a depth value or ``QoSProfile
   # Or pass a QoSProfile object directly
   node.create_publisher(Empty, 'chatter', qos_profile_sensor_data)
 
-Likewise for subscriptions, previously you would have written:
+订阅同理，以前你会这样写：
 
 .. code-block:: python
 
@@ -663,7 +652,7 @@ Likewise for subscriptions, previously you would have written:
   # Or using a keyword argument for QoSProfile
   node.create_subscription(BasicTypes, 'chatter', lambda msg: print(msg), qos_profile=qos_profile_sensor_data)
 
-In Dashing:
+在 Dashing 中：
 
 .. code-block:: python
 
@@ -672,11 +661,11 @@ In Dashing:
   # Or pass a QoSProfile object directly
   node.create_subscription(BasicTypes, 'chatter', lambda msg: print(msg), qos_profile_sensor_data)
 
-To ease the transition, users who do not use the new API will see deprecation warnings.
+为便于过渡，未使用新 API 的用户将会看到弃用警告。
 
-Furthermore, we also require that when constructing ``QoSProfile`` objects that a history policy and/or depth is set.
-If a history policy of ``KEEP_LAST`` is provided, then a depth argument is also required.
-For example, these calls are valid:
+此外，我们还要求：在构造 ``QoSProfile`` 对象时必须设置历史策略和/或深度。
+如果提供了 ``KEEP_LAST`` 历史策略，则还必须提供深度参数。
+例如，以下调用是有效的：
 
 .. code-block:: python
 
@@ -684,7 +673,7 @@ For example, these calls are valid:
   QoSProfile(history=QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST, depth=10)
   QoSProfile(depth=10)  # equivalent to the previous line
 
-And these calls will cause a deprecation warning:
+而以下调用会产生弃用警告：
 
 .. code-block:: python
 
@@ -693,20 +682,20 @@ And these calls will cause a deprecation warning:
   # KEEP_LAST but no depth
   QoSProfile(history=QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST)
 
-See the issue and pull request related to introducing this change for more details:
+有关引入此变更的详细信息，请参见相关的 issue 和拉取请求：
 
 - https://github.com/ros2/rclpy/issues/342
 - https://github.com/ros2/rclpy/pull/344
 
 
-Changes Due to Declare Parameter Change
-"""""""""""""""""""""""""""""""""""""""
+由声明参数变更引起的变更
+""""""""""""""""""""""""
 
-For details about the actual behavior change, see `Declaring Parameters`_ above. The changes are analogous to the ones in ``rclcpp``.
+有关实际行为变更的详细信息，请参见上文的 `声明参数`_。这些变更与 ``rclcpp`` 中的变更类似。
 
-These are the new API methods available in ``rclpy.node.Node`` interface:
+以下是 ``rclpy.node.Node`` 接口中可用的新 API 方法：
 
-- To declare parameters given a name, an optional default value (supported by ``rcl_interfaces.msg.ParameterValue``) and an optional descriptor, returning the value actually set:
+- 用于声明参数，接受名称、可选默认值（由 ``rcl_interfaces.msg.ParameterValue`` 支持）和可选描述符，并返回实际设置的值：
 
   .. code-block:: python
 
@@ -725,7 +714,7 @@ These are the new API methods available in ``rclpy.node.Node`` interface:
         ]]
       ) -> List[Parameter]
 
-- To undeclare previously declared parameters and to check if a parameter has been declared beforehand:
+- 用于取消声明先前已声明的参数，以及检查参数之前是否已声明：
 
   .. code-block:: python
 
@@ -733,7 +722,7 @@ These are the new API methods available in ``rclpy.node.Node`` interface:
 
       def has_parameter(name: str) -> bool
 
-- To get and set parameter descriptors:
+- 用于获取和设置参数描述符：
 
   .. code-block:: python
 
@@ -747,102 +736,102 @@ These are the new API methods available in ``rclpy.node.Node`` interface:
           alternative_value: Optional[ParameterValue] = None
       ) -> ParameterValue
 
-- A convenience method to get parameters that may not have been declared:
+- 一个便捷方法，用于获取可能尚未声明的参数：
 
   .. code-block:: python
 
       def get_parameter_or(name: str, alternative_value: Optional[Parameter] = None) -> Parameter
 
-Other changes
-"""""""""""""
+其他变更
+""""""""
 
-``rclpy.parameter.Parameter`` can now guess its type without explicitly setting it (as long as it's one of the supported ones by ``rcl_interfaces.msg.ParameterValue``).
-For example, this code:
+``rclpy.parameter.Parameter`` 现在可以无需显式设置类型就推断出其类型（只要它是 ``rcl_interfaces.msg.ParameterValue`` 所支持的类型之一）。
+例如，以下代码：
 
   .. code-block:: python
 
       p = Parameter('myparam', Parameter.Type.DOUBLE, 2.41)
 
-Is equivalent to this code:
+等价于以下代码：
 
   .. code-block:: python
 
       p = Parameter('myparam', value=2.41)
 
-This change does not break existing API.
+此变更不会破坏现有 API。
 
 rosidl
 ^^^^^^
 
-Until Crystal each message generator package registered itself using the ``ament_cmake`` extension point ``rosidl_generate_interfaces`` and was passed a set of ``.msg`` / ``.srv`` / ``.action`` files.
-As of Dashing the message generation pipeline is based on ``.idl`` files instead.
+在 Crystal 之前，每个消息生成器软件包都使用 ``ament_cmake`` 扩展点 ``rosidl_generate_interfaces`` 注册自身，并接收一组 ``.msg`` / ``.srv`` / ``.action`` 文件。
+从 Dashing 开始，消息生成流水线改为基于 ``.idl`` 文件。
 
-Any message generator package needs to change and register itself using the new extension point ``rosidl_generate_idl_interfaces`` which passes only ``.idl`` files instead.
-The message generators for the commonly supported languages C, C++, and Python as well as the typesupport packages for introspection, Fast RTPS, Connext and OpenSplice have already been updated (see `ros2/rosidl#334 <https://github.com/ros2/rosidl/pull/334/files>`__).
-The CMake code calling ``rosidl_generate_interfaces()`` can either pass ``.idl`` files directly or pass ``.msg`` / ``.srv`` / ``.action`` which will then internally be converted into ``.idl`` files before being passed to each message generator.
+任何消息生成器软件包都需要改用新的扩展点 ``rosidl_generate_idl_interfaces`` 进行注册，该扩展点只接收 ``.idl`` 文件。
+常用语言 C、C++ 和 Python 的消息生成器，以及用于内省、Fast RTPS、Connext 和 OpenSplice 的 typesupport 软件包都已完成更新（参见 `ros2/rosidl#334 <https://github.com/ros2/rosidl/pull/334/files>`__）。
+调用 ``rosidl_generate_interfaces()`` 的 CMake 代码既可以直接传入 ``.idl`` 文件，也可以传入 ``.msg`` / ``.srv`` / ``.action``，后者会在内部先被转换为 ``.idl`` 文件，然后再传递给每个消息生成器。
 
-The format of ``.msg`` / ``.srv`` / ``.action`` files is not being evolved in the future.
-The mapping between ``.msg`` / ``.srv`` / ``.action`` files and ``.idl`` files is described in `this design article <https://design.ros2.org/articles/legacy_interface_definition.html>`__.
-A `second design article <https://design.ros2.org/articles/idl_interface_definition.html>`__ describes the supported features in ``.idl`` files.
-In order to leverage any of the new features existing interfaces need to be converted (e.g. using the command line tools  ``msg2idl`` / ``srv2idl`` / ``action2idl``).
+今后不再演进 ``.msg`` / ``.srv`` / ``.action`` 文件的格式。
+``.msg`` / ``.srv`` / ``.action`` 文件与 ``.idl`` 文件之间的映射在 `这篇设计文章 <https://design.ros2.org/articles/legacy_interface_definition.html>`__ 中有所描述。
+另一篇 `设计文章 <https://design.ros2.org/articles/idl_interface_definition.html>`__ 描述了 ``.idl`` 文件中所支持的特性。
+要利用任何新特性，都需要转换现有接口（例如使用命令行工具 ``msg2idl`` / ``srv2idl`` / ``action2idl``）。
 
-To distinguish same type names, but with different namespaces, the introspection structs now contain a namespace field that replaces the package name (see `ros2/rosidl#335 <https://github.com/ros2/rosidl/pull/355/files>`_).
+为了区分同名但位于不同命名空间的类型，内省结构现在包含一个命名空间字段，用于取代软件包名（参见 `ros2/rosidl#335 <https://github.com/ros2/rosidl/pull/355/files>`_）。
 
-Mapping of char in .msg files
-"""""""""""""""""""""""""""""
+.msg 文件中 char 的映射
+"""""""""""""""""""""""
 
-In `ROS 1 <https://wiki.ros.org/msg#Fields>`__ ``char`` has been deprecated for a long time and is being mapped to ``uint8``.
-In ROS 2 until Crystal ``char`` was mapped to a single character (``char`` in C / C++, ``str`` with length 1 in Python) in an effort to provide a more natural mapping.
-As of Dashing the ROS 1 semantic has been restored and ``char`` maps to ``uint8`` again.
+在 `ROS 1 <https://wiki.ros.org/msg#Fields>`__ 中，``char`` 早已被弃用，并被映射为 ``uint8``。
+在 ROS 2 中，直到 Crystal，``char`` 都被映射为单个字符（在 C / C++ 中为 ``char``，在 Python 中为长度为 1 的 ``str``），以提供更自然的映射。
+从 Dashing 开始，ROS 1 的语义已恢复，``char`` 再次映射为 ``uint8``。
 
 rosidl_generator_cpp
 ^^^^^^^^^^^^^^^^^^^^
 
-The C++ data structures generated for messages, services and actions provide setter methods for each field.
-Until Crystal each setter returned a pointer to the data structure itself to enable the named parameter idiom.
-As of Dashing these setters `return a reference <https://github.com/ros2/rosidl/pull/353>`__ instead since that seems to be the more common signature as well as it clarifies that the returned value can't be a ``nullptr``.
+为消息、服务和动作生成的 C++ 数据结构会为每个字段提供 setter 方法。
+直到 Crystal，每个 setter 都返回指向数据结构自身的指针，以便实现命名参数惯用法。
+从 Dashing 开始，这些 setter 改为 `返回引用 <https://github.com/ros2/rosidl/pull/353>`__，因为这似乎是更常见的签名，同时也明确了返回值不可能是 ``nullptr``。
 
 rosidl_generator_py
 ^^^^^^^^^^^^^^^^^^^
 
-Until Crystal an array (fixed size) or sequence (dynamic size, optionally with an upper boundary) field in a message was stored as a ``list`` in Python.
-As of Dashing the Python type for arrays / sequences of numeric values has been changed:
+直到 Crystal，消息中的数组（固定大小）或序列（动态大小，可选带上界）字段在 Python 中都存储为 ``list``。
+从 Dashing 开始，数值数组/序列的 Python 类型已更改：
 
-* an array of numeric values is stored as a ``numpy.ndarray`` (the ``dtype`` is chosen to match the type of the numeric value)
-* a sequence of numeric values is stored as an ``array.array`` (the ``typename`` is chosen to match the type of the numeric value)
+* 数值数组存储为 ``numpy.ndarray`` （``dtype`` 的选择与数值的类型匹配）
+* 数值序列存储为 ``array.array`` （``typename`` 的选择与数值的类型匹配）
 
-As before an array / sequence of non-numeric types is still represented as a ``list`` in Python.
+与之前一样，非数值类型的数组/序列在 Python 中仍然表示为 ``list``。
 
-This change brings a number of benefits:
+此变更带来了一些好处：
 
-* The new data structures ensure that each item in the array / sequence complies with the value range restrictions of the numeric type.
-* The numeric values can be stored more efficiently in memory which avoid the overhead of Python objects for each item.
-* The memory layout of both data structures allows to read and write all items of the array / sequence in a single operation which makes the conversion from and to Python significantly faster / more efficient.
+* 新的数据结构确保数组/序列中的每一项都符合该数值类型的取值范围限制。
+* 数值可以更高效地存储在内存中，从而避免为每一项创建 Python 对象带来的开销。
+* 这两种数据结构的内存布局允许在单次操作中读取和写入数组/序列的所有项，这使得与 Python 之间的相互转换显著更快、更高效。
 
 launch
 ^^^^^^
 
-The ``launch_testing`` package caught up with the ``launch`` package redesign done in Bouncy Bolson.
-The legacy Python API, already moved into the ``launch.legacy`` submodule, has thus been deprecated and removed.
+``launch_testing`` 软件包跟上了 Bouncy Bolson 中完成的 ``launch`` 软件包重新设计。
+因此，已经移入 ``launch.legacy`` 子模块的旧式 Python API 已被弃用并移除。
 
-See ``launch`` `examples <https://github.com/ros2/launch/tree/dashing/launch/examples>`__ and `documentation <https://github.com/ros2/launch/tree/dashing/launch/doc>`__ for reference on how to use its new API.
+有关如何使用其新 API，请参见 ``launch`` 的 `示例 <https://github.com/ros2/launch/tree/dashing/launch/examples>`__ 和 `文档 <https://github.com/ros2/launch/tree/dashing/launch/doc>`__。
 
-See `demos tests <https://github.com/ros2/demos>`__ for reference on how to use the new ``launch_testing`` API.
+有关如何使用新的 ``launch_testing`` API，请参见 `demos 测试 <https://github.com/ros2/demos>`__。
 
 rmw
 ^^^
 
-Changes since the `Crystal Clemmys <Release-Crystal-Clemmys>` release:
+自 `Crystal Clemmys <Release-Crystal-Clemmys>` 发行版以来的变更：
 
-* New API in ``rmw``, a fini function for ``rmw_context_t``:
+* ``rmw`` 中的新 API，即 ``rmw_context_t`` 的 fini 函数：
 
  * `rmw_context_fini <https://github.com/ros2/rmw/blob/c518842f6f82910482470b40c221c268d30691bd/rmw/include/rmw/init.h#L111-L136>`_
 
-* Modification of ``rmw``, now passes ``rmw_context_t`` to ``rmw_create_wait_set``:
+* ``rmw`` 修改，现在将 ``rmw_context_t`` 传递给 ``rmw_create_wait_set``：
 
  * `rmw_create_wait_set <https://github.com/ros2/rmw/blob/c518842f6f82910482470b40c221c268d30691bd/rmw/include/rmw/rmw.h#L522-L543>`_
 
-* New APIs in ``rmw`` for preallocating space for published and subscribed messages:
+* ``rmw`` 中用于为已发布和已订阅消息预分配空间的新 API：
 
  * `rmw_init_publisher_allocation <https://github.com/ros2/rmw/blob/dc7b2f49f1f961d6cf2c173adc54736451be8938/rmw/include/rmw/rmw.h#L262>`_
  * `rmw_fini_publisher_allocation <https://github.com/ros2/rmw/blob/dc7b2f49f1f961d6cf2c173adc54736451be8938/rmw/include/rmw/rmw.h#L279>`_
@@ -850,88 +839,87 @@ Changes since the `Crystal Clemmys <Release-Crystal-Clemmys>` release:
  * `rmw_fini_subscription_allocation <https://github.com/ros2/rmw/blob/dc7b2f49f1f961d6cf2c173adc54736451be8938/rmw/include/rmw/rmw.h#L506>`_
  * `rmw_serialized_message_size <https://github.com/ros2/rmw/blob/dc7b2f49f1f961d6cf2c173adc54736451be8938/rmw/include/rmw/rmw.h#L395>`_
 
-* Modification of ``rmw``, now passes ``rmw_publisher_allocation_t`` or ``rmw_subscription_allocation_t`` to ``rmw_publish`` and ``rmw_take``, respectively.
-  Note that this argument can be ``NULL`` or ``nullptr``, which keeps existing Crystal behavior.
+* ``rmw`` 修改，现在分别将 ``rmw_publisher_allocation_t`` 或 ``rmw_subscription_allocation_t`` 传递给 ``rmw_publish`` 和 ``rmw_take``。
+  请注意，此参数可以是 ``NULL`` 或 ``nullptr``，这将保持现有的 Crystal 行为。
 
  * `rmw_publish <https://github.com/ros2/rmw/blob/dc7b2f49f1f961d6cf2c173adc54736451be8938/rmw/include/rmw/rmw.h#L310>`_
  * `rmw_take <https://github.com/ros2/rmw/blob/dc7b2f49f1f961d6cf2c173adc54736451be8938/rmw/include/rmw/rmw.h#L556>`_
 
-* Type names returned by ``rmw_get_*_names_and_types*`` functions should have a fully-qualified namespace.
-  For example, instead of ``rcl_interfaces/Parameter`` and ``rcl_interfaces/GetParameters``, the returned type names should be ``rcl_interface/msg/Parameter`` and ``rcl_interfaces/srv/GetParameters``.
+* ``rmw_get_*_names_and_types*`` 函数返回的类型名应带有完全限定的命名空间。
+  例如，返回的类型名应为 ``rcl_interface/msg/Parameter`` 和 ``rcl_interfaces/srv/GetParameters``，而不是 ``rcl_interfaces/Parameter`` 和 ``rcl_interfaces/GetParameters``。
 
 actions
 ^^^^^^^
 
-* Changes to ``rclcpp_action::Client`` signatures:
+* ``rclcpp_action::Client`` 签名的变更：
 
-  The signature of `rclcpp_action::Client::async_send_goal <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L343>`_ has changed.
-  Now users can optionally provide callback functions for the **goal response** and the **result** using the new
-  `SendGoalOptions <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L276>`_ struct.
-  The goal response callback is called when an action server accepts or rejects the goal and the result callback is called when the result for the goal is received.
-  Optional callbacks were also added to `rclcpp_action::Client::async_cancel_goal <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L432-L434>`_
-  and `rclcpp_action::Client::async_get_result <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L399-L401>`_.
+  `rclcpp_action::Client::async_send_goal <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L343>`_ 的签名已变更。
+  现在用户可以使用新的 `SendGoalOptions <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L276>`_ 结构体。
+  当动作服务器接受或拒绝目标时会调用目标响应回调，当收到目标的结果时会调用结果回调。
+  此外还向 `rclcpp_action::Client::async_cancel_goal <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L432-L434>`_
+  和 `rclcpp_action::Client::async_get_result <https://github.com/ros2/rclcpp/blob/ef41059a751702274667e2164182c062b47c453d/rclcpp_action/include/rclcpp_action/client.hpp#L399-L401>`_ 添加了可选回调。
 
-* Changes to goal transition names:
+* 目标状态转换名称的变更：
 
-  The names of goal state transitions have been refactored to reflect the design documention.
-  This affects ``rcl_action``, ``rclcpp_action``, and ``rclpy``.
-  Here is a list of the event name changes (*Old name -> New name*):
+  目标状态转换的名称已被重构，以反映设计文档。
+  这影响 ``rcl_action``、``rclcpp_action`` 和 ``rclpy``。
+  以下是事件名称变更的列表（*旧名称 -> 新名称*）：
 
   * GOAL_EVENT_CANCEL -> GOAL_EVENT_CANCEL_GOAL
   * GOAL_EVENT_SET_SUCCEEDED -> GOAL_EVENT_SUCCEED
   * GOAL_EVENT_SET_ABORTED -> GOAL_EVENT_ABORT
   * GOAL_EVENT_SET_CANCELED -> GOAL_EVENT_CANCELED
 
-* Changes to ``CancelGoal.srv``:
+* ``CancelGoal.srv`` 的变更：
 
-  A ``return_code`` field was added to the response message of the ``CancelGoal`` service.
-  This is to better communicate a reason for a failed service call.
-  See the `pull request <https://github.com/ros2/rcl_interfaces/pull/76>`_ and connected issue for details.
+  ``CancelGoal`` 服务的响应消息中新增了 ``return_code`` 字段。
+  这是为了更好地说明服务调用失败的原因。
+  有关详细信息，请参见 `拉取请求 <https://github.com/ros2/rcl_interfaces/pull/76>`_ 及相关 issue。
 
 rviz
 ^^^^
 
-* Plugins should use fully qualified type names otherwise a warning will be logged.
-  For `example <https://github.com/ros2/rviz/blob/dfceae319d49546f1e4ad39689853c18fef0001e/rviz_default_plugins/plugins_description.xml#L13>`_, use the type ``sensor_msgs/msg/Image`` instead of ``sensor_msgs/Image``.
-  See `PR introducing this change <https://github.com/ros2/rviz/pull/387>`_ for more details.
+* 插件应使用完全限定类型名，否则会记录一条警告。
+  例如 <https://github.com/ros2/rviz/blob/dfceae319d49546f1e4ad39689853c18fef0001e/rviz_default_plugins/plugins_description.xml#L13>`_，应使用类型 ``sensor_msgs/msg/Image``，而不是 ``sensor_msgs/Image``。
+  有关更多详细信息，请参见引入此变更的 `PR <https://github.com/ros2/rviz/pull/387>`_。
 
-Known Issues
-------------
+已知问题
+--------
 
-* `[ros2/rclcpp#715] <https://github.com/ros2/rclcpp/issues/715>`_ There is an inconsistency in the way that parameter YAML files are loaded between standalone ROS 2 nodes and composed ROS 2 nodes.
-  Currently available workarounds are noted in an `issue comment <https://github.com/ros2/rclcpp/issues/715#issuecomment-497392626>`_
-* `[ros2/rclpy#360] <https://github.com/ros2/rclpy/issues/360>`_ rclpy nodes ignore :kbd:`ctrl-c` when using OpenSplice on Windows.
-* `[ros2/rosidl_typesupport_opensplice#30] <https://github.com/ros2/rosidl_typesupport_opensplice/issues/30>`_ There is a bug preventing nesting a message inside of a service or action definition with the same name when using OpenSplice.
-* `[ros2/rclcpp#781] <https://github.com/ros2/rclcpp/pull/781>`_ Calling ``get_parameter``/``list_parameter`` from within ``on_set_parameter_callback`` causes a deadlock on Dashing.  This is fixed for Eloquent, but is an ABI break so has not been backported to Dashing.
-* `[ros2/rclcpp#912] <https://github.com/ros2/rclcpp/issues/912>`_ Inter-process communication forces a message copy when intra-process communication takes place between an ``std::unique_ptr`` publisher and a single ``std::unique_ptr`` subscription (published ``std::unique_ptr`` is internally being promoted to an ``std::shared_ptr``).
-* `[ros2/rosbag2#125] <https://github.com/ros2/rosbag2/issues/125>`_ Topics with unreliable QOS are not recorded.
-* `[ros2/rclcpp#715] <https://github.com/ros2/rclcpp/issues/715>`_ Composable nodes cannot receive parameters via remapping. Supplying parameters to composable nodes can be accomplished using the methods described in `[this comment] <https://github.com/ros2/rclcpp/issues/715#issuecomment-497392626>`_.
-* `[ros2/rclcpp#893] <https://github.com/ros2/rclcpp/issues/893>`_ ``rclcpp::Context`` is not destroyed because of a reference cycle with ``rclcpp::GraphListener``. This causes a memory leak. A fix has not been backported because of the risk of breaking ABI.
+* `[ros2/rclcpp#715] <https://github.com/ros2/rclcpp/issues/715>`_ 在独立 ROS 2 节点和组合式 ROS 2 节点之间，参数 YAML 文件的加载方式存在不一致。
+  当前可用的变通方法记录在一条 `issue 评论 <https://github.com/ros2/rclcpp/issues/715#issuecomment-497392626>`_ 中
+* `[ros2/rclpy#360] <https://github.com/ros2/rclpy/issues/360>`_ 在 Windows 上使用 OpenSplice 时，rclpy 节点会忽略 :kbd:`ctrl-c`。
+* `[ros2/rosidl_typesupport_opensplice#30] <https://github.com/ros2/rosidl_typesupport_opensplice/issues/30>`_ 在使用 OpenSplice 时，存在一个缺陷，导致无法在服务或动作定义中嵌套同名的消息。
+* `[ros2/rclcpp#781] <https://github.com/ros2/rclcpp/pull/781>`_ 在 ``on_set_parameter_callback`` 中调用 ``get_parameter``/``list_parameter`` 会在 Dashing 上造成死锁。该问题在 Eloquent 中已修复，但由于会破坏 ABI，因此尚未向后移植到 Dashing。
+* `[ros2/rclcpp#912] <https://github.com/ros2/rclcpp/issues/912>`_ 当进程内通信发生在 ``std::unique_ptr`` 发布者和单个 ``std::unique_ptr`` 订阅之间时，进程间通信会强制进行一次消息拷贝（发布的 ``std::unique_ptr`` 在内部会被提升为 ``std::shared_ptr``）。
+* `[ros2/rosbag2#125] <https://github.com/ros2/rosbag2/issues/125>`_ 使用不可靠 QoS 的话题不会被记录。
+* `[ros2/rclcpp#715] <https://github.com/ros2/rclcpp/issues/715>`_ 可组合节点无法通过重映射接收参数。可以使用 `[此评论] <https://github.com/ros2/rclcpp/issues/715#issuecomment-497392626>`_ 中描述的方法向可组合节点提供参数。
+* `[ros2/rclcpp#893] <https://github.com/ros2/rclcpp/issues/893>`_ 由于与 ``rclcpp::GraphListener`` 之间存在引用环，``rclcpp::Context`` 不会被销毁。这会造成内存泄漏。由于存在破坏 ABI 的风险，修复尚未向后移植。
 
-Timeline before the release
----------------------------
+发布前的时间线
+--------------
 
-A few milestones leading up to the release:
+发布前的几个里程碑：
 
-    Mon. Apr 8th (alpha)
-        First releases of core packages available.
-        Testing can happen from now on (some features might not have landed yet).
+    4 月 8 日（周一，alpha）
+        核心软件包的首次发布版本可用。
+        从现在起可以进行测试（某些特性可能尚未合入）。
 
-    Thu. May 2nd
-        API freeze for core packages
+    5 月 2 日（周四）
+        核心软件包 API 冻结
 
-    Mon. May 6th (beta)
-        Updated releases of core packages available.
-        Additional testing of the latest features.
+    5 月 6 日（周一，beta）
+        核心软件包的更新版本可用。
+        对最新特性进行额外测试。
 
-    Thu. May 16th
-        Feature freeze.
-        Only bug fix releases should be made after this point.
-        New packages can be released independently.
+    5 月 16 日（周四）
+        特性冻结。
+        在此之后只应进行缺陷修复发布。
+        新软件包可以独立发布。
 
-    Mon. May 20th (release candidate)
-        Updated releases of core packages available.
+    5 月 20 日（周一，候选版本）
+        核心软件包的更新版本可用。
 
-    Wed. May 29th
-        Freeze rosdistro.
-        No PRs for Dashing on the rosdistro repo will be merged (reopens after the release announcement).
+    5 月 29 日（周三）
+        冻结 rosdistro。
+        针对 Dashing 的 PR 将不会在 rosdistro 仓库中被合并（在发布公告后重新开放）。

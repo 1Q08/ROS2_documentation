@@ -4,36 +4,36 @@
 
 .. _BuildingURDF:
 
-Building a visual robot model from scratch
-==========================================
+从零开始构建一个视觉机器人模型
+==============================
 
-**Goal:** Learn how to build a visual model of a robot that you can view in Rviz
+**目标：** 学习如何构建一个可以在 Rviz 中查看的机器人视觉模型
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 20 minutes
+**时间：** 20 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-.. note:: This tutorial assumes you know how to write well-formatted XML code
+.. note:: 本教程假设你知道如何编写格式良好的 XML 代码
 
-In this tutorial, we're going to build a visual model of a robot that vaguely looks like R2D2.
-In later tutorials, you'll learn how to :doc:`articulate the model <./Building-a-Movable-Robot-Model-with-URDF>`, :doc:`add in some physical properties <./Adding-Physical-and-Collision-Properties-to-a-URDF-Model>`, and :doc:`generate neater code with xacro <./Using-Xacro-to-Clean-Up-a-URDF-File>`, but for now, we're going to focus on getting the visual geometry correct.
+在本教程中，我们将构建一个看起来隐约像 R2D2 的机器人视觉模型。
+在后面的教程中，你将学习如何 :doc:`连接模型 <./Building-a-Movable-Robot-Model-with-URDF>`、:doc:`添加一些物理属性 <./Adding-Physical-and-Collision-Properties-to-a-URDF-Model>`，以及 :doc:`用 xacro 生成更简洁的代码 <./Using-Xacro-to-Clean-Up-a-URDF-File>`，但现在我们先专注于让视觉几何体正确。
 
-Before continuing, make sure you have the `joint_state_publisher <https://index.ros.org/p/joint_state_publisher>`_ package installed.
-If you installed `urdf_tutorial <https://index.ros.org/p/urdf_tutorial>`_ binaries, this should already be the case.
-If not, please update your installation to include that package (use ``rosdep`` to check).
+继续之前，请确保你已安装 `joint_state_publisher <https://index.ros.org/p/joint_state_publisher>`_ 包。
+如果你安装了 `urdf_tutorial <https://index.ros.org/p/urdf_tutorial>`_ 二进制文件，这应该已经满足。
+如果没有，请更新你的安装以包含该包（用 ``rosdep`` 检查）。
 
-All of the robot models mentioned in this tutorial (and the source files) can be found in the `urdf_tutorial <https://index.ros.org/p/urdf_tutorial>`_ package.
+本教程中提到的所有机器人模型（以及源文件）都可以在 `urdf_tutorial <https://index.ros.org/p/urdf_tutorial>`_ 包中找到。
 
-One Shape
----------
+一个形状
+--------
 
-First, we're just going to explore one simple shape.
-Here's about as simple as a urdf as you can make.
-`[Source: 01-myfirst.urdf] <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/01-myfirst.urdf>`_
+首先，我们只探索一个简单的形状。
+下面是一个你能做到的最简单的 urdf。
+`[源：01-myfirst.urdf] <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/01-myfirst.urdf>`_
 
 .. code-block:: xml
 
@@ -48,42 +48,42 @@ Here's about as simple as a urdf as you can make.
       </link>
     </robot>
 
-To translate the XML into English, this is a robot with the name ``myfirst``, that contains only one link (a.k.a. part), whose visual component is just a cylinder 0.6 meters long with a 0.2 meter radius.
-This may seem like a lot of enclosing tags for a simple "hello world" type example.
+把 XML 翻译成通俗的话，这是一个名为 ``myfirst`` 的机器人，它只包含一个 link（即部件），其视觉组件只是一个长 0.6 米、半径 0.2 米的圆柱体。
+对于一个简单的 "hello world" 类型示例来说，这可能看起来有很多包裹标签。
 
-To examine the model, launch the ``display.launch.py`` file:
+要查看模型，启动 ``display.launch.py`` 文件：
 
 .. code-block:: console
 
   $ ros2 launch urdf_tutorial display.launch.py model:=urdf/01-myfirst.urdf
 
-This does three things:
+这做了三件事：
 
- * Loads the specified model and saves it as a parameter for the ``robot_state_publisher`` node.
- * Runs nodes to publish `sensor_msgs/msg/JointState <https://github.com/ros2/common_interfaces/blob/{DISTRO}/sensor_msgs/msg/JointState.msg>`_ and transforms (more on these later)
- * Starts Rviz with a configuration file
+ * 加载指定模型，并将其作为 ``robot_state_publisher`` 节点的参数保存。
+ * 运行节点来发布 `sensor_msgs/msg/JointState <https://github.com/ros2/common_interfaces/blob/{DISTRO}/sensor_msgs/msg/JointState.msg>`_ 和变换（稍后再详细介绍）
+ * 使用配置文件启动 Rviz
 
-After launching ``display.launch.py``, you should end up with RViz showing you the following:
+启动 ``display.launch.py`` 后，你应该会看到 RViz 显示如下内容：
 
 .. image:: https://raw.githubusercontent.com/ros/urdf_tutorial/ros2/images/myfirst.png
   :width: 800
   :alt: my first image
 
-Things to note:
- * The fixed frame is the transform frame where the center of the grid is located.
-   Here, it's a frame defined by our one link, base_link.
- * The visual element (the cylinder) has its origin at the center of its geometry as a default.
-   Hence, half the cylinder is below the grid.
+需要注意的事项：
+ * 固定坐标系是网格中心所在的变换坐标系。
+   这里，它是由我们的一个 link ``base_link`` 定义的坐标系。
+ * 视觉元素（圆柱体）的默认原点在其几何体的中心。
+   因此，圆柱体有一半位于网格之下。
 
-Multiple Shapes
----------------
+多个形状
+--------
 
-Now let's look at how to add multiple shapes/links.
-If we just add more link elements to the urdf, the parser won't know where to put them.
-So, we have to add joints.
-Joint elements can refer to both flexible and inflexible joints.
-We'll start with inflexible, or fixed joints.
-`[Source: 02-multipleshapes.urdf] <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/02-multipleshapes.urdf>`_
+现在让我们看看如何添加多个形状/link。
+如果我们只是向 urdf 添加更多 link 元素，解析器不知道把它们放在哪里。
+因此，我们必须添加关节。
+关节元素可以同时指柔性关节和非柔性关节。
+我们将从非柔性的、即固定关节开始。
+`[源：02-multipleshapes.urdf] <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/02-multipleshapes.urdf>`_
 
 .. code-block:: xml
 
@@ -112,10 +112,10 @@ We'll start with inflexible, or fixed joints.
 
     </robot>
 
-* Note how we defined a 0.6m x 0.1m x 0.2m box
-* The joint is defined in terms of a parent and a child.
-  URDF is ultimately a tree structure with one root link.
-  This means that the leg's position is dependent on the base_link's position.
+* 注意我们是如何定义一个 0.6m x 0.1m x 0.2m 的盒子的
+* 关节是用一个父节点和一个子节点来定义的。
+  URDF 最终是一个只有一个根 link 的树状结构。
+  这意味着腿的位置取决于 base_link 的位置。
 
 .. code-block:: console
 
@@ -125,17 +125,17 @@ We'll start with inflexible, or fixed joints.
   :width: 800
   :alt: Multiple Shapes
 
-Both of the shapes overlap with each other, because they share the same origin.
-If we want them not to overlap we must define more origins.
+两个形状相互重叠，因为它们共享同一个原点。
+如果我们不想让它们重叠，就必须定义更多的原点。
 
-Origins
--------
+原点
+----
 
-R2D2's leg attaches to the top half of his torso, on the side.
-So that's where we specify the origin of the JOINT to be.
-Also, it doesn't attach to the middle of the leg, it attaches to the upper part, so we must offset the origin for the leg as well.
-We also rotate the leg so it is upright.
-`[Source: 03-origins.urdf] <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/03-origins.urdf>`_
+R2D2 的腿连接到他躯干上半部分的侧面。
+所以那就是我们指定 JOINT 原点的地方。
+而且，它不是连接到腿的中间，而是连接到上部，所以我们也必须为腿偏移原点。
+我们还要旋转腿，使它直立。
+`[源：03-origins.urdf] <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/03-origins.urdf>`_
 
 .. code-block:: xml
 
@@ -166,15 +166,15 @@ We also rotate the leg so it is upright.
 
     </robot>
 
-* Let's start by examining the joint's origin.
-  It is defined in terms of the parent's reference frame.
-  So we are -0.22 meters in the y direction (to our left, but to the right relative to the axes) and 0.25 meters in the z direction (up).
-  This means that the origin for the child link will be up and to the right, regardless of the child link's visual origin tag.
-  Since we didn't specify a rpy (roll pitch yaw) attribute, the child frame will be default have the same orientation as the parent frame.
-* Now, looking at the leg's visual origin, it has both a xyz and rpy offset.
-  This defines where the center of the visual element should be, relative to its origin.
-  Since we want the leg to attach at the top, we offset the origin down by setting the z offset to be -0.3 meters.
-  And since we want the long part of the leg to be parallel to the z axis, we rotate the visual part PI/2 around the Y axis.
+* 让我们先看关节的原点。
+  它是相对于父节点的参考坐标系定义的。
+  所以我们在 y 方向偏移 -0.22 米（在我们的左边，但相对于轴来说是右边），在 z 方向偏移 0.25 米（向上）。
+  这意味着子 link 的原点将位于上方和右侧，而不管子 link 的视觉原点标签如何。
+  由于我们没有指定 rpy（roll pitch yaw）属性，子坐标系默认将与父坐标系具有相同的方向。
+* 现在，看腿的视觉原点，它同时有 xyz 和 rpy 偏移。
+  这定义了视觉元素中心相对于其原点的位置。
+  由于我们想让腿在顶部连接，我们通过将 z 偏移设为 -0.3 米来把原点向下偏移。
+  而且由于我们想让腿的长边平行于 z 轴，我们将视觉部分绕 Y 轴旋转 PI/2。
 
 .. code-block:: console
 
@@ -184,20 +184,20 @@ We also rotate the leg so it is upright.
   :width: 800
   :alt: Origins Screenshot
 
-* The launch file runs packages that will create TF frames for each link in your model based on your URDF.
-  Rviz uses this information to figure out where to display each shape.
-* If a TF frame does not exist for a given URDF link, then it will be placed at the origin in white
-  (`related question <http://answers.ros.org/question/207947/how-do-you-use-externally-defined-materials-in-a-urdfxacro-file/>`_).
+* 启动文件运行一些包，它们会根据你的 URDF 为模型中的每个 link 创建 TF 坐标系。
+  Rviz 使用这些信息来确定在哪里显示每个形状。
+* 如果某个 URDF link 不存在 TF 坐标系，那么它将被以白色放置在原点处
+  （`相关问题 <http://answers.ros.org/question/207947/how-do-you-use-externally-defined-materials-in-a-urdfxacro-file/>`_）。
 
-Material Girl
--------------
+材料女孩
+--------
 
-"Alright," I hear you say.
-"That's very cute, but not everyone owns a B21.
-My robot and R2D2 are not red!"
-That's a good point.
-Let's take a look at the material tag.
-`[Source: 04-materials.urdf] <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/04-materials.urdf>`_
+“好吧，”我听到你说。
+“那很可爱，但不是每个人都拥有一台 B21。
+我的机器人和 R2D2 不是红色的！”
+这是个好观点。
+让我们看看 material 标签。
+`[源：04-materials.urdf] <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/04-materials.urdf>`_
 
 .. code-block:: xml
 
@@ -255,14 +255,14 @@ Let's take a look at the material tag.
 
     </robot>
 
-* The body is now blue.
-  We've defined a new material called "blue", with the red, green, blue and alpha channels defined as 0,0,0.8 and 1 respectively.
-  All of the values can be in the range [0,1].
-  This material is then referenced by the base_link's visual element.
-  The white material is defined similarly.
-* You could also define the material tag from within the visual element, and even reference it in other links.
-  No one will even complain if you redefine it though.
-* You can also use a texture to specify an image file to be used for coloring the object
+* 身体现在是蓝色的。
+  我们定义了一个名为 "blue" 的新材料，其中红、绿、蓝和 alpha 通道分别定义为 0、0、0.8 和 1。
+  所有值都可以在 [0,1] 范围内。
+  然后这个材料被 base_link 的视觉元素引用。
+  白色材料也是类似定义的。
+* 你也可以在视觉元素内部定义 material 标签，甚至在其他 link 中引用它。
+  不过，即使你重新定义它，也没有人会抱怨。
+* 你还可以使用纹理来指定一个用于给对象着色的图像文件
 
 .. code-block:: console
 
@@ -272,13 +272,13 @@ Let's take a look at the material tag.
   :width: 800
   :alt: Materials Screenshot
 
-Finishing the Model
--------------------
+完成模型
+--------
 
-Now we finish the model off with a few more shapes: feet, wheels, and head.
-Most notably, we add a sphere and some meshes.
-We'll also add few other pieces that we'll use later.
-`[Source: 05-visual.urdf] <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/05-visual.urdf>`_
+现在我们用几个更多的形状来完成模型：脚、轮子和头。
+最值得注意的是，我们添加了一个球体和一些网格。
+我们还会添加一些以后会用到的其他部件。
+`[源：05-visual.urdf] <https://github.com/ros/urdf_tutorial/blob/ros2/urdf/05-visual.urdf>`_
 
 .. code-block:: xml
 
@@ -536,7 +536,7 @@ We'll also add few other pieces that we'll use later.
   :width: 800
   :alt: Visual Screenshot
 
-How to add the sphere should be fairly self explanatory:
+如何添加球体应该相当不言自明：
 
 .. code-block:: xml
 
@@ -549,10 +549,10 @@ How to add the sphere should be fairly self explanatory:
     </visual>
   </link>
 
-The meshes here were borrowed from the PR2.
-They are separate files which you have to specify the path for.
-You should use the ``package://NAME_OF_PACKAGE/path`` notation.
-The meshes for this tutorial are located within the ``urdf_tutorial`` package, in a folder called meshes.
+这里的网格是从 PR2 借来的。
+它们是单独的文件，你必须指定路径。
+你应该使用 ``package://NAME_OF_PACKAGE/path`` 表示法。
+本教程的网格位于 ``urdf_tutorial`` 包中一个名为 meshes 的文件夹里。
 
 .. code-block:: xml
 
@@ -565,13 +565,13 @@ The meshes for this tutorial are located within the ``urdf_tutorial`` package, i
     </visual>
   </link>
 
-* The meshes can be imported in a number of different formats.
-  STL is fairly common, but the engine also supports DAE, which can have its own color data, meaning you don't have to specify the color/material.
-  Often these are in separate files.
-  These meshes reference the ``.tif`` files also in the meshes folder.
-* Meshes can also be sized using relative scaling parameters or a bounding box size.
-* We could have also referred to meshes in a completely different package.
+* 网格可以以多种不同的格式导入。
+  STL 相当常见，但引擎也支持 DAE，它可以有自己的颜色数据，这意味着你不必指定颜色/材料。
+  这些通常位于单独的文件中。
+  这些网格引用了同样位于 meshes 文件夹中的 ``.tif`` 文件。
+* 网格也可以使用相对缩放参数或包围盒尺寸来调整大小。
+* 我们也可以引用完全不同包中的网格。
 
-There you have it.
-A R2D2-like URDF model.
-Now you can continue on to the next step, :doc:`making it move <./Building-a-Movable-Robot-Model-with-URDF>`.
+就是这样。
+一个类似 R2D2 的 URDF 模型。
+现在你可以继续下一步，:doc:`让它动起来 <./Building-a-Movable-Robot-Model-with-URDF>`。

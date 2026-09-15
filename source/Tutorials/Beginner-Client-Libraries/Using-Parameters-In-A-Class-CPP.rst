@@ -4,70 +4,70 @@
 
 .. _CppParamNode:
 
-Using parameters in a class (C++)
-=================================
+在类中使用参数（C++）
+=====================
 
-**Goal:** Create and run a class with ROS parameters using C++.
+**目标：** 使用 C++ 创建并运行一个带 ROS 参数的类。
 
-**Tutorial level:** Beginner
+**教程级别：** 入门
 
-**Time:** 20 minutes
+**时间：** 20 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-When making your own :doc:`nodes <../Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes>` you will sometimes need to add parameters that can be set from the launch file.
+在创建你自己的 :doc:`节点 <../Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes>` 时，有时你需要添加可以从 launch 文件设置的参数。
 
-This tutorial will show you how to create those parameters in a C++ class, and how to set them in a launch file.
+本教程将向你展示如何在 C++ 类中创建这些参数，以及如何在 launch 文件中设置它们。
 
-Prerequisites
--------------
+前置条件
+--------
 
-In previous tutorials, you learned how to :doc:`create a workspace <./Creating-A-Workspace/Creating-A-Workspace>` and :doc:`create a package <./Creating-Your-First-ROS2-Package>`.
-You have also learned about :doc:`parameters <../Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters>` and their function in a ROS 2 system.
+在之前的教程中，你学习了如何 :doc:`创建工作空间 <./Creating-A-Workspace/Creating-A-Workspace>` 和 :doc:`创建包 <./Creating-Your-First-ROS2-Package>`。
+你还学习了 :doc:`参数 <../Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters>` 及其在 ROS 2 系统中的功能。
 
-Tasks
------
+任务
+----
 
-1 Create a package
-^^^^^^^^^^^^^^^^^^
+1 创建一个包
+^^^^^^^^^^^^
 
-Open a new terminal and :doc:`source your ROS 2 installation <../Beginner-CLI-Tools/Configuring-ROS2-Environment>` so that ``ros2`` commands will work.
+打开一个新终端并 :doc:`source 你的 ROS 2 安装 <../Beginner-CLI-Tools/Configuring-ROS2-Environment>`，以便 ``ros2`` 命令能够工作。
 
-Follow :ref:`these instructions <new-directory>` to create a new workspace named ``ros2_ws``.
+按照 :ref:`这些说明 <new-directory>` 创建一个名为 ``ros2_ws`` 的新工作空间。
 
-Recall that packages should be created in the ``src`` directory, not the root of the workspace.
-Navigate into ``ros2_ws/src`` and create a new package:
+回想一下，包应该创建在 ``src`` 目录中，而不是工作空间的根目录中。
+进入 ``ros2_ws/src`` 并创建一个新包：
 
 .. code-block:: console
 
   $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 cpp_parameters --dependencies rclcpp
 
-Your terminal will return a message verifying the creation of your package ``cpp_parameters`` and all its necessary files and folders.
+你的终端将返回一条消息，验证你的包 ``cpp_parameters`` 及其所有必需文件和文件夹已创建。
 
-The ``--dependencies`` argument will automatically add the necessary dependency lines to ``package.xml`` and ``CMakeLists.txt``.
+``--dependencies`` 参数会自动将必要的依赖行添加到 ``package.xml`` 和 ``CMakeLists.txt``。
 
-1.1 Update ``package.xml``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+1.1 更新 ``package.xml``
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-Because you used the ``--dependencies`` option during package creation, you don't have to manually add dependencies to ``package.xml`` or ``CMakeLists.txt``.
+因为在包创建期间你使用了 ``--dependencies`` 选项，所以你不必手动向 ``package.xml`` 或 ``CMakeLists.txt`` 添加依赖。
 
-As always, though, make sure to add the description, maintainer email and name, and license information to ``package.xml``.
+不过，一如既往，请务必向 ``package.xml`` 添加描述、维护者邮箱和姓名，以及许可信息。
 
 .. code-block:: xml
 
   <description>C++ parameter tutorial</description>
   <maintainer email="you@email.com">Your Name</maintainer>
-  <license>Apache License 2.0</license>
+  <license>Apache-2.0</license>
 
-2 Write the C++ node
-^^^^^^^^^^^^^^^^^^^^
+2 编写 C++ 节点
+^^^^^^^^^^^^^^^
 
-Inside the ``ros2_ws/src/cpp_parameters/src`` directory, create a new file called ``cpp_parameters_node.cpp`` and paste the following code within:
+在 ``ros2_ws/src/cpp_parameters/src`` 目录中，创建一个名为 ``cpp_parameters_node.cpp`` 的新文件，并在其中粘贴以下代码：
 
 .. code-block:: C++
 
@@ -87,18 +87,15 @@ Inside the ``ros2_ws/src/cpp_parameters/src`` directory, create a new file calle
       {
         this->declare_parameter("my_parameter", "world");
 
-        timer_ = this->create_wall_timer(
-          1000ms, std::bind(&MinimalParam::timer_callback, this));
-      }
+        auto timer_callback = [this](){
+          std::string my_param = this->get_parameter("my_parameter").as_string();
 
-      void timer_callback()
-      {
-        std::string my_param = this->get_parameter("my_parameter").as_string();
+          RCLCPP_INFO(this->get_logger(), "Hello %s!", my_param.c_str());
 
-        RCLCPP_INFO(this->get_logger(), "Hello %s!", my_param.c_str());
-
-        std::vector<rclcpp::Parameter> all_new_parameters{rclcpp::Parameter("my_parameter", "world")};
-        this->set_parameters(all_new_parameters);
+          std::vector<rclcpp::Parameter> all_new_parameters{rclcpp::Parameter("my_parameter", "world")};
+          this->set_parameters(all_new_parameters);
+        };
+        timer_ = this->create_wall_timer(1000ms, timer_callback);
       }
 
     private:
@@ -113,14 +110,20 @@ Inside the ``ros2_ws/src/cpp_parameters/src`` directory, create a new file calle
       return 0;
     }
 
-2.1 Examine the code
-~~~~~~~~~~~~~~~~~~~~
-The ``#include`` statements at the top are the package dependencies.
+2.1 检查代码
+~~~~~~~~~~~~
+顶部的 ``#include`` 语句是包依赖。
 
-The next piece of code creates the class and the constructor.
-The first line of this constructor creates a parameter with the name ``my_parameter`` and a default value of ``world``.
-The parameter type is inferred from the default value, so in this case it would be set to a string type.
-Next the ``timer_`` is initialized with a period of 1000ms, which causes the ``timer_callback`` function to be executed once a second.
+下一段代码创建了类和构造函数。
+构造函数的第一行创建了一个名为 ``my_parameter``、默认值为 ``world`` 的参数。
+参数类型由默认值推断，因此在这种情况下它会被设置为字符串类型。
+接下来，声明了一个名为 ``timer_callback`` 的 `lambda 函数 <https://en.cppreference.com/w/cpp/language/lambda>`_。
+它对当前对象 ``this`` 进行引用捕获，不接受输入参数并返回 void。
+我们的 ``timer_callback`` 函数的第一行从节点获取参数 ``my_parameter``，并将其存储在 ``my_param`` 中。
+然后 ``RCLCPP_INFO`` 函数确保事件被记录。
+``set_parameters`` 函数将参数 ``my_parameter`` 设置回默认字符串值 ``world``。
+如果用户从外部更改了参数，这可以确保它总是被重置回原始值。
+最后，``timer_`` 被初始化为 1000ms 的周期，这会导致 ``timer_callback`` 函数每秒执行一次。
 
 .. code-block:: C++
 
@@ -132,36 +135,26 @@ Next the ``timer_`` is initialized with a period of 1000ms, which causes the ``t
       {
         this->declare_parameter("my_parameter", "world");
 
-        timer_ = this->create_wall_timer(
-          1000ms, std::bind(&MinimalParam::timer_callback, this));
+        auto timer_callback = [this](){
+          std::string my_param = this->get_parameter("my_parameter").as_string();
+
+          RCLCPP_INFO(this->get_logger(), "Hello %s!", my_param.c_str());
+
+          std::vector<rclcpp::Parameter> all_new_parameters{rclcpp::Parameter("my_parameter", "world")};
+          this->set_parameters(all_new_parameters);
+        };
+        timer_ = this->create_wall_timer(1000ms, timer_callback);
       }
 
-The first line of our ``timer_callback`` function gets the parameter ``my_parameter`` from the node, and stores it in ``my_param``.
-Next the ``RCLCPP_INFO`` function ensures the event is logged.
-The ``set_parameters`` function then sets the parameter ``my_parameter`` back to the default string value ``world``.
-In the case that the user changed the parameter externally, this ensures it is always reset back to the original.
-
-.. code-block:: C++
-
-    void timer_callback()
-    {
-      std::string my_param = this->get_parameter("my_parameter").as_string();
-
-      RCLCPP_INFO(this->get_logger(), "Hello %s!", my_param.c_str());
-
-      std::vector<rclcpp::Parameter> all_new_parameters{rclcpp::Parameter("my_parameter", "world")};
-      this->set_parameters(all_new_parameters);
-    }
-
-Last is the declaration of ``timer_``.
+最后是 ``timer_`` 的声明。
 
 .. code-block:: C++
 
     private:
       rclcpp::TimerBase::SharedPtr timer_;
 
-Following our ``MinimalParam`` is our ``main``.
-Here ROS 2 is initialized, an instance of the ``MinimalParam`` class is constructed, and ``rclcpp::spin`` starts processing data from the node.
+在我们的 ``MinimalParam`` 之后是 ``main``。
+这里初始化了 ROS 2，构造了一个 ``MinimalParam`` 类的实例，并且 ``rclcpp::spin`` 开始处理来自节点的数据。
 
 .. code-block:: C++
 
@@ -173,11 +166,11 @@ Here ROS 2 is initialized, an instance of the ``MinimalParam`` class is construc
       return 0;
     }
 
-2.1.1 (Optional) Add ParameterDescriptor
-""""""""""""""""""""""""""""""""""""""""
-Optionally, you can set a descriptor for the parameter.
-Descriptors allow you to specify a text description of the parameter and its constraints, like making it read-only, specifying a range, etc.
-For that to work, the code in the constructor has to be changed to:
+2.1.1 （可选）添加 ParameterDescriptor
+""""""""""""""""""""""""""""""""""""""
+可选地，你可以为参数设置一个描述符。
+描述符允许你指定参数的文本描述及其约束，例如将其设为只读、指定范围等。
+为此，构造函数中的代码必须更改为：
 
 .. code-block:: C++
 
@@ -194,19 +187,27 @@ For that to work, the code in the constructor has to be changed to:
 
         this->declare_parameter("my_parameter", "world", param_desc);
 
-        timer_ = this->create_wall_timer(
-          1000ms, std::bind(&MinimalParam::timer_callback, this));
+        auto timer_callback = [this](){
+          std::string my_param = this->get_parameter("my_parameter").as_string();
+
+          RCLCPP_INFO(this->get_logger(), "Hello %s!", my_param.c_str());
+
+          std::vector<rclcpp::Parameter> all_new_parameters{rclcpp::Parameter("my_parameter", "world")};
+          this->set_parameters(all_new_parameters);
+        };
+        timer_ = this->create_wall_timer(1000ms, timer_callback);
+
       }
 
-The rest of the code remains the same.
-Once you run the node, you can then run ``ros2 param describe /minimal_param_node my_parameter`` to see the type and description.
+其余代码保持不变。
+一旦你运行节点，就可以运行 ``ros2 param describe /minimal_param_node my_parameter`` 来查看类型和描述。
 
 
-2.2 Add executable
+2.2 添加可执行文件
 ~~~~~~~~~~~~~~~~~~
 
-Now open the ``CMakeLists.txt`` file.
-Below the dependency ``find_package(rclcpp REQUIRED)`` add the following lines of code.
+现在打开 ``CMakeLists.txt`` 文件。
+在依赖 ``find_package(rclcpp REQUIRED)`` 下面添加以下几行代码。
 
 .. code-block:: cmake
 
@@ -219,10 +220,10 @@ Below the dependency ``find_package(rclcpp REQUIRED)`` add the following lines o
     )
 
 
-3 Build and run
-^^^^^^^^^^^^^^^
+3 构建并运行
+^^^^^^^^^^^^
 
-It's good practice to run ``rosdep`` in the root of your workspace (``ros2_ws``) to check for missing dependencies before building:
+在构建之前，最好在工作空间的根目录（``ros2_ws``）运行 ``rosdep`` 来检查缺失的依赖：
 
 .. tabs::
 
@@ -234,13 +235,13 @@ It's good practice to run ``rosdep`` in the root of your workspace (``ros2_ws``)
 
    .. group-tab:: macOS
 
-      rosdep only runs on Linux, so you can skip ahead to next step.
+      rosdep 只在 Linux 上运行，所以你可以跳到下一步。
 
    .. group-tab:: Windows
 
-      rosdep only runs on Linux, so you can skip ahead to next step.
+      rosdep 只在 Linux 上运行，所以你可以跳到下一步。
 
-Navigate back to the root of your workspace, ``ros2_ws``, and build your new package:
+返回到工作空间的根目录 ``ros2_ws``，并构建你的新包：
 
 .. tabs::
 
@@ -262,7 +263,7 @@ Navigate back to the root of your workspace, ``ros2_ws``, and build your new pac
 
       $ colcon build --merge-install --packages-select cpp_parameters
 
-Open a new terminal, navigate to ``ros2_ws``, and source the setup files:
+打开一个新终端，进入 ``ros2_ws``，然后 source 安装文件：
 
 .. tabs::
 
@@ -284,64 +285,64 @@ Open a new terminal, navigate to ``ros2_ws``, and source the setup files:
 
       $ call install/setup.bat
 
-Now run the node.
-The terminal should return the ``Hello World`` message every second:
+现在运行节点。
+终端应该每秒返回一次 ``Hello World`` 消息：
 
 .. code-block:: console
 
      $ ros2 run cpp_parameters minimal_param_node
     [INFO] [minimal_param_node]: Hello world!
 
-Now you can see the default value of your parameter, but you want to be able to set it yourself.
-There are two ways to accomplish this.
+现在你可以看到参数的默认值，但你想能够自己设置它。
+有两种方法可以实现这一点。
 
-3.1 Change via the console
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+3.1 通过控制台更改
+~~~~~~~~~~~~~~~~~~
 
-This part will use the knowledge you have gained from the :doc:`tutorial about parameters <../Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters>` and apply it to the node you have just created.
+这部分将使用你从 :doc:`关于参数的教程 <../Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters>` 中获得的知识，并将其应用到你刚刚创建的节点上。
 
-Make sure the node is running:
+确保节点正在运行：
 
 .. code-block:: console
 
      $ ros2 run cpp_parameters minimal_param_node
 
-Open another terminal, source the setup files from inside ``ros2_ws`` again, and enter the following line:
+打开另一个终端，再次从 ``ros2_ws`` 内 source 安装文件，然后输入以下行：
 
 .. code-block:: console
 
     $ ros2 param list
 
-There you will see the custom parameter ``my_parameter``.
-To change it, simply run the following line in the console:
+在那里你会看到自定义参数 ``my_parameter``。
+要更改它，只需在控制台中运行以下行：
 
 .. code-block:: console
 
     $ ros2 param set /minimal_param_node my_parameter earth
 
-You know it went well if you got the output ``Set parameter successful``.
-If you look at the other terminal, you should see the output change to ``[INFO] [minimal_param_node]: Hello earth!``
+如果你得到了输出 ``Set parameter successful``，你就知道它成功了。
+如果你查看另一个终端，你应该会看到输出变为 ``[INFO] [minimal_param_node]: Hello earth!``
 
-3.2 Change via a launch file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-You can also set the parameter in a launch file, but first you will need to add the launch directory.
-Inside the ``ros2_ws/src/cpp_parameters/`` directory, create a new directory called ``launch``.
-In there, create a new file called ``cpp_parameters_launch.py``
+3.2 通过 launch 文件更改
+~~~~~~~~~~~~~~~~~~~~~~~~
+你也可以在 launch 文件中设置参数，但首先你需要添加 launch 目录。
+在 ``ros2_ws/src/cpp_parameters/`` 目录中，创建一个名为 ``launch`` 的新目录。
+在其中，创建一个名为 ``cpp_parameters_launch.py`` 的新文件。
 
 
 .. literalinclude:: launch/cpp_parameters_launch.py
   :language: python
 
-Here you can see that we set ``my_parameter`` to ``earth`` when we launch our node ``minimal_param_node``.
-By adding the two lines below, we ensure our output is printed in our console.
+在这里你可以看到，当我们启动节点 ``minimal_param_node`` 时，我们将 ``my_parameter`` 设置为 ``earth``。
+通过添加下面两行，我们确保输出打印在我们的控制台中。
 
 .. code-block:: python
 
           output="screen",
           emulate_tty=True,
 
-Now open the ``CMakeLists.txt`` file.
-Below the lines you added earlier, add the following lines of code.
+现在打开 ``CMakeLists.txt`` 文件。
+在你之前添加的行下面，添加以下几行代码。
 
 .. code-block:: cmake
 
@@ -350,7 +351,7 @@ Below the lines you added earlier, add the following lines of code.
       DESTINATION share/${PROJECT_NAME}
     )
 
-Open a console and navigate to the root of your workspace, ``ros2_ws``, and build your new package:
+打开一个控制台，进入工作空间的根目录 ``ros2_ws``，然后构建你的新包：
 
 .. tabs::
 
@@ -372,7 +373,7 @@ Open a console and navigate to the root of your workspace, ``ros2_ws``, and buil
 
       $ colcon build --merge-install --packages-select cpp_parameters
 
-Then source the setup files in a new terminal:
+然后在一个新终端中 source 安装文件：
 
 .. tabs::
 
@@ -394,23 +395,23 @@ Then source the setup files in a new terminal:
 
       $ call install/setup.bat
 
-Now run the node using the launch file we have just created.
-The terminal should return the following message the first time:
+现在使用我们刚刚创建的 launch 文件运行节点。
+终端第一次应该返回以下消息：
 
 .. code-block:: console
 
      $ ros2 launch cpp_parameters cpp_parameters_launch.py
      [INFO] [custom_minimal_param_node]: Hello earth!
 
-Further outputs should show  ``[INFO] [minimal_param_node]: Hello world!`` every second.
+后续输出应该每秒显示一次 ``[INFO] [minimal_param_node]: Hello world!``。
 
-Summary
--------
+总结
+----
 
-You created a node with a custom parameter that can be set either from a launch file or the command line.
-You added the dependencies, executables, and a launch file to the package configuration files so that you could build and run them, and see the parameter in action.
+你创建了一个带有自定义参数的节点，该参数可以从 launch 文件或命令行设置。
+你向包配置文件添加了依赖、可执行文件和 launch 文件，这样你就可以构建并运行它们，并看到参数的实际效果。
 
-Next steps
-----------
+后续步骤
+--------
 
-Now that you have some packages and ROS 2 systems of your own, the :doc:`next tutorial <./Getting-Started-With-Ros2doctor>` will show you how to examine issues in your environment and systems in case you have problems.
+既然你已经有了自己的包和 ROS 2 系统，:doc:`下一个教程 <./Getting-Started-With-Ros2doctor>` 将向你展示如何在你遇到问题时检查你的环境和系统中的问题。

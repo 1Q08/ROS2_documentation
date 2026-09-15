@@ -2,78 +2,74 @@
 
     Tutorials/Monitoring-For-Parameter-Changes-CPP
 
-Monitoring for parameter changes (C++)
-======================================
+监测参数变化（C++）
+===================
 
-**Goal:** Learn to use the ParameterEventHandler class to monitor and respond to parameter changes.
+**目标：** 学习使用 ParameterEventHandler 类来监测并响应参数变化。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 20 minutes
+**时间：** 20 分钟
 
-**Minimum Platform:** Galactic
-
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-Often a node needs to respond to changes to its own parameters or another node's parameters.
-The ParameterEventHandler class makes it easy to listen for parameter changes so that your code can respond to them.
-This tutorial will show you how to use the C++ version of the ParameterEventHandler class to monitor for changes to a node's own parameters as well as changes to another node's parameters.
+节点通常需要响应其自身参数或其他节点参数的变化。
+ParameterEventHandler 类可以方便地监听参数变化，从而使你的代码能够对其做出响应。
+本教程将展示如何使用 C++ 版本的 ParameterEventHandler 类来监测节点自身参数的变化以及其他节点参数的变化。
 
-Prerequisites
--------------
+前提条件
+--------
 
-Before starting this tutorial, you should first complete the following tutorials:
+开始本教程之前，你应该先完成以下教程：
 
 - :doc:`../Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters`
 - :doc:`../Beginner-Client-Libraries/Using-Parameters-In-A-Class-CPP`
 
-In addition, you must be running the Galactic distribution of ROS 2.
+任务
+----
 
-Tasks
------
-
-In this tutorial, you will create a new package to contain some sample code, write some C++ code to use the ParameterEventHandler class, and test the resulting code.
+在本教程中，你将创建一个新软件包来包含一些示例代码，编写一些使用 ParameterEventHandler 类的 C++ 代码，并测试生成的代码。
 
 
-1 Create a package
-^^^^^^^^^^^^^^^^^^
+1 创建软件包
+^^^^^^^^^^^^
 
-First, open a new terminal and :doc:`source your ROS 2 installation <../Beginner-CLI-Tools/Configuring-ROS2-Environment>` so that ``ros2`` commands will work.
+首先，打开一个新终端并 :doc:`source 你的 ROS 2 安装 <../Beginner-CLI-Tools/Configuring-ROS2-Environment>`，使 ``ros2`` 命令能够正常工作。
 
-Follow :ref:`these instructions <new-directory>` to create a new workspace named ``ros2_ws``.
+按照 :ref:`这些说明 <new-directory>` 创建一个名为 ``ros2_ws`` 的新工作空间。
 
-Recall that packages should be created in the ``src`` directory, not the root of the workspace.
-So, navigate into ``ros2_ws/src`` and then create a new package there:
+请记住，软件包应创建在 ``src`` 目录中，而不是工作空间的根目录。
+因此，进入 ``ros2_ws/src``，然后在其中创建一个新软件包：
 
 .. code-block:: console
 
   $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 cpp_parameter_event_handler --dependencies rclcpp
 
-Your terminal will return a message verifying the creation of your package ``cpp_parameter_event_handler`` and all its necessary files and folders.
+你的终端将返回一条消息，确认你的软件包 ``cpp_parameter_event_handler`` 及其所有必要文件和文件夹已创建。
 
-The ``--dependencies`` argument will automatically add the necessary dependency lines to ``package.xml`` and ``CMakeLists.txt``.
+``--dependencies`` 参数将自动向 ``package.xml`` 和 ``CMakeLists.txt`` 添加必要的依赖行。
 
-1.1 Update ``package.xml``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+1.1 更新 ``package.xml``
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-Because you used the ``--dependencies`` option during package creation, you don't have to manually add dependencies to ``package.xml`` or ``CMakeLists.txt``.
-As always, though, make sure to add the description, maintainer email and name, and license information to ``package.xml``.
+由于你在创建软件包时使用了 ``--dependencies`` 选项，因此无需手动向 ``package.xml`` 或 ``CMakeLists.txt`` 添加依赖项。
+但像往常一样，请务必向 ``package.xml`` 添加描述、维护者邮箱和姓名以及许可证信息。
 
 .. code-block:: xml
 
   <description>C++ parameter events client tutorial</description>
   <maintainer email="you@email.com">Your Name</maintainer>
-  <license>Apache License 2.0</license>
+  <license>Apache-2.0</license>
 
-2 Write the C++ node
-^^^^^^^^^^^^^^^^^^^^
+2 编写 C++ 节点
+^^^^^^^^^^^^^^^
 
-Inside the ``ros2_ws/src/cpp_parameter_event_handler/src`` directory, create a new file called ``parameter_event_handler.cpp`` and paste the following code within:
+在 ``ros2_ws/src/cpp_parameter_event_handler/src`` 目录内，创建一个名为 ``parameter_event_handler.cpp`` 的新文件，并将以下代码粘贴到其中：
 
 .. code-block:: C++
 
@@ -118,19 +114,19 @@ Inside the ``ros2_ws/src/cpp_parameter_event_handler/src`` directory, create a n
       return 0;
     }
 
-2.1 Examine the code
-~~~~~~~~~~~~~~~~~~~~
-The first statement, ``#include <memory>`` is included so that the code can utilize the std::make_shared template.
-The next, ``#include "rclcpp/rclcpp.hpp"`` is included to allow the code to reference the various functionality provided by the rclcpp interface, including the ParameterEventHandler class.
+2.1 检查代码
+~~~~~~~~~~~~
+第一条语句 ``#include <memory>`` 是为了让代码能够使用 std::make_shared 模板。
+下一条语句 ``#include "rclcpp/rclcpp.hpp"`` 是为了让代码能够引用 rclcpp 接口提供的各种功能，包括 ParameterEventHandler 类。
 
-After the class declaration, the code defines a class, ``SampleNodeWithParameters``.
-The constructor for the class declares an integer parameter ``an_int_param``, with a default value of 0.
-Next, the code creates a ``ParameterEventHandler`` that will be used to monitor changes to parameters.
-Finally, the code creates a lambda function and sets it as the callback to invoke whenever ``an_int_param`` is updated.
+类声明之后，代码定义了一个类 ``SampleNodeWithParameters``。
+该类的构造函数声明了一个整数参数 ``an_int_param``，默认值为 0。
+接下来，代码创建了一个 ``ParameterEventHandler``，用于监测参数的变化。
+最后，代码创建了一个 lambda 函数，并将其设置为每当 ``an_int_param`` 更新时调用的回调。
 
 .. note::
 
-   It is very important to save the handle that is returned by ``add_parameter_callback``; otherwise, the callback will not be properly registered.
+   保存 ``add_parameter_callback`` 返回的句柄非常重要；否则，回调将无法正确注册。
 
 .. code-block:: C++
 
@@ -154,7 +150,7 @@ Finally, the code creates a lambda function and sets it as the callback to invok
       cb_handle_ = param_subscriber_->add_parameter_callback("an_int_param", cb);
     }
 
-Following the ``SampleNodeWithParameters`` is a typical ``main`` function which initializes ROS, spins the sample node so that it can send and receive messages, and then shuts down after the user enters ^C at the console.
+在 ``SampleNodeWithParameters`` 之后是一个典型的 ``main`` 函数，它初始化 ROS，旋转示例节点以使其能够发送和接收消息，然后在用户在控制台输入 ^C 后关闭。
 
 .. code-block:: C++
 
@@ -168,10 +164,10 @@ Following the ``SampleNodeWithParameters`` is a typical ``main`` function which 
     }
 
 
-2.2 Add executable
+2.2 添加可执行文件
 ~~~~~~~~~~~~~~~~~~
 
-To build this code, first open the ``CMakeLists.txt`` file and add the following lines of code below the dependency ``find_package(rclcpp REQUIRED)``
+要构建此代码，首先打开 ``CMakeLists.txt`` 文件，并在依赖项 ``find_package(rclcpp REQUIRED)`` 下方添加以下代码行
 
 .. code-block:: console
 
@@ -183,10 +179,10 @@ To build this code, first open the ``CMakeLists.txt`` file and add the following
       DESTINATION lib/${PROJECT_NAME}
     )
 
-3 Build and run
-^^^^^^^^^^^^^^^
+3 构建并运行
+^^^^^^^^^^^^
 
-It's good practice to run ``rosdep`` in the root of your workspace (``ros2_ws``) to check for missing dependencies before building:
+构建之前，最好在工作空间的根目录（``ros2_ws``）运行 ``rosdep`` 以检查缺失的依赖项：
 
 .. tabs::
 
@@ -198,19 +194,19 @@ It's good practice to run ``rosdep`` in the root of your workspace (``ros2_ws``)
 
    .. group-tab:: macOS
 
-      rosdep only runs on Linux, so you can skip ahead to next step.
+      rosdep 仅在 Linux 上运行，所以你可以跳到下一步。
 
    .. group-tab:: Windows
 
-      rosdep only runs on Linux, so you can skip ahead to next step.
+      rosdep 仅在 Linux 上运行，所以你可以跳到下一步。
 
-Navigate back to the root of your workspace, ``ros2_ws``, and build your new package:
+返回到工作空间的根目录 ``ros2_ws``，并构建你的新软件包：
 
 .. code-block:: console
 
     $ colcon build --packages-select cpp_parameter_event_handler
 
-Open a new terminal, navigate to ``ros2_ws``, and source the setup files:
+打开一个新终端，进入 ``ros2_ws``，并 source 安装文件：
 
 .. tabs::
 
@@ -232,42 +228,42 @@ Open a new terminal, navigate to ``ros2_ws``, and source the setup files:
 
       $ call install/setup.bat
 
-Now run the node:
+现在运行节点：
 
 .. code-block:: console
 
      $ ros2 run cpp_parameter_event_handler parameter_event_handler
 
-The node is now active and has a single parameter and will print a message whenever this parameter is updated.
-To test this, open up another terminal and source the ROS setup file as before (``. install/setup.bash``) and execute the following command:
+节点现在处于活动状态，有一个参数，并且每当该参数更新时会打印一条消息。
+为了测试这一点，打开另一个终端，像之前一样 source ROS 安装文件（``. install/setup.bash``），并执行以下命令：
 
 .. code-block:: console
 
     $ ros2 param set node_with_parameters an_int_param 43
 
-The terminal running the node will display a message similar to the following:
+运行节点的终端将显示类似以下内容的消息：
 
 .. code-block:: console
 
     [INFO] [1606950498.422461764] [node_with_parameters]: cb: Received an update to parameter "an_int_param" of type integer: "43"
 
-The callback we set previously in the node has been invoked and has displayed the new updated value.
-You can now terminate the running parameter_event_handler sample using ^C in the terminal.
+我们之前在节点中设置的回调已被调用，并显示了更新后的值。
+现在你可以使用 ^C 在终端中终止运行中的 parameter_event_handler 示例。
 
-Extensions
-----------
+扩展
+----
 
-So far, we built and tested a small node that monitors a single parameter owned by the node itself.
-Using this node as a base, two other usecases where the ParameterEventHandler can be useful are presented below.
+到目前为止，我们构建并测试了一个小节点，它监测节点自身拥有的单个参数。
+以该节点为基础，下面展示 ParameterEventHandler 可以发挥作用的另外两种用例。
 
-Monitor changes to another node's parameters
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+监测另一个节点的参数变化
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can also use the ParameterEventHandler to monitor parameter changes to another node's parameters.
-Let's update the SampleNodeWithParameters class to also monitor for changes to a parameter in another node.
-We will use the parameter_blackboard demo application to host a double parameter that we will monitor for updates.
+你还可以使用 ParameterEventHandler 来监测另一个节点参数的变化。
+让我们更新 SampleNodeWithParameters 类，使其也能监测另一个节点中参数的变化。
+我们将使用 parameter_blackboard 演示应用程序来托管一个我们将监测其更新的 double 参数。
 
-First update the constructor to add the following code after the existing code:
+首先更新构造函数，在现有代码之后添加以下代码：
 
 .. code-block:: C++
 
@@ -285,7 +281,7 @@ First update the constructor to add the following code after the existing code:
     cb_handle2_ = param_subscriber_->add_parameter_callback(remote_param_name, cb2, remote_node_name);
 
 
-Then add another member variable, ``cb_handle2`` for the additional callback handle:
+然后为额外的回调句柄添加另一个成员变量 ``cb_handle2``：
 
 .. code-block:: C++
 
@@ -296,13 +292,13 @@ Then add another member variable, ``cb_handle2`` for the additional callback han
   };
 
 
-In a terminal, navigate back to the root of your workspace, ``ros2_ws``, and build your updated package as before:
+在终端中，返回工作空间的根目录 ``ros2_ws``，并像之前一样构建更新后的软件包：
 
 .. code-block:: console
 
     $ colcon build --packages-select cpp_parameter_event_handler
 
-Then source the setup files:
+然后 source 安装文件：
 
 .. tabs::
 
@@ -324,37 +320,37 @@ Then source the setup files:
 
       $ call install/setup.bat
 
-Now, to test monitoring of remote parameters, first run the newly-built parameter_event_handler code:
+现在，为了测试远程参数的监测，首先运行新构建的 parameter_event_handler 代码：
 
 .. code-block:: console
 
      $ ros2 run cpp_parameter_event_handler parameter_event_handler
 
-Next, from another terminal (with ROS initialized), run the parameter_blackboard demo application, as follows:
+接下来，从另一个终端（已初始化 ROS），按如下方式运行 parameter_blackboard 演示应用程序：
 
 .. code-block:: console
 
      $ ros2 run demo_nodes_cpp parameter_blackboard
 
-Finally, from a third terminal (with ROS initialized), let's set a parameter on the parameter_blackboard node:
+最后，从第三个终端（已初始化 ROS），让我们在 parameter_blackboard 节点上设置一个参数：
 
 .. code-block:: console
 
      $ ros2 param set parameter_blackboard a_double_param 3.45
 
-Upon executing this command, you should see output in the parameter_event_handler window, indicating that the callback function was invoked upon the parameter update:
+执行此命令后，你应该在 parameter_event_handler 窗口中看到输出，表明回调函数在参数更新时被调用：
 
 .. code-block:: console
 
     [INFO] [1606952588.237531933] [node_with_parameters]: cb2: Received an update to parameter "a_double_param" of type: double: "3.45"
 
-Monitor all node parameters simultaneously
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+同时监测所有节点参数
+^^^^^^^^^^^^^^^^^^^^
 
-If you need to monitor multiple nodes or parameters at the same time, it would be cumbersome to have to call ``add_parameter_callback`` once for each of them.
-In this case, you can use ``add_parameter_event_callback`` to register a single callback that fires when *any* parameters of *any* nodes change.
+如果你需要同时监测多个节点或参数，为每个参数分别调用 ``add_parameter_callback`` 会很繁琐。
+在这种情况下，你可以使用 ``add_parameter_event_callback`` 注册一个单一回调，当 *任何* 节点的 *任何* 参数变化时触发。
 
-To do this, first update the SampleNodeWithParameters constructor to add the following code:
+为此，首先更新 SampleNodeWithParameters 构造函数，添加以下代码：
 
 .. code-block:: C++
 
@@ -376,11 +372,11 @@ To do this, first update the SampleNodeWithParameters constructor to add the fol
       };
     event_cb_handle_ = param_subscriber_->add_parameter_event_callback(event_cb);
 
-This declares a new double parameter ``another_double_param`` and adds an event callback that will monitor both parameters.
-Note that the ``parameter_event`` is of type {interface(rcl_interfaces/msg/ParameterEvent)}.
-Although it's not shown in this tutorial, event callbacks can also be used to monitor when parameters are added or deleted.
+这会声明一个新的 double 参数 ``another_double_param``，并添加一个将监测两个参数的事件回调。
+请注意，``parameter_event`` 的类型为 {interface(rcl_interfaces/msg/ParameterEvent)}。
+尽管本教程未展示，事件回调也可以用于监测参数何时被添加或删除。
 
-Finally, don't forget to add the event callback handle as a private member:
+最后，别忘了将事件回调句柄添加为私有成员：
 
 .. code-block:: C++
 
@@ -388,13 +384,13 @@ Finally, don't forget to add the event callback handle as a private member:
       ...
       std::shared_ptr<rclcpp::ParameterEventCallbackHandle> event_cb_handle_;
 
-Navigate back to the root of your workspace, ``ros2_ws``, and rebuild your updated package as before:
+返回工作空间的根目录 ``ros2_ws``，并像之前一样重新构建更新后的软件包：
 
 .. code-block:: console
 
     $ colcon build --packages-select cpp_parameter_event_handler
 
-Then source the setup files:
+然后 source 安装文件：
 
 .. tabs::
 
@@ -416,19 +412,19 @@ Then source the setup files:
 
       $ call install\setup.bat
 
-To test the new event callback, first run the parameter_event_handler node:
+要测试新的事件回调，首先运行 parameter_event_handler 节点：
 
 .. code-block:: console
 
      $ ros2 run cpp_parameter_event_handler parameter_event_handler
 
-Then, from a second terminal (with ROS sourced), let's set the original int parameter:
+然后，从第二个终端（已 source ROS），让我们设置原始的 int 参数：
 
 .. code-block:: console
 
      $ ros2 param set node_with_parameters an_int_param 44
 
-Upon executing this command, you should see both the single-parameter callback, as well as the event callback being fired:
+执行此命令后，你应该看到单参数回调和事件回调都被触发：
 
 .. code-block:: console
 
@@ -436,13 +432,13 @@ Upon executing this command, you should see both the single-parameter callback, 
       [INFO] [1747144403.419086611] [node_with_parameters]: Received parameter event from node "/node_with_parameters"
       [INFO] [1747144403.419114103] [node_with_parameters]: Inside event: "an_int_param" changed to 44
 
-Now set the new double parameter:
+现在设置新的 double 参数：
 
 .. code-block:: console
 
      $ ros2 param set node_with_parameters another_double_param 4.4
 
-Since no single-parameter callback was added (via ``add_parameter_callback``) for the double parameter, we should see only the event callback fire:
+由于没有为 double 参数添加单参数回调（通过 ``add_parameter_callback``），我们应该只看到事件回调被触发：
 
 .. code-block:: console
 
@@ -451,19 +447,19 @@ Since no single-parameter callback was added (via ``add_parameter_callback``) fo
 
 .. note::
 
-   When setting multiple parameters at once, it's best to use ``set_parameters_atomically``, explained in :doc:`../../Concepts/Basic/About-Parameters`.
-   This way, the event callback is only fired once.
+   一次性设置多个参数时，最好使用 ``set_parameters_atomically``，这在 :doc:`../../Concepts/Basic/About-Parameters` 中有解释。
+   这样，事件回调只会被触发一次。
 
-Summary
--------
+小结
+----
 
-You created a node with a parameter and used the ParameterEventHandler class to set a callback to monitor changes to that parameter.
-You also used the same class to monitor changes to a remote node, and to monitor all parameters in a single event callback.
-The ParameterEventHandler is a convenient way to monitor for parameter changes so that you can then respond to the updated values.
+你创建了一个带参数的节点，并使用 ParameterEventHandler 类设置了一个回调来监测该参数的变化。
+你还使用同一个类来监测远程节点的变化，以及在单个事件回调中监测所有参数。
+ParameterEventHandler 是监测参数变化以便你能响应更新值的便捷方式。
 
-Related content
----------------
+相关内容
+--------
 
-To learn how to adapt ROS 1 parameter files for ROS 2, see the :doc:`Migrating YAML parameter files from ROS 1 to ROS2 <../../How-To-Guides/Migrating-from-ROS1/Migrating-Parameters>` tutorial.
+要了解如何为 ROS 2 改编 ROS 1 参数文件，请参阅 :doc:`将 YAML 参数文件从 ROS 1 迁移到 ROS2 <../../How-To-Guides/Migrating-from-ROS1/Migrating-Parameters>` 教程。
 
 

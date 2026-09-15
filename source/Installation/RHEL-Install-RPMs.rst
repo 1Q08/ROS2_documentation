@@ -1,44 +1,44 @@
-RHEL (RPM packages)
-===================
+RHEL（RPM 软件包）
+==================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-RPM packages for ROS 2 {DISTRO_TITLE_FULL} are currently available for RHEL 8.
-The target platforms are defined in `REP 2000 <https://reps.openrobotics.org/rep-2000/>`__.
+ROS 2 {DISTRO_TITLE_FULL} 的 RPM 软件包目前可用于 RHEL 8。
+目标平台在 `REP 2000 <https://reps.openrobotics.org/rep-2000/>`__ 中定义。
 
-Resources
----------
+资源
+----
 
-* Status Page:
+* 状态页面：
 
-  * ROS 2 {DISTRO_TITLE} (RHEL 8): `amd64 <http://repo.ros2.org/status_page/ros_{DISTRO}_rhel.html>`__
-* `Jenkins Instance <http://build.ros2.org/>`__
-* `Repositories <http://repo.ros2.org>`__
+  * ROS 2 {DISTRO_TITLE}（RHEL 8）：`amd64 <http://repo.ros2.org/status_page/ros_{DISTRO}_rhel.html>`__
+* `Jenkins 实例 <http://build.ros2.org/>`__
+* `仓库 <http://repo.ros2.org>`__
 
 
-Set locale
-----------
+设置 locale
+-----------
 
 .. include:: _RHEL-Set-Locale.rst
 
 .. _rhel-install-rpms-setup-sources:
 
-Setup Sources
--------------
+配置软件源
+----------
 
-You will need to enable the EPEL repositories and the PowerTools repository:
+你需要启用 EPEL 仓库和 PowerTools 仓库：
 
 .. code-block:: console
 
    $ sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-$(rpm -E %rhel).noarch.rpm
    $ sudo env FORCE_DNF=1 crb enable
 
-.. note:: This step may be slightly different depending on the distribution you are using.
-          `Check the EPEL documentation <https://docs.fedoraproject.org/en-US/epel/getting-started/>`_
+.. note:: 此步骤可能因你所使用的发行版而略有不同。
+          请查看 `EPEL 文档 <https://docs.fedoraproject.org/en-US/epel/getting-started/>`_
 
-Next, download the ``ros2-release`` package and install it:
+接下来，下载 ``ros2-release`` 软件包并安装它：
 
 .. code-block:: console
 
@@ -46,36 +46,36 @@ Next, download the ``ros2-release`` package and install it:
    $ export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F'"' '{print $4}')
    $ sudo dnf install "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-release-${ROS_APT_SOURCE_VERSION}-1.noarch.rpm"
 
-The `ros2-release <https://github.com/ros-infrastructure/ros-apt-source/>`_ package provides keys and repo configuration for the various ROS repositories.
-Updates to repository configuration will occur automatically when new versions of this package are released to the ROS repositories.
+`ros2-release <https://github.com/ros-infrastructure/ros-apt-source/>`_ 软件包为各个 ROS 仓库提供密钥和仓库配置。
+当该软件包的新版本发布到 ROS 仓库时，仓库配置会自动更新。
 
 .. _rhel-install-rpms-install-ros-2-packages:
 
-Install ROS 2 packages
-----------------------
+安装 ROS 2 软件包
+-----------------
 
 .. include:: _Dnf-Update-Admonition.rst
 
-Desktop Install (Recommended): ROS, RViz, demos, tutorials.
+桌面版安装（推荐）：ROS、RViz、演示程序和教程。
 
 .. code-block:: console
 
    $ sudo dnf install ros-{DISTRO}-desktop
 
-ROS-Base Install (Bare Bones): Communication libraries, message packages, command line tools.
-No GUI tools.
+ROS-Base 安装（精简版）：通信库、消息包、命令行工具。
+不包含 GUI 工具。
 
 .. code-block:: console
 
    $ sudo dnf install ros-{DISTRO}-ros-base
 
-Environment setup
------------------
+环境配置
+--------
 
-Sourcing the setup script
-^^^^^^^^^^^^^^^^^^^^^^^^^
+加载安装脚本
+^^^^^^^^^^^^
 
-Set up your environment by sourcing the following file.
+通过加载以下文件来配置你的环境。
 
 .. code-block:: console
 
@@ -83,59 +83,58 @@ Set up your environment by sourcing the following file.
 
 .. note::
 
-   Replace ``.bash`` with your shell if you're not using console.
-   Possible values are: ``setup.bash``, ``setup.sh``, ``setup.zsh``.
+   如果你不使用 console，请将 ``.bash`` 替换为你所用的 shell。
+   可选值包括：``setup.bash``、``setup.sh``、``setup.zsh``。
 
-Try some examples
------------------
+尝试一些示例
+------------
 
-If you installed ``ros-{DISTRO}-desktop`` above you can try some examples.
+如果你在上面安装了 ``ros-{DISTRO}-desktop``，可以尝试一些示例。
 
-In one terminal, source the setup file and then run a C++ ``talker``\ :
+在一个终端中，加载安装脚本，然后运行 C++ 的 ``talker``\ ：
 
 .. code-block:: console
 
    $ source /opt/ros/{DISTRO}/setup.bash
    $ ros2 run demo_nodes_cpp talker
 
-In another terminal source the setup file and then run a Python ``listener``\ :
+在另一个终端中加载安装脚本，然后运行 Python 的 ``listener``\ ：
 
 .. code-block:: console
 
    $ source /opt/ros/{DISTRO}/setup.bash
    $ ros2 run demo_nodes_py listener
 
-You should see the ``talker`` saying that it's ``Publishing`` messages and the ``listener`` saying ``I heard`` those messages.
-This verifies both the C++ and Python APIs are working properly.
-Hooray!
+你应该会看到 ``talker`` 输出 ``Publishing`` 消息，而 ``listener`` 输出 ``I heard`` 这些消息。
+这验证了 C++ 和 Python API 都能正常工作。
+太棒了！
 
-If you want to use other RMW implementations, you can check the :doc:`guide <./RMW-Implementations>`.
+如果你想使用其他 RMW 实现，可以查看 :doc:`指南 <./RMW-Implementations>`。
 
-Next steps after installing
----------------------------
-Continue with the :doc:`tutorials and demos <../../Tutorials>` to configure your environment, create your own workspace and packages, and learn ROS 2 core concepts.
+安装后的后续步骤
+----------------
+继续学习 :doc:`教程和演示 <../../Tutorials>`，以配置你的环境、创建自己的工作空间和软件包，并了解 ROS 2 的核心概念。
 
-Additional RMW implementations (optional)
------------------------------------------
-The default middleware that ROS 2 uses is ``Fast DDS``, but the middleware (RMW) can be replaced at runtime.
-See the :doc:`guide <../How-To-Guides/Working-with-multiple-RMW-implementations>` on how to work with multiple RMWs.
+其他 RMW 实现（可选）
+---------------------
+ROS 2 使用的默认中间件是 ``Fast DDS``，但中间件（RMW）可以在运行时替换。
+请参阅关于如何使用多个 RMW 的 :doc:`指南 <../How-To-Guides/Working-with-multiple-RMW-implementations>`。
 
-Troubleshooting
----------------
+故障排查
+--------
 
-Troubleshooting techniques can be found :doc:`here <../How-To-Guides/Installation-Troubleshooting>`.
+故障排查技巧可以在 :doc:`这里 <../How-To-Guides/Installation-Troubleshooting>` 找到。
 
-Uninstall
----------
+卸载
+----
 
-If you need to uninstall ROS 2 or switch to a source-based install once you
-have already installed from binaries, run the following command:
+如果你已经通过二进制包安装了 ROS 2，之后需要卸载或切换到基于源码的安装，请运行以下命令：
 
 .. code-block:: console
 
    $ sudo dnf remove ros-{DISTRO}-*
 
-To remove the repository configuration run
+要移除仓库配置，请运行
 
 .. code-block:: console
 

@@ -2,58 +2,58 @@
 
   How-To-Guides/Disabling-ZeroCopy-loaned-messages
 
-Configure Zero Copy Loaned Messages
-===================================
+配置零拷贝借出消息
+==================
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Overview
+概述
+----
+
+ROS 2 借出消息与零拷贝数据共享是旨在通过尽可能减少数据复制来提升性能的机制。
+使用借出消息时，RMW 中间件可以分配并管理消息内存，使发布者和订阅者能够直接共享数据缓冲区。
+这降低了内存分配和数据复制带来的开销，从而实现更低的延迟和更高的吞吐量。
+零拷贝数据共享在对大量数据需要高效传输的高性能应用中尤为有益。
+
+关于借出消息的工作原理，请参阅 `Loaned Messages <https://design.ros2.org/articles/zero_copy.html>`__ 一文了解更多细节。
+
+RMW 支持
 --------
 
-ROS 2 loaned messages and zero copy data sharing are mechanisms designed to improve performance by minimizing data copying.
-When using loaned messages, the RMW middleware can allocate and manage message memory, allowing publishers and subscribers to share data buffers directly.
-This reduces the overhead associated with memory allocation and data copying, leading to lower latency and higher throughput.
-Zero copy data sharing is particularly beneficial in high-performance applications where large amounts of data need to be transmitted efficiently.
+借出消息需要 RMW 实现提供支持。
 
-See more details for `Loaned Messages <https://design.ros2.org/articles/zero_copy.html>`__ article for details on how loaned messages work.
-
-RMW Support
------------
-
-Loaned messages require RMW implementation support.
-
-.. list-table::  Loaned Messages Support Status
+.. list-table::  借出消息支持状态
    :widths: 25 25 25
 
-   * - RMW Implementation
-     - Support Status
-     - Documentation
+   * - RMW 实现
+     - 支持状态
+     - 文档
    * - rmw_fastrtps
-     - supported
-     - `Enable Zero Copy Data Sharing <https://github.com/ros2/rmw_fastrtps?tab=readme-ov-file#enable-zero-copy-data-sharing>`__
+     - 支持
+     - `启用零拷贝数据共享 <https://github.com/ros2/rmw_fastrtps?tab=readme-ov-file#enable-zero-copy-data-sharing>`__
    * - rmw_connextdds
-     - not supported
-     - N.A
+     - 不支持
+     - 不适用
    * - rmw_cyclonedds
-     - not supported
-     - N.A
+     - 不支持
+     - 不适用
 
-Installing the demo
--------------------
+安装演示
+--------
 
-See the :doc:`installation instructions <../../Installation>` for details on installing ROS 2.
+关于安装 ROS 2 的详细信息，请参阅 :doc:`安装说明 <../../Installation>`。
 
-If you've installed ROS 2 from packages, ensure that you have ``ros-{DISTRO}-demo-nodes-cpp`` installed.
-If you downloaded the archive or built ROS 2 from source, it will already be part of the installation.
+如果你是通过软件包安装的 ROS 2，请确保已安装 ``ros-{DISTRO}-demo-nodes-cpp``。
+如果你下载的是压缩包或是从源码构建的 ROS 2，它已经是安装内容的一部分。
 
-Using Loaned Messages
----------------------
+使用借出消息
+------------
 
-Loaned messages on the publisher are used by default when the underlying RMW implementation supports them.
-If the RMW implementation does not support loaned messages, the messages will be allocated with the allocator instance provided by the publisher.
-The `talker_loaned_message example <https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics/talker_loaned_message.cpp>`__ demonstrates how to create a ROS 2 publisher that uses loaned messages to publish data efficiently without copying the message data.
+当底层 RMW 实现支持借出消息时，发布者上的借出消息会被默认使用。
+如果 RMW 实现不支持借出消息，消息将使用发布者提供的分配器实例进行分配。
+`talker_loaned_message 示例 <https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/topics/talker_loaned_message.cpp>`__ 演示了如何创建一个使用借出消息的 ROS 2 发布者，从而在不复制消息数据的情况下高效地发布数据。
 
 .. code-block:: c++
 
@@ -146,11 +146,11 @@ The `talker_loaned_message example <https://github.com/ros2/demos/blob/{REPOS_FI
 
     }  // namespace demo_nodes_cpp
 
-This example tries to loan two types of messages from the RMW implementation with calling ``borrow_loaned_message()``.
-The one is a Plain Old Data (POD) message type, ``std_msgs::msg::Float64``, and the other is a non-Plain Old Data (POD) message type, ``std_msgs::msg::String``.
-The requirements for loaned messages are that the message type is a Plain Old Data (POD) type for `rmw_fastrtps <https://github.com/ros2/rmw_fastrtps>`__ as shown below.
+此示例通过调用 ``borrow_loaned_message()`` 尝试从 RMW 实现借出两种类型的消息。
+一种是纯旧数据（POD）消息类型 ``std_msgs::msg::Float64``，另一种是非纯旧数据（POD）消息类型 ``std_msgs::msg::String``。
+借出消息的要求是：对于 `rmw_fastrtps <https://github.com/ros2/rmw_fastrtps>`__ 而言，消息类型必须是纯旧数据（POD）类型，如下所示。
 
-We can run the demo by running the ``ros2 run demo_nodes_cpp talker_loaned_message`` executable (don't forget to source the setup file first):
+我们可以通过运行 ``ros2 run demo_nodes_cpp talker_loaned_message`` 可执行文件来运行该演示（别忘了先 source 安装文件）：
 
 .. code-block:: console
 
@@ -164,8 +164,8 @@ We can run the demo by running the ``ros2 run demo_nodes_cpp talker_loaned_messa
     [INFO] [1741063658.446383011] [loaned_message_talker]: Publishing: 'Hello World: 3'
     [...]
 
-If the RMW implementation does not support loaned messages, all the messages will be allocated with the allocator instance provided by the publisher.
-We can try that by executing ``RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 run demo_nodes_cpp talker_loaned_message``.
+如果 RMW 实现不支持借出消息，所有消息都将使用发布者提供的分配器实例进行分配。
+我们可以通过执行 ``RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 run demo_nodes_cpp talker_loaned_message`` 来验证这一点。
 
 .. code-block:: console
 
@@ -180,17 +180,17 @@ We can try that by executing ``RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 run de
     [INFO] [1741064111.676937613] [loaned_message_talker]: Publishing: 'Hello World: 3'
     [...]
 
-As we can see, both messages are published successfully, but the messages are allocated with the local allocator instance provided by the publisher because the RMW implementation does not support loaned messages.
+可以看到，两种消息都能成功发布，但由于该 RMW 实现不支持借出消息，消息是使用发布者提供的本地分配器实例进行分配的。
 
-How to disable Loaned Messages
-------------------------------
+如何禁用借出消息
+----------------
 
-Publishers
-~~~~~~~~~~
+发布者
+~~~~~~
 
-By default, *Loaned Messages* will try to borrow the memory from underlying middleware if it supports *Loaned Messages*.
-The ``ROS_DISABLE_LOANED_MESSAGES`` environment variable can be used to disable *Loaned Messages*, and fallback to normal publisher behavior, without any code changes or middleware configuration.
-You can set the environment variable with the following command:
+默认情况下，如果底层中间件支持 *借出消息*，则 *借出消息* 会尝试从中借用内存。
+可以使用 ``ROS_DISABLE_LOANED_MESSAGES`` 环境变量禁用 *借出消息*，并回退到发布者的常规行为，而无需修改任何代码或中间件配置。
+你可以使用以下命令设置该环境变量：
 
 .. tabs::
 
@@ -200,7 +200,7 @@ You can set the environment variable with the following command:
 
         $ export ROS_DISABLE_LOANED_MESSAGES=1
 
-      To maintain this setting between shell sessions, you can add the command to your shell startup script:
+      要在不同的 shell 会话之间保留此设置，可以将该命令添加到 shell 启动脚本中：
 
       .. code-block:: console
 
@@ -212,7 +212,7 @@ You can set the environment variable with the following command:
 
         $ export ROS_DISABLE_LOANED_MESSAGES=1
 
-      To maintain this setting between shell sessions, you can add the command to your shell startup script:
+      要在不同的 shell 会话之间保留此设置，可以将该命令添加到 shell 启动脚本中：
 
       .. code-block:: console
 
@@ -224,19 +224,19 @@ You can set the environment variable with the following command:
 
         $ set ROS_DISABLE_LOANED_MESSAGES=1
 
-      If you want to make this permanent between shell sessions, also run:
+      如果你希望在不同的 shell 会话之间使其永久生效，还应运行：
 
       .. code-block:: console
 
         $ setx ROS_DISABLE_LOANED_MESSAGES 1
 
 
-Subscriptions
-~~~~~~~~~~~~~
+订阅
+~~~~
 
-Currently using *Loaned Messages* is not safe on subscription, see more details in `rmw issue <https://github.com/ros2/rmw_cyclonedds/issues/469>`_ and `rclcpp issue <https://github.com/ros2/rclcpp/issues/2401>`_.
-Because of this, by default *Loaned Messages* is ``disabled`` on subscription with `Set disable loan to on by default <https://github.com/ros2/rcl/pull/1110>`_ even though underlying middleware supports that.
-To enable *Loaned Messages* on subscription, you need to set the environment variable ``ROS_DISABLE_LOANED_MESSAGES`` to ``0`` explicitly.
+目前在订阅端使用 *借出消息* 并不安全，详情请参见 `rmw issue <https://github.com/ros2/rmw_cyclonedds/issues/469>`_ 和 `rclcpp issue <https://github.com/ros2/rclcpp/issues/2401>`_。
+因此，尽管底层中间件支持该功能，*借出消息* 在订阅端默认是 ``disabled`` 的，参见 `Set disable loan to on by default <https://github.com/ros2/rcl/pull/1110>`_。
+要在订阅端启用 *借出消息*，你需要显式地将环境变量 ``ROS_DISABLE_LOANED_MESSAGES`` 设置为 ``0``。
 
 .. tabs::
 
@@ -246,7 +246,7 @@ To enable *Loaned Messages* on subscription, you need to set the environment var
 
         $ export ROS_DISABLE_LOANED_MESSAGES=0
 
-      To maintain this setting between shell sessions, you can add the command to your shell startup script:
+      要在不同的 shell 会话之间保留此设置，可以将该命令添加到 shell 启动脚本中：
 
       .. code-block:: console
 
@@ -258,7 +258,7 @@ To enable *Loaned Messages* on subscription, you need to set the environment var
 
         $ export ROS_DISABLE_LOANED_MESSAGES=0
 
-      To maintain this setting between shell sessions, you can add the command to your shell startup script:
+      要在不同的 shell 会话之间保留此设置，可以将该命令添加到 shell 启动脚本中：
 
       .. code-block:: console
 
@@ -270,7 +270,7 @@ To enable *Loaned Messages* on subscription, you need to set the environment var
 
         $ set ROS_DISABLE_LOANED_MESSAGES=0
 
-      If you want to make this permanent between shell sessions, also run:
+      如果你希望在不同的 shell 会话之间使其永久生效，还应运行：
 
       .. code-block:: console
 

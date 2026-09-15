@@ -4,16 +4,16 @@
 
 .. _How-to Guides:
 
-How-to Guides
-=============
+操作指南
+========
 
-How-to Guides provide direct and modular answers to "How-to" questions regarding key aspects of ROS 2.
-They contain succinct steps to help you accomplish important tasks quickly.
+操作指南针对有关 ROS 2 关键方面的“如何做”问题，提供直接且模块化的答案。
+它们包含简明的步骤，帮助您快速完成重要任务。
 
-How-to Guides are meant for users who already have some knowledge of ROS 2 and just want to find out how to implement something specific.
-They will not go in-depth by providing background information or teaching how a concept ties into the greater ROS 2 ecosystem.
+操作指南面向已经对 ROS 2 有一定了解、只想弄清如何实现某个具体功能的用户。
+它们不会深入提供背景信息，也不会讲解某个概念如何融入更大的 ROS 2 生态。
 
-If you are new and looking to learn the ropes, start with the :doc:`Tutorials <Tutorials>` for a more well-rounded progression through ROS 2.
+如果您是新手并希望入门，请从 :doc:`教程 <Tutorials>` 开始，以获得更全面的 ROS 2 学习路径。
 
 
 

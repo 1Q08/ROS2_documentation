@@ -4,16 +4,16 @@
 
 .. _SimulationMain:
 
-Simulators
-==========
+仿真器
+======
 
-Several advanced robot simulators can be used with ROS 2, such as Gazebo, Webots, etc.
-Unlike turtlesim, they provide fairly realistic results relying on physics-based models for robots, sensors, actuators and objects.
-Hence, what you observe in simulation is very close to what you will get when transferring your ROS 2 controllers to a real robot.
+多种高级机器人仿真器可与 ROS 2 配合使用，例如 Gazebo、Webots 等。
+与 turtlesim 不同，它们基于机器人、传感器、执行器和物体的物理模型，能提供相当逼真的结果。
+因此，您在仿真中观察到的结果与将 ROS 2 控制器迁移到真实机器人上得到的结果非常接近。
 
-This set of tutorials will teach you how to configure different simulators with ROS 2.
+这一系列教程将教你如何为 ROS 2 配置各种仿真器。
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 

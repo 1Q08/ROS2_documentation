@@ -1,43 +1,43 @@
-Release Track
-=============
+发布轨道
+========
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
 .. _what-is-a-track:
 
-What is a Track?
-----------------
+什么是轨道？
+------------
 
-Bloom requires the user to enter configuration information when releasing packages for the first time.
-It is beneficial to store such configurations in the release repository so we don't have to manually enter configurations that won't change for subsequent releases.
+Bloom 在首次发布软件包时要求用户输入配置信息。
+把这些配置保存在发布仓库中是很有好处的，这样我们在后续发布时就不必再次手动输入那些不会变化的配置。
 
-Since some of the configurations will differ when releasing the package for different ROS distributions, bloom uses **release tracks to store the configurations for releasing** per distribution.
-By convention you should create tracks with the same name as the ROS distro you are releasing for.
+由于针对不同的 ROS 发行版发布软件包时，某些配置会有所不同，因此 bloom 使用 **发布轨道来存储每个发行版的发布配置。**
+按照惯例，你应当创建与你要发布到的 ROS 发行版同名的轨道。
 
-All release track configurations are stored in ``tracks.yaml`` on the master branch of your release repository.
+所有发布轨道配置都存储在你发布仓库 master 分支上的 ``tracks.yaml`` 中。
 
-Track Configurations
---------------------
+轨道配置
+--------
 
-Track configurations are explained in more detail along with the prompts from bloom.
+各轨道配置会结合 bloom 的提示一并详细说明。
 
 .. _release-repository-url:
 
-Release Repository url
-^^^^^^^^^^^^^^^^^^^^^^
+发布仓库 url
+^^^^^^^^^^^^
 
-This is the url of your release repository, and should be of form ``https://github.com/ros2-gbp/my_repo-release.git`` if your release repository is hosted on ros2-gbp.
+这是你发布仓库的 url，如果你的发布仓库托管在 ros2-gbp 上，其形式应为 ``https://github.com/ros2-gbp/my_repo-release.git``。
 
 .. code-block:: bash
 
    No reasonable default release repository url could be determined from previous releases.
    Release repository url [press enter to abort]:
 
-Paste your release repository URL and press Enter.
+粘贴你的发布仓库 URL 并按 Enter。
 
-Bloom may additionally ask you about initializing the new repository, as following:
+Bloom 还可能就初始化新仓库向你提问，如下所示：
 
 .. code-block:: bash
 
@@ -45,14 +45,14 @@ Bloom may additionally ask you about initializing the new repository, as followi
    An initial empty commit is going to be made.
    Continue [Y/n]?
 
-Simply press Enter to accept the default of yes.
+直接按 Enter 接受默认选项 yes 即可。
 
 .. _repository-name:
 
-Repository Name
-^^^^^^^^^^^^^^^
+仓库名称
+^^^^^^^^
 
-The repository name is trivial, but it is recommended to set this to the name of your project.
+仓库名称本身并不重要，但建议将其设置为你的项目名称。
 
 .. code-block:: bash
 
@@ -63,15 +63,15 @@ The repository name is trivial, but it is recommended to set this to the name of
          Name of the repository (used in the archive name)
       ['upstream']:
 
-Type the name of your project (e.g. ``my_project``) and press Enter.
+输入你的项目名称（例如 ``my_project``）并按 Enter。
 
 .. _upstream-repository-uri:
 
-Upstream Repository URI
-^^^^^^^^^^^^^^^^^^^^^^^
+上游仓库 URI
+^^^^^^^^^^^^
 
-The **upstream repository** is the repository where your source code is.
-This is most likely an https link to your project hosted on a git hosting service such as GitHub or GitLab.
+**上游仓库** 是存放你源代码的仓库。
+它很可能是托管在 GitHub 或 GitLab 等 git 托管服务上的你项目的 https 链接。
 
 .. code-block:: bash
 
@@ -82,15 +82,15 @@ This is most likely an https link to your project hosted on a git hosting servic
          where the :{version} token will be replaced with the version for this release.
       [None]:
 
-Make sure you **use the https address** (e.g. ``https://github.com/my_organization/my_repo.git``) and not the ssh address.
+请确保 **使用 https 地址** （例如 ``https://github.com/my_organization/my_repo.git``），而不是 ssh 地址。
 
 .. _upstream-vcs-type:
 
-Upstream VCS Type
-^^^^^^^^^^^^^^^^^
+上游 VCS 类型
+^^^^^^^^^^^^^
 
-This is the `Upstream Repository URI`_'s version control system (VCS) type.
-You must specify the type of vcs your repository is using, from  ``svn``, ``git``, ``hg`` or ``tar``.
+这是 `上游仓库 URI`_ 所使用的版本控制系统（VCS）类型。
+你必须指明你的仓库所使用的 vcs 类型，可选项为 ``svn``、``git``、``hg`` 或 ``tar``。
 
 .. code-block:: bash
 
@@ -105,15 +105,15 @@ You must specify the type of vcs your repository is using, from  ``svn``, ``git`
          Upstream URI is a tarball
       ['git']:
 
-Most repositories will be using git, but some legacy repositories might be using hg or svn.
+大多数仓库会使用 git，但一些遗留仓库可能使用 hg 或 svn。
 
 .. _version:
 
-Version
-^^^^^^^
+版本
+^^^^
 
-This is the version of the package you are releasing.
-(e.g. ``1.0.3``)
+这是你要发布的软件包的版本。
+（例如 ``1.0.3``）
 
 .. code-block:: bash
 
@@ -130,16 +130,16 @@ This is the version of the package you are releasing.
          It must be updated for each new upstream version.
       [':{auto}']:
 
-Setting this to ``:{auto}`` (the default, and recommended setup) will automatically determine the version from the devel branch's package.xml.
+把它设为 ``:{auto}`` （默认值，也是推荐的设置）将根据开发分支的 package.xml 自动确定版本。
 
-Setting this to ``:{ask}`` will bring up a prompt asking for the version every time you run a release with bloom.
+把它设为 ``:{ask}`` 会在你每次用 bloom 发布时弹出提示询问版本。
 
 .. _release-tag:
 
-Release Tag
-^^^^^^^^^^^
+发布标签
+^^^^^^^^
 
-The Release Tag refers to which tag or branch you want to import the code from.
+发布标签（Release Tag）指的是你想从哪个标签或分支导入代码。
 
 .. code-block:: bash
 
@@ -160,21 +160,21 @@ The Release Tag refers to which tag or branch you want to import the code from.
          it is ignored.  For svn this means no revision number is used.
       [':{version}']:
 
-Setting this to ``:{version}`` (the default, and recommended setup) will make the release tag match the version tag.
+把它设为 ``:{version}`` （默认值，也是推荐的设置）将使发布标签与版本标签保持一致。
 
-A less common setup is to set this to a branch name to always pull in that branch at the time of release from the upstream project.
+一种不太常见的做法是把它设为某个分支名，以便在发布时始终从上游项目拉取该分支。
 
-Alternatively, if you want to be prompted to enter a different tag every time you do a release, enter ``:{ask}``.
-``:{ask}`` is useful if the upstream project has frequent tagged releases and you want to refer to the new tag every time you're releasing.
+另外，如果你希望每次发布时都被提示输入一个不同的标签，可以输入 ``:{ask}``。
+如果上游项目频繁地打标签发布，而你想在每次发布时都引用新的标签，那么 ``:{ask}`` 会很有用。
 
 .. _upstream-devel-branch:
 
-Upstream Devel Branch
-^^^^^^^^^^^^^^^^^^^^^
+上游开发分支
+^^^^^^^^^^^^
 
-The upstream devel branch is the name of the branch in your :ref:`upstream repository <upstream-repository-uri>`.
-If you use separate branches for each ROS distribution, this field would be different for each release track.
-It is used to determine the version of the package you are releasing when :ref:`Version` is set to ``:{auto}``.
+上游开发分支是你的 :ref:`上游仓库 <upstream-repository-uri>` 中分支的名称。
+如果你为每个 ROS 发行版使用不同的分支，那么该字段在每个发布轨道中都会不同。
+当 :ref:`版本 <version>` 设为 ``:{auto}`` 时，会用它来确定你要发布的软件包的版本。
 
 .. code-block:: bash
 
@@ -184,15 +184,15 @@ It is used to determine the version of the package you are releasing when :ref:`
          This is used only when version is set to ':{auto}'.
       [None]:
 
-To release from a branch called ``{DISTRO}``, enter ``{DISTRO}``.
-Leaving this as ``None`` would result in the version being determined from the default branch of your repository (this is not recommended).
+要从名为 ``{DISTRO}`` 的分支发布，请输入 ``{DISTRO}``。
+将其保留为 ``None`` 会导致版本从你仓库的默认分支来确定（不推荐这样做）。
 
 .. _ros-distro:
 
-ROS Distro
+ROS 发行版
 ^^^^^^^^^^
 
-This is the distribution you're planning on releasing the package into.
+这是你计划将软件包发布到的发行版。
 
 .. code-block:: bash
 
@@ -201,14 +201,14 @@ This is the distribution you're planning on releasing the package into.
          This can be any valid ROS distro, e.g. indigo, kinetic, lunar, melodic
       ['indigo']:
 
-If you plan on releasing into ROS {DISTRO}, enter ``{DISTRO}``.
+如果你计划发布到 ROS {DISTRO}，请输入 ``{DISTRO}``。
 
 .. _patches-directory:
 
-Patches Directory
-^^^^^^^^^^^^^^^^^
+补丁目录
+^^^^^^^^
 
-This is the directory where any additional patches to the releases are.
+这是存放对发布内容所做任何额外补丁的目录。
 
 .. code-block:: bash
 
@@ -223,13 +223,13 @@ This is the directory where any additional patches to the releases are.
          Use this if you want to disable overlaying of files.
       [None]:
 
-Adding additional patches to a release is a rarely used feature.
-For almost all packages, this should be left as the default ``None``.
+为发布添加额外补丁是一项很少使用的功能。
+对于几乎所有软件包，此项都应保留默认值 ``None``。
 
 .. _release-repository-push-url:
 
-Release Repository Push URL
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+发布仓库推送 URL
+^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -243,4 +243,4 @@ Release Repository Push URL
          to push rather than a https:// url.
       [None]:
 
-Can be left as the default in most cases.
+在大多数情况下都可以保留默认值。

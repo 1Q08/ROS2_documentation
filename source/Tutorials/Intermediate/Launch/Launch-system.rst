@@ -4,39 +4,39 @@
   Tutorials/Launch-Files/Launch-system
   Tutorials/Launch/Launch-system
 
-Integrating launch files into ROS 2 packages
-============================================
+将 launch 文件集成到 ROS 2 包中
+===============================
 
-**Goal:** Add a launch file to a ROS 2 package
+**目标：** 向 ROS 2 包添加一个 launch 文件
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 10 minutes
+**时间：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Prerequisites
--------------
+先决条件
+--------
 
-You should have gone through the tutorial on how to :doc:`create a ROS 2 package <../../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>`.
+你应该已经完成了关于如何 :doc:`创建 ROS 2 包 <../../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>` 的教程。
 
-As always, don't forget to source ROS 2 in :doc:`every new terminal you open <../../Beginner-CLI-Tools/Configuring-ROS2-Environment>`.
+和往常一样，别忘了在 :doc:`你打开的每个新终端 <../../Beginner-CLI-Tools/Configuring-ROS2-Environment>` 中 source ROS 2。
 
-Background
-----------
+背景
+----
 
-In the :doc:`previous tutorial <Creating-Launch-Files>`, we saw how to write a standalone launch file.
-This tutorial will show how to add a launch file to an existing package, and the conventions typically used.
+在 :doc:`上一个教程 <Creating-Launch-Files>` 中，我们了解了如何编写一个独立的 launch 文件。
+本教程将展示如何向现有包添加 launch 文件，以及通常使用的约定。
 
-Tasks
------
+任务
+----
 
-1 Create a package
-^^^^^^^^^^^^^^^^^^
+1 创建一个包
+^^^^^^^^^^^^
 
-Create a workspace for the package to live in:
+为包创建一个工作空间：
 
 .. tabs::
 
@@ -63,29 +63,29 @@ Create a workspace for the package to live in:
 
 .. tabs::
 
-  .. group-tab:: Python package
+  .. group-tab:: Python 包
 
     .. code-block:: console
 
       $ ros2 pkg create --build-type ament_python --license Apache-2.0 py_launch_example
 
-  .. group-tab:: C++ package
+  .. group-tab:: C++ 包
 
     .. code-block:: console
 
       $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 cpp_launch_example
 
-2 Creating the structure to hold launch files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 创建存放 launch 文件的结构
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-By convention, all launch files for a package are stored in the ``launch`` directory inside of the package.
-Make sure to create a ``launch`` directory at the top-level of the package you created above.
+按照约定，一个包的所有 launch 文件都存储在包内的 ``launch`` 目录中。
+确保在你上面创建的包的顶层创建一个 ``launch`` 目录。
 
 .. tabs::
 
-  .. group-tab:: Python package
+  .. group-tab:: Python 包
 
-    For Python packages, the directory containing your package should look like this:
+    对于 Python 包，包含你的包的目录应该如下所示：
 
     .. code-block:: console
 
@@ -99,8 +99,8 @@ Make sure to create a ``launch`` directory at the top-level of the package you c
           setup.py
           test/
 
-    To enable colcon to locate and utilize our launch files, we need to inform Python's setup tools of their presence.
-    To achieve this, open the ``setup.py`` file, add the necessary ``import`` statements at the top, and include the launch files into the ``data_files`` parameter of ``setup``:
+    为了让 colcon 能够定位和使用我们的 launch 文件，我们需要告知 Python 的 setup 工具它们的存在。
+    为此，打开 ``setup.py`` 文件，在顶部添加必要的 ``import`` 语句，并将 launch 文件包含到 ``setup`` 的 ``data_files`` 参数中：
 
     .. code-block:: python
 
@@ -119,9 +119,9 @@ Make sure to create a ``launch`` directory at the top-level of the package you c
           ]
       )
 
-  .. group-tab:: C++ package
+  .. group-tab:: C++ 包
 
-    For C++ packages, we will only be adjusting the ``CMakeLists.txt`` file by adding:
+    对于 C++ 包，我们只需要调整 ``CMakeLists.txt`` 文件，在文件末尾（但在 ``ament_package()`` 之前）添加：
 
     .. code-block:: cmake
 
@@ -131,104 +131,102 @@ Make sure to create a ``launch`` directory at the top-level of the package you c
         DESTINATION share/${PROJECT_NAME}/
       )
 
-    to the end of the file (but before ``ament_package()``).
 
-
-3 Writing the launch file
-^^^^^^^^^^^^^^^^^^^^^^^^^
+3 编写 launch 文件
+^^^^^^^^^^^^^^^^^^
 
 .. tabs::
 
-  .. group-tab:: XML launch file
+  .. group-tab:: XML launch 文件
 
-    Inside your ``launch`` directory, create a new launch file called ``my_script_launch.xml``.
-    ``_launch.xml`` is recommended, but not required, as the file suffix for XML launch files.
+    在你的 ``launch`` 目录中，创建一个名为 ``my_script_launch.xml`` 的新 launch 文件。
+    ``_launch.xml`` 是 XML launch 文件推荐（但不是必需）的文件后缀。
 
     .. literalinclude:: launch/my_script_launch.xml
       :language: xml
 
-  .. group-tab:: YAML launch file
+  .. group-tab:: YAML launch 文件
 
-    Inside your ``launch`` directory, create a new launch file called ``my_script_launch.yaml``.
-    ``_launch.yaml`` is recommended, but not required, as the file suffix for YAML launch files.
+    在你的 ``launch`` 目录中，创建一个名为 ``my_script_launch.yaml`` 的新 launch 文件。
+    ``_launch.yaml`` 是 YAML launch 文件推荐（但不是必需）的文件后缀。
 
     .. literalinclude:: launch/my_script_launch.yaml
       :language: yaml
 
-  .. group-tab:: Python launch file
+  .. group-tab:: Python launch 文件
 
-    Inside your ``launch`` directory, create a new launch file called ``my_script_launch.py``.
-    ``_launch.py`` is recommended, but not required, as the file suffix for Python launch files.
-    However, the launch file name needs to end with ``launch.py`` to be recognized and autocompleted by ``ros2 launch``.
+    在你的 ``launch`` 目录中，创建一个名为 ``my_script_launch.py`` 的新 launch 文件。
+    ``_launch.py`` 是 Python launch 文件推荐（但不是必需）的文件后缀。
+    但是，launch 文件名需要以 ``launch.py`` 结尾，才能被 ``ros2 launch`` 识别和自动补全。
 
-    Your launch file should define the ``generate_launch_description()`` function which returns a ``launch.LaunchDescription()`` to be used by the ``ros2 launch`` verb.
+    你的 launch 文件应该定义 ``generate_launch_description()`` 函数，它返回一个 ``launch.LaunchDescription()`` 供 ``ros2 launch`` 动词使用。
 
     .. literalinclude:: launch/my_script_launch.py
       :language: python
 
 
-4 Building and running the launch file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 构建和运行 launch 文件
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-Go to the top-level of the workspace, and build it:
+进入工作空间的顶层，并构建它：
 
 .. code-block:: console
 
   $ colcon build
 
-After the ``colcon build`` has been successful and you've sourced the workspace, you should be able to run the launch file as follows:
+在 ``colcon build`` 成功并且你已 source 工作空间之后，你应该能够按如下方式运行 launch 文件：
 
 .. tabs::
 
-  .. group-tab:: Python package
+  .. group-tab:: Python 包
 
     .. tabs::
 
-      .. group-tab:: XML launch file
+      .. group-tab:: XML launch 文件
 
         .. code-block:: console
 
           $ ros2 launch py_launch_example my_script_launch.xml
 
-      .. group-tab:: YAML launch file
+      .. group-tab:: YAML launch 文件
 
         .. code-block:: console
 
           $ ros2 launch py_launch_example my_script_launch.yaml
 
-      .. group-tab:: Python launch file
+      .. group-tab:: Python launch 文件
 
         .. code-block:: console
 
           $ ros2 launch py_launch_example my_script_launch.py
 
-  .. group-tab:: C++ package
+  .. group-tab:: C++ 包
 
     .. tabs::
 
-      .. group-tab:: XML launch file
+      .. group-tab:: XML launch 文件
 
         .. code-block:: console
 
           $ ros2 launch cpp_launch_example my_script_launch.xml
 
-      .. group-tab:: YAML launch file
+      .. group-tab:: YAML launch 文件
 
         .. code-block:: console
 
           $ ros2 launch cpp_launch_example my_script_launch.yaml
 
-      .. group-tab:: Python launch file
+      .. group-tab:: Python launch 文件
 
         .. code-block:: console
 
           $ ros2 launch cpp_launch_example my_script_launch.py
 
 
-Documentation
--------------
+文档
+----
 
-`The launch documentation <https://github.com/ros2/launch/blob/{REPOS_FILE_BRANCH}/launch/doc/source/architecture.rst>`__ provides more details on concepts that are also used in ``launch_ros``.
+`launch 文档 <https://github.com/ros2/launch/blob/{REPOS_FILE_BRANCH}/launch/doc/source/architecture.rst>`__ 提供了关于 ``launch_ros`` 中同样使用的一些概念的更多细节。
 
-Additional documentation/examples of launch capabilities are forthcoming.
-See the source code (https://github.com/ros2/launch and https://github.com/ros2/launch_ros) in the meantime.
+关于 launch 能力的更多文档/示例即将推出。
+在此期间，请参阅源代码（https://github.com/ros2/launch 和 https://github.com/ros2/launch_ros）。

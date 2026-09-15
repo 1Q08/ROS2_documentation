@@ -1,139 +1,139 @@
 .. _Help:
 
-Contact
-=======
+联系
+====
 
 .. _Using Robotics Stack Exchange:
 
-Support
--------
+支持
+----
 
-Different types of questions or discussions correspond to different avenues of communication;
-check the descriptions below to ensure you choose the right method.
+不同类型的问题或讨论对应不同的沟通渠道；
+请查阅下面的说明，确保您选择了正确的方式。
 
-Need help troubleshooting your system?
-First, search `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ to see if others have had similar issues, and if their solution works for you.
+需要帮助排查系统问题？
+首先，在 `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ 上搜索，看看是否其他人也遇到过类似问题，以及他们的解决方案对您是否有效。
 
-If not, ask a new question on `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__.
-Make sure to add tags, at the very least the ``ros2`` tag and the distro version you are running, e.g. ``{DISTRO}``.
-If your question is related to the documentation here, add a tag like ``docs``, or more specifically, ``tutorials``.
+如果没有，请在 `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ 上提出新问题。
+务必添加标签，至少包括 ``ros2`` 标签和您所使用的发行版版本，例如 ``{DISTRO}``。
+如果您的问题与这里的文档有关，请添加类似 ``docs`` 的标签，或更具体地添加 ``tutorials``。
 
-Please don't contact the developers/maintainers directly.
-The community can't see question or answer(s) not asked or answered publicly.
-Open Source development works best when the entire community participates in discussions and helps to answer questions.
-It's better to send all questions to `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ and report all issues to the issue tracker.
+请不要直接联系开发者/维护者。
+社区无法看到未公开提出或回答的问题或答案。
+当整个社区都参与讨论并帮助回答问题的时候，开源开发的效果最好。
+最好把所有问题都发送到 `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__，并将所有问题报告到问题追踪器。
 
-Contributing support
-^^^^^^^^^^^^^^^^^^^^
+贡献支持
+^^^^^^^^
 
-ROS 2 users come from a wide range of technical backgrounds, use a variety of different operating systems, and don't necessarily have any prior experience with ROS (1 or 2).
-So, it's important for users with any amount of experience to contribute support.
+ROS 2 用户来自各种不同的技术背景，使用各种不同的操作系统，并且不一定具有任何 ROS（1 或 2）经验。
+因此，无论经验多少，用户参与贡献支持都很重要。
 
-If you see an issue on `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ that is similar to something you've run into yourself, please consider providing some pointers to what helped in your situation.
-Don't worry if you aren't sure if your response is correct.
-Simply say so, and other community members will jump in if necessary.
+如果您在 `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ 上看到与您自己遇到过的问题类似的问题，请考虑提供一些对您的情况有帮助的线索。
+不要担心您不确定自己的回答是否正确。
+只需说明这一点，其他社区成员会在必要时参与进来。
 
-Issues
-------
+问题
+----
 
-If you identify bugs, have suggestions for improvements, or a question specific to one package, you can open an issue on GitHub.
+如果您发现了 bug、有改进建议，或有针对某个特定包的问题，您可以在 GitHub 上提交 issue。
 
-For example, if you are following the :doc:`tutorials here <Tutorials>` and come across an instruction that doesn't work on your system,
-you can open an issue in the `ros2_documentation <https://github.com/ros2/ros2_documentation>`__ repo.
+例如，如果您正在阅读 :doc:`这里的教程 <Tutorials>`，并遇到某条在您的系统上无法工作的说明，
+您可以在 `ros2_documentation <https://github.com/ros2/ros2_documentation>`__ 仓库中提交 issue。
 
-You can search for individual ROS 2 repositories on `ROS 2's GitHub <https://github.com/ros2>`__.
+您可以在 `ROS 2 的 GitHub <https://github.com/ros2>`__ 上搜索各个 ROS 2 仓库。
 
-Before opening an issue, check if other users have reported similar issues by searching across the ros2 and ament GitHub organizations: `example search query <https://github.com/search?q=user%3Aros2+user%3Aament+turtlesim&type=Issues>`__.
+在提交 issue 之前，请先在 ros2 和 ament 这两个 GitHub 组织中搜索，检查是否已有其他用户报告过类似问题：`搜索查询示例 <https://github.com/search?q=user%3Aros2+user%3Aament+turtlesim&type=Issues>`__。
 
-Next, check `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ to see if someone else has asked your question or reported your issue.
+接下来，请查看 `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__，看看是否有人已经提出过您的问题或报告过您的 issue。
 
-If it has not been reported, feel free to open an issue in the appropriate repository tracker.
-If it's not clear which tracker to use for a particular issue, file it in the `ros2/ros2 repository <https://github.com/ros2/ros2/issues>`__ and we'll have a look at it.
+如果尚未被报告，欢迎您在相应仓库的追踪器中提交 issue。
+如果不清楚某个特定问题该使用哪个追踪器，请将其提交到 `ros2/ros2 仓库 <https://github.com/ros2/ros2/issues>`__，我们会查看它。
 
-When filing an issue, please make sure to:
+提交 issue 时，请务必：
 
-* Include enough information for another person to understand the issue.
+* 包含足够的信息，以便他人理解该问题。
 
-Describe exactly what you were doing or are trying to do, and exactly what, if anything, went wrong.
-If following a tutorial or online instructions provide a link to the specific instructions.
+准确描述您当时在做什么或正试图做什么，以及具体出了什么错（如果有的话）。
+如果是按照教程或在线说明操作，请提供指向具体说明的链接。
 
-* Use a descriptive headline or subject line.
-  Bad: "rviz doesn't work".
-  Good: "Rviz crashing looking for missing ``.so`` after latest apt update"
-* Include information about the exact platform, software, versions, and environment relevant to the problem.
-  This includes how you installed the software (from binaries or from source) and which ROS middleware/DDS vendor you are using (if you know it).
-* Any warnings or errors.
-  Cut and paste them directly from the terminal window to which they were printed.
-  Please do not re-type or include a screenshot.
-* In case of a bug consider providing a `short, self contained, correct (compilable), example <https://sscce.org/>`__.
-* When discussing any compiling/linking/installation issues, also provide the compiler version
+* 使用描述性的标题或主题行。
+  差：“rviz 不工作”。
+  好：“Rviz crashing looking for missing ``.so`` after latest apt update”
+* 包含与问题相关的确切平台、软件、版本和环境信息。
+  这包括您安装软件的方式（从二进制包还是从源代码）以及您使用的 ROS 中间件/DDS 厂商（如果您知道的话）。
+* 任何警告或错误。
+  请直接从输出它们的终端窗口剪切并粘贴。
+  请不要重新输入或提供截图。
+* 如果是 bug，请考虑提供一个 `简短、自包含、正确（可编译）的示例 <https://sscce.org/>`__。
+* 在讨论任何编译/链接/安装问题时，还请提供编译器版本
 
-As appropriate, also include your:
+可视情况一并附上您的：
 
-* ROS environment variables (env | grep ROS)
-* Backtraces
-* Relevant config files
-* Graphics card model and driver version
-* Ogre.log for rviz, if possible (run with rviz -l)
-* Bag files and code samples that can reproduce the problem
-* Gifs or movies to demonstrate the problem
+* ROS 环境变量（env | grep ROS）
+* 回溯信息
+* 相关配置文件
+* 显卡型号和驱动版本
+* 如有可能，rviz 的 Ogre.log（以 rviz -l 运行）
+* 能重现问题的 bag 文件和代码示例
+* 演示问题的 Gif 或视频
 
 .. _Using ROS Discourse:
 
-Discussion
-----------
+讨论
+----
 
-To start a discussion with other ROS 2 community members, visit the official `Open Robotics Discourse <https://discourse.openrobotics.org/>`__.
-Content on the Discourse should be high-level;
-it's not a place to get *questions* about code answered, but it would be suitable to start a conversation about best practices or improving standards.
+要与其他 ROS 2 社区成员发起讨论，请访问官方的 `Open Robotics Discourse <https://discourse.openrobotics.org/>`__。
+Discourse 上的内容应该是高层次的；
+它不是用来解答关于代码的 *问题* 的，但适合发起关于最佳实践或改进标准的对话。
 
-Discussions about ROS 2 development and plans are happening on the `Open Robotics Discourse' ROS category <https://discourse.openrobotics.org/c/ros/111>`__.
-Participating in these discussions is an important way to have a say on how different features of ROS 2 will work and be implemented.
+有关 ROS 2 开发和计划的讨论在 `Open Robotics Discourse 的 ROS 分类 <https://discourse.openrobotics.org/c/ros/111>`__ 中进行。
+参与这些讨论是对 ROS 2 各项功能如何工作和实现发表意见的重要方式。
 
-The diverse community behind the ROS ecosystem is one of its greatest assets.
-We encourage all members of the ROS community to participate in these design discussions so that we can leverage the experience of community members, and keep the varied use cases of ROS in mind.
+ROS 生态背后的多元化社区是它最大的资产之一。
+我们鼓励 ROS 社区的所有成员参与这些设计讨论，以便我们能够利用社区成员的经验，并在思考中兼顾 ROS 多样化的使用场景。
 
-Etiquette
-----------
+礼仪
+----
 
-Assume 'good faith': It's easy to mis-interpret the meaning or tone of comments on the internet.
-Assuming good faith gives the benefit of the doubt to those trying to help you, avoiding: insulting well meaning community members, and poisoning the mood.
-Assuming 'good faith' when responding almost always works better even if the original response was not in fact in good faith.
+假定‘善意’：网络上评论的含义或语气很容易被误解。
+假定善意能让您对那些试图帮助您的人多一分宽容，从而避免：侮辱善意的社区成员，以及破坏氛围。
+在回复时假定‘善意’几乎总是效果更好，即使最初的回复实际上并非出于善意。
 
-Please don't send your question more than once: The question was seen.
-If you didn't get a response then likely nobody has had time to answer you.
-Alternatively, it could be that nobody knows the answer.
-In any case, sending it again is poor form and akin to shouting and is likely to aggravate a large number of people.
-This also applies to crossposting.
-Try to pick the forum which you think matches best and ask there.
-If you are referred to a new forum, provide a link to the old discussion.
+请不要多次发送您的问题：问题已被看到。
+如果您没有得到回复，那么很可能是没有人有时间回答您。
+也可能是没有人知道答案。
+无论如何，再次发送都是不好的做法，如同大声喊叫，很可能会激怒很多人。
+这同样适用于跨平台发帖。
+尽量选择您认为最合适的论坛并在那里提问。
+如果您被引导到新的论坛，请提供指向旧讨论的链接。
 
-On `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ you can edit your question to provide more details.
-The more details that you include in your question the easier it is for others to help you find your solution which makes it more likely for you to get a response.
+在 `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ 上，您可以编辑自己的问题以提供更多细节。
+您在问题中包含的细节越多，其他人就越容易帮您找到解决方案，您也就越有可能得到回复。
 
-It's considered bad form to list your personal deadlines; community members answering questions also have them.
+列出您的个人截止日期被视为不好的做法；回答问题的社区成员也有自己的截止日期。
 
-Do not beg for help.
-If there is someone willing and able to help with your problem, you usually get a response.
-Asking for faster answers will mostly have a negative effect.
+不要乞求帮助。
+如果有人愿意并且有能力帮助您解决问题，您通常会得到回复。
+要求更快得到答案，大多会产生负面影响。
 
-Do not add unrelated content to posts.
-The content of posts should be focused on the topic at hand and not include unrelated content.
-Content, links, and images unrelated to the topic are considered spam.
+不要在帖子中添加无关内容。
+帖子的内容应聚焦于当前主题，不应包含无关内容。
+与主题无关的内容、链接和图片会被视为垃圾信息。
 
-For commercial posts, see also `this discussion <https://discourse.openrobotics.org/t/sponsorship-notation-in-posts-on-ros-org/2078>`_.
+关于商业性帖子，另请参见 `这个讨论 <https://discourse.openrobotics.org/t/sponsorship-notation-in-posts-on-ros-org/2078>`_。
 
-Minimize references to content behind pay walls.
-The content posted on `Open Robotics Discourse <https://discourse.openrobotics.org/>`__ and `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ should "generally" be free and open to all users.
-Links to content behind pay walls such as private journal articles, text books, and paid news websites, while helpful and relevant, may not be accessible to all users.
-Where possible primary sources should be free and open with paid content playing a supporting role.
+尽量减少引用付费墙后的内容。
+发布在 `Open Robotics Discourse <https://discourse.openrobotics.org/>`__ 和 `Robotics Stack Exchange <https://robotics.stackexchange.com/>`__ 上的内容“通常”应当是免费且对所有用户开放的。
+指向付费墙后内容的链接（例如非公开的期刊文章、教科书和付费新闻网站）虽然可能有帮助且相关，但并非所有用户都能访问。
+在可能的情况下，主要来源应当免费开放，付费内容只发挥辅助作用。
 
-Single link posts are to be avoided.
-Generally speaking, posting a single link answer is less helpful and can be easily confused with spam.
-Moreover, links may degrade over time or be replaced.
-Paraphrasing a link's content along with some contextual information and attribution is often much more helpful.
+应避免只发一个链接的帖子。
+一般来说，只发一个链接作为回答帮助较小，而且很容易与垃圾信息混淆。
+此外，链接可能随时间失效或被替换。
+用自己的话转述链接内容，并配合一些上下文信息和出处，往往有用得多。
 
-Private contact
----------------
+私下联系
+--------
 
-If you'd like to contact us privately (e.g., if your question contains information sensitive to your organization or project, or if it's regarding a security issue), you can email us directly at ``ros@osrfoundation.org``.
+如果您想私下联系我们（例如，您的问题包含对您所在组织或项目敏感的信息，或涉及安全问题），可以直接发邮件至 ``ros@osrfoundation.org``。

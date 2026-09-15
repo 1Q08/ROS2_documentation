@@ -2,28 +2,28 @@
 
   Guides/Launch-file-different-formats
 
-Using XML, YAML, and Python for ROS 2 Launch Files
-==================================================
+将 XML、YAML 和 Python 用于 ROS 2 启动文件
+==========================================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-ROS 2 launch files can be written in XML, YAML, and Python.
-This guide shows how to use these different formats to accomplish the same task, as well as has some discussion on when to use each format.
+ROS 2 启动文件可以用 XML、YAML 和 Python 编写。
+本指南展示了如何使用这些不同格式完成同一任务，并讨论了何时使用每种格式。
 
-Launch file examples
---------------------
+启动文件示例
+------------
 
-Below is a launch file implemented in XML, YAML, and Python.
-Each launch file performs the following actions:
+下面是一个用 XML、YAML 和 Python 实现的启动文件。
+每个启动文件都执行以下操作：
 
-* Setup command line arguments with defaults
-* Include another launch file
-* Include another launch file in another namespace
-* Start a node and setting its namespace
-* Start a node, setting its namespace, and setting parameters in that node (using the args)
-* Create a node to remap messages from one topic to another
+* 设置带默认值的命令行参数
+* 包含另一个启动文件
+* 在另一个命名空间中包含另一个启动文件
+* 启动一个节点并设置其命名空间
+* 启动一个节点，设置其命名空间，并在该节点中设置参数（使用 args）
+* 创建一个节点，将消息从一个话题重映射到另一个话题
 
 .. tabs::
 
@@ -43,45 +43,45 @@ Each launch file performs the following actions:
         :language: python
 
 
-Using the Launch files from the command line
---------------------------------------------
+从命令行使用启动文件
+--------------------
 
-Launching
-^^^^^^^^^
+启动
+^^^^
 
-Any of the launch files above can be run with ``ros2 launch``.
-To try them locally, you can either create a new package and use
+上面任何一个启动文件都可以用 ``ros2 launch`` 运行。
+要在本地试用它们，你可以创建一个新软件包并使用
 
 .. code-block:: console
 
   $ ros2 launch <package_name> <launch_file_name>
 
-or run the file directly by specifying the path to the launch file
+或者通过指定启动文件的路径直接运行该文件
 
 .. code-block:: console
 
   $ ros2 launch <path_to_launch_file>
 
-Setting arguments
-^^^^^^^^^^^^^^^^^
+设置参数
+^^^^^^^^
 
-To set the arguments that are passed to the launch file, you should use ``key:=value`` syntax.
-For example, you can set the value of ``background_r`` in the following way:
+要设置传递给启动文件的参数，你应该使用 ``key:=value`` 语法。
+例如，你可以通过以下方式设置 ``background_r`` 的值：
 
 .. code-block:: console
 
   $ ros2 launch <package_name> <launch_file_name> background_r:=255
 
-or
+或者
 
 .. code-block:: console
 
   $ ros2 launch <path_to_launch_file> background_r:=255
 
-Controlling the turtles
-^^^^^^^^^^^^^^^^^^^^^^^
+控制海龟
+^^^^^^^^
 
-To test that the remapping is working, you can control the turtles by running the following command in another terminal:
+要测试重映射是否正常工作，你可以在另一个终端中运行以下命令来控制海龟：
 
 .. code-block:: console
 
@@ -90,19 +90,19 @@ To test that the remapping is working, you can control the turtles by running th
 
 .. _launch-file-different-formats-which:
 
-XML, YAML, or Python: Which should I use?
------------------------------------------
+XML、YAML 还是 Python：我应该使用哪个？
+---------------------------------------
 
 .. note::
 
-  Launch files in ROS 1 were written in XML, so XML may be the most familiar to people coming from ROS 1.
-  To see what's changed, you can visit :doc:`Migrating-from-ROS1/Migrating-Launch-Files`.
+  ROS 1 中的启动文件是用 XML 编写的，所以对于从 ROS 1 过来的人来说，XML 可能是最熟悉的。
+  要了解有哪些变化，你可以访问 :doc:`Migrating-from-ROS1/Migrating-Launch-Files`。
 
-For most applications the choice of which ROS 2 launch format comes down to developer preference.
-However, if your launch file requires flexibility that you cannot achieve with XML or YAML, you can use Python to write your launch file.
-Using Python for ROS 2 launch is more flexible because of following two reasons:
+对于大多数应用而言，选择哪种 ROS 2 启动格式取决于开发者偏好。
+不过，如果你的启动文件需要 XML 或 YAML 无法实现的灵活性，你可以使用 Python 编写启动文件。
+将 Python 用于 ROS 2 启动更加灵活，原因有以下两点：
 
-* Python is a scripting language, and thus you can leverage the language and its libraries in your launch files.
-* `ros2/launch <https://github.com/ros2/launch>`_ (general launch features) and `ros2/launch_ros <https://github.com/ros2/launch_ros>`_ (ROS 2 specific launch features) are written in Python and thus you have lower level access to launch features that may not be exposed by XML and YAML.
+* Python 是一种脚本语言，因此你可以在启动文件中利用该语言及其库。
+* `ros2/launch <https://github.com/ros2/launch>`_ （通用启动功能）和 `ros2/launch_ros <https://github.com/ros2/launch_ros>`_ （ROS 2 特有的启动功能）都是用 Python 编写的，因此你可以更低层地访问 XML 和 YAML 可能未公开的启动功能。
 
-That being said, a launch file written in Python may be more complex and verbose than one in XML or YAML.
+话虽如此，用 Python 编写的启动文件可能比用 XML 或 YAML 编写的更复杂、更冗长。

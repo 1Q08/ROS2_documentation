@@ -1,102 +1,97 @@
 .. _galactic-release:
 
-Galactic Geochelone (``galactic``)
-==================================
+Galactic Geochelone（``galactic``）
+===================================
 
 .. toctree::
    :hidden:
 
    Galactic-Geochelone-Complete-Changelog
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-*Galactic Geochelone* is the seventh release of ROS 2.
-What follows is highlights of the important changes and features in Galactic Geochelone since the last release.
-For a list of all of the changes since Foxy, see the `long form changelog <Galactic-Geochelone-Complete-Changelog>`.
+*Galactic Geochelone* 是 ROS 2 的第七个发行版。
+以下内容概述了 Galactic Geochelone 自上一个发行版以来的重要变更与特性亮点。
+关于自 Foxy 以来的所有变更列表，请参阅 `long form changelog <Galactic-Geochelone-Complete-Changelog>`。
 
-Supported Platforms
--------------------
+支持的平台
+----------
 
-Galactic Geochelone supports the following platforms according to `the platform support tiers <../The-ROS2-Project/Platform-Support-Tiers>`:
+Galactic Geochelone 根据 `the platform support tiers <../The-ROS2-Project/Platform-Support-Tiers>` 支持以下平台：
 
-Tier 1 platforms:
+第 1 层级平台：
 
-* Ubuntu 20.04 (Focal): ``amd64`` and ``arm64``
-* Windows 10 (Visual Studio 2019): ``amd64``
+* Ubuntu 20.04 (Focal)：``amd64`` 和 ``arm64``
+* Windows 10 (Visual Studio 2019)：``amd64``
 
-Tier 2 platforms:
+第 2 层级平台：
 
-* RHEL 8: ``amd64``
+* RHEL 8：``amd64``
 
-Tier 3 platforms:
+第 3 层级平台：
 
-* Ubuntu 20.04 (Focal): ``arm32``
-* Debian Bullseye (11): ``amd64``, ``arm64`` and ``arm32``
-* OpenEmbedded Thud (2.6) / webOS OSE: ``arm32`` and ``arm64``
-* Mac macOS 10.14 (Mojave): ``amd64``
+* Ubuntu 20.04 (Focal)：``arm32``
+* Debian Bullseye (11)：``amd64``、``arm64`` 和 ``arm32``
+* OpenEmbedded Thud (2.6) / webOS OSE：``arm32`` 和 ``arm64``
+* Mac macOS 10.14 (Mojave)：``amd64``
 
-Targeted platforms:
+目标平台：
 
-+--------------+------------------+--------------+------------------+-----------+-----------------+-----------------+
-| Architecture | Ubuntu Focal     | Windows 10   | RHEL 8           | macOS     | Debian Bullseye | OpenEmbedded /  |
-|              | (20.04)          | (VS2019)     |                  |           | (11)            | webOS OSE       |
-+==============+==================+==============+==================+===========+=================+=================+
-| amd64        | Tier 1 [d][a][s] | Tier 1 [a][s]| Tier 2 [d][a][s] | Tier 3 [s]| Tier 3 [s]      |                 |
-+--------------+------------------+--------------+------------------+-----------+-----------------+-----------------+
-| arm64        | Tier 1 [d][a][s] |              |                  |           | Tier 3 [s]      | Tier 3 [s]      |
-+--------------+------------------+--------------+------------------+-----------+-----------------+-----------------+
-| arm32        | Tier 3 [s]       |              |                  |           | Tier 3 [s]      | Tier 3 [s]      |
-+--------------+------------------+--------------+------------------+-----------+-----------------+-----------------+
++--------+-----------------------+----------------------+----------------------+----------------+-----------------------+---------------------------+
+|  架构  | Ubuntu Focal (20.04)  | Windows 10 (VS2019)  | RHEL 8               | macOS          | Debian Bullseye (11)  | OpenEmbedded / webOS OSE  |
++========+=======================+======================+======================+================+=======================+===========================+
+| amd64  | 第 1 层级 [d][a][s]   | 第 1 层级 [a][s]     | 第 2 层级 [d][a][s]  | 第 3 层级 [s]  | 第 3 层级 [s]         |                           |
++--------+-----------------------+----------------------+----------------------+----------------+-----------------------+---------------------------+
+| arm64  | 第 1 层级 [d][a][s]   |                      |                      |                | 第 3 层级 [s]         | 第 3 层级 [s]             |
++--------+-----------------------+----------------------+----------------------+----------------+-----------------------+---------------------------+
+| arm32  | 第 3 层级 [s]         |                      |                      |                | 第 3 层级 [s]         | 第 3 层级 [s]             |
++--------+-----------------------+----------------------+----------------------+----------------+-----------------------+---------------------------+
 
 
-The following indicators show what delivery mechanisms are available for
-each platform.
+以下指标说明了每个平台可用的交付机制。
 
-\" \[d\] \" Distribution-specific (Debian, RPM, etc.) packages will be
-provided for this platform for packages submitted to the rosdistro.
+\" \[d\] \" 发行版特定的（Debian、RPM 等）软件包将针对提交到 rosdistro 的软件包
+为该平台提供。
 
-\" \[a\] \" Binary releases are provided as a single archive per
-platform containing all packages in the Galactic ROS 2 repos file[^10].
+\" \[a\] \" 二进制发行版以每个平台一个归档文件的形式提供，
+其中包含 Galactic ROS 2 repos 文件[^10] 中的所有软件包。
 
-\" \[s\] \" Compilation from source.
+\" \[s\] \" 从源代码编译。
 
-Middleware Implementation Support:
+中间件实现支持：
 
 +--------------------------+-------------------------+---------------+----------------------------+------------------------------+
-| Middleware Library       | Middleware Provider     | Support Level | Platforms                  | Architectures                |
+|         中间件库         |       中间件供应商      |    支持层级   |            平台            |             架构             |
 +==========================+=========================+===============+============================+==============================+
-| rmw_cyclonedds_cpp*      | Eclipse Cyclone DDS     | Tier 1        | All Platforms              | All Architectures            |
+|    rmw_cyclonedds_cpp*   |   Eclipse Cyclone DDS   |   第 1 层级   |          所有平台          |           所有架构           |
 +--------------------------+-------------------------+---------------+----------------------------+------------------------------+
-| rmw_fastrtps_cpp         | eProsima Fast-DDS       | Tier 1        | All Platforms              | All Architectures            |
+|     rmw_fastrtps_cpp     |    eProsima Fast-DDS    |   第 1 层级   |          所有平台          |           所有架构           |
 +--------------------------+-------------------------+---------------+----------------------------+------------------------------+
-| rmw_connextdds           | RTI Connext             | Tier 1        | Ubuntu, Windows, and macOS | All Architectures except     |
-|                          |                         |               |                            | arm64                        |
+|      rmw_connextdds      |       RTI Connext       |   第 1 层级   |  Ubuntu、Windows 和 macOS  |     除 arm64 外的所有架构    |
 +--------------------------+-------------------------+---------------+----------------------------+------------------------------+
-| rmw_fastrtps_dynamic_cpp | eProsima Fast-DDS       | Tier 2        | All Platforms              | All Architectures            |
+| rmw_fastrtps_dynamic_cpp |    eProsima Fast-DDS    |   第 2 层级   |          所有平台          |           所有架构           |
 +--------------------------+-------------------------+---------------+----------------------------+------------------------------+
-| rmw_gurumdds_cpp         | GurumNetworks GurumDDS  | Tier 3        | Ubuntu and Windows         | All Architectures except     |
-|                          |                         |               |                            | arm32                        |
+|     rmw_gurumdds_cpp     |  GurumNetworks GurumDDS |   第 3 层级   |      Ubuntu 和 Windows     |     除 arm32 外的所有架构    |
 +--------------------------+-------------------------+---------------+----------------------------+------------------------------+
 
-\" \* \" means default RMW implementation.
+\" \* \" 表示默认的 RMW 实现。
 
-Middleware implementation support is dependent upon the platform support
-tier. For example a Tier 1 middleware implementation on a Tier 2
-platform can only receive Tier 2 support.
+中间件实现支持取决于平台支持层级。例如，运行在第 2 层级平台上的
+第 1 层级中间件实现只能获得第 2 层级支持。
 
-Minimum language requirements:
+最低语言要求：
 
 - C++17
 - Python 3.6
 
-Dependency Requirements:
+依赖项要求：
 
 +------------+----------------------------+--------------------------------------------------------------------------------+
-|            | Required Support           | Recommended Support                                                            |
+|            | 必需支持                   | 推荐支持                                                                       |
 +------------+-------------+--------------+----------+----------+-----------------+----------------------------------------+
-| Package    | Ubuntu Focal| Windows 10** | RHEL 8   | macOS**  | Debian Bullseye | OpenEmbedded**                         |
+| 软件包     | Ubuntu Focal| Windows 10** | RHEL 8   | macOS**  | Debian Bullseye | OpenEmbedded**                         |
 +============+=============+==============+==========+==========+=================+========================================+
 | CMake      | 3.16.3      | 3.19.1       | 3.18.2   | 3.14.4   | 3.18.4          | 3.16.1 / 3.12.2****                    |
 +------------+-------------+--------------+----------+----------+-----------------+----------------------------------------+
@@ -116,11 +111,11 @@ Dependency Requirements:
 +------------+-------------+--------------+----------+----------+-----------------+----------------------------------------+
 | Qt         | 5.12.5      | 5.12.10      | 5.12.5   | 5.12.3   | 5.15.2          | 5.14.1 / 5.12.5****                    |
 +------------+-------------+--------------+----------+----------+-----------------+----------------------------------------+
-|                                         | **Linux only**                                                                 |
+|                                         | **仅 Linux 平台**                                                              |
 +------------+-------------+--------------+----------+----------+-----------------+----------------------------------------+
 | PCL        | 1.10.0      | N/A          | 1.11.1   | N/A      | 1.11.1          | 1.10.0                                 |
 +------------+-------------+--------------+----------+----------+-----------------+----------------------------------------+
-| **RMW DDS Middleware Providers**                                                                                         |
+| **RMW DDS 中间件供应商**                                                                                                 |
 +------------+-------------+--------------+----------+----------+-----------------+----------------------------------------+
 | Cyclone DDS| 0.8.x (Réplique)                                                                                            |
 +------------+-------------+--------------+----------+----------+-----------------+----------------------------------------+
@@ -131,97 +126,91 @@ Dependency Requirements:
 | Gurum DDS  | 2.7.x                      | N/A                                                                            |
 +------------+----------------------------+--------------------------------------------------------------------------------+
 
-\" \* \" means that this is not the upstream version (available on the
-official Operating System repositories) but a package distributed by
-OSRF or the community (package built and distributed on custom
-repositories).
+\" \* \" 表示这不是上游版本（即官方操作系统仓库中可用的版本），
+而是由 OSRF 或社区分发的软件包（在自定义仓库中构建并分发的软件包）。
 
-\" \*\* \" Rolling distributions will see multiple version changes of
-these dependencies during their lifetime. The versions shown for
-OpenEmbedded are those provided by the 3.1 Dunfell release series; the
-versions provided by the other supported release series are listed here:
-<https://github.com/ros/meta-ros/wiki/Package-Version-Differences> .
-Note that the OpenEmbedded releases series for which a ROS distro has
-support will change during its support time frame, as per the
-OpenEmbedded support policy shown here:
+\" \*\* \" 滚动发行版在其生命周期内会看到这些依赖项的多个版本变更。
+此处显示的 OpenEmbedded 版本是 3.1 Dunfell 发行系列提供的版本；
+其他受支持的发行系列提供的版本在此列出：
+<https://github.com/ros/meta-ros/wiki/Package-Version-Differences> 。
+请注意，某个 ROS 发行版所支持的 OpenEmbedded 发行系列会在其支持时间范围内
+发生变化，这遵循此处所示的 OpenEmbedded 支持政策：
 <https://github.com/ros/meta-ros/wiki/Policies#openembedded-release-series-support>
-. However, it will always be supported by least one stable OpenEmbedded
-release series.
+。但它始终会由至少一个稳定的 OpenEmbedded 发行系列支持。
 
-\" \*\*\*\* \" webOS OSE provides this different version.
+\" \*\*\*\* \" webOS OSE 提供了这一不同的版本。
 
-This document only captures the version at the first release of a ROS
-distribution and will not be updated as the dependencies move forward.
-These versions are thus a low watermark.
+本文档仅记录某个 ROS 发行版首次发布时的版本，
+不会随着依赖项的演进更新。因此这些版本是一个低水位线。
 
-Package manager use for dependencies:
+依赖项使用的软件包管理器：
 
-- Ubuntu, Debian: apt
-- Windows: Chocolatey, pip
-- macOS: Homebrew, pip
-- RHEL: dnf
-- OpenEmbedded: opkg
+- Ubuntu、Debian：apt
+- Windows：Chocolatey、pip
+- macOS：Homebrew、pip
+- RHEL：dnf
+- OpenEmbedded：opkg
 
-Build System Support:
+构建系统支持：
 
 - ament_cmake
 - cmake
 - setuptools
 
-Installation
-------------
+安装
+----
 
-`Install Galactic Geochelone <../../galactic/Installation.html>`__
+`安装 Galactic Geochelone <../../galactic/Installation.html>`__
 
-New features in this ROS 2 release
-----------------------------------
+此 ROS 2 发行版中的新特性
+-------------------------
 
-Ability to specify per-logger log levels
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+能够为每个日志记录器指定日志级别
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-It is now possible to specify different logging levels for different loggers on the command line:
+现在可以在命令行上为不同的日志记录器指定不同的日志级别：
 
 .. code-block:: console
 
    $ ros2 run demo_nodes_cpp talker --ros-args --log-level WARN --log-level talker:=DEBUG
 
-The above command sets a global log level of WARN, but sets the log level of the talker node messages to DEBUG.
-The ``--log-level`` command-line option can be passed an arbitrary number of times to set different log levels for each logger.
+上述命令将全局日志级别设置为 WARN，但将 talker 节点消息的日志级别设置为 DEBUG。
+``--log-level`` 命令行选项可以传入任意次数，从而为每个日志记录器设置不同的日志级别。
 
-Ability to configure logging directory through environment variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+能够通过环境变量配置日志目录
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-It is now possible to configure the logging directory through two environment variables: ``ROS_LOG_DIR`` and ``ROS_HOME``.
-The logic is as follows:
+现在可以通过两个环境变量来配置日志目录：``ROS_LOG_DIR`` 和 ``ROS_HOME``。
+其逻辑如下：
 
-* Use ``$ROS_LOG_DIR`` if ``ROS_LOG_DIR`` is set and not empty.
-* Otherwise, use ``$ROS_HOME/log``, using ``~/.ros`` for ``ROS_HOME`` if not set or if empty.
+* 如果设置了 ``ROS_LOG_DIR`` 且不为空，则使用 ``$ROS_LOG_DIR``。
+* 否则，使用 ``$ROS_HOME/log``；如果未设置 ``ROS_HOME`` 或它为空，则使用 ``~/.ros``。
 
-Thus the default value stays the same: ``~/.ros/log``.
+因此默认值保持不变：``~/.ros/log``。
 
-Related PRs: `ros2/rcl_logging#53 <https://github.com/ros2/rcl_logging/pull/53>`_ and `ros2/launch#460 <https://github.com/ros2/launch/pull/460>`_.
+相关 PR：`ros2/rcl_logging#53 <https://github.com/ros2/rcl_logging/pull/53>`_ 和 `ros2/launch#460 <https://github.com/ros2/launch/pull/460>`_。
 
-For example:
+例如：
 
 .. code-block:: bash
 
   ROS_LOG_DIR=/tmp/foo ros2 run demo_nodes_cpp talker
 
-Will place all logs in ``/tmp/foo``.
+会将所有日志放在 ``/tmp/foo`` 中。
 
 .. code-block:: bash
 
   ROS_HOME=/path/to/home ros2 run demo_nodes_cpp talker
 
-Will place all logs in ``/path/to/home/log``.
+会将所有日志放在 ``/path/to/home/log`` 中。
 
-Ability to invoke ``rosidl`` pipeline outside CMake
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+能够在 CMake 之外调用 ``rosidl`` 管道
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-It is now straightforward to invoke the ``rosidl`` interface generation pipeline outside CMake.
-Source code generators and interface definition translators are accessible through a unified command line interface.
+现在可以直接在 CMake 之外调用 ``rosidl`` 接口生成管道。
+源代码生成器和接口定义转换器可以通过统一的命令行接口访问。
 
-For example, given a ``Demo`` message in some ``demo`` package like:
+例如，给定某个 ``demo`` 软件包中的 ``Demo`` 消息如下：
 
 .. code-block:: console
 
@@ -233,52 +222,52 @@ For example, given a ``Demo`` message in some ``demo`` package like:
   geometry_msgs/Accel accel
   EOF
 
-it is easy to generate C, C++, and Python support source code:
+就可以轻松生成 C、C++ 和 Python 支持源代码：
 
 .. code-block:: console
 
   $ rosidl generate -o gen -t c -t cpp -t py -I$(ros2 pkg prefix --share std_msgs)/.. \
     -I$(ros2 pkg prefix --share geometry_msgs)/.. demo msg/Demo.msg
 
-Generated source code will be put in the ``gen`` directory.
+生成的源代码将放在 ``gen`` 目录中。
 
-One may also translate the message definition to a different format for a third-party code generation tool to consume:
+也可以将消息定义转换为其他格式，以便第三方代码生成工具使用：
 
 .. code-block:: console
 
   $ rosidl translate -o gen --to idl -I$(ros2 pkg prefix --share std_msgs)/.. \
     -I$(ros2 pkg prefix --share geometry_msgs)/.. demo msg/Demo.msg
 
-The translated message definition will be put in the ``gen`` directory.
+转换后的消息定义将放在 ``gen`` 目录中。
 
-Note that these tools generate sources but do not build it -- that responsibility is still on the caller.
-This is a first step towards enabling ``rosidl`` interface generation in build systems other than CMake.
-See the `design document <https://github.com/ros2/design/pull/310>`_ for further reference and next steps.
+请注意，这些工具只生成源代码，并不负责构建 —— 构建仍由调用方负责。
+这是朝着在 CMake 之外的构建系统中启用 ``rosidl`` 接口生成迈出的第一步。
+有关更多参考和后续步骤，请参阅 `设计文档 <https://github.com/ros2/design/pull/310>`_。
 
-Externally configure QoS at start-up
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+在启动时从外部配置 QoS
+^^^^^^^^^^^^^^^^^^^^^^
 
-It is now possible to externally configure the QoS settings for a node at start-up time.
-QoS settings are **not** configurable during runtime; they are only configurable at start-up.
-Node authors must opt-in to enable changing QoS settings at start-up.
-If the feature is enabled on a node, then QoS settings can be set with ROS parameters when a node first starts.
+现在可以在启动时从外部配置节点的 QoS 设置。
+QoS 设置 **不能** 在运行时配置；它们只能在启动时配置。
+节点作者必须显式选择加入，才能启用启动时修改 QoS 设置的功能。
+如果节点启用了该特性，那么在节点首次启动时就可以通过 ROS 参数设置 QoS 设置。
 
-`Demos in C++ and Python can be found here. <https://github.com/ros2/demos/tree/a66f0e894841a5d751bce6ded4983acb780448cf/quality_of_service_demo#qos-overrides>`_
+`此处可以找到 C++ 和 Python 的示例。 <https://github.com/ros2/demos/tree/a66f0e894841a5d751bce6ded4983acb780448cf/quality_of_service_demo#qos-overrides>`_
 
-See the `design document for more details <http://design.ros2.org/articles/qos_configurability.html>`_.
+有关更多详情，请参阅 `设计文档获取更多详情 <http://design.ros2.org/articles/qos_configurability.html>`_。
 
-Note, user code handling parameter changes with registered callbacks should avoid rejecting updates for unknown parameters.
-It was considered bad practice prior to Galactic, but with externally configurable QoS enabled it will result in a hard failure.
+请注意，通过注册回调来处理参数变更的用户代码应避免拒绝未知参数的更新。
+在 Galactic 之前这被视为不良实践，但在启用了可外部配置的 QoS 之后，这样做会导致硬失败。
 
-Related PRs: `ros2/rclcpp#1408 <https://github.com/ros2/rclcpp/pull/1408>`_ and `ros2/rclpy#635 <https://github.com/ros2/rclpy/pull/635>`_
+相关 PR：`ros2/rclcpp#1408 <https://github.com/ros2/rclcpp/pull/1408>`_ 和 `ros2/rclpy#635 <https://github.com/ros2/rclpy/pull/635>`_
 
-Python point_cloud2 utilities available
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+可用的 Python point_cloud2 工具
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Several utilities for interacting with `PointCloud2 messages <https://github.com/ros2/common_interfaces/blob/galactic/sensor_msgs/msg/PointCloud2.msg>`__ in Python were `ported to ROS 2 <https://github.com/ros2/common_interfaces/pull/128>`__.
-These utilities allow one to get a list of points from a PointCloud2 message (``read_points`` and ``read_points_list``), and to create a PointCloud2 message from a list of points (``create_cloud`` and ``create_cloud_xyz32``).
+用于在 Python 中操作 `PointCloud2 消息 <https://github.com/ros2/common_interfaces/blob/galactic/sensor_msgs/msg/PointCloud2.msg>`__ 的若干实用工具已被 `移植到 ROS 2 <https://github.com/ros2/common_interfaces/pull/128>`__。
+这些工具允许从 PointCloud2 消息中获取点列表（``read_points`` 和 ``read_points_list``），以及从点列表创建 PointCloud2 消息（``create_cloud`` 和 ``create_cloud_xyz32``）。
 
-An example of creating PointCloud 2 message, then reading it back:
+下面是一个创建 PointCloud2 消息再将其读回的示例：
 
 .. code-block:: python
 
@@ -292,29 +281,29 @@ An example of creating PointCloud 2 message, then reading it back:
   for point in sensor_msgs_py.point_cloud2.read_points(pointcloud):
       print(point)
 
-RViz2 Time Panel
-^^^^^^^^^^^^^^^^
+RViz2 时间面板
+^^^^^^^^^^^^^^
 
-The Rviz2 Time Panel, which shows the current Wall and ROS time, along with the elapsed Wall and ROS time, has been `ported to RViz2 <https://github.com/ros2/rviz/pull/599>`__.
-To enable the Time Panel, click on Panels -> Add New Panel, and select "Time".
-A panel that looks like the following will appear:
+Rviz2 时间面板会显示当前的真实时间（Wall time）和 ROS 时间，以及已经流逝的真实时间和 ROS 时间，它已被 `移植到 RViz2 <https://github.com/ros2/rviz/pull/599>`__。
+要启用时间面板，请点击 Panels -> Add New Panel，然后选择 "Time"。
+将会出现如下所示的面板：
 
 .. image:: rviz2-time-panel-2021-05-17.png
 
-ros2 topic echo can print serialized data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ros2 topic echo 可打印序列化数据
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When debugging middleware issues, it can be useful to see the raw serialized data that the RMW is sending.
-The `--raw command-line flag <https://github.com/ros2/ros2cli/pull/470>`__ was added to ``ros2 topic echo`` to show this data.
-To see this in action, run the following commands.
+在调试中间件问题时，查看 RMW 发送的原始序列化数据会很有帮助。
+``ros2 topic echo`` 中添加了 `--raw 命令行标志 <https://github.com/ros2/ros2cli/pull/470>`__ 来显示这些数据。
+要实际查看效果，请运行以下命令。
 
-Terminal 1:
+终端 1：
 
 .. code-block:: console
 
   $ ros2 topic pub /chatter std_msgs/msg/String "data: 'hello'"
 
-Terminal 2:
+终端 2：
 
 .. code-block:: console
 
@@ -322,11 +311,11 @@ Terminal 2:
   b'\x00\x01\x00\x00\x06\x00\x00\x00hello\x00\x00\x00'
   ---
 
-Get the YAML representation of messages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+获取消息的 YAML 表示
+^^^^^^^^^^^^^^^^^^^^
 
-It is now possible to get a YAML representation of all messages in C++ using the `to_yaml <https://github.com/ros2/rosidl/issues/523>`__ function.
-An example of code that prints out the YAML representation:
+现在可以在 C++ 中使用 `to_yaml <https://github.com/ros2/rosidl/issues/523>`__ 函数获取所有消息的 YAML 表示。
+下面是一个打印 YAML 表示的代码示例：
 
 .. code-block:: c++
 
@@ -342,48 +331,48 @@ An example of code that prints out the YAML representation:
     return 0;
   }
 
-Ability to load parameter files at runtime through the ros2 command
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+能够在运行时通过 ros2 命令加载参数文件
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-ROS 2 has long had the ability to specify parameter values at startup (through command-line arguments or a YAML file), and to dump current parameters out to a file (through ``ros2 param dump``).
-Galactic adds the ability to `load parameter values at runtime <https://github.com/ros2/ros2cli/pull/590>`__ from a YAML file using the ``ros2 param load`` verb.
-For example:
+ROS 2 长期以来一直支持在启动时（通过命令行参数或 YAML 文件）指定参数值，并支持将当前参数导出到文件（通过 ``ros2 param dump``）。
+Galactic 新增了使用 ``ros2 param load`` 动词从 YAML 文件 `在运行时加载参数值 <https://github.com/ros2/ros2cli/pull/590>`__ 的能力。
+例如：
 
-Terminal 1:
+终端 1：
 
 .. code-block:: console
 
   $ ros2 run demo_nodes_cpp parameter_blackboard
 
-Terminal 2:
+终端 2：
 
 .. code-block:: console
 
-  $ ros2 param set /parameter_blackboard foo bar  # sets 'foo' parameter to value 'bar'
-  $ ros2 param dump /parameter_blackboard  # dumps current value of parameters to ./parameter_blackboard.yaml
-  $ ros2 param set /parameter_blackboard foo different  # sets 'foo' parameter to value 'different'
-  $ ros2 param load /parameter_blackboard ./parameter_blackboard.yaml  # reloads previous state of parameters, 'foo' is back to 'bar'
+  $ ros2 param set /parameter_blackboard foo bar  # 将 'foo' 参数设置为值 'bar'
+  $ ros2 param dump /parameter_blackboard  # 将参数的当前值导出到 ./parameter_blackboard.yaml
+  $ ros2 param set /parameter_blackboard foo different  # 将 'foo' 参数设置为值 'different'
+  $ ros2 param load /parameter_blackboard ./parameter_blackboard.yaml  # 重新加载参数的先前状态，'foo' 恢复为 'bar'
 
-Tools to check for QoS incompatibilities
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+检查 QoS 不兼容性的工具
+^^^^^^^^^^^^^^^^^^^^^^^
 
-Built on top of new QoS compatibility check APIs, ``ros2doctor`` and ``rqt_graph`` can now detect and report QoS incompatibilities between publishers and subscriptions.
+基于新的 QoS 兼容性检查 API，``ros2doctor`` 和 ``rqt_graph`` 现在可以检测并报告发布者与订阅之间的 QoS 不兼容性。
 
-Given a publisher and a subscription with `incompatible QoS settings <../../Concepts/Intermediate/About-Quality-of-Service-Settings>`:
+给定一个发布者和一个具有 `不兼容 QoS 设置 <../../Concepts/Intermediate/About-Quality-of-Service-Settings>` 的订阅：
 
-Terminal 1:
-
-.. code-block:: console
-
-  $ ros2 run demo_nodes_py talker_qos -n 1000  # i.e. best_effort publisher
-
-Terminal 2:
+终端 1：
 
 .. code-block:: console
 
-  $ ros2 run demo_nodes_py listener_qos --reliable -n 1000  # i.e. reliable subscription
+  $ ros2 run demo_nodes_py talker_qos -n 1000  # 即 best_effort 发布者
 
-``ros2doctor`` reports:
+终端 2：
+
+.. code-block:: console
+
+  $ ros2 run demo_nodes_py listener_qos --reliable -n 1000  # 即 reliable 订阅
+
+``ros2doctor`` 报告：
 
 .. code-block:: console
 
@@ -396,18 +385,18 @@ Terminal 2:
   compatibility status    : ERROR: Best effort publisher and reliable subscription;
   ~ ...
 
-while ``rqt_graph`` shows:
+而 ``rqt_graph`` 显示：
 
 .. image:: images/rqt_graph-qos-incompatibility-2021-05-17.png
 
-Related PRs: `ros2/ros2cli#621 <https://github.com/ros2/ros2cli/pull/621>`_, `ros-visualization/rqt_graph#61 <https://github.com/ros-visualization/rqt_graph/pull/61>`_
+相关 PR：`ros2/ros2cli#621 <https://github.com/ros2/ros2cli/pull/621>`_、`ros-visualization/rqt_graph#61 <https://github.com/ros-visualization/rqt_graph/pull/61>`_
 
-Use launch substitutions in parameter files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+在参数文件中使用 launch 替换
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Just like ``rosparam`` tags in ROS 1 ``roslaunch``, ``launch_ros`` can now evaluate substitutions in parameter files.
+就像 ROS 1 ``roslaunch`` 中的 ``rosparam`` 标签一样，``launch_ros`` 现在可以求值参数文件中的替换。
 
-For example, given some ``parameter_file_with_substitutions.yaml`` like the following:
+例如，给定如下所示的 ``parameter_file_with_substitutions.yaml``：
 
 .. code-block:: yaml
 
@@ -415,7 +404,7 @@ For example, given some ``parameter_file_with_substitutions.yaml`` like the foll
     ros__parameters:
       launch_date: $(command date)
 
-Set ``allow_substs`` to ``True`` to get substitutions evaluated upon ``Node`` launch:
+将 ``allow_substs`` 设置为 ``True``，即可在 ``Node`` 启动时对替换进行求值：
 
 .. code-block:: python
 
@@ -436,7 +425,7 @@ Set ``allow_substs`` to ``True`` to get substitutions evaluated upon ``Node`` la
           )
       ])
 
-XML launch files also support this.
+XML launch 文件也支持这一功能。
 
 .. code-block:: xml
 
@@ -446,39 +435,39 @@ XML launch files also support this.
     </node>
   </launch>
 
-Related PR: `ros2/launch_ros#168 <https://github.com/ros2/launch_ros/pull/168>`_
+相关 PR：`ros2/launch_ros#168 <https://github.com/ros2/launch_ros/pull/168>`_
 
-Support for unique network flows
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+支持唯一网络流
+^^^^^^^^^^^^^^
 
-Applications may now require UDP/TCP and IP-based RMW implementations to provide unique *network flows* (i.e. unique `Differentiated Services Code Points <https://tools.ietf.org/html/rfc2474>`_ and/or unique `IPv6 Flow Labels <https://tools.ietf.org/html/rfc6437>`_ and/or unique ports in IP packet headers) for publishers and subscriptions, enabling QoS specifications for these IP streams in network architectures that support such a feature, like 5G networks.
+应用程序现在可以要求基于 UDP/TCP 和 IP 的 RMW 实现为发布者和订阅提供唯一的 *网络流* （即唯一的 `区分服务代码点 <https://tools.ietf.org/html/rfc2474>`_ 和/或唯一的 `IPv6 流标签 <https://tools.ietf.org/html/rfc6437>`_ 和/或 IP 包头部中的唯一端口），从而在支持该特性的网络架构（例如 5G 网络）中为这些 IP 流指定 QoS。
 
-To see this in action, you may run these C++ examples (to be found in the `ros2/examples <https://github.com/ros2/examples>`__ repository):
+要查看实际效果，可以运行以下 C++ 示例（位于 `ros2/examples <https://github.com/ros2/examples>`__ 仓库中）：
 
-Terminal 1:
+终端 1：
 
 .. code-block:: console
 
   $ ros2 run examples_rclcpp_minimal_publisher publisher_member_function_with_unique_network_flow_endpoints
 
 
-Terminal 2:
+终端 2：
 
 .. code-block:: console
 
   $ ros2 run examples_rclcpp_minimal_subscriber subscriber_member_function_with_unique_network_flow_endpoints
 
 
-See the `Unique Network Flows design document <https://github.com/ros2/design/pull/304>`_ for further reference.
+更多参考请参阅 `唯一网络流设计文档 <https://github.com/ros2/design/pull/304>`_。
 
-Rosbag2 New Features
-^^^^^^^^^^^^^^^^^^^^
+Rosbag2 新特性
+^^^^^^^^^^^^^^
 
-Split recording by time
-"""""""""""""""""""""""
+按时间分割录制
+""""""""""""""
 
-In Foxy, you could only split bags as they were recording by the size of the bag, now you can also split by the elapsed time.
-The following command will split bagfiles into 100-second chunks.
+在 Foxy 中，录制时只能按照包的大小对包进行分割，现在还可以按照经过的时间进行分割。
+以下命令会将包文件分割为 100 秒的块。
 
 .. code-block:: console
 
@@ -487,7 +476,7 @@ The following command will split bagfiles into 100-second chunks.
 ros2 bag list
 """""""""""""
 
-This new command lists installed plugins of various types that rosbag2 uses.
+这个新命令会列出 rosbag2 所使用的各类已安装插件。
 
 .. code-block:: console
 
@@ -499,56 +488,56 @@ This new command lists installed plugins of various types that rosbag2 uses.
   rosbag_v2_converter
 
 
-Compression implementation is a plugin
-""""""""""""""""""""""""""""""""""""""
+压缩实现是一个插件
+""""""""""""""""""
 
-In Foxy, rosbag2 compression was hardcoded with a Zstd library implementation.
-This has been rearchitected so that compression implementations are a plugin, and can be swapped out without modifying the core rosbag2 codebase.
-The default plugin that ships with ``ros-galactic-rosbag2`` is still the Zstd plugin - but now more can be released and used, and by selectively installing packages Zstd could be excluded from an installation.
+在 Foxy 中，rosbag2 的压缩是硬编码为使用 Zstd 库实现的。
+现在已重新设计，使压缩实现成为一个插件，无需修改 rosbag2 核心代码库即可替换。
+``ros-galactic-rosbag2`` 自带的默认插件仍然是 Zstd 插件 —— 但现在可以发布并使用更多插件，而且通过有选择地安装软件包，可以将 Zstd 排除在安装之外。
 
 
-Compress per-message
-""""""""""""""""""""
+按消息压缩
+""""""""""
 
-In Foxy, you could automatically compress each rosbag file as it was split (per-file compression), but now you can also specify per-message compression.
+在 Foxy 中，可以在文件分割时自动压缩每个 rosbag 文件（按文件压缩），但现在还可以指定按消息压缩。
 
 .. code-block:: console
 
   $ ros2 bag record --all --compression-format zstd --compression-mode message
 
 
-Rosbag2 Python API
+Rosbag2 的 Python API
 """""""""""""""""""""
 
-A new package ``rosbag2_py`` has been released in Galactic, which provides a Python API.
-This package is a ``pybind11`` binding around the C++ API.
-As of the initial Galactic release, it does not yet expose all functionality available via the ``rosbag2_cpp`` API, but it is the sole connection for the ``ros2 bag`` CLI tool, so a good deal of functionality is available.
+Galactic 中发布了新软件包 ``rosbag2_py``，它提供了 Python API。
+该软件包是对 C++ API 的 ``pybind11`` 绑定。
+在 Galactic 的初始发行版中，它尚未公开 ``rosbag2_cpp`` API 中可用的全部功能，但它是 ``ros2 bag`` 命令行工具唯一的连接方式，因此已经可以使用相当多的功能。
 
 
-performance testing package and performance improvements
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+性能测试软件包与性能改进
+""""""""""""""""""""""""
 
-A thorough performance analysis project was performed on rosbag2 since the Foxy release.
-The full initial report is available at https://github.com/ros2/rosbag2/blob/galactic/rosbag2_performance/rosbag2_performance_benchmarking/docs/rosbag2_performance_improvements.pdf .
-The package ``rosbag2_performance_benchmarking`` provides tools to run performance analyses, especially on recording, which helps us maintain and improve the performance of rosbag2.
+自 Foxy 发行版以来，我们对 rosbag2 开展了一次全面的性能分析项目。
+完整的初始报告见 https://github.com/ros2/rosbag2/blob/galactic/rosbag2_performance/rosbag2_performance_benchmarking/docs/rosbag2_performance_improvements.pdf 。
+软件包 ``rosbag2_performance_benchmarking`` 提供了运行性能分析的工具，尤其是针对录制的分析，这有助于我们维护并改进 rosbag2 的性能。
 
-Following this report, key work was done do improve the performance to a much more usable state for actual robot workflows.
-To highlight a key metric - in a high bandwidth stress test (200Mbps), the Foxy release dropped up to 70% of messages, whereas the Galactic version was approximately 100% retention.
-Please see the linked report for more details.
+根据这份报告，我们开展了关键工作，将性能提升到更适用于实际机器人工作流的状态。
+举一个关键指标 —— 在高带宽压力测试（200Mbps）中，Foxy 发行版最多会丢弃 70% 的消息，而 Galactic 版本的消息保留率约为 100%。
+更多详情请参阅所链接的报告。
 
-``--regex`` and ``--exclude`` options for topic selection
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+用于筛选话题的 ``--regex`` 和 ``--exclude`` 选项
+""""""""""""""""""""""""""""""""""""""""""""""""
 
-The new recording options ``--regex`` and ``--exclude`` allow for fine-tuning the topics recorded in a bag, without having to explicitly list all topics.
-These options may be used together or separately, and in conjunction with ``--all``
+新的录制选项 ``--regex`` 和 ``--exclude`` 可以对包中录制的话题进行精细控制，而无需显式列出所有话题。
+这些选项可以一起使用，也可以分开使用，还可以与 ``--all`` 结合使用。
 
-The following command will record only topics with "scan" in the name.
+以下命令只会录制名称中包含 "scan" 的话题。
 
 .. code-block:: console
 
   $ ros2 bag record --regex "*scan*"
 
-The following command will record all topics except for ones in ``/my_namespace/``
+以下命令会录制除 ``/my_namespace/`` 中的话题之外的所有话题。
 
 .. code-block:: console
 
@@ -558,24 +547,24 @@ The following command will record all topics except for ones in ``/my_namespace/
 ``ros2 bag reindex``
 """"""""""""""""""""
 
-ROS 2 bags are represented by a directory, instead of a single file.
-This directory contains a ``metadata.yaml`` file, and one or more bag files.
-When the ``metadata.yaml`` file is lost or missing, ``ros2 bag reindex $bag_dir`` will attempt to reconstruct it by reading all the bag files in the directory.
+ROS 2 的包由一个目录表示，而不是单个文件。
+该目录包含一个 ``metadata.yaml`` 文件以及一个或多个包文件。
+当 ``metadata.yaml`` 文件丢失或缺失时，``ros2 bag reindex $bag_dir`` 会尝试通过读取该目录中的所有包文件来重建它。
 
-Playback time control
-"""""""""""""""""""""
+回放时间控制
+""""""""""""
 
-New controls have been added for rosbag2 playback - pause & resume, change rate, and play-next.
-As of the Galactic release, these controls are exposed only as services on the rosbag2 player node.
-Development is in progress to expose them to keyboard controls as well in ``ros2 bag play``, but until then a user application with buttons or keyboard controls may be trivially implemented to call these services.
+rosbag2 回放新增了控制功能 —— 暂停与恢复、更改速率以及播放下一跳。
+截至 Galactic 发行版，这些控制仅以服务的形式在 rosbag2 播放器节点上提供。
+我们正在开发将这些控制也以键盘操作的形式公开到 ``ros2 bag play`` 中，但在那之前，可以很容易地实现一个带按钮或键盘控制的用户应用程序来调用这些服务。
 
-In one shell:
+在一个终端中：
 
 .. code-block:: console
 
   $ ros2 bag play my_bag
 
-In another shell:
+在另一个终端中：
 
 .. code-block:: console
 
@@ -590,171 +579,171 @@ In another shell:
 
   $ ros2 service call /rosbag2_player/is_paused rosbag2_interfaces/IsPaused
 
-To pause playback:
+暂停回放：
 
 .. code-block:: console
 
   $ ros2 service call /rosbag2_player/pause rosbag2_interfaces/Pause
 
-To resume playback:
+恢复回放：
 
 .. code-block:: console
 
   $ ros2 service call /rosbag2_player/resume rosbag2_interfaces/Resume
 
-To change the paused state of playback to its opposite.
-If playing, pauses.
-If paused, resumes.
+将回放的暂停状态切换为其相反状态。
+如果正在播放，则暂停。
+如果已暂停，则恢复。
 
 .. code-block:: console
 
   $ ros2 service call /rosbag2_player/toggle_paused rosbag2_interfaces/TogglePaused
 
-To get the current playback rate:
+获取当前回放速率：
 
 .. code-block:: console
 
   $ ros2 service call /rosbag2_player/get_rate
 
-To set the current playback rate (must be > 0):
+设置当前回放速率（必须大于 0）：
 
 .. code-block:: console
 
   $ ros2 service call /rosbag2_player/set_rate rosbag2_interfaces/SetRate "rate: 0.1"
 
-To play a single next message (only works while paused):
+播放接下来的单条消息（仅在暂停时有效）：
 
 .. code-block:: console
 
   $ ros2 service call /rosbag2_player/play_next rosbag2_interfaces/PlayNext
 
 
-Playback publishes /clock
-"""""""""""""""""""""""""
+回放会发布 /clock
+"""""""""""""""""
 
-Rosbag2 can also dictate "simulation time" by publishing to the ``/clock`` topic during playback.
-The following commands will publish the clock message at a regular interval.
+Rosbag2 还可以在回放期间向 ``/clock`` 话题发布消息，从而控制“仿真时间”。
+以下命令会以固定间隔发布时钟消息。
 
-To publish at the default rate of 40Hz:
+以默认的 40Hz 速率发布：
 
 .. code-block:: console
 
   $ ros2 bag play my_bag --clock
 
 
-To publish at a specific rate, e.g., 100Hz:
+以指定速率发布，例如 100Hz：
 
 .. code-block:: console
 
   $ ros2 bag play my_bag --clock 100
 
-Changes since the Foxy release
-------------------------------
+自 Foxy 发行版以来的变更
+------------------------
 
-Default RMW changed to Eclipse Cyclone DDS
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+默认 RMW 更改为 Eclipse Cyclone DDS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-During the Galactic development process, the ROS 2 Technical Steering Committee `voted <https://discourse.ros.org/t/ros-2-galactic-default-middleware-announced/18064>`__ to change the default ROS middleware (RMW) to `Eclipse Cyclone DDS <https://github.com/eclipse-cyclonedds/cyclonedds>`__ project of `Eclipse Foundation <https://www.eclipse.org>`__.
-Without any configuration changes, users will get Eclipse Cyclone DDS by default.
-Fast DDS and Connext are still Tier-1 supported RMW vendors, and users can opt-in to use one of these RMWs at their discretion by using the ``RMW_IMPLEMENTATION`` environment variable.
-See the `Working with multiple RMW implementations guide <../../How-To-Guides/Working-with-multiple-RMW-implementations>` for more information.
+在 Galactic 开发过程中，ROS 2 技术指导委员会（TSC） `投票决定 <https://discourse.ros.org/t/ros-2-galactic-default-middleware-announced/18064>`__ 将默认的 ROS 中间件（RMW）改为 `Eclipse Foundation <https://www.eclipse.org>`__ 的 `Eclipse Cyclone DDS <https://github.com/eclipse-cyclonedds/cyclonedds>`__ 项目。
+在没有任何配置更改的情况下，用户将默认获得 Eclipse Cyclone DDS。
+Fast DDS 和 Connext 仍然是 Tier-1 支持的 RMW 厂商，用户可以通过 ``RMW_IMPLEMENTATION`` 环境变量自行选择使用其中之一。
+更多信息请参阅 `使用多个 RMW 实现指南 <../../How-To-Guides/Working-with-multiple-RMW-implementations>`。
 
-Connext RMW changed to rmw_connextdds
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Connext RMW 更改为 rmw_connextdds
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A new RMW for Connext called `rmw_connextdds <https://github.com/ros2/rmw_connextdds>`_ was merged for Galactic.
-This RMW has better performance and fixes many of the issues with the older RMW ``rmw_connext_cpp``.
+Galactic 合并了一个新的 Connext RMW，名为 `rmw_connextdds <https://github.com/ros2/rmw_connextdds>`_。
+该 RMW 具有更好的性能，并修复了旧 RMW ``rmw_connext_cpp`` 的许多问题。
 
-Large improvements in testing and overall quality
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+测试与整体质量的大幅改进
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-Galactic contains many changes that fix race conditions, plug memory leaks, and fix user reported problems.
-Besides these changes, there was a concerted effort during Galactic development to improve overall quality of the system by implementing `REP 2004 <https://reps.openrobotics.org/rep-2004/>`__.
-The ``rclcpp`` package and all of its dependencies (which include most of the ROS 2 non-Python core packages) were brought up to `Quality Level 1 <https://reps.openrobotics.org/rep-2004/#quality-level-1>`__ by:
+Galactic 包含许多修复竞态条件、填补内存泄漏以及修复用户所报告问题的更改。
+除了这些更改之外，在 Galactic 开发期间我们还通过实施 `REP 2004 <https://reps.openrobotics.org/rep-2004/>`__ 共同努力提升了系统的整体质量。
+``rclcpp`` 软件包及其所有依赖项（包括大多数 ROS 2 非 Python 核心软件包）通过以下方式提升到了 `质量等级 1 <https://reps.openrobotics.org/rep-2004/#quality-level-1>`__：
 
-* Having a version policy (QL1 requirement 1)
-* Having a documented change control process (QL1 requirement 2)
-* Documenting all features and public APIs (QL1 requirement 3)
-* Adding many additional tests (QL1 requirement 4):
+* 具有版本策略（QL1 要求 1）
+* 具有文档化的变更控制流程（QL1 要求 2）
+* 记录所有功能和公共 API（QL1 要求 3）
+* 增加大量额外的测试（QL1 要求 4）：
 
-  * System tests for all features
-  * Unit tests for all public APIs
-  * Nightly performance tests
-  * Code coverage at 95%
+  * 所有功能的系统测试
+  * 所有公共 API 的单元测试
+  * 每晚性能测试
+  * 代码覆盖率达到 95%
 
-* Having all runtime dependencies of packages be at least as high as the package (QL1 requirement 5)
-* Supporting all of the REP-2000 platforms (QL1 requirement 6)
-* Having a vulnerability disclosure policy (QL1 requirement 7)
+* 使软件包的所有运行时依赖项的等级至少与软件包本身相同（QL1 要求 5）
+* 支持所有 REP-2000 平台（QL1 要求 6）
+* 具有漏洞披露政策（QL1 要求 7）
 
 rmw
 ^^^
 
-New API for checking QoS profile compatibility
-""""""""""""""""""""""""""""""""""""""""""""""
+用于检查 QoS 配置文件兼容性的新 API
+"""""""""""""""""""""""""""""""""""
 
-``rmw_qos_profile_check_compatible`` is a new function for checking the compatibility of two QoS profiles.
+``rmw_qos_profile_check_compatible`` 是一个用于检查两个 QoS 配置文件兼容性的新函数。
 
-RMW vendors should implement this API for QoS debugging and introspection features in tools such as ``rqt_graph`` to work correctly.
+RMW 厂商应实现此 API，以便 ``rqt_graph`` 等工具中的 QoS 调试和自省功能正常工作。
 
-Related PR: `ros2/rmw#299 <https://github.com/ros2/rmw/pull/299>`_
+相关 PR：`ros2/rmw#299 <https://github.com/ros2/rmw/pull/299>`_
 
 ament_cmake
 ^^^^^^^^^^^
 
-``ament_install_python_package()`` now installs a Python egg
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+``ament_install_python_package()`` 现在会安装 Python egg
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-By installing a flat Python egg, Python packages installed using ``ament_install_python_package()`` can be discovered using modules such as ``pkg_resources`` and ```importlib.metadata``. Also, additional metadata can be provided in a ``setup.cfg`` file (including entry points).
+通过安装扁平的 Python egg，使用 ``ament_install_python_package()`` 安装的 Python 包可以通过 ``pkg_resources`` 和 ```importlib.metadata`` 等模块被发现。此外，还可以在 ``setup.cfg`` 文件中提供额外的元数据（包括入口点）。
 
-Related PR: `ament/ament_cmake#326 <https://github.com/ament/ament_cmake/pull/326>`_
+相关 PR：`ament/ament_cmake#326 <https://github.com/ament/ament_cmake/pull/326>`_
 
-``ament_target_dependencies()`` handles SYSTEM dependencies
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+``ament_target_dependencies()`` 可处理 SYSTEM 依赖项
+""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Some package dependencies can now be marked as SYSTEM dependencies, helping to cope with warnings in external code. Typically, SYSTEM dependencies are also excluded from dependency calculations -- use them with care.
+现在可以将某些软件包依赖项标记为 SYSTEM 依赖项，以应对外部代码中的警告。通常，SYSTEM 依赖项也会被排除在依赖项计算之外 —— 请谨慎使用。
 
-Related PR: `ament/ament_cmake#297 <https://github.com/ament/ament_cmake/pull/297>`_
+相关 PR：`ament/ament_cmake#297 <https://github.com/ament/ament_cmake/pull/297>`_
 
 nav2
 ^^^^
 
-Changes include, but are not limited to, a number of stability improvements, new plugins, interface changes, costmap filters.
-See `Migration Guides <https://navigation.ros.org/migration/Foxy.html>`_ for full list
+变更包括但不限于若干稳定性改进、新插件、接口变更以及代价地图过滤器。
+完整列表请参阅 `迁移指南 <https://navigation.ros.org/migration/Foxy.html>`_
 
-tf2_ros Python split out of tf2_ros
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tf2_ros 中的 Python 代码拆分出来
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The Python code that used to live in tf2_ros has been moved into its own package named tf2_ros_py.
-Any existing Python code that depends on tf2_ros will continue to work, but the package.xml of those packages should be amended to ``exec_depend`` on tf2_ros_py.
+过去位于 tf2_ros 中的 Python 代码已移至名为 tf2_ros_py 的独立软件包中。
+任何依赖 tf2_ros 的现有 Python 代码都将继续正常工作，但这些软件包的 package.xml 应修改为对 tf2_ros_py 使用 ``exec_depend``。
 
-tf2_ros Python TransformListener uses global namespace
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tf2_ros 的 Python TransformListener 使用全局命名空间
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The Python ``TransformListener`` now subscribes to ``/tf`` and ``/tf_static`` in the global namespace.
-Previously, it was susbcribing in the node's namespace.
-This means that the node's namespace will no longer have an effect on the ``/tf`` and ``/tf_static`` subscriptions.
+Python 的 ``TransformListener`` 现在会在全局命名空间中订阅 ``/tf`` 和 ``/tf_static``。
+此前，它是在节点的命名空间中进行订阅的。
+这意味着节点的命名空间将不再影响 ``/tf`` 和 ``/tf_static`` 的订阅。
 
-For example:
+例如：
 
 .. code-block:: console
 
   $ ros2 run tf2_ros tf2_echo --ros-args -r __ns:=/test -- odom base_link
 
-will subscribe to ``/tf`` and ``/tf_static``, as ``ros2 topic list`` will show.
+将订阅 ``/tf`` 和 ``/tf_static``，如 ``ros2 topic list`` 所示。
 
-Related PR: `ros2/geometry2#390 <https://github.com/ros2/geometry2/pull/390>`_
+相关 PR：`ros2/geometry2#390 <https://github.com/ros2/geometry2/pull/390>`_
 
 rclcpp
 ^^^^^^
 
-Change in spin_until_future_complete template parameters
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+spin_until_future_complete 模板参数的变更
+"""""""""""""""""""""""""""""""""""""""""
 
-The first template parameter of ``Executor::spin_until_future_complete`` was the future result type ``ResultT``, and the method only accepted a ``std::shared_future<ResultT>``.
-In order to accept other types of futures (e.g.: ``std::future``), that parameter was changed to the future type itself.
+``Executor::spin_until_future_complete`` 的第一个模板参数是 future 结果类型 ``ResultT``，并且该方法只接受 ``std::shared_future<ResultT>``。
+为了接受其他类型的 future（例如 ``std::future``），该参数已改为 future 类型本身。
 
-In places where a ``spin_until_future_complete`` call was relying on template argument deduction, no change is needed.
-If not, this is an example diff:
+如果 ``spin_until_future_complete`` 调用依赖模板参数推导，则无需更改。
+如果不是，以下是一个示例 diff：
 
 .. code-block:: dpatch
 
@@ -764,59 +753,59 @@ If not, this is an example diff:
    +executor.spin_until_future_complete<std::shared_future<MyResultT>>(future);
 
 
-For more details, see `ros2/rclcpp#1160 <https://github.com/ros2/rclcpp/pull/1160>`_.
-For an example of the needed changes in user code, see `ros-visualization/interactive_markers#72 <https://github.com/ros-visualization/interactive_markers/pull/72>`_.
+更多详情请参阅 `ros2/rclcpp#1160 <https://github.com/ros2/rclcpp/pull/1160>`_。
+关于用户代码中所需更改的示例，请参阅 `ros-visualization/interactive_markers#72 <https://github.com/ros-visualization/interactive_markers/pull/72>`_。
 
-Change in default ``/clock`` subscription QoS profile
-"""""""""""""""""""""""""""""""""""""""""""""""""""""
+默认 ``/clock`` 订阅 QoS 配置文件的变更
+"""""""""""""""""""""""""""""""""""""""
 
-The default was changed from a reliable communication with history depth 10 to a best effort communication with history depth 1.
-See `ros2/rclcpp#1312 <https://github.com/ros2/rclcpp/pull/1312>`_.
+默认值已从历史深度为 10 的可靠通信更改为历史深度为 1 的最佳努力通信。
+参见 `ros2/rclcpp#1312 <https://github.com/ros2/rclcpp/pull/1312>`_。
 
 Waitable API
 """"""""""""
 
-Waitable API was modified to avoid issues with the ``MultiThreadedExecutor``.
-This only affects users implementing a custom waitable.
-See `ros2/rclcpp#1241 <https://github.com/ros2/rclcpp/pull/1241>`_ for more details.
+Waitable API 已修改，以避免与 ``MultiThreadedExecutor`` 相关的问题。
+这只会影响实现自定义 waitable 的用户。
+更多详情请参阅 `ros2/rclcpp#1241 <https://github.com/ros2/rclcpp/pull/1241>`_。
 
-Change in ``rclcpp``'s logging macros
-"""""""""""""""""""""""""""""""""""""
-Previously, the logging macros were vulnerable to a `format string attack <https://owasp.org/www-community/attacks/Format_string_attack>`_, where the format string is evaluated and can potentially execute code, read the stack, or cause a segmentation fault in the running program.
-To address this security issue, the logging macro now accepts only string literals for it's format string argument.
+``rclcpp`` 日志宏的变更
+"""""""""""""""""""""""
+此前，日志宏容易受到 `格式化字符串攻击 <https://owasp.org/www-community/attacks/Format_string_attack>`_ 的影响，攻击者可以利用被求值的格式化字符串执行代码、读取栈内容或导致运行中的程序发生段错误。
+为解决此安全问题，日志宏现在只接受字符串字面量作为其格式化字符串参数。
 
-If you previously had code like:
+如果你之前有这样的代码：
 
 .. code-block::
 
   const char *my_const_char_string format = "Foo";
   RCLCPP_DEBUG(get_logger(), my_const_char_string);
 
-you should now replace it with:
+你现在应将其替换为：
 
 .. code-block::
 
   const char *my_const_char_string format = "Foo";
   RCLCPP_DEBUG(get_logger(), "%s", my_const_char_string);
 
-or:
+或：
 
 .. code-block::
 
   RCLCPP_DEBUG(get_logger(), "Foo");
 
 
-This change removes some convenience from the logging macros, as ``std::string``\s are no longer accepted as the format argument.
+此更改去除了日志宏的一些便利性，因为不再接受 ``std::string``\s 作为格式参数。
 
 
-If you previously had code with no format arguments like:
+如果你之前的代码没有任何格式参数，例如：
 
 .. code-block::
 
   std::string my_std_string = "Foo";
   RCLCPP_DEBUG(get_logger(), my_std_string);
 
-you should now replace it with:
+你现在应将其替换为：
 
 .. code-block::
 
@@ -824,19 +813,19 @@ you should now replace it with:
     RCLCPP_DEBUG(get_logger(), "%s", my_std_string.c_str());
 
 .. note::
-    If you are using a ``std::string`` as a format string with format arguments, converting that string to a ``char *`` and using it as the format string will yield a format security warning. That's because the compiler has no way at compile to introspect into the ``std::string`` to verify the arguments.  To avoid the security warning, we recommend you build the string manually and pass it in with no format arguments like the previous example.
+    如果你将 ``std::string`` 用作带格式参数的格式化字符串，那么将该字符串转换为 ``char *`` 并用作格式化字符串会产生格式化安全警告。这是因为编译器在编译时无法深入检查 ``std::string`` 来验证参数。为避免该安全警告，我们建议像上一个示例那样手动构建字符串，并在不传入任何格式参数的情况下使用它。
 
-``std::stringstream`` types are still accepted as arguments to the stream logging macros.
-See `ros2/rclcpp#1442 <https://github.com/ros2/rclcpp/pull/1442>`_ for more details.
+``std::stringstream`` 类型仍然可以作为流日志宏的参数使用。
+更多详情请参阅 `ros2/rclcpp#1442 <https://github.com/ros2/rclcpp/pull/1442>`_。
 
-Parameter types are now static by default
-"""""""""""""""""""""""""""""""""""""""""
+参数类型现在默认是静态的
+""""""""""""""""""""""""
 
-Previously, the type of a parameter could be changed when a parameter was set.
-For example, if a parameter was declared as an integer, a later call to set the parameter could change that type to a string.
-This behavior could lead to bugs, and is rarely what the user wants.
-As of Galactic parameter types are static by default, and attempts to change the type will fail.
-If the previous dynamic behavior is desired, there is an mechanism to opt it in (see the code below).
+此前，参数在被设置时可以更改其类型。
+例如，如果某个参数被声明为整数，随后设置该参数的调用可能会将其类型改为字符串。
+这种行为可能导致 bug，而且很少是用户想要的效果。
+从 Galactic 开始，参数类型默认是静态的，尝试更改类型将会失败。
+如果需要此前的动态行为，可以通过某种机制选择启用（见下方代码）。
 
 .. code-block:: cpp
 
@@ -855,24 +844,24 @@ If the previous dynamic behavior is desired, there is an mechanism to opt it in 
     descriptor.dynamic_typing = true;
     node->declare_parameter("dynamically_typed_param", rclcpp::ParameterValue{}, descriptor);
 
-For more details see https://github.com/ros2/rclcpp/blob/galactic/rclcpp/doc/notes_on_statically_typed_parameters.md.
+更多详情请参见 https://github.com/ros2/rclcpp/blob/galactic/rclcpp/doc/notes_on_statically_typed_parameters.md 。
 
-New API for checking QoS profile compatibility
-""""""""""""""""""""""""""""""""""""""""""""""
+用于检查 QoS 配置文件兼容性的新 API
+"""""""""""""""""""""""""""""""""""
 
-``qos_check_compatible`` is a new function for checking the compatibility of two QoS profiles.
+``qos_check_compatible`` 是一个用于检查两个 QoS 配置文件兼容性的新函数。
 
-Related PR: `ros2/rclcpp#1554 <https://github.com/ros2/rclcpp/pull/1554>`_
+相关 PR：`ros2/rclcpp#1554 <https://github.com/ros2/rclcpp/pull/1554>`_
 
 rclpy
 ^^^^^
 
-Removal of deprecated Node.set_parameters_callback
-""""""""""""""""""""""""""""""""""""""""""""""""""
+移除已弃用的 Node.set_parameters_callback
+"""""""""""""""""""""""""""""""""""""""""
 
-The method ``Node.set_parameters_callback`` was `deprecated in ROS Foxy <https://github.com/ros2/rclpy/pull/504>`_ and has been `removed in ROS Galactic <https://github.com/ros2/rclpy/pull/633>`_.
-Use ``Node.add_on_set_parameters_callback()`` instead.
-Here is some example code using it.
+方法 ``Node.set_parameters_callback`` 在 `ROS Foxy 中已被弃用 <https://github.com/ros2/rclpy/pull/504>`_，并已在 `ROS Galactic 中移除 <https://github.com/ros2/rclpy/pull/633>`_。
+请改用 ``Node.add_on_set_parameters_callback()``。
+下面是一些使用它的示例代码。
 
 .. code-block:: python
 
@@ -896,19 +885,19 @@ Here is some example code using it.
     node.add_on_set_parameters_callback(on_parameter_event)
     rclpy.spin(node)
 
-Run this command to see the parameter callback in action.
+运行以下命令以查看参数回调的实际效果。
 
 .. code-block::
 
     ros2 param set /callback_example my_param "Hello World"
 
-Parameter types are now static by default
-"""""""""""""""""""""""""""""""""""""""""
+参数类型现在默认是静态的
+""""""""""""""""""""""""
 
-In Foxy and earlier a call to set a parameter could change its type.
-As of Galactic parameter types are static and cannot be changed by default.
-If the previous behavior is desired, then set ``dynamic_typing`` to true in the parameter descriptor.
-Here is an example.
+在 Foxy 及更早版本中，设置参数的调用可能会更改其类型。
+从 Galactic 开始，参数类型是静态的，默认情况下无法更改。
+如果需要此前的行为，请在参数描述符中将 ``dynamic_typing`` 设为 true。
+下面是一个示例。
 
 .. code-block:: python
 
@@ -922,7 +911,7 @@ Here is an example.
   node.declare_parameter('dynamic_param', 'initial value', descriptor=ParameterDescriptor(dynamic_typing=True))
   rclpy.spin(node)
 
-Run these commands to see how statically and dynamically typed parameters are different.
+运行以下命令以查看静态类型参数与动态类型参数的区别。
 
 .. code-block:: console
 
@@ -931,13 +920,13 @@ Run these commands to see how statically and dynamically typed parameters are di
     $ ros2 param set /static_param_example static_param 42
     Setting parameter failed: Wrong parameter type, expected 'Type.STRING' got 'Type.INTEGER'
 
-For more details see https://github.com/ros2/rclcpp/blob/galactic/rclcpp/doc/notes_on_statically_typed_parameters.md.
+更多详情请参见 https://github.com/ros2/rclcpp/blob/galactic/rclcpp/doc/notes_on_statically_typed_parameters.md 。
 
-New API for checking QoS profile compatibility
-""""""""""""""""""""""""""""""""""""""""""""""
+用于检查 QoS 配置文件兼容性的新 API
+"""""""""""""""""""""""""""""""""""
 
-``rclpy.qos.qos_check_compatible`` is `a new function <https://github.com/ros2/rclpy/pull/708>`_ for checking the compatibility of two QoS profiles.
-If the profiles are compatible, then a publisher and subscriber using them will be able to talk to each other.
+``rclpy.qos.qos_check_compatible`` 是一个 `新函数 <https://github.com/ros2/rclpy/pull/708>`_，用于检查两个 QoS 配置文件的兼容性。
+如果两个配置文件兼容，则使用它们的发布者和订阅者将能够相互通信。
 
 .. code-block:: python
 
@@ -956,44 +945,44 @@ If the profiles are compatible, then a publisher and subscriber using them will 
 rclcpp_action
 ^^^^^^^^^^^^^
 
-Action client goal response callback signature changed
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
+动作客户端目标响应回调签名的变更
+""""""""""""""""""""""""""""""""
 
-The goal response callback should now take a shared pointer to a goal handle, instead of a future.
+目标响应回调现在应接受指向目标句柄的共享指针，而不是 future。
 
-For `example <https://github.com/ros2/examples/pull/291>`_, old signature:
+例如 `example <https://github.com/ros2/examples/pull/291>`_，旧签名为：
 
 .. code-block:: c++
 
    void goal_response_callback(std::shared_future<GoalHandleFibonacci::SharedPtr> future)
 
-New signature:
+新签名：
 
 .. code-block:: c++
 
    void goal_response_callback(GoalHandleFibonacci::SharedPtr goal_handle)
 
-Related PR: `ros2/rclcpp#1311 <https://github.com/ros2/rclcpp/pull/1311>`_
+相关 PR：`ros2/rclcpp#1311 <https://github.com/ros2/rclcpp/pull/1311>`_
 
 rosidl_typesupport_introspection_c
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-API break in function that gets an element from an array
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+从数组中获取元素的函数存在 API 破坏性变更
+"""""""""""""""""""""""""""""""""""""""""
 
-The signature of the function was changed because it was semantically different to all the other functions used to get an element from an array or sequence.
-This only affects authors of rmw implementations using the introspection typesupport.
+该函数的签名被更改，因为它在语义上与其他所有用于从数组或序列中获取元素的函数不一致。
+这只会影响使用 introspection 类型支持的 rmw 实现作者。
 
-For further details, see `ros2/rosidl#531 <https://github.com/ros2/rosidl/pull/531>`_.
+更多详情请参阅 `ros2/rosidl#531 <https://github.com/ros2/rosidl/pull/531>`_。
 
-rcl_lifecycle and rclcpp_lifecycle
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rcl_lifecycle 与 rclcpp_lifecycle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-RCL's lifecycle state machine gets new init API
-"""""""""""""""""""""""""""""""""""""""""""""""
+RCL 的生命周期状态机新增 init API
+"""""""""""""""""""""""""""""""""
 
-The lifecycle state machine in rcl_lifecycle was modified to expect a newly introduced options struct, combining general configurations for the state machine.
-The option struct allows to indicate whether the state machine shall be initialized with default values, whether its attached services are active and which allocator to be used.
+``rcl_lifecycle`` 中的生命周期状态机经过修改，现在期望一个新引入的选项结构体，用于合并状态机的通用配置。
+该选项结构体允许指示状态机是否应使用默认值初始化、其附带的服务是否处于活动状态，以及使用哪个分配器。
 
 .. code-block:: c
 
@@ -1009,12 +998,12 @@ The option struct allows to indicate whether the state machine shall be initiali
     const rosidl_service_type_support_t * ts_srv_get_transition_graph,
     const rcl_lifecycle_state_machine_options_t * state_machine_options);
 
-RCL's lifecycle state machine stores allocator instance
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+RCL 的生命周期状态机存储分配器实例
+""""""""""""""""""""""""""""""""""
 
-The options struct (discussed above) entails an instance of the allocator being used for initializing the state machine.
-This options struct and there the embodied allocator are being stored within the lifecycle state machine.
-As a direct consequence, the ``rcl_lifecycle_fini function`` no longer expects an allocator in its fini function but rather uses the allocator set in the options struct for deallocating its internal data structures.
+上述选项结构体包含了用于初始化状态机的分配器实例。
+该选项结构体以及其中包含的分配器都被存储在生命周期状态机内部。
+作为直接结果，``rcl_lifecycle_fini function`` 不再在其 fini 函数中期望传入分配器，而是使用选项结构体中设置的分配器来释放其内部数据结构。
 
 .. code-block:: c
 
@@ -1023,11 +1012,11 @@ As a direct consequence, the ``rcl_lifecycle_fini function`` no longer expects a
     rcl_lifecycle_state_machine_t * state_machine,
     rcl_node_t * node_handle);
 
-RCLCPP's lifecycle node exposes option to not instantiate services
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+RCLCPP 的生命周期节点提供不实例化服务的选项
+"""""""""""""""""""""""""""""""""""""""""""
 
-In order to use rclcpp's lifecycle nodes without exposing its internal services such as ``change_state``, ``get_state`` et. al., the constructor of a lifecycle node has a newly introduced parameter indicating whether or not the services shall be available.
-This boolean flag is set to true by default, not requiring any changes to existing API if not wished.
+为了在不暴露 ``change_state``、``get_state`` 等内部服务的情况下使用 rclcpp 的生命周期节点，生命周期节点的构造函数新增了一个参数，用于指示这些服务是否可用。
+该布尔标志默认为 true，如果不需要，无需对现有 API 做任何改动。
 
 .. code-block:: c++
 
@@ -1036,91 +1025,91 @@ This boolean flag is set to true by default, not requiring any changes to existi
     const rclcpp::NodeOptions & options = rclcpp::NodeOptions(),
     bool enable_communication_interface = true);
 
-Related PRs: `ros2/rcl#882 <https://github.com/ros2/rcl/pull/882>`_ and `ros2/rclcpp#1507 <https://github.com/ros2/rclcpp/pull/1507>`_
+相关 PR：`ros2/rcl#882 <https://github.com/ros2/rcl/pull/882>`_ 和 `ros2/rclcpp#1507 <https://github.com/ros2/rclcpp/pull/1507>`_
 
-rcl_lifecycle and rclcpp_lifecycle
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rcl_lifecycle 与 rclcpp_lifecycle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Recording - Split by time
-"""""""""""""""""""""""""""""""""""""""""""""""
+录制 - 按时间分割
+"""""""""""""""""
 
 
 
-Known Issues
-------------
+已知问题
+--------
 
 ros2cli
 ^^^^^^^
 
-Daemon slows down CLI on Windows
-""""""""""""""""""""""""""""""""
+在 Windows 上守护进程会拖慢 CLI
+"""""""""""""""""""""""""""""""
 
-As a workaround, CLI commands may be used without a daemon e.g.:
+作为变通方法，可以在不使用守护进程的情况下运行 CLI 命令，例如：
 
 .. code-block:: console
 
   $ ros2 topic list --no-daemon
 
 
-Issue is tracked by `ros2/ros2cli#637 <https://github.com/ros2/ros2cli/issues/637>`_.
+该问题由 `ros2/ros2cli#637 <https://github.com/ros2/ros2cli/issues/637>`_ 跟踪。
 
 rqt
 ^^^
 
-Some rqt_bag icons are missing
-""""""""""""""""""""""""""""""
+部分 rqt_bag 图标缺失
+"""""""""""""""""""""
 
-The icons to "Zoom In", "Zoom Out", "Zoom Home", and "Toggle Thumbnails" are missing in ``rqt_bag``.
-The issue is tracked in `ros-visualization/rqt_bag#102 <https://github.com/ros-visualization/rqt_bag/issues/102>`_
+``rqt_bag`` 中缺少 “Zoom In”（放大）、“Zoom Out”（缩小）、“Zoom Home”（回到初始视图）和 “Toggle Thumbnails”（切换缩略图）的图标。
+该问题在 `ros-visualization/rqt_bag#102 <https://github.com/ros-visualization/rqt_bag/issues/102>`_ 中被跟踪
 
-Most rqt utilities don't work standalone on Windows
-"""""""""""""""""""""""""""""""""""""""""""""""""""
+大多数 rqt 工具在 Windows 上无法独立运行
+""""""""""""""""""""""""""""""""""""""""
 
-Launching the rqt utilities "standalone" on Windows (like ``ros2 run rqt_graph rqt_graph``) generally doesn't work.
-The workaround is to launch the rqt container process (``rqt``), and then insert the plugins to be used.
+在 Windows 上“独立”启动 rqt 工具（例如 ``ros2 run rqt_graph rqt_graph``）通常无法正常工作。
+变通方法是启动 rqt 容器进程（``rqt``），然后插入要使用的插件。
 
 rviz2
 ^^^^^
 
-RViz2 panel close buttons are blank
-"""""""""""""""""""""""""""""""""""
+RViz2 面板的关闭按钮为空白
+""""""""""""""""""""""""""
 
-The upper right-hand corner of every RViz2 panel should contain an "X" to allow one to close the panel.
-Those buttons are there, but the "X" inside of them is missing on all platforms.
-The issue is being tracked in `ros2/rviz2#692 <https://github.com/ros2/rviz/issues/692>`__.
+每个 RViz2 面板的右上角都应包含一个 “X”，以便关闭该面板。
+这些按钮确实存在，但在所有平台上它们内部的 “X” 都缺失了。
+该问题正在 `ros2/rviz2#692 <https://github.com/ros2/rviz/issues/692>`__ 中被跟踪。
 
-Timeline before the release
----------------------------
+发行前的时间线
+--------------
 
-    Mon. March 22, 2021 - Alpha
-        Preliminary testing and stabilization of ROS Core [1]_ packages.
+    Mon. 2021年3月22日 - Alpha
+        对 ROS Core [1]_ 软件包进行初步测试与稳定化。
 
-    Mon. April 5, 2021 - Freeze
-        API and feature freeze for ROS Core [1]_ packages in Rolling Ridley.
-        Note that this includes ``rmw``, which is a recursive dependency of ``ros_core``.
-        Only bug fix releases should be made after this point.
-        New packages can be released independently.
+    Mon. 2021年4月5日 - Freeze
+        对 Rolling Ridley 中的 ROS Core [1]_ 软件包进行 API 与功能冻结。
+        注意这包括 ``rmw``，它是 ``ros_core`` 的递归依赖项。
+        此时间点之后只应发布 bug 修复版本。
+        新软件包可以独立发布。
 
-    Mon. April 19, 2021 - Branch
-        Branch from Rolling Ridley.
-        ``rosdistro`` is reopened for Rolling PRs for ROS Core [1]_ packages.
-        Galactic development shifts from ``ros-rolling-*`` packages to ``ros-galactic-*`` packages.
+    Mon. 2021年4月19日 - Branch
+        从 Rolling Ridley 分支。
+        ``rosdistro`` 重新开放接受 ROS Core [1]_ 软件包的 Rolling PR。
+        Galactic 的开发从 ``ros-rolling-*`` 软件包转向 ``ros-galactic-*`` 软件包。
 
-    Mon. April 26, 2021 - Beta
-        Updated releases of ROS Desktop [2]_ packages available.
-        Call for general testing.
+    Mon. 2021年4月26日 - Beta
+        提供 ROS Desktop [2]_ 软件包的更新版本。
+        呼吁进行广泛测试。
 
-    Mon. May 17, 2021 - RC
-      Release Candidate packages are built.
-        Updated releases of ROS Desktop [2]_ packages available.
+    Mon. 2021年5月17日 - RC
+      发布候选（RC）软件包已构建。
+        提供 ROS Desktop [2]_ 软件包的更新版本。
 
-    Thu. May 20, 2021 - Distro Freeze
-        Freeze rosdistro.
-        No PRs for Galactic on the ``rosdistro`` repo will be merged (reopens after the release announcement).
+    Thu. 2021年5月20日 - Distro Freeze
+        冻结 rosdistro。
+        ``rosdistro`` 仓库上针对 Galactic 的 PR 将不会被合并（在发行公告后重新开放）。
 
-    Sun. May 23, 2021 - General Availability
-      Release announcement.
-        ``rosdistro`` is reopened for Galactic PRs.
+    Sun. 2021年5月23日 - General Availability
+      发布公告。
+        ``rosdistro`` 重新开放接受 Galactic 的 PR。
 
-.. [1] The ``ros_core`` variant is described in `REP 2001 (ros-core) <https://reps.openrobotics.org/rep-2001/#ros-core>`_.
-.. [2] The ``desktop`` variant is described in `REP 2001 (desktop-variants) <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_.
+.. [1] ``ros_core`` 变体在 `REP 2001 (ros-core) <https://reps.openrobotics.org/rep-2001/#ros-core>`_ 中有描述。
+.. [2] ``desktop`` 变体在 `REP 2001 (desktop-variants) <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_ 中有描述。

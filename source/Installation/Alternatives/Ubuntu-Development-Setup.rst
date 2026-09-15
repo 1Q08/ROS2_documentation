@@ -5,48 +5,48 @@
    Installation/Linux-Development-Setup
    Installation/Ubuntu-Development-Setup
 
-Ubuntu (source)
-===============
+Ubuntu（源码）
+==============
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
 
-System requirements
--------------------
-The current Debian-based target platforms for {DISTRO_TITLE_FULL} are:
+系统要求
+--------
+当前 {DISTRO_TITLE_FULL} 的 Debian 系统目标平台为：
 
 - Tier 1: Ubuntu Linux - Jammy (22.04) 64-bit
 - Tier 3: Ubuntu Linux - Focal (20.04) 64-bit
 - Tier 3: Debian Linux - Bullseye (11) 64-bit
 
 
-Other Linux platforms with varying support levels include:
+其他支持级别不同的 Linux 平台包括：
 
-- Arch Linux, see `alternate instructions <https://wiki.archlinux.org/index.php/ROS#ROS_2>`__
-- Fedora Linux, see :doc:`alternate instructions <Fedora-Development-Setup>`
-- OpenEmbedded / webOS OSE, see `alternate instructions <https://github.com/ros/meta-ros/wiki/OpenEmbedded-Build-Instructions>`__
+- Arch Linux，参见 `替代说明 <https://wiki.archlinux.org/index.php/ROS#ROS_2>`__
+- Fedora Linux，参见 :doc:`替代说明 <Fedora-Development-Setup>`
+- OpenEmbedded / webOS OSE，参见 `替代说明 <https://github.com/ros/meta-ros/wiki/OpenEmbedded-Build-Instructions>`__
 
-As defined in `REP 2000 <https://reps.openrobotics.org/rep-2000/>`_.
+如 `REP 2000 <https://reps.openrobotics.org/rep-2000/>`_ 中所定义。
 
-System setup
-------------
+系统设置
+--------
 
-Set locale
-^^^^^^^^^^
+设置区域设置
+^^^^^^^^^^^^
 
 .. include:: ../_Ubuntu-Set-Locale.rst
 
-Add the ROS 2 apt repository
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+添加 ROS 2 apt 仓库
+^^^^^^^^^^^^^^^^^^^
 
 .. include:: ../_Apt-Repositories.rst
 
-Install development tools and ROS tools
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+安装开发工具和 ROS 工具
+^^^^^^^^^^^^^^^^^^^^^^^
 
-Install common packages.
+安装通用软件包。
 
 .. code-block:: console
 
@@ -56,7 +56,7 @@ Install common packages.
      python3-pytest-cov \
      ros-dev-tools
 
-Install packages according to your Ubuntu version.
+根据你的 Ubuntu 版本安装软件包。
 
 .. tabs::
 
@@ -95,10 +95,10 @@ Install packages according to your Ubuntu version.
 
 .. _linux-dev-get-ros2-code:
 
-Get ROS 2 code
---------------
+获取 ROS 2 代码
+---------------
 
-Create a workspace and clone all repos:
+创建一个工作空间并克隆所有仓库：
 
 .. code-block:: console
 
@@ -108,8 +108,8 @@ Create a workspace and clone all repos:
 
 .. _linux-development-setup-install-dependencies-using-rosdep:
 
-Install dependencies using rosdep
----------------------------------
+使用 rosdep 安装依赖项
+----------------------
 
 .. include:: ../_Apt-Upgrade-Admonition.rst
 
@@ -121,45 +121,45 @@ Install dependencies using rosdep
 
 .. include:: ../_rosdep_Linux_Mint.rst
 
-Install additional DDS implementations (optional)
--------------------------------------------------
+安装额外 DDS 实现（可选）
+-------------------------
 
-If you would like to use another DDS or RTPS vendor besides the default, you can find instructions :doc:`here <../RMW-Implementations>`.
+如果你想使用除默认外的其他 DDS 或 RTPS 厂商，可以在此处找到说明：:doc:`这里 <../RMW-Implementations>`。
 
-Install colcon mixins
-^^^^^^^^^^^^^^^^^^^^^
+安装 colcon mixins
+^^^^^^^^^^^^^^^^^^
 
 .. code-block:: console
 
    $ colcon mixin add default https://github.com/colcon/colcon-mixin-repository/raw/master/index.yaml
    $ colcon mixin update default
 
-Build the code in the workspace
--------------------------------
+在工作空间中构建代码
+--------------------
 
-If you have already installed ROS 2 another way (either via debs or the binary distribution), make sure that you run the below commands in a fresh environment that does not have those other installations sourced.
-Also ensure that you do not have ``source /opt/ros/${ROS_DISTRO}/setup.bash`` in your ``.bashrc``.
-You can make sure that ROS 2 is not sourced with the command ``printenv | grep -i ROS``.
-The output should be empty.
+如果你已经用其他方式安装了 ROS 2（无论是通过 deb 包还是二进制发布版），请确保在一个未加载那些其他安装的全新环境中运行下面的命令。
+同时确保你的 ``.bashrc`` 中没有 ``source /opt/ros/${ROS_DISTRO}/setup.bash``。
+你可以用命令 ``printenv | grep -i ROS`` 来确认 ROS 2 没有被加载。
+输出应该为空。
 
-More info on working with a ROS workspace can be found in :doc:`this tutorial <../../Tutorials/Beginner-Client-Libraries/Colcon-Tutorial>`.
+关于使用 ROS 工作空间的更多信息，可以在 :doc:`本教程 <../../Tutorials/Beginner-Client-Libraries/Colcon-Tutorial>` 中找到。
 
 .. code-block:: console
 
    $ cd ~/ros2_{DISTRO}/
    $ colcon build --symlink-install --mixin release
 
-Note: if you are having trouble compiling all examples and this is preventing you from completing a successful build, you can use ``COLCON_IGNORE`` in the same manner as `CATKIN_IGNORE <https://github.com/ros-infrastructure/rep/blob/master/rep-0128.rst>`__ to ignore the subtree or remove the folder from the workspace.
-Take for instance: you would like to avoid installing the large OpenCV library.
-Well then simply run ``touch COLCON_IGNORE`` in the ``cam2image`` demo directory to leave it out of the build process.
+注意：如果你在编译所有示例时遇到困难，导致无法成功完成构建，你可以像 `CATKIN_IGNORE <https://github.com/ros-infrastructure/rep/blob/master/rep-0128.rst>`__ 那样使用 ``COLCON_IGNORE`` 来忽略某个子目录树，或者将该文件夹从工作空间中移除。
+举例来说：假设你想避免安装庞大的 OpenCV 库。
+那么只需在 ``cam2image`` 演示目录中运行 ``touch COLCON_IGNORE``，即可将它排除在构建过程之外。
 
-Environment setup
------------------
+环境配置
+--------
 
-Source the setup script
-^^^^^^^^^^^^^^^^^^^^^^^
+加载安装脚本
+^^^^^^^^^^^^
 
-Set up your environment by sourcing the following file.
+通过加载以下文件来配置你的环境。
 
 .. code-block:: console
 
@@ -167,56 +167,56 @@ Set up your environment by sourcing the following file.
 
 .. note::
 
-   Replace ``.bash`` with your shell if you're not using bash.
-   Possible values are: ``setup.bash``, ``setup.sh``, ``setup.zsh``.
+   如果你不使用 bash，请将 ``.bash`` 替换为你所用的 shell。
+   可选值包括：``setup.bash``、``setup.sh``、``setup.zsh``。
 
 .. _talker-listener:
 
-Try some examples
------------------
+尝试一些示例
+------------
 
-In one terminal, source the setup file and then run a C++ ``talker``\ :
+在一个终端中，加载安装脚本，然后运行 C++ 的 ``talker``\ :
 
 .. code-block:: console
 
    $ . ~/ros2_{DISTRO}/install/local_setup.bash
    $ ros2 run demo_nodes_cpp talker
 
-In another terminal source the setup file and then run a Python ``listener``\ :
+在另一个终端中加载安装脚本，然后运行 Python 的 ``listener``\ :
 
 .. code-block:: console
 
    $ . ~/ros2_{DISTRO}/install/local_setup.bash
    $ ros2 run demo_nodes_py listener
 
-You should see the ``talker`` saying that it's ``Publishing`` messages and the ``listener`` saying ``I heard`` those messages.
-This verifies both the C++ and Python APIs are working properly.
-Hooray!
+你应该会看到 ``talker`` 输出 ``Publishing`` 消息，而 ``listener`` 输出 ``I heard`` 这些消息。
+这验证了 C++ 和 Python API 都能正常工作。
+太棒了！
 
-Next steps after installing
----------------------------
-Continue with the :doc:`tutorials and demos <../../Tutorials>` to configure your environment, create your own workspace and packages, and learn ROS 2 core concepts.
+安装后的后续步骤
+----------------
+继续学习 :doc:`教程和演示 <../../Tutorials>`，以配置你的环境、创建自己的工作空间和软件包，并了解 ROS 2 的核心概念。
 
-Using the ROS 1 bridge
-----------------------
-The ROS 1 bridge can connect topics from ROS 1 to ROS 2 and vice-versa.
-See the dedicated `documentation <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__ on how to build and use the ROS 1 bridge.
+使用 ROS 1 桥接
+---------------
+ROS 1 桥接可以将话题从 ROS 1 连接到 ROS 2，反之亦然。
+请参阅关于如何构建和使用 ROS 1 桥接的专门 `文档 <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__。
 
-Additional RMW implementations (optional)
------------------------------------------
-The default middleware that ROS 2 uses is ``Fast DDS``, but the middleware (RMW) can be replaced at runtime.
-See the :doc:`guide <../../How-To-Guides/Working-with-multiple-RMW-implementations>` on how to work with multiple RMWs.
+其他 RMW 实现（可选）
+---------------------
+ROS 2 使用的默认中间件是 ``Fast DDS``，但中间件（RMW）可以在运行时替换。
+请参阅关于如何使用多个 RMW 的 :doc:`指南 <../../How-To-Guides/Working-with-multiple-RMW-implementations>`。
 
-Alternate compilers
--------------------
+替代编译器
+----------
 
-Using a different compiler besides gcc to compile ROS 2 is easy.
-If you set the environment variables ``CC`` and ``CXX`` to executables for a working C and C++ compiler, respectively, and retrigger CMake configuration (by using ``--cmake-force-configure`` or by deleting the packages you want to be affected), CMake will reconfigure and use the different compiler.
+除 gcc 之外，使用其他编译器来编译 ROS 2 也很简单。
+如果你将环境变量 ``CC`` 和 ``CXX`` 分别设置为可正常工作的 C 和 C++ 编译器的可执行文件，然后重新触发 CMake 配置（通过使用 ``--cmake-force-configure``，或删除你希望受影响的软件包），CMake 就会重新配置并使用不同的编译器。
 
 Clang
 ^^^^^
 
-To configure CMake to detect and use Clang:
+要配置 CMake 检测并使用 Clang：
 
 .. code-block:: console
 
@@ -225,23 +225,23 @@ To configure CMake to detect and use Clang:
    $ export CXX=clang++
    $ colcon build --cmake-force-configure
 
-Stay up to date
----------------
+保持最新
+--------
 
-See :doc:`../Maintaining-a-Source-Checkout` to periodically refresh your source installation.
+请参阅 :doc:`../Maintaining-a-Source-Checkout`，以定期刷新你的源码安装。
 
-Troubleshooting
----------------
+故障排查
+--------
 
-Troubleshooting techniques can be found :ref:`here <linux-troubleshooting>`.
+故障排查技巧可以在 :ref:`这里 <linux-troubleshooting>` 找到。
 
-Uninstall
----------
+卸载
+----
 
-1. If you installed your workspace with colcon as instructed above, "uninstalling" could be just a matter of opening a new terminal and not sourcing the workspace's ``setup`` file.
-   This way, your environment will behave as though there is no {DISTRO_TITLE} install on your system.
+1. 如果你按上面的说明使用 colcon 安装工作空间，那么“卸载”可能只需打开一个新终端，并且不要加载该工作空间的 ``setup`` 文件。
+   这样，你的环境就会表现得如同系统中没有安装 {DISTRO_TITLE}。
 
-2. If you're also trying to free up space, you can delete the entire workspace directory with:
+2. 如果你还想释放空间，可以用以下命令删除整个工作空间目录：
 
    .. code-block:: console
 

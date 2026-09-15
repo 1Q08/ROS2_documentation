@@ -4,215 +4,215 @@
 
 .. _CodeStyle:
 
-Code style and language versions
-================================
+代码风格与语言版本
+==================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-In order to achieve a consistent looking product we will all follow externally (if possible) defined style guidelines for each language.
-For other things like package layout or documentation layout we will need to come up with our own guidelines, drawing on current, popular styles in use now.
+为了得到外观一致的产品，我们将全部遵循（如有可能）外部定义的、针对各语言的风格指南。
+对于软件包布局或文档布局之类的其他事项，我们需要自行制定指南，并借鉴目前流行的风格。
 
-Additionally, wherever possible, developers should use integrated tools to allow them to check that these guidelines are followed in their editors.
-For example, everyone should have a PEP8 checker built into their editor to cut down on review iterations related to style.
+此外，在可能的情况下，开发者应使用集成工具，以便在编辑器中检查是否遵循了这些指南。
+例如，每个人都应在自己的编辑器中内置 PEP8 检查器，以减少与风格相关的评审迭代次数。
 
-Also where possible, packages should check style as part of their unit tests to help with the automated detection of style issues (see `ament_lint_auto <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_lint_auto/doc/index.rst>`__).
+同样，在可能的情况下，软件包应把风格检查作为其单元测试的一部分，以帮助自动发现风格问题（参见 `ament_lint_auto <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_lint_auto/doc/index.rst>`__）。
 
 C
 -
 
-Standard
-^^^^^^^^
+标准
+^^^^
 
-We will target C99.
+我们将以 C99 为目标。
 
-Style
-^^^^^
+风格
+^^^^
 
-We will use `Python's PEP7 <https://www.python.org/dev/peps/pep-0007/>`__ for our C style guide, with some modifications and additions:
+我们的 C 风格指南将采用 `Python 的 PEP7 <https://www.python.org/dev/peps/pep-0007/>`__，并做一些修改和补充：
 
-* We will target C99, as we do not need to support C89 (as PEP7 recommends)
+* 我们将以 C99 为目标，因为我们不需要支持 C89（尽管 PEP7 建议支持）
 
-  * rationale: among other things it allows us to use both ``//`` and ``/* */`` style comments
-  * rationale: C99 is pretty much ubiquitous now
+  * 理由：除其他外，它允许我们同时使用 ``//`` 和 ``/* */`` 风格注释
+  * 理由：C99 如今几乎无处不在
 
-* C++ style ``//`` comments are allowed
-* (optional) Always place literals on the left-hand side of comparison operators, e.g. ``0 == ret`` instead of ``ret == 0``
+* 允许使用 C++ 风格的 ``//`` 注释
+* （可选）始终把字面量放在比较运算符的左侧，例如写 ``0 == ret`` 而不是 ``ret == 0``
 
-  * rationale: ``ret == 0`` too easily turns into ``ret = 0`` by accident
-  * optional because when using ``-Wall`` (or equivalent) modern compilers will warn you when this happens
+  * 理由：``ret == 0`` 太容易因疏忽而写成 ``ret = 0``
+  * 之所以是可选的，是因为在使用 ``-Wall`` （或等价选项）时，现代编译器会对此给出警告
 
-All of the following modifications only apply if we are not writing Python modules:
+以下所有修改仅在我们不是在编写 Python 模块时适用：
 
-* Do not use ``Py_`` as a prefix for everything
+* 不要给所有东西都加上 ``Py_`` 前缀
 
-  * instead use a CamelCase version of the package name or other appropriate prefix
+  * 应使用包名的驼峰式版本或其他合适的前缀
 
-* The stuff about documentation strings doesn't apply
+* 关于文档字符串的那些内容不适用
 
-We can use the `pep7 <https://github.com/mike-perdide/pep7>`__ python module for style checking.
-The editor integration seems slim, we may need to look into automated checking for C in more detail.
+我们可以使用 `pep7 <https://github.com/mike-perdide/pep7>`__ Python 模块进行风格检查。
+其编辑器集成似乎比较薄弱，我们可能需要更深入地研究 C 的自动检查方案。
 
 C++
 ---
 
-Standard
-^^^^^^^^
+标准
+^^^^
 
-{DISTRO_TITLE} targets C++17.
+{DISTRO_TITLE} 以 C++17 为目标。
 
-Style
-^^^^^
+风格
+^^^^
 
 
-We will use the `Google C++ Style Guide <https://google.github.io/styleguide/cppguide.html>`__, with some modifications:
+我们将采用 `Google C++ 风格指南 <https://google.github.io/styleguide/cppguide.html>`__，并做一些修改：
 
-Line Length
-~~~~~~~~~~~
+行长
+~~~~
 
-* Our maximum line length is 100 characters.
+* 我们的最大行长为 100 个字符。
 
-File Extensions
-~~~~~~~~~~~~~~~
-
-* Header files should use the ``.hpp`` extension.
-
-  * rationale: Allow tools to determine content of files, C++ or C.
-
-* Implementation files should use the ``.cpp`` extension.
-
-  * rationale: Allow tools to determine content of files, C++ or C.
-
-Variable Naming
-~~~~~~~~~~~~~~~
-
-* For global variables use lowercase with underscores prefixed with ``g_``
-
-  * rationale: keep variable naming case consistent across the project
-  * rationale: easy to tell the scope of a variable at a glance
-  * consistency across languages
-
-* **Note on naming conventions**: ROS 2 deviates from the Google C++ Style Guide in several naming areas:
-
-  * The Google style guide recommends ``kPascalCase`` for constants (e.g., ``kDaysInAWeek``)
-  * ROS 2 projects currently use a mix of ``snake_case``, ``PascalCase``, and ``UPPER_CASE`` naming conventions
-  * This deviation is for historical reasons and consistency with existing ROS codebases
-  * For new projects, developers should follow the existing conventions in related ROS 2 packages
-  * When in doubt, prefer consistency with surrounding code over strict adherence to Google style
-
-Function and Method Naming
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* Google style guide says ``CamelCase``, but the C++ std library's style of ``snake_case`` is also allowed
-
-  * rationale: ROS 2 core packages currently use ``snake_case``
-
-    * reason: either an historical oversight or a personal preference that didn't get checked by the linter
-    * reason for not changing: retroactively changing would be too disruptive
-  * other considerations:
-
-    * ``cpplint.py`` does not check this case (hard to enforce other than with review)
-    * ``snake_case`` can result in more consistency across languages
-  * specific guidance:
-
-    * for existing projects, prefer the existing style
-    * for new projects, either is acceptable, but a preference for matching related existing projects is advised
-    * final decision is always developer discretion
-
-      * special cases like function pointers, callable types, etc. may require bending the rules
-    * Note that classes should still use ``CamelCase`` by default
-
-Access Control
-~~~~~~~~~~~~~~
-
-* Drop requirement for all class members to be private and therefore require accessors
-
-  * rationale: this is overly constraining for user API design
-  * we should prefer private members, only making them public when they are needed
-  * we should consider using accessors before choosing to allow direct member access
-  * we should have a good reason for allowing direct member access, other than because it is convenient for us
-
-Exceptions
+文件扩展名
 ~~~~~~~~~~
 
-* Exceptions are allowed
+* 头文件应使用 ``.hpp`` 扩展名。
 
-  * rationale: this is a new codebase, so the legacy argument doesn't apply to us
-  * rationale: for user-facing API's it is more idiomatic C++ to have exceptions
-  * Exceptions in destructors should be explicitly avoided
+  * 理由：让工具能够判断文件内容是 C++ 还是 C。
 
-* We should consider avoiding Exceptions if we intend to wrap the resulting API in C
+* 实现文件应使用 ``.cpp`` 扩展名。
 
-  * rationale: it will make it easier to wrap in C
-  * rationale: most of our dependencies in code we intend to wrap in C do not use exceptions anyways
+  * 理由：让工具能够判断文件内容是 C++ 还是 C。
 
-Function-like Objects
-~~~~~~~~~~~~~~~~~~~~~
+变量命名
+~~~~~~~~
 
-* No restrictions on Lambda's or ``std::function`` or ``std::bind``
+* 对于全局变量，使用小写加下划线，并以 ``g_`` 作为前缀
+
+  * 理由：保持整个项目的变量命名大小写风格一致
+  * 理由：一眼就能看出变量的作用域
+  * 保持各语言之间的一致性
+
+* **关于命名约定的说明**：ROS 2 在若干命名方面偏离了 Google C++ 风格指南：
+
+  * Google 风格指南建议常量使用 ``kPascalCase`` （例如 ``kDaysInAWeek``）
+  * ROS 2 项目目前混用 ``snake_case``、``PascalCase`` 和 ``UPPER_CASE`` 命名约定
+  * 这种偏离是出于历史原因以及与既有 ROS 代码库保持一致
+  * 对于新项目，开发者应遵循相关 ROS 2 软件包中已有的约定
+  * 如有疑问，优先与周围代码保持一致，而不是严格遵循 Google 风格
+
+函数与方法命名
+~~~~~~~~~~~~~~
+
+* Google 风格指南要求 ``CamelCase``，但也允许 C++ 标准库风格的 ``snake_case``
+
+  * 理由：ROS 2 核心软件包目前使用 ``snake_case``
+
+    * 原因：要么是历史上的疏忽，要么是个人偏好未被 linter 检查出来
+    * 不修改的原因：追溯性地修改会造成太大破坏
+  * 其他考虑：
+
+    * ``cpplint.py`` 不检查这种情况（除人工评审外很难强制执行）
+    * ``snake_case`` 可以让各语言之间更一致
+  * 具体指导：
+
+    * 对于现有项目，优先使用既有风格
+    * 对于新项目，两种都可以接受，但建议优先与相关的现有项目保持一致
+    * 最终决定始终由开发者自行判断
+
+      * 函数指针、可调用类型等特殊情形可能需要变通规则
+    * 注意，类默认仍应使用 ``CamelCase``
+
+访问控制
+~~~~~~~~
+
+* 取消“所有类成员都必须是私有的、因而都需要访问器”的要求
+
+  * 理由：这对用户 API 设计限制过强
+  * 我们应优先使用私有成员，只在需要时才把它们设为公有
+  * 在决定允许直接访问成员之前，应先考虑使用访问器
+  * 允许直接访问成员应有充分的理由，而不能仅仅因为对我们方便
+
+异常
+~~~~
+
+* 允许使用异常
+
+  * 理由：这是一个新的代码库，所以遗留问题的理由对我们不适用
+  * 理由：对于面向用户的 API 来说，使用异常更符合 C++ 惯例
+  * 应明确避免在析构函数中抛出异常
+
+* 如果我们打算把最终的 API 用 C 封装，就应考虑避免使用异常
+
+  * 理由：这样更容易用 C 封装
+  * 理由：我们打算用 C 封装的代码中，大多数依赖本身都不使用异常
+
+函数式对象
+~~~~~~~~~~
+
+* 对 Lambda、``std::function`` 或 ``std::bind`` 没有限制
 
 Boost
 ~~~~~
 
-* Boost should be avoided unless absolutely required.
+* 除非绝对必要，否则应避免使用 Boost。
 
-Comments and Doc Comments
-~~~~~~~~~~~~~~~~~~~~~~~~~
+注释与文档注释
+~~~~~~~~~~~~~~
 
-* Use ``///`` and ``/** */`` comments for *documentation* purposes and ``//`` style comments for notes and general comments
+* *文档* 用途使用 ``///`` 和 ``/** */`` 注释，笔记和一般性说明使用 ``//`` 风格注释
 
-  * Class and Function comments should use ``///`` and ``/** */`` style comments
-  * rationale: these are recommended for Doxygen and Sphinx in C/C++
-  * rationale: mixing ``/* */`` and ``//`` is convenient for block commenting out code which contains comments
-  * Descriptions of how the code works or notes within classes and functions should use ``//`` style comments
+  * 类和函数的注释应使用 ``///`` 和 ``/** */`` 风格注释
+  * 理由：在 C/C++ 中，Doxygen 和 Sphinx 推荐这样使用
+  * 理由：混用 ``/* */`` 和 ``//`` 便于用块注释注释掉本身含有注释的代码
+  * 关于代码如何工作的描述，或类和函数内部的笔记，应使用 ``//`` 风格注释
 
-Pointer Syntax Alignment
-~~~~~~~~~~~~~~~~~~~~~~~~
+指针语法对齐
+~~~~~~~~~~~~
 
-* Use ``char * c;`` instead of ``char* c;`` or ``char *c;`` because of this scenario ``char* c, *d, *e;``
+* 使用 ``char * c;`` 而不是 ``char* c;`` 或 ``char *c;``，因为存在这种情形：``char* c, *d, *e;``
 
-Class Privacy Keywords
-~~~~~~~~~~~~~~~~~~~~~~
+类访问关键字
+~~~~~~~~~~~~
 
-* Do not put 1 space before ``public:``, ``private:``, or ``protected:``, it is more consistent for all indentations to be a multiple of 2
+* 不要在 ``public:``、``private:`` 或 ``protected:`` 前加 1 个空格，所有缩进都是 2 的倍数会更为一致
 
-  * rationale: most editors don't like indentations which are not a multiple of the (soft) tab size
-  * Use zero spaces before ``public:``, ``private:``, or ``protected:``, or 2 spaces
-  * If you use 2 spaces before, indent other class statements by 2 additional spaces
-  * Prefer zero spaces, i.e. ``public:``, ``private:``, or ``protected:`` in the same column as the class
+  * 理由：大多数编辑器不喜欢不是（软）制表符宽度倍数的缩进
+  * 在 ``public:``、``private:`` 或 ``protected:`` 前使用零个空格或 2 个空格
+  * 如果你在前面使用 2 个空格，就把其他类语句再额外缩进 2 个空格
+  * 优先使用零个空格，即让 ``public:``、``private:`` 或 ``protected:`` 与 class 位于同一列
 
-Nested Templates
-~~~~~~~~~~~~~~~~
-
-* Never add whitespace to nested templates
-
-  * Prefer ``set<list<string>>`` (C++11 feature) to ``set<list<string> >`` or ``set< list<string> >``
-
-Always Use Braces
-~~~~~~~~~~~~~~~~~
-
-* Always use braces following ``if``, ``else``, ``do``, ``while``, and ``for``, even when the body is a single line.
-
-  * rationale: less opportunity for visual ambiguity and for complications due to use of macros in the body
-
-Open Versus Cuddled Braces
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* Use open braces for ``function``, ``class``, ``enum``, and ``struct`` definitions, but cuddle braces on ``if``, ``else``, ``while``, ``for``, etc...
-
-  * Exception: when an ``if`` (or ``while``, etc.) condition is long enough to require line-wrapping, then use an open brace (i.e., don't cuddle).
-
-* When a function call cannot fit on one line, wrap at the open parenthesis (not in between arguments) and start them on the next line with a 2-space indent.
-  Continue with the 2-space indent on subsequent lines for more arguments.
-  (Note that the `Google style guide <https://google.github.io/styleguide/cppguide.html#Function_Calls>`__ is internally contradictory on this point.)
-
-  * Same goes for ``if`` (and ``while``, etc.) conditions that are too long to fit on one line.
-
-Examples
+嵌套模板
 ~~~~~~~~
 
-This is OK:
+* 绝不要在嵌套模板中添加空白
+
+  * 优先使用 ``set<list<string>>`` （C++11 特性），而不是 ``set<list<string> >`` 或 ``set< list<string> >``
+
+始终使用花括号
+~~~~~~~~~~~~~~
+
+* 在 ``if``、``else``、``do``、``while`` 和 ``for`` 之后始终使用花括号，即使函数体只有一行。
+
+  * 理由：减少视觉歧义的机会，也减少因函数体中使用宏而产生的复杂情况
+
+开放花括号与紧凑花括号
+~~~~~~~~~~~~~~~~~~~~~~
+
+* ``function``、``class``、``enum`` 和 ``struct`` 定义使用开放花括号，而在 ``if``、``else``、``while``、``for`` 等之后使用紧凑花括号……
+
+  * 例外：当 ``if`` （或 ``while`` 等）的条件长到需要换行时，就使用开放花括号（即不要紧凑）。
+
+* 当函数调用无法放入一行时，在左圆括号处换行（而不是在参数之间），并在下一行以 2 空格缩进开始。
+  后续更多参数的行继续使用 2 空格缩进。
+  （注意，`Google 风格指南 <https://google.github.io/styleguide/cppguide.html#Function_Calls>`__ 在这一点上自相矛盾。）
+
+  * 对于无法放入一行的 ``if`` （以及 ``while`` 等）条件也是如此。
+
+示例
+~~~~
+
+下面是正确的：
 
 .. code-block:: c++
 
@@ -250,7 +250,7 @@ This is OK:
      fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo,
      bar, bat);
 
-This is **not** OK:
+下面 **不** 正确：
 
 .. code-block:: c++
 
@@ -265,9 +265,9 @@ This is **not** OK:
    }
 
 
-Use open braces rather than excessive indentation, e.g. for distinguishing constructor code from constructor initializer lists
+应使用开放花括号而不是过度缩进，例如用于区分构造函数代码和构造函数初始化列表
 
-This is OK:
+下面是正确的：
 
 .. code-block:: c++
 
@@ -289,7 +289,7 @@ This is OK:
      ...
    }
 
-This is **not** OK, even weird (the google way?):
+下面 **不** 正确，甚至很怪（Google 的方式？）：
 
 .. code-block:: c++
 
@@ -309,44 +309,44 @@ This is **not** OK, even weird (the google way?):
      ...
    }
 
-Linters
-~~~~~~~
+Linter
+~~~~~~
 
-We check these styles with a combination of Google's `cpplint.py <https://github.com/google/styleguide>`__ and `uncrustify <https://github.com/uncrustify/uncrustify>`__.
+我们用 Google 的 `cpplint.py <https://github.com/google/styleguide>`__ 和 `uncrustify <https://github.com/uncrustify/uncrustify>`__ 的组合来检查这些风格。
 
-We provide command line tools with custom configurations:
+我们提供带有自定义配置的命令行工具：
 
-* `ament_clang_format <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_clang_format/doc/index.rst>`__: `configuration <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_clang_format/ament_clang_format/configuration/.clang-format>`__
+* `ament_clang_format <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_clang_format/doc/index.rst>`__：`配置 <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_clang_format/ament_clang_format/configuration/.clang-format>`__
 * `ament_cpplint <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_cpplint/doc/index.rst>`__
-* `ament_uncrustify <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_uncrustify/doc/index.rst>`__: `configuration <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_uncrustify/ament_uncrustify/configuration/ament_code_style.cfg>`__
+* `ament_uncrustify <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_uncrustify/doc/index.rst>`__：`配置 <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_uncrustify/ament_uncrustify/configuration/ament_code_style.cfg>`__
 
-Some formatters such as ament_uncrustify and ament_clang_format support ``--reformat`` options to apply changes in place.
+某些格式化工具（例如 ament_uncrustify 和 ament_clang_format）支持 ``--reformat`` 选项，用于就地应用更改。
 
-We also run other tools to detect and eliminate as many warnings as possible.
-Here's a non-exhaustive list of additional things we try to do on all of our packages:
+我们还会运行其他工具来检测并尽可能消除警告。
+下面是我们尽量对所有软件包执行的其他事项的非穷尽列表：
 
-* use compiler flags like ``-Wall -Wextra -Wpedantic``
-* run static code analysis like ``cppcheck``, which we have integrated in `ament_cppcheck <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_cppcheck/doc/index.rst>`__.
+* 使用 ``-Wall -Wextra -Wpedantic`` 之类的编译器标志
+* 运行静态代码分析，例如 ``cppcheck``，我们已把它集成到 `ament_cppcheck <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_cppcheck/doc/index.rst>`__ 中。
 
 Python
 ------
 
-Version
-^^^^^^^
+版本
+^^^^
 
-We will target Python 3 for our development.
+我们的开发将以 Python 3 为目标。
 
-Style
-^^^^^
+风格
+^^^^
 
-We will use the `PEP8 guidelines <https://www.python.org/dev/peps/pep-0008/>`_ for code format.
+代码格式将采用 `PEP8 指南 <https://www.python.org/dev/peps/pep-0008/>`_。
 
-We chose the following more precise rule where PEP 8 leaves some freedom:
+在 PEP 8 留有自由的地方，我们选择了以下更精确的规则：
 
-* `We allow up to 100 characters per line (fifth paragraph) <https://www.python.org/dev/peps/pep-0008/#maximum-line-length>`_.
-* `We pick single quotes over double quotes as long as no escaping is necessary <https://www.python.org/dev/peps/pep-0008/#string-quotes>`_.
-* `We prefer hanging indents for continuation lines <https://www.python.org/dev/peps/pep-0008/#indentation>`_.
-* `We prefer splitting having only one import per line <https://peps.python.org/pep-0008/#imports>`_:
+* `我们允许每行最多 100 个字符（第五段） <https://www.python.org/dev/peps/pep-0008/#maximum-line-length>`_。
+* `只要不需要转义，我们选择单引号而不是双引号 <https://www.python.org/dev/peps/pep-0008/#string-quotes>`_。
+* `续行我们优先使用悬挂缩进 <https://www.python.org/dev/peps/pep-0008/#indentation>`_。
+* `我们更倾向于每行只有一个 import <https://peps.python.org/pep-0008/#imports>`_：
 
   .. code-block:: python
 
@@ -361,11 +361,11 @@ We chose the following more precise rule where PEP 8 leaves some freedom:
       List,
     )
 
-Tools like the ``(ament_)pycodestyle`` Python package should be used in unit-test and/or editor integration for checking Python code style.
+在单元测试和/或编辑器集成中，应使用 ``(ament_)pycodestyle`` Python 包之类的工具来检查 Python 代码风格。
 
-The pycodestyle configuration used in the linter is `here <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_pycodestyle/ament_pycodestyle/configuration/ament_pycodestyle.ini>`__.
+linter 中使用的 pycodestyle 配置见 `此处 <https://github.com/ament/ament_lint/blob/{REPOS_FILE_BRANCH}/ament_pycodestyle/ament_pycodestyle/configuration/ament_pycodestyle.ini>`__。
 
-Integration with editors:
+与编辑器集成：
 
 * `atom <https://atom.io/packages/linter-pycodestyle>`_
 * `emacs <https://www.emacswiki.org/emacs/PythonProgrammingInEmacs>`_
@@ -375,75 +375,75 @@ Integration with editors:
 CMake
 -----
 
-Version
-^^^^^^^
+版本
+^^^^
 
-Read `REP 2000 <https://reps.openrobotics.org/rep-2000/>`_ to determine the minimum CMake version you should support.
-Currently the minimum version of any supported ROS distro is **3.14.4** (ROS Humble on macOS).
+请阅读 `REP 2000 <https://reps.openrobotics.org/rep-2000/>`_ 以确定你应支持的最低 CMake 版本。
+目前所有受支持 ROS 发行版的最低版本是 **3.14.4** （macOS 上的 ROS Humble）。
 
-Style
-^^^^^
+风格
+^^^^
 
-Since there is not an existing CMake style guide we will define our own:
+由于没有现成的 CMake 风格指南，我们将定义自己的：
 
-* Use lowercase command names (``find_package``, not ``FIND_PACKAGE``).
-* Use ``snake_case`` identifiers (variables, functions, macros).
-* Use empty ``else()`` and ``end...()`` commands.
-* No whitespace before ``(``\ 's.
-* Use two spaces of indentation, do not use tabs.
-* Do not use aligned indentation for parameters of multi-line macro invocations.
-  Use two spaces only.
-* Prefer functions with ``set(PARENT_SCOPE)`` to macros.
-* When using macros prefix local variables with ``_`` or a reasonable prefix.
+* 命令名使用小写（``find_package``，而不是 ``FIND_PACKAGE``）。
+* 标识符（变量、函数、宏）使用 ``snake_case``。
+* 使用空的 ``else()`` 和 ``end...()`` 命令。
+* ``(`` 前不加空白。
+* 使用两个空格缩进，不要使用制表符。
+* 多行宏调用时，参数不要使用对齐缩进。
+  只使用两个空格。
+* 优先使用带 ``set(PARENT_SCOPE)`` 的函数，而不是宏。
+* 使用宏时，给局部变量加上 ``_`` 或合理的前缀。
 
-Markdown / reStructured Text / docblocks
-----------------------------------------
+Markdown / reStructured Text / 文档块
+-------------------------------------
 
-The following rules to format text is intended to increase readability as well as versioning.
+以下文本格式规则旨在提升可读性以及版本管理效果。
 
-Any Doc Type
+任何文档类型
 ^^^^^^^^^^^^
 
-* Each sentence must start on a new line.
+* 每个句子都必须另起一行。
 
-  * Rationale: For longer paragraphs a single change in the beginning makes the diff unreadable since it carries forward through the whole paragraph.
+  * 理由：对于较长的段落，开头的单个改动会让 diff 无法阅读，因为它会贯穿整个段落。
 
-* Each sentence can optionally be wrapped to keep each line short.
-* The lines should not have any trailing white spaces.
+* 每个句子可以选择性地换行以保持每行较短。
+* 各行不应有行尾空白。
 
-Markdown or RST
+Markdown 或 RST
 ^^^^^^^^^^^^^^^
 
-* Each section title should be preceded by one empty line and succeeded by one empty line.
+* 每个节标题前应有一个空行，后也应有一个空行。
 
-  * Rationale: It expedites to get an overview about the structure when screening the document.
+  * 理由：这有助于快速浏览文档结构、获得整体印象。
 
-* A code block must be preceded and succeeded by an empty line.
+* 代码块前后必须有空行。
 
-  * Rationale: Whitespace is significant only directly before and directly after fenced code blocks.
-    Following these instructions will ensure that highlighting works properly and consistently.
+  * 理由：空白只对围栏代码块的正前方和正后方有影响。
+    遵循这些说明可确保高亮正常且一致地工作。
 
-* A code block should specify a syntax (e.g. ``bash``).
+* 代码块应指定语言（例如 ``bash``）。
 
-RST only
+仅限 RST
 ^^^^^^^^
 
-* In reStructured Text the headings should follow the hierarchy described in the `Sphinx style guide <https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#headings>`__:
+* 在 reStructured Text 中，标题应遵循 `Sphinx 风格指南 <https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#headings>`__ 中描述的层级：
 
-  * ``#`` with overline (only once, used for the document title)
-  * ``*`` with overline
+  * 带上下划线的 ``#`` （仅用一次，用于文档标题）
+  * 带上下划线的 ``*``
   * ``=``
   * ``-``
   * ``^``
   * ``"``
-  * Rationale: A consistent hierarchy expedites getting an idea about the nesting level when screening the document.
+  * 理由：一致的层级有助于在浏览文档时快速了解嵌套层级。
 
-Markdown Only
+仅限 Markdown
 ^^^^^^^^^^^^^
 
-* In Markdown the headings should follow the ATX-style described in the `Markdown syntax documentation <https://daringfireball.net/projects/markdown/syntax#header>`__
+* 在 Markdown 中，标题应遵循 `Markdown 语法文档 <https://daringfireball.net/projects/markdown/syntax#header>`__ 中描述的 ATX 风格
 
-  * ATX-style headers use 1-6 hash characters (``#``) at the start of the line to denote header levels 1-6.
-  * A space between the hashes and the header title should be used (such as ``# Heading 1``) to make it easier to visually separate them.
-  * Justification for the ATX-style preference comes from the `Google Markdown style guide <https://github.com/google/styleguide/blob/gh-pages/docguide/style.md#atx-style-headings>`__
-  * Rationale: ATX-style headers are easier to search and maintain, and make the first two header levels consistent with the other levels.
+  * ATX 风格标题在行首使用 1-6 个井号字符（``#``）来表示 1-6 级标题。
+  * 井号与标题文字之间应加一个空格（例如 ``# Heading 1``），以便更便于在视觉上区分它们。
+  * 偏好 ATX 风格的理由来自 `Google Markdown 风格指南 <https://github.com/google/styleguide/blob/gh-pages/docguide/style.md#atx-style-headings>`__
+  * 理由：ATX 风格标题更易于搜索和维护，并使前两级标题与其他级别的标题保持一致。

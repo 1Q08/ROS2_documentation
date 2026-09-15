@@ -4,88 +4,88 @@
 
 .. _CustomInterfaces:
 
-Creating custom msg and srv files
-=================================
+创建自定义 msg 和 srv 文件
+==========================
 
-**Goal:** Define custom interface files (``.msg`` and ``.srv``) and use them with Python and C++ nodes.
+**目标：** 定义自定义接口文件（``.msg`` 和 ``.srv``），并在 Python 和 C++ 节点中使用它们。
 
-**Tutorial level:** Beginner
+**教程级别：** 入门
 
-**Time:** 20 minutes
+**时间：** 20 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-In previous tutorials you utilized message and service interfaces to learn about :doc:`topics <../Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics>`, :doc:`services <../Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services>`, and simple publisher/subscriber (:doc:`C++ <./Writing-A-Simple-Cpp-Publisher-And-Subscriber>`/:doc:`Python<./Writing-A-Simple-Py-Publisher-And-Subscriber>`) and service/client (:doc:`C++ <./Writing-A-Simple-Cpp-Service-And-Client>`/:doc:`Python<./Writing-A-Simple-Py-Service-And-Client>`) nodes.
-The interfaces you used were predefined in those cases.
+在之前的教程中，你使用消息和服务接口学习了 :doc:`话题 <../Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics>`、:doc:`服务 <../Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services>`，以及简单的发布者/订阅者（:doc:`C++ <./Writing-A-Simple-Cpp-Publisher-And-Subscriber>`/:doc:`Python<./Writing-A-Simple-Py-Publisher-And-Subscriber>`）和服务/客户端（:doc:`C++ <./Writing-A-Simple-Cpp-Service-And-Client>`/:doc:`Python<./Writing-A-Simple-Py-Service-And-Client>`）节点。
+在这些情况下，你使用的接口都是预定义的。
 
-While it's good practice to use predefined interface definitions, you will probably need to define your own messages and services sometimes as well.
-This tutorial will introduce you to the simplest method of creating custom interface definitions.
+虽然使用预定义的接口定义是一种良好实践，但有时你可能也需要定义自己的消息和服务。
+本教程将向你介绍创建自定义接口定义的最简单方法。
 
-Prerequisites
--------------
+前置条件
+--------
 
-You should have a :doc:`ROS 2 workspace <./Creating-A-Workspace/Creating-A-Workspace>`.
+你应该有一个 :doc:`ROS 2 工作空间 <./Creating-A-Workspace/Creating-A-Workspace>`。
 
-This tutorial also uses the packages created in the publisher/subscriber (:doc:`C++ <./Writing-A-Simple-Cpp-Publisher-And-Subscriber>` and :doc:`Python<./Writing-A-Simple-Py-Publisher-And-Subscriber>`) and service/client  (:doc:`C++ <./Writing-A-Simple-Cpp-Service-And-Client>` and :doc:`Python<./Writing-A-Simple-Py-Service-And-Client>`) tutorials to try out the new custom messages.
+本教程还使用了发布者/订阅者（:doc:`C++ <./Writing-A-Simple-Cpp-Publisher-And-Subscriber>` 和 :doc:`Python<./Writing-A-Simple-Py-Publisher-And-Subscriber>`）以及服务/客户端（:doc:`C++ <./Writing-A-Simple-Cpp-Service-And-Client>` 和 :doc:`Python<./Writing-A-Simple-Py-Service-And-Client>`）教程中创建的包来试用新的自定义消息。
 
-Tasks
------
+任务
+----
 
-1 Create a new package
-^^^^^^^^^^^^^^^^^^^^^^^
+1 创建一个新包
+^^^^^^^^^^^^^^
 
-For this tutorial you will be creating custom ``.msg`` and ``.srv`` files in their own package, and then utilizing them in a separate package.
-Both packages should be in the same workspace.
+在本教程中，你将在一个独立的包中创建自定义的 ``.msg`` 和 ``.srv`` 文件，然后在另一个单独的包中使用它们。
+两个包应该位于同一个工作空间中。
 
-Since we will use the pub/sub and service/client packages created in earlier tutorials, make sure you are in the same workspace as those packages (``ros2_ws/src``), and then run the following command to create a new package:
+由于我们将使用早期教程中创建的 pub/sub 和 service/client 包，请确保你与这些包位于同一个工作空间（``ros2_ws/src``），然后运行以下命令创建一个新包：
 
 .. code-block:: console
 
   $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 tutorial_interfaces
 
-``tutorial_interfaces`` is the name of the new package.
-Note that it is, and can only be, an ament_cmake package, but this doesn't restrict in which type of packages you can use your messages and services.
-You can create your own custom interfaces in an ament_cmake package, and then use it in a C++ or Python node, which will be covered in the last section.
+``tutorial_interfaces`` 是新包的名称。
+请注意，它是一个 ament_cmake 包，而且也只能是 ament_cmake 包，但这并不限制你可以在哪种类型的包中使用你的消息和服务。
+你可以在 ament_cmake 包中创建自己的自定义接口，然后在 C++ 或 Python 节点中使用它，这一点将在最后一节介绍。
 
-The ``.msg`` and ``.srv`` files are required to be placed in directories called ``msg`` and ``srv`` respectively.
-Create the directories in ``ros2_ws/src/tutorial_interfaces``:
+``.msg`` 和 ``.srv`` 文件需要分别放置在名为 ``msg`` 和 ``srv`` 的目录中。
+在 ``ros2_ws/src/tutorial_interfaces`` 中创建这些目录：
 
 .. code-block:: console
 
   $ mkdir msg srv
 
-2 Create custom definitions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 创建自定义定义
+^^^^^^^^^^^^^^^^
 
-2.1 msg definition
-~~~~~~~~~~~~~~~~~~
+2.1 msg 定义
+~~~~~~~~~~~~
 
-In the ``tutorial_interfaces/msg`` directory you just created, make a new file called ``Num.msg`` with one line of code declaring its data structure:
+在你刚创建的 ``tutorial_interfaces/msg`` 目录中，新建一个名为 ``Num.msg`` 的文件，其中一行代码声明它的数据结构：
 
 .. code-block:: bash
 
     int64 num
 
-This is a custom message that transfers a single 64-bit integer called ``num``.
+这是一个自定义消息，传输一个名为 ``num`` 的单个 64 位整数。
 
-Also in the ``tutorial_interfaces/msg`` directory you just created, make a new file called ``Sphere.msg`` with the following content:
+同样在你刚创建的 ``tutorial_interfaces/msg`` 目录中，新建一个名为 ``Sphere.msg`` 的文件，内容如下：
 
 .. code-block:: bash
 
     geometry_msgs/Point center
     float64 radius
 
-This custom message uses a message from another message package (``geometry_msgs/Point`` in this case).
+这个自定义消息使用了来自另一个消息包的消息（在本例中是 ``geometry_msgs/Point``）。
 
-2.2 srv definition
-~~~~~~~~~~~~~~~~~~
+2.2 srv 定义
+~~~~~~~~~~~~
 
-Back in the ``tutorial_interfaces/srv`` directory you just created, make a new file called ``AddThreeInts.srv`` with the following request and response structure:
+回到你刚创建的 ``tutorial_interfaces/srv`` 目录，新建一个名为 ``AddThreeInts.srv`` 的文件，具有以下请求和响应结构：
 
 .. code-block:: bash
 
@@ -95,12 +95,12 @@ Back in the ``tutorial_interfaces/srv`` directory you just created, make a new f
   ---
   int64 sum
 
-This is your custom service that requests three integers named ``a``, ``b``, and ``c``, and responds with an integer called ``sum``.
+这是你的自定义服务，它请求三个名为 ``a``、``b`` 和 ``c`` 的整数，并返回一个名为 ``sum`` 的整数作为响应。
 
 3 ``CMakeLists.txt``
 ^^^^^^^^^^^^^^^^^^^^
 
-To convert the interfaces you defined into language-specific code (like C++ and Python) so that they can be used in those languages, add the following lines to ``CMakeLists.txt``:
+要将你定义的接口转换为特定语言的代码（如 C++ 和 Python），以便在这些语言中使用，请在 ``CMakeLists.txt`` 中添加以下行：
 
 .. code-block:: cmake
 
@@ -116,17 +116,17 @@ To convert the interfaces you defined into language-specific code (like C++ and 
 
 .. note::
 
-  The first argument (library name) in the ``rosidl_generate_interfaces`` must start with the name of the package, e.g., simply ``${PROJECT_NAME}`` or ``${PROJECT_NAME}_suffix``.
-  See https://github.com/ros2/rosidl/issues/441#issuecomment-591025515.
+  ``rosidl_generate_interfaces`` 中的第一个参数（库名）必须以包的名称开头，例如简单的 ``${PROJECT_NAME}`` 或 ``${PROJECT_NAME}_suffix``。
+  参见 https://github.com/ros2/rosidl/issues/441#issuecomment-591025515。
 
 4 ``package.xml``
 ^^^^^^^^^^^^^^^^^
 
-Because the interfaces rely on ``rosidl_default_generators`` for generating language-specific code, you need to declare a build tool dependency on it.
-``rosidl_default_runtime`` is a runtime or execution-stage dependency, needed to be able to use the interfaces later.
-The ``rosidl_interface_packages`` is the name of the dependency group that your package, ``tutorial_interfaces``, should be associated with, declared using the ``<member_of_group>`` tag.
+因为接口依赖于 ``rosidl_default_generators`` 来生成特定语言的代码，所以你需要声明对它的构建工具依赖。
+``rosidl_default_runtime`` 是运行时或执行阶段的依赖，是之后能够使用接口所必需的。
+``rosidl_interface_packages`` 是你的包 ``tutorial_interfaces`` 应该关联的依赖组的名称，使用 ``<member_of_group>`` 标签声明。
 
-Add the following lines within the ``<package>`` element of ``package.xml``:
+在 ``package.xml`` 的 ``<package>`` 元素中添加以下行：
 
 .. code-block:: xml
 
@@ -135,11 +135,11 @@ Add the following lines within the ``<package>`` element of ``package.xml``:
   <exec_depend>rosidl_default_runtime</exec_depend>
   <member_of_group>rosidl_interface_packages</member_of_group>
 
-5 Build the ``tutorial_interfaces`` package
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 构建 ``tutorial_interfaces`` 包
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now that all the parts of your custom interfaces package are in place, you can build the package.
-In the root of your workspace (``~/ros2_ws``), run the following command:
+现在你的自定义接口包的所有部分都已就位，你可以构建该包了。
+在工作空间的根目录（``~/ros2_ws``）中，运行以下命令：
 
 .. tabs::
 
@@ -161,12 +161,12 @@ In the root of your workspace (``~/ros2_ws``), run the following command:
 
       $ colcon build --merge-install --packages-select tutorial_interfaces
 
-Now the interfaces will be discoverable by other ROS 2 packages.
+现在其他 ROS 2 包将能够发现这些接口。
 
-6 Confirm msg and srv creation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 确认 msg 和 srv 的创建
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-In a new terminal, run the following command from within your workspace (``ros2_ws``) to source it:
+在一个新终端中，从你的工作空间（``ros2_ws``）内运行以下命令来 source 它：
 
 .. tabs::
 
@@ -188,8 +188,8 @@ In a new terminal, run the following command from within your workspace (``ros2_
 
       $ call install/setup.bat
 
-Now you can confirm that your interface creation worked by using the ``ros2 interface show`` command.
-The output you see in your terminal should look similar to the following:
+现在你可以通过使用 ``ros2 interface show`` 命令来确认你的接口创建成功了。
+你在终端中看到的输出应该类似于以下内容：
 
 .. code-block:: console
 
@@ -214,19 +214,19 @@ The output you see in your terminal should look similar to the following:
   ---
   int64 sum
 
-7 Test the new interfaces
-^^^^^^^^^^^^^^^^^^^^^^^^^
+7 测试新接口
+^^^^^^^^^^^^
 
-For this step you can use the packages you created in previous tutorials.
-A few simple modifications to the nodes, ``CMakeLists.txt`` and ``package.xml`` files will allow you to use your new interfaces.
+在这一步，你可以使用你在之前教程中创建的包。
+对节点、``CMakeLists.txt`` 和 ``package.xml`` 文件做一些简单修改，就能让你使用新的接口。
 
-7.1 Testing ``Num.msg`` with pub/sub
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+7.1 用 pub/sub 测试 ``Num.msg``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With a few modifications to the publisher/subscriber package created in a previous tutorial (:doc:`C++ <./Writing-A-Simple-Cpp-Publisher-And-Subscriber>` or :doc:`Python <./Writing-A-Simple-Py-Publisher-And-Subscriber>`), you can see ``Num.msg`` in action.
-Since you'll be changing the standard string msg to a numerical one, the output will be slightly different.
+对之前教程中创建的发布者/订阅者包（:doc:`C++ <./Writing-A-Simple-Cpp-Publisher-And-Subscriber>` 或 :doc:`Python <./Writing-A-Simple-Py-Publisher-And-Subscriber>`）做一些修改，你就能看到 ``Num.msg`` 的实际效果。
+由于你将把标准的字符串消息改为数值消息，输出会略有不同。
 
-**Publisher**
+**发布者**
 
 .. tabs::
 
@@ -249,18 +249,17 @@ Since you'll be changing the standard string msg to a numerical one, the output 
         : Node("minimal_publisher"), count_(0)
         {
           publisher_ = this->create_publisher<tutorial_interfaces::msg::Num>("topic", 10);  // CHANGE
-          timer_ = this->create_wall_timer(
-            500ms, std::bind(&MinimalPublisher::timer_callback, this));
+
+          auto timer_callback = [this](){
+            auto message = tutorial_interfaces::msg::Num();                                   // CHANGE
+            message.num = this->count_++;                                                     // CHANGE
+            RCLCPP_INFO_STREAM(this->get_logger(), "Publishing: '" << message.num << "'");    // CHANGE
+            publisher_->publish(message);
+          };
+          timer_ = this->create_wall_timer(500ms, timer_callback);
         }
 
       private:
-        void timer_callback()
-        {
-          auto message = tutorial_interfaces::msg::Num();                                   // CHANGE
-          message.num = this->count_++;                                                     // CHANGE
-          RCLCPP_INFO_STREAM(this->get_logger(), "Publishing: '" << message.num << "'");    // CHANGE
-          publisher_->publish(message);
-        }
         rclcpp::TimerBase::SharedPtr timer_;
         rclcpp::Publisher<tutorial_interfaces::msg::Num>::SharedPtr publisher_;             // CHANGE
         size_t count_;
@@ -316,7 +315,7 @@ Since you'll be changing the standard string msg to a numerical one, the output 
           main()
 
 
-**Subscriber**
+**订阅者**
 
 .. tabs::
 
@@ -338,15 +337,14 @@ Since you'll be changing the standard string msg to a numerical one, the output 
         MinimalSubscriber()
         : Node("minimal_subscriber")
         {
+          auto topic_callback = [this](const tutorial_interfaces::msg::Num & msg){     // CHANGE
+            RCLCPP_INFO_STREAM(this->get_logger(), "I heard: '" << msg.num << "'");    // CHANGE
+          };
           subscription_ = this->create_subscription<tutorial_interfaces::msg::Num>(    // CHANGE
-            "topic", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
+            "topic", 10, topic_callback);
         }
 
       private:
-        void topic_callback(const tutorial_interfaces::msg::Num & msg) const  // CHANGE
-        {
-          RCLCPP_INFO_STREAM(this->get_logger(), "I heard: '" << msg.num << "'");     // CHANGE
-        }
         rclcpp::Subscription<tutorial_interfaces::msg::Num>::SharedPtr subscription_;  // CHANGE
       };
 
@@ -400,7 +398,7 @@ Since you'll be changing the standard string msg to a numerical one, the output 
 
 **CMakeLists.txt**
 
-Add the following lines (C++ only):
+添加以下行（仅 C++）：
 
 .. code-block:: cmake
 
@@ -426,7 +424,7 @@ Add the following lines (C++ only):
 
 **package.xml**
 
-Add the following line:
+添加以下行：
 
 .. tabs::
 
@@ -443,19 +441,19 @@ Add the following line:
       <exec_depend>tutorial_interfaces</exec_depend>
 
 
-After making the above edits and saving all the changes, build the package:
+完成上述编辑并保存所有更改后，构建该包：
 
 .. tabs::
 
   .. group-tab:: C++
 
-    On Linux/macOS:
+    在 Linux/macOS 上：
 
     .. code-block:: console
 
       $ colcon build --packages-select cpp_pubsub
 
-    On Windows:
+    在 Windows 上：
 
     .. code-block:: console
 
@@ -463,19 +461,19 @@ After making the above edits and saving all the changes, build the package:
 
   .. group-tab:: Python
 
-    On Linux/macOS:
+    在 Linux/macOS 上：
 
     .. code-block:: console
 
       $ colcon build --packages-select py_pubsub
 
-    On Windows:
+    在 Windows 上：
 
     .. code-block:: console
 
       $ colcon build --merge-install --packages-select py_pubsub
 
-Then open two new terminals, source ``ros2_ws`` in each, and run:
+然后打开两个新终端，在每个终端中 source ``ros2_ws``，然后运行：
 
 .. tabs::
 
@@ -499,7 +497,7 @@ Then open two new terminals, source ``ros2_ws`` in each, and run:
 
         $ ros2 run py_pubsub listener
 
-Since ``Num.msg`` relays only an integer, the talker should only be publishing integer values, as opposed to the string it published previously:
+由于 ``Num.msg`` 只中继一个整数，talker 应该只发布整数值，而不是它之前发布的字符串：
 
 .. code-block:: console
 
@@ -508,13 +506,13 @@ Since ``Num.msg`` relays only an integer, the talker should only be publishing i
     [INFO] [minimal_publisher]: Publishing: '2'
 
 
-7.2 Testing ``AddThreeInts.srv`` with service/client
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+7.2 用 service/client 测试 ``AddThreeInts.srv``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With a few modifications to the service/client package created in a previous tutorial (:doc:`C++ <./Writing-A-Simple-Cpp-Service-And-Client>` or :doc:`Python <./Writing-A-Simple-Py-Service-And-Client>`), you can see ``AddThreeInts.srv`` in action.
-Since you'll be changing the original two integer request srv to a three integer request srv, the output will be slightly different.
+对之前教程中创建的 service/client 包（:doc:`C++ <./Writing-A-Simple-Cpp-Service-And-Client>` 或 :doc:`Python <./Writing-A-Simple-Py-Service-And-Client>`）做一些修改，你就能看到 ``AddThreeInts.srv`` 的实际效果。
+由于你将把原来的两个整数请求 srv 改为三个整数请求 srv，输出会略有不同。
 
-**Service**
+**服务**
 
 .. tabs::
 
@@ -585,7 +583,7 @@ Since you'll be changing the original two integer request srv to a three integer
       if __name__ == '__main__':
           main()
 
-**Client**
+**客户端**
 
 .. tabs::
 
@@ -698,7 +696,7 @@ Since you'll be changing the original two integer request srv to a three integer
 
 **CMakeLists.txt**
 
-Add the following lines (C++ only):
+添加以下行（仅 C++）：
 
 .. code-block:: cmake
 
@@ -726,7 +724,7 @@ Add the following lines (C++ only):
 
 **package.xml**
 
-Add the following line:
+添加以下行：
 
 .. tabs::
 
@@ -743,19 +741,19 @@ Add the following line:
       <exec_depend>tutorial_interfaces</exec_depend>
 
 
-After making the above edits and saving all the changes, build the package:
+完成上述编辑并保存所有更改后，构建该包：
 
 .. tabs::
 
   .. group-tab:: C++
 
-    On Linux/macOS:
+    在 Linux/macOS 上：
 
     .. code-block:: console
 
       $ colcon build --packages-select cpp_srvcli
 
-    On Windows:
+    在 Windows 上：
 
     .. code-block:: console
 
@@ -764,19 +762,19 @@ After making the above edits and saving all the changes, build the package:
 
   .. group-tab:: Python
 
-    On Linux/macOS:
+    在 Linux/macOS 上：
 
     .. code-block:: console
 
       $ colcon build --packages-select py_srvcli
 
-    On Windows:
+    在 Windows 上：
 
     .. code-block:: console
 
       $ colcon build --merge-install --packages-select py_srvcli
 
-Then open two new terminals, source ``ros2_ws`` in each, and run:
+然后打开两个新终端，在每个终端中 source ``ros2_ws``，然后运行：
 
 .. tabs::
 
@@ -801,15 +799,15 @@ Then open two new terminals, source ``ros2_ws`` in each, and run:
         $ ros2 run py_srvcli client 2 3 1
 
 
-Summary
--------
+总结
+----
 
-In this tutorial, you learned how to create custom interfaces in their own package and how to utilize those interfaces in other packages.
+在本教程中，你学习了如何在它们自己的包中创建自定义接口，以及如何在其他包中使用这些接口。
 
-This tutorial only scratches the surface about defining custom interfaces.
-You can learn more about it in :doc:`About ROS 2 interfaces <../../Concepts/Basic/About-Interfaces>`.
+本教程只是定义了自定义接口的皮毛。
+你可以在 :doc:`关于 ROS 2 接口 <../../Concepts/Basic/About-Interfaces>` 中了解更多。
 
-Next steps
-----------
+后续步骤
+--------
 
-The :doc:`next tutorial <./Single-Package-Define-And-Use-Interface>` covers more ways to use interfaces in ROS 2.
+:doc:`下一个教程 <./Single-Package-Define-And-Use-Interface>` 介绍了在 ROS 2 中使用接口的更多方式。

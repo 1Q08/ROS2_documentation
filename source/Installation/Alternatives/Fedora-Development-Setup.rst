@@ -2,14 +2,14 @@
 
   Installation/Fedora-Development-Setup
 
-Fedora (source)
-===============
+Fedora（源码）
+==============
 
-How to setup the development environment?
------------------------------------------
+如何搭建开发环境？
+------------------
 
-The following system dependencies are required to build ROS 2 on Fedora.
-They can be installed with ``dnf`` as follows:
+在 Fedora 上构建 ROS 2 需要以下系统依赖项。
+可以使用 ``dnf`` 如下安装它们：
 
 .. code-block:: bash
 
@@ -48,5 +48,5 @@ They can be installed with ``dnf`` as follows:
      wget
 
 
-With this done, you can follow the rest of the :ref:`instructions <rhel-dev-get-ros2-code>` to fetch and build ROS 2.
+完成后，你可以按照剩余的 :ref:`说明 <rhel-dev-get-ros2-code>` 来获取并构建 ROS 2。
 

@@ -1,29 +1,29 @@
-Wait for acknowledgment
-=======================
+等待确认
+========
 
-**Goal:** Wait for acknowledgment of messages sent by a publisher.
+**目标：** 等待发布者所发送消息的确认。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 10 minutes
+**时长：** 10 分钟
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 1
    :local:
 
-Overview
+概述
+----
+
+在发布者-订阅者架构中，消息从发布者发送给订阅者，而发布者没有任何内置机制来确认订阅者已收到消息。
+该特性使发布者能够等待其所发送消息的确认。
+在发布者需要在继续执行进一步操作（例如发送更多消息或执行其他操作）之前确保订阅者已收到消息的场景中，这非常有用。
+
+RMW 支持
 --------
 
-In Publisher-Subscriber architecture, messages are sent from the publisher to the subscribers, and the publisher does not have any built-in mechanism to confirm that the subscriber has received the messages.
-This feature enables the publisher to wait for acknowledgment of messages it sent.
-This is useful in scenarios where the publisher needs to ensure that the subscriber has received the message before proceeding with further actions, such as sending more messages or performing other operations.
+等待确认需要 RMW 实现的支持。
 
-RMW Support
------------
-
-Wait for acknowledgment requires RMW implementation support.
-
-.. list-table::  Wait-for-Acknowledgment Support Status
+.. list-table::  Wait-for-Acknowledgment 支持状态
    :widths: 25 25
 
    * - rmw_fastrtps
@@ -33,28 +33,28 @@ Wait for acknowledgment requires RMW implementation support.
    * - rmw_cyclonedds
      - supported
 
-The publisher's :ref:`QoS reliability policy <about_qos_policies>` needs to be ``RELIABLE`` to use the wait for acknowledgment feature, otherwise the publisher will not wait for acknowledgment.
+发布者的 :ref:`QoS 可靠性策略 <about_qos_policies>` 需要为 ``RELIABLE`` 才能使用等待确认特性，否则发布者将不会等待确认。
 
-Installing the demo
--------------------
+安装演示
+--------
 
-See the :doc:`installation instructions <../../Installation>` for details on installing ROS 2.
+有关安装 ROS 2 的详细信息，请参阅 :doc:`安装说明 <../../Installation>`。
 
-If you've installed ROS 2 from packages, ensure that you have ``ros-{DISTRO}-examples-rclcpp-minimal-publisher`` and ``ros-{DISTRO}-examples-rclcpp-minimal-subscriber`` installed.
-If you downloaded the archive or built ROS 2 from source, it will already be part of the installation.
+如果你从软件包安装了 ROS 2，请确保已安装 ``ros-{DISTRO}-examples-rclcpp-minimal-publisher`` 和 ``ros-{DISTRO}-examples-rclcpp-minimal-subscriber``。
+如果你下载了压缩包或从源码构建了 ROS 2，它们已包含在安装中。
 
-Running the demo
-----------------
+运行演示
+--------
 
-This demo shows how to use the wait for acknowledgment feature in the publisher to ensure that messages sent by the publisher are acknowledged by all subscriptions.
+本演示展示了如何在发布者中使用等待确认特性，以确保发布者发送的消息被所有订阅端确认。
 
 https://github.com/ros2/examples/blob/{REPOS_FILE_BRANCH}/rclcpp/topics/minimal_publisher/member_function_with_wait_for_all_acked.cpp
 
-The publisher can use the ``wait_for_all_acked`` method to wait for message acknowledgments within a specified timeout before shutdown by the signal.
+发布者可以使用 ``wait_for_all_acked`` 方法，在因信号关闭之前，于指定的超时时间内等待消息确认。
 
-We can start the demo by running the ``publisher_wait_for_all_acked`` and ``subscriber_member_function`` executables from the ``examples_rclcpp_minimal_publisher`` package (don't forget to source the setup file first):
+我们可以通过运行 ``examples_rclcpp_minimal_publisher`` 软件包中的 ``publisher_wait_for_all_acked`` 和 ``subscriber_member_function`` 可执行文件来启动该演示（别忘了先 source 设置文件）：
 
-Start the subscriber in one terminal:
+在一个终端中启动订阅者：
 
 .. code-block:: console
 
@@ -68,7 +68,7 @@ Start the subscriber in one terminal:
     [INFO] [1743121570.030825871] [minimal_subscriber]: I heard: 'Hello, world! 6'
     ...
 
-Then start the publisher in another terminal:
+然后在另一个终端中启动发布者：
 
 .. code-block:: console
 
@@ -83,11 +83,11 @@ Then start the publisher in another terminal:
     ^C[INFO] [1743121570.344981639] [rclcpp]: signal_handler(signum=2)
     [INFO] [1743121570.345398788] [minimal_publisher_with_wait_for_all_acked]: All subscribers acknowledge messages
 
-When the publisher is terminated (e.g., by pressing :kbd:`Ctrl-C`), it will wait for acknowledgment of all messages sent before shutdown.
-If all subscribers acknowledge the messages, the publisher will print a message indicating that all subscribers have acknowledged the messages.
-If not, it will print a message indicating that not all subscribers acknowledged the messages within the specified timeout.
+当发布者被终止时（例如按下 :kbd:`Ctrl-C`），它会在关闭之前等待所有已发送消息的确认。
+如果所有订阅者都确认了消息，发布者将打印一条消息，表明所有订阅者都已确认这些消息。
+如果没有，它将打印一条消息，表明并非所有订阅者都在指定的超时时间内确认了消息。
 
-Related content
----------------
+相关内容
+--------
 
-- `Wait-for-Acknowledgment example with rclpy <https://github.com/ros2/examples/blob/{REPOS_FILE_BRANCH}/rclpy/topics/minimal_publisher/examples_rclpy_minimal_publisher/publisher_member_function_with_wait_for_all_acked.py>`__.
+- `使用 rclpy 的等待确认示例 <https://github.com/ros2/examples/blob/{REPOS_FILE_BRANCH}/rclpy/topics/minimal_publisher/examples_rclpy_minimal_publisher/publisher_member_function_with_wait_for_all_acked.py>`__。

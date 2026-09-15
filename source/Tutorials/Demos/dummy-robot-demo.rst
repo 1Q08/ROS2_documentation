@@ -3,19 +3,19 @@
     dummy-robot-demo
     Tutorials/dummy-robot-demo
 
-Experimenting with a dummy robot
-================================
+使用虚拟机器人进行试验
+======================
 
-In this demo, we present a simple demo robot with all components from publishing joint states over publishing fake laser data until visualizing the robot model on a map in RViz.
+在本演示中，我们展示一个简单的演示机器人，涵盖从发布关节状态、发布模拟激光数据，直到在 RViz 中的地图上可视化机器人模型的所有组件。
 
-Launching the demo
-------------------
+启动演示
+--------
 
-We assume your ROS 2 installation dir as ``~/ros2_ws``.
-Please change the directories according to your platform.
+我们假设你的 ROS 2 安装目录为 ``~/ros2_ws``。
+请根据你的平台更改相应目录。
 
-To start the demo, we execute the demo bringup launch file, which we are going to explain in more details in the next section.
-You should see some prints inside your terminal along the lines of the following:
+为了启动该演示，我们执行 demo bringup 启动文件；我们将在下一节中更详细地解释它。
+你应该会在终端中看到类似以下内容的输出：
 
 .. code-block:: console
 
@@ -47,7 +47,7 @@ You should see some prints inside your terminal along the lines of the following
    Adding fixed segment from single_rrbot_link3 to single_rrbot_camera_link
    Adding fixed segment from single_rrbot_link3 to single_rrbot_hokuyo_link
 
-If you now open RViz2 in a new terminal, you'll see your robot.
+如果你现在在新终端中打开 RViz2，就会看到你的机器人。
 🎉
 
 .. code-block:: console
@@ -55,18 +55,18 @@ If you now open RViz2 in a new terminal, you'll see your robot.
    $ source <ROS2_INSTALL_FOLDER>/setup.bash
    $ rviz2
 
-This opens RViz2.
-Assuming you have your dummy_robot_bringup still launched, you can now add the TF display plugin and configure your global frame to ``world``.
-Once you did that, you should see a similar picture:
+这会启动 RViz2。
+假设你的 dummy_robot_bringup 仍处于启动状态，现在你可以添加 TF 显示插件，并将全局坐标系配置为 ``world``。
+完成之后，你应该会看到类似的画面：
 
 
 .. image:: images/rviz-dummy-robot.png
 
 
-What's happening?
-^^^^^^^^^^^^^^^^^
+发生了什么？
+^^^^^^^^^^^^
 
-If you have a closer look at the launch file, we start a couple of nodes at the same time.
+如果你仔细查看该启动文件，会发现我们同时启动了若干节点。
 
 
 * dummy_map_server
@@ -74,15 +74,15 @@ If you have a closer look at the launch file, we start a couple of nodes at the 
 * dummy_joint_states
 * robot_state_publisher
 
-The first two packages are relatively simple.
-The ``dummy_map_server`` constantly publishes an empty map with a periodic update.
-The ``dummy_laser`` does basically the same; publishing dummy fake laser scans.
+前两个软件包相对简单。
+``dummy_map_server`` 会以周期性更新不断发布空地图。
+``dummy_laser`` 基本上做同样的事：发布模拟的激光扫描数据。
 
-The ``dummy_joint_states`` node is publishing fake joint state data.
-As we are publishing a simple RRbot with only two joints, this node publishes joint states values for these two joints.
+``dummy_joint_states`` 节点会发布模拟的关节状态数据。
+由于我们发布的是一个只有两个关节的简单 RRbot，该节点会为这两个关节发布关节状态值。
 
-The ``robot_state_publisher`` is doing the actual interesting work.
-It parses the given URDF file, extracts the robot model and listens to the incoming joint states.
-With this information, it publishes TF values for our robot which we visualize in RViz.
+``robot_state_publisher`` 承担了真正有趣的工作。
+它解析给定的 URDF 文件，提取机器人模型，并监听传入的关节状态。
+借助这些信息，它会为我们的机器人发布 TF 值，我们则在 RViz 中将这些值可视化。
 
-Hooray!
+太棒了！

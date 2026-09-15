@@ -1,9 +1,9 @@
 Webots
 ======
 
-This set of tutorials will teach you how to configure the Webots simulator with ROS 2.
+这一系列教程将教你如何为 ROS 2 配置 Webots 仿真器。
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 

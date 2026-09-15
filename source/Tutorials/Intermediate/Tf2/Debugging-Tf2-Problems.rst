@@ -4,75 +4,73 @@
 
 .. _DebuggingTf2Problems:
 
-Debugging
-=========
+调试
+====
 
-**Goal:** Learn how to use a systematic approach for debugging tf2 related problems.
+**目标：** 学习如何使用系统化方法来调试 tf2 相关的问题。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 10 minutes
+**时间：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-This tutorial walks you through the steps to debug a typical tf2 problem.
-It will also use many of the tf2 debugging tools, such as ``tf2_echo``, ``tf2_monitor``, and ``view_frames``.
-This tutorial assumes you have completed the :doc:`learning tf2 <./Tf2-Main>` tutorials.
+本教程将带你一步步调试一个典型的 tf2 问题。
+它还会使用许多 tf2 调试工具，如 ``tf2_echo``、``tf2_monitor`` 和 ``view_frames``。
+本教程假设你已经完成了 :doc:`学习 tf2 <./Tf2-Main>` 教程。
 
-Debugging example
------------------
+调试示例
+--------
 
-1 Setting and starting the example
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 设置并启动示例
+^^^^^^^^^^^^^^^^
 
-For this tutorial we will set up a demo application that has a number of problems.
-The goal of this tutorial is to apply a systematic approach to find and tackle these problems.
-First, let's create the source file.
+在本教程中，我们将设置一个存在多个问题的演示应用程序。
+本教程的目标是应用一种系统化方法来发现并解决这些问题。
+首先，让我们创建源文件。
 
-Go to the ``learning_tf2_cpp`` package we created in :doc:`tf2 tutorials <./Tf2-Main>`.
-Inside the ``src`` directory make a copy of the source file ``turtle_tf2_listener.cpp`` and rename it to ``turtle_tf2_listener_debug.cpp``.
+转到我们在 :doc:`tf2 教程 <./Tf2-Main>` 中创建的 ``learning_tf2_cpp`` 包。
+在 ``src`` 目录中复制源文件 ``turtle_tf2_listener.cpp``，并将其重命名为 ``turtle_tf2_listener_debug.cpp``。
 
-Open the file using your preferred text editor, and change line 67 from
+用你喜欢的文本编辑器打开该文件，将第 67 行从
 
 .. code-block:: C++
 
    std::string toFrameRel = "turtle2";
 
-to
+改为
 
 .. code-block:: C++
 
    std::string toFrameRel = "turtle3";
 
-and change ``lookupTransform()`` call in lines 75-79 from
+并将第 75-79 行的 ``lookupTransform()`` 调用从
 
 .. code-block:: C++
 
-   try {
+    try {
       t = tf_buffer_->lookupTransform(
-        toFrameRel,
-        fromFrameRel,
+        toFrameRel, fromFrameRel,
         tf2::TimePointZero);
-   } catch (tf2::TransformException & ex) {
+    } catch (tf2::TransformException & ex) {
 
-to
+改为
 
 .. code-block:: C++
 
-   try {
+    try {
       t = tf_buffer_->lookupTransform(
-        toFrameRel,
-        fromFrameRel,
+        toFrameRel, fromFrameRel,
         this->now());
-   } catch (tf2::TransformException & ex) {
+    } catch (tf2::TransformException & ex) {
 
-And save changes to the file.
-In order to run this demo, we need to create a launch file ``start_tf2_debug_demo_launch`` with extension ``.py``, ``.xml``, or ``.yaml`` in the ``launch`` subdirectory of package ``learning_tf2_cpp``:
+并保存对文件的更改。
+为了运行这个演示，我们需要在 ``learning_tf2_cpp`` 包的 ``launch`` 子目录中创建一个名为 ``start_tf2_debug_demo_launch``、扩展名为 ``.py``、``.xml`` 或 ``.yaml`` 的启动文件：
 
 .. tabs::
 
@@ -91,9 +89,9 @@ In order to run this demo, we need to create a launch file ``start_tf2_debug_dem
     .. literalinclude:: launch/start_tf2_debug_demo_launch.yaml
         :language: yaml
 
-Don't forget to add the ``turtle_tf2_listener_debug`` executable to the ``CMakeLists.txt`` and build the package.
+不要忘记将 ``turtle_tf2_listener_debug`` 可执行文件添加到 ``CMakeLists.txt`` 中，并构建包。
 
-Now let's run it to see what happens:
+现在让我们运行它，看看会发生什么：
 
 .. tabs::
 
@@ -115,8 +113,8 @@ Now let's run it to see what happens:
 
         $ ros2 launch learning_tf2_cpp start_tf2_debug_demo_launch.py
 
-You will now see that the turtlesim came up.
-At the same time, if you run the ``turtle_teleop_key`` in another terminal window, you can use the arrow keys to drive the ``turtle1`` around.
+现在你会看到 turtlesim 出现了。
+同时，如果你在另一个终端窗口运行 ``turtle_teleop_key``，你可以使用方向键驾驶 ``turtle1`` 四处移动。
 
 .. code-block:: console
 
@@ -125,41 +123,40 @@ At the same time, if you run the ``turtle_teleop_key`` in another terminal windo
    transform turtle3 to turtle1: "turtle3" passed to lookupTransform argument target_frame
    does not exist
 
-You will also notice that there is a second turtle in the lower, left corner.
-If the demo would be working correctly, this second turtle should be following the turtle you can command with the arrow keys.
-However, it is not the case because we have to solve some problems first.
+你还会注意到左下角有第二只 turtle。
+如果演示正常工作，这第二只 turtle 应该跟随你能用方向键控制的那只 turtle。
+然而事实并非如此，因为我们必须先解决一些问题。
 
-2 Finding the tf2 request
-^^^^^^^^^^^^^^^^^^^^^^^^^
+2 查找 tf2 请求
+^^^^^^^^^^^^^^^
 
-Firstly, we need to find out what exactly we are asking tf2 to do.
-Therefore, we go into the part of the code that is using tf2.
-Open the ``src/turtle_tf2_listener_debug.cpp`` file, and take a look at line 67:
+首先，我们需要找出我们到底要求 tf2 做什么。
+因此，我们进入使用 tf2 的那部分代码。
+打开 ``src/turtle_tf2_listener_debug.cpp`` 文件，查看第 67 行：
 
 .. code-block:: C++
 
    std::string toFrameRel = "turtle3";
 
-and lines 75-79:
+以及第 75-79 行：
 
 .. code-block:: C++
 
-   try {
+    try {
       t = tf_buffer_->lookupTransform(
-        toFrameRel,
-        fromFrameRel,
+        toFrameRel, fromFrameRel,
         this->now());
-   } catch (tf2::TransformException & ex) {
+    } catch (tf2::TransformException & ex) {
 
-Here we do the actual request to tf2.
-The three arguments tell us directly what we are asking tf2: transform from frame ``turtle3`` to frame ``turtle1`` at time ``now``.
+这里我们向 tf2 发起实际的请求。
+这三个参数直接告诉我们我们在要求 tf2 做什么：在时间 ``now`` 从帧 ``turtle3`` 变换到帧 ``turtle1``。
 
-Now, let's take a look at why this request to tf2 is failing.
+现在，让我们看看为什么这个对 tf2 的请求会失败。
 
-3 Checking the frames
-^^^^^^^^^^^^^^^^^^^^^
+3 检查帧
+^^^^^^^^
 
-Firstly, to find out if tf2 knows about our transform between ``turtle3`` and ``turtle1``, we will use ``tf2_echo`` tool.
+首先，为了找出 tf2 是否知道我们 ``turtle3`` 和 ``turtle1`` 之间的变换，我们将使用 ``tf2_echo`` 工具。
 
 .. code-block:: console
 
@@ -168,23 +165,23 @@ Firstly, to find out if tf2 knows about our transform between ``turtle3`` and ``
    Invalid frame ID "turtle3" passed to canTransform argument target_frame - frame does
    not exist
 
-The output tells us that frame ``turtle3`` does not exist.
+输出告诉我们帧 ``turtle3`` 不存在。
 
-Then what frames do exist?
-If you like to get a graphical representation of this, use ``view_frames`` tool.
+那么哪些帧存在呢？
+如果你想要一个图形化表示，请使用 ``view_frames`` 工具。
 
 .. code-block:: console
 
    $ ros2 run tf2_tools view_frames
 
-Open the generated ``frames.pdf`` file to see the following output:
+打开生成的 ``frames.pdf`` 文件，查看以下输出：
 
 .. image:: images/turtlesim_frames.png
 
-So obviously the problem is that we are requesting transform from frame ``turtle3``, which does not exist.
-To fix this bug, just replace ``turtle3`` with ``turtle2`` in line 67.
+所以问题显然是我们请求从帧 ``turtle3`` 变换，而该帧不存在。
+要修复这个错误，只需将第 67 行的 ``turtle3`` 替换为 ``turtle2``。
 
-And now stop the running demo, build it, and run it again:
+现在停止正在运行的演示，构建它，然后再次运行：
 
 .. tabs::
 
@@ -218,14 +215,14 @@ And now stop the running demo, build it, and run it again:
         time 1630223704.617054 but the latest data is at time 1630223704.616726, when looking up
         transform from frame [turtle1] to frame [turtle2]
 
-And right away we run into the next problem.
+我们立刻就遇到了下一个问题。
 
-4 Checking the timestamp
-^^^^^^^^^^^^^^^^^^^^^^^^
+4 检查时间戳
+^^^^^^^^^^^^
 
-Now that we solved the frame name problem, it is time to look at the timestamps.
-Remember, we are trying to get the transform between ``turtle2`` and ``turtle1`` at the current time (i.e., ``now``).
-To get statistics on the timing, call ``tf2_monitor`` with corresponding frames.
+既然我们解决了帧名称问题，现在是时候看看时间戳了。
+记住，我们正在尝试获取 ``turtle2`` 和 ``turtle1`` 之间在当前时间（即 ``now``）的变换。
+要获取关于时间的统计信息，请用相应的帧调用 ``tf2_monitor``。
 
 .. code-block:: console
 
@@ -240,24 +237,23 @@ To get statistics on the timing, call ``tf2_monitor`` with corresponding frames.
    All Broadcasters:
    Node: <no authority available> 125.246 Hz, Average Delay: 0.000290237 Max Delay: 0.000786781
 
-The key part here is the delay for the chain from ``turtle2`` to ``turtle1``.
-The output shows there is an average delay of about 3 milliseconds.
-This means that tf2 can only transform between the turtles after 3 milliseconds are passed.
-So, if we would be asking tf2 for the transformation between the turtles 3 milliseconds ago instead of ``now``, tf2 would be able to give us an answer sometimes.
-Let's test this quickly by changing lines 75-79 to:
+这里的关键部分是 ``turtle2`` 到 ``turtle1`` 链的延迟。
+输出显示平均延迟约为 3 毫秒。
+这意味着 tf2 只能在经过 3 毫秒后才能变换 turtle 之间的数据。
+因此，如果我们要求 tf2 给出 3 毫秒前而不是 ``now`` 的 turtle 间变换，tf2 有时就能给出答案。
+让我们通过将第 75-79 行改为以下内容来快速测试：
 
 .. code-block:: C++
 
-   try {
+    try {
       t = tf_buffer_->lookupTransform(
-        toFrameRel,
-        fromFrameRel,
+        toFrameRel, fromFrameRel,
         this->now() - rclcpp::Duration::from_seconds(0.1));
-   } catch (tf2::TransformException & ex) {
+    } catch (tf2::TransformException & ex) {
 
-In the new code we are asking for the transform between the turtles 100 milliseconds ago.
-It is usual to use a longer periods, just to make sure that the transform will arrive.
-Stop the demo, build and run:
+在新代码中，我们请求 100 毫秒前的 turtle 间变换。
+通常使用更长的时间段，只是为了确保变换会到达。
+停止演示，构建并运行：
 
 .. tabs::
 
@@ -279,47 +275,44 @@ Stop the demo, build and run:
 
         $ ros2 launch learning_tf2_cpp start_tf2_debug_demo_launch.py
 
-And you should finally see the turtle move!
+你应该终于看到 turtle 移动了！
 
 .. image:: images/turtlesim_follow1.png
 
-That last fix we made is not really what you want to do, it was just to make sure that was our problem.
-The real fix would look like this:
+我们做的最后一个修复并不是你真正想做的，它只是用来确认那就是我们的问题。
+真正的修复应该是这样的：
 
 .. code-block:: C++
 
-   try {
+    try {
       t = tf_buffer_->lookupTransform(
-        toFrameRel,
-        fromFrameRel,
+        toFrameRel, fromFrameRel,
         tf2::TimePointZero);
-   } catch (tf2::TransformException & ex) {
+    } catch (tf2::TransformException & ex) {
 
-Or like this:
+或者像这样：
 
 .. code-block:: C++
 
-   try {
+    try {
       t = tf_buffer_->lookupTransform(
-        toFrameRel,
-        fromFrameRel,
+        toFrameRel, fromFrameRel,
         tf2::TimePoint());
-   } catch (tf2::TransformException & ex) {
+    } catch (tf2::TransformException & ex) {
 
-You can learn more about timeouts in the :doc:`Using time <./Learning-About-Tf2-And-Time-Cpp>` tutorial, and use them as below:
+你可以在 :doc:`使用时间 <./Learning-About-Tf2-And-Time-Cpp>` 教程中了解更多关于超时的内容，并按如下方式使用它们：
 
 .. code-block:: C++
 
-   try {
+    try {
       t = tf_buffer_->lookupTransform(
-        toFrameRel,
-        fromFrameRel,
+        toFrameRel, fromFrameRel,
         this->now(),
         rclcpp::Duration::from_seconds(0.05));
-   } catch (tf2::TransformException & ex) {
+    } catch (tf2::TransformException & ex) {
 
-Summary
--------
+总结
+----
 
-In this tutorial you learned how to use a systematic approach for debugging tf2 related problems.
-You also learned how to use tf2 debugging tools, such as ``tf2_echo``, ``tf2_monitor``, and ``view_frames`` to help you debug those tf2 problems.
+在本教程中，你学习了如何使用系统化方法来调试 tf2 相关的问题。
+你还学习了如何使用 tf2 调试工具，如 ``tf2_echo``、``tf2_monitor`` 和 ``view_frames`` 来帮助你调试这些 tf2 问题。

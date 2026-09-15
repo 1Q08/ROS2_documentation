@@ -1,90 +1,90 @@
-=======
-Mirrors
-=======
+====
+镜像
+====
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 3
 
-Docs Mirrors
-------------
+文档镜像
+--------
 
-Mirrors of the ROS Docs act as a backup when the `main site <http://docs.ros.org>`_ is unavailable, and may provide faster access to users who are geographically closer to the mirror.
+ROS 文档的镜像在 `主站 <http://docs.ros.org>`_ 不可用时充当备份，并且可以为地理位置更接近镜像的用户提供更快的访问速度。
 
-Debian/Ubuntu (APT) Repository Mirrors
---------------------------------------
+Debian/Ubuntu（APT）仓库镜像
+----------------------------
 
-To use these mirrors, replace the official ROS repository URL with the one listed below in your APT configuration.
+要使用这些镜像，请在你的 APT 配置中将官方的 ROS 仓库 URL 替换为下面列出的镜像 URL。
 
-Asia
+亚洲
 ^^^^
 
 .. list-table::
    :widths: 30 20 50
 
-   * - Tsinghua University (TUNA)
-     - China
+   * - 清华大学（TUNA）
+     - 中国
      - `https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu/ <https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu/>`_
-   * - USTC
-     - China
+   * - 中国科学技术大学（USTC）
+     - 中国
      - `https://mirrors.ustc.edu.cn/ros2/ubuntu/ <https://mirrors.ustc.edu.cn/ros2/ubuntu/>`_
-   * - Alibaba Cloud (Aliyun)
-     - China
+   * - 阿里云（Aliyun）
+     - 中国
      - `https://mirrors.aliyun.com/ros2/ubuntu/ <https://mirrors.aliyun.com/ros2/ubuntu/>`_
-   * - Qilu University of Technology (QLU)
-     - China
+   * - 齐鲁工业大学（QLU）
+     - 中国
      - `https://mirrors.qlu.edu.cn/ros2/ubuntu/ <https://mirrors.qlu.edu.cn/ros2/ubuntu/>`_
-   * - Chongqing University (CQU)
-     - China
+   * - 重庆大学（CQU）
+     - 中国
      - `https://mirrors.cqu.edu.cn/ros2/ubuntu/ <https://mirrors.cqu.edu.cn/ros2/ubuntu/>`_
 
-Europe
+欧洲
+^^^^
+
+.. list-table::
+   :widths: 30 20 50
+
+   * - 代尔夫特理工大学
+     - 荷兰
+     - `http://ftp.tudelft.nl/ros2/ubuntu/ <http://ftp.tudelft.nl/ros2/ubuntu/>`_
+
+北美洲
 ^^^^^^
 
 .. list-table::
    :widths: 30 20 50
 
-   * - Delft University of Technology
-     - the Netherlands
-     - `http://ftp.tudelft.nl/ros2/ubuntu/ <http://ftp.tudelft.nl/ros2/ubuntu/>`_
-
-North America
-^^^^^^^^^^^^^
-
-.. list-table::
-   :widths: 30 20 50
-
-   * - University of Maryland (UMD)
-     - USA
+   * - 马里兰大学（UMD）
+     - 美国
      - `http://mirror.umd.edu/packages.ros.org/ros2/ubuntu/ <http://mirror.umd.edu/packages.ros.org/ros2/ubuntu/>`_
    * - nulled LLC
-     - USA
+     - 美国
      - `http://mirror.nulled.llc/ros2/ubuntu/ <http://mirror.nulled.llc/ros2/ubuntu/>`_
 
-Oceania
-^^^^^^^
+大洋洲
+^^^^^^
 
 .. list-table::
    :widths: 30 20 50
 
    * - AARNet
-     - Australia
+     - 澳大利亚
      - `https://mirror.aarnet.edu.au/pub/ros2-packages/ubuntu/ <https://mirror.aarnet.edu.au/pub/ros2-packages/ubuntu/>`_
 
-South America and Africa
-^^^^^^^^^^^^^^^^^^^^^^^^
+南美洲与非洲
+^^^^^^^^^^^^
 
-There are currently no officially verified ROS 2 mirrors for these regions.
-If you are hosting a mirror in South America or Africa and would like it listed here, please see the **Hosting a Mirror** section below.
+这些地区目前没有官方验证过的 ROS 2 镜像。
+如果你在南美洲或非洲托管镜像并希望在此处列出，请参阅下面的 **托管镜像** 一节。
 
-Creating a mirror
------------------
+创建镜像
+--------
 
-If you are maintaining a mirror please join the Mirrors category on discourse.openrobotics.org: `https://discourse.openrobotics.org/c/infrastructure-project/infra-mirrors/ <https://discourse.openrobotics.org/c/infrastructure-project/infra-mirrors/>`_ for both feedback and prompt updates.
+如果你正在维护镜像，请加入 discourse.openrobotics.org 上的 Mirrors 类别：`https://discourse.openrobotics.org/c/infrastructure-project/infra-mirrors/ <https://discourse.openrobotics.org/c/infrastructure-project/infra-mirrors/>`_ ，以便获取反馈和及时更新。
 
-Using a Mirror
-^^^^^^^^^^^^^^
+使用镜像
+^^^^^^^^
 
-To use a mirror, replace ``packages.ros.org`` with the mirror URL in your ``ros2-latest.list`` file:
+要使用镜像，请在 ``ros2-latest.list`` 文件中将 ``packages.ros.org`` 替换为镜像 URL：
 
 .. code-block:: bash
 
@@ -92,35 +92,35 @@ To use a mirror, replace ``packages.ros.org`` with the mirror URL in your ``ros2
    sudo sed -i 's|http://packages.ros.org/ros2/ubuntu|https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu|g' /etc/apt/sources.list.d/ros2-latest.list
    sudo apt update
 
-Setting up a Mirror
--------------------
+搭建镜像
+--------
 
-The ROS infrastructure uses ``rsync`` to distribute packages.
-To create a local mirror of the ROS 2 repositories:
+ROS 基础设施使用 ``rsync`` 分发软件包。
+要创建 ROS 2 仓库的本地镜像：
 
-1. **Storage Requirement:** Ensure you have at least 500GB of available disk space.
-2. **Sync Command:** Use ``rsync`` to pull from the official OSUOSL endpoints:
+1. **存储需求：** 确保你至少有 500GB 可用磁盘空间。
+2. **同步命令：** 使用 ``rsync`` 从官方 OSUOSL 端点拉取：
 
 .. code-block:: bash
 
    # Sync the main ROS 2 repository
    rsync -azv rsync.osuosl.org::ros2-main /your/local/path --delete
 
-3. **Maintenance:** Set up a ``cron`` job to sync every 6-12 hours.
+3. **维护：** 设置一个 ``cron`` 任务，每 6-12 小时同步一次。
 
-Adding your mirror to this list
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+将你的镜像加入此列表
+^^^^^^^^^^^^^^^^^^^^
 
-To be officially listed, your mirror must meet the following requirements:
+要获得官方收录，你的镜像必须满足以下要求：
 
-* Support **HTTPS**.
-* Sync at least once every 24 hours.
-* Provide a contact email for infrastructure alerts.
+* 支持 **HTTPS**。
+* 至少每 24 小时同步一次。
+* 提供一个用于基础设施告警的联系邮箱。
 
-Once verified, please open a Pull Request against this page or post in the `Mirrors Discourse <https://discourse.openrobotics.org/c/infrastructure-project/infra-mirrors/>`_.
+验证通过后，请针对本页面提交 Pull Request，或在 `Mirrors Discourse <https://discourse.openrobotics.org/c/infrastructure-project/infra-mirrors/>`_ 中发帖。
 
-Mirroring docs.ros.org
-----------------------
+镜像 docs.ros.org
+-----------------
 
-Mirroring the documentation site requires specific configuration to prevent search engine fragmentation.
-If you are interested in hosting a regional mirror of the documentation, please **contact the infrastructure team** via Discourse before proceeding.
+镜像文档站点需要特定配置，以防止搜索引擎索引碎片化。
+如果你有兴趣托管文档的区域镜像，请先通过 Discourse **联系基础设施团队**，然后再继续。

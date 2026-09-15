@@ -3,21 +3,21 @@
     Rosbag-with-ROS1-Bridge
     Tutorials/Rosbag-with-ROS1-Bridge
 
-Recording and playing back data with ``rosbag`` using the ROS 1 bridge
-======================================================================
+使用 ROS 1 桥接的 ``rosbag`` 录制和回放数据
+===========================================
 
-This tutorial is a follow up to the *Bridge communication between ROS 1 and ROS 2* demo as can be found `here <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__, and in the following it is assumed you have completed that tutorial already.
+本教程是 *ROS 1 和 ROS 2 之间的桥接通信* 演示的后续，该演示可在 `此处 <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__ 找到，以下内容假设你已经完成了该教程。
 
-The ros1_bridge can be built from :doc:`source <../../How-To-Guides/Using-ros1_bridge-Jammy-upstream>` for these examples.
+对于这些示例，ros1_bridge 可以从 :doc:`源代码 <../../How-To-Guides/Using-ros1_bridge-Jammy-upstream>` 构建。
 
-What follows is a series of additional examples, like that ones that come at the end of the aforementioned *Bridge communication between ROS 1 and ROS 2* demo.
+接下来是一系列额外的示例，就像上述 *ROS 1 和 ROS 2 之间的桥接通信* 演示末尾的那些一样。
 
-Recording topic data with rosbag and ROS 1 Bridge
--------------------------------------------------
+使用 rosbag 和 ROS 1 Bridge 录制话题数据
+----------------------------------------
 
-In this example, we'll be using the ``cam2image`` demo program that comes with ROS 2 and a Python script to emulate a simple turtlebot-like robot's sensor data so that we can bridge it to ROS 1 and use rosbag to record it.
+在本示例中，我们将使用 ROS 2 自带的 ``cam2image`` 演示程序，以及一个 Python 脚本来模拟类似 turtlebot 机器人的传感器数据，以便将其桥接到 ROS 1 并用 rosbag 录制。
 
-First we'll run a ROS 1 ``roscore`` in a new shell:
+首先，我们在一个新 shell 中运行 ROS 1 的 ``roscore``：
 
 .. tabs::
 
@@ -35,12 +35,12 @@ First we'll run a ROS 1 ``roscore`` in a new shell:
          $ . ~/ros_catkin_ws/install_isolated/setup.bash
          $ rocore
 
-Then we'll run the ROS 1 <=> ROS 2 ``dynamic_bridge`` with the ``--bridge-all-topics`` option (so we can do ``rostopic list`` and see them) in another shell:
+然后在另一个 shell 中运行带 ``--bridge-all-topics`` 选项的 ROS 1 <=> ROS 2 ``dynamic_bridge`` （这样我们就可以运行 ``rostopic list`` 并看到它们）：
 
 .. note::
 
-   If you installed rosbridge from source, adapt the path to the setup file accordingly:
-   ``. <workspace-with-bridge>/install/setup.bash``.
+   如果你是从源代码安装 rosbridge 的，请相应调整 setup 文件的路径：
+   ``. <带桥接的工作空间>/install/setup.bash``。
 
 .. tabs::
 
@@ -65,20 +65,20 @@ Then we'll run the ROS 1 <=> ROS 2 ``dynamic_bridge`` with the ``--bridge-all-to
 
 ----
 
-Now we can start up the ROS 2 programs that will emulate our turtlebot-like robot.
-First we'll run the ``cam2image`` program with the ``-b`` option so it doesn't require a camera to work.
-In another shell:
+现在我们可以启动 ROS 2 程序来模拟我们的类 turtlebot 机器人。
+首先，我们用 ``-b`` 选项运行 ``cam2image`` 程序，这样它就不需要摄像头也能工作。
+在另一个 shell 中：
 
 .. code-block:: console
 
    $ . /opt/ros/ardent/setup.bash
    $ ros2 run image_tools cam2image -- -b
 
-TODO: use namespaced topic names
+TODO: 使用命名空间话题名称
 
-Then we'll run a simple Python script to emulate the ``odom`` and ``imu_data`` topics from a Kobuki base.
-I would use the more accurate ``~sensors/imu_data`` topic name for the imu data, but we don't have namespace support just yet in ROS 2 (it's coming!).
-Place this script in a file called ``emulate_kobuki_node.py``:
+然后我们运行一个简单的 Python 脚本来模拟 Kobuki 底座的 ``odom`` 和 ``imu_data`` 话题。
+我会使用更准确的 ``~sensors/imu_data`` 话题名称来表示 imu 数据，但 ROS 2 目前还没有命名空间支持（它即将到来！）。
+将此脚本放在一个名为 ``emulate_kobuki_node.py`` 的文件中：
 
 .. code-block:: python
 
@@ -121,7 +121,7 @@ Place this script in a file called ``emulate_kobuki_node.py``:
    if __name__ == '__main__':
        sys.exit(main())
 
-You can run this python script in a new ROS 2 shell:
+你可以在一个新的 ROS 2 shell 中运行这个 Python 脚本：
 
 .. code-block:: console
 
@@ -130,11 +130,11 @@ You can run this python script in a new ROS 2 shell:
 
 .. note::
 
-   If building ROS 2 from source adapt the path to the setup file accordingly: ``<workspace-with-bridge>/install/setup.bash``.
+   如果是从源代码构建 ROS 2，请相应调整 setup 文件的路径：``<带桥接的工作空间>/install/setup.bash``。
 
 ----
 
-Now that all the data sources and the dynamic bridge are running, we can look at the available topics in a new ROS 1 shell:
+现在所有数据源和动态桥接都在运行了，我们可以在一个新的 ROS 1 shell 中查看可用的话题：
 
 .. tabs::
 
@@ -162,13 +162,13 @@ Now that all the data sources and the dynamic bridge are running, we can look at
        /rosout
        /rosout_agg
 
-We can now record this data with ``rosbag record`` in the same shell:
+现在我们可以用 ``rosbag record`` 在同一个 shell 中录制这些数据：
 
 .. code-block:: console
 
    $ rosbag record /image /imu_data /odom
 
-After a few seconds you can ``Ctrl-c`` the ``rosbag`` command and do an ``ls -lh`` to see how big the file is, you might see something like this:
+几秒钟后，你可以对 ``rosbag`` 命令执行 ``Ctrl-c``，然后执行 ``ls -lh`` 看看文件有多大，你可能会看到类似这样的结果：
 
 .. code-block:: console
 
@@ -176,17 +176,17 @@ After a few seconds you can ``Ctrl-c`` the ``rosbag`` command and do an ``ls -lh
    total 0
    -rw-rw-r-- 1 william william  12M Feb 23 16:59 2017-02-23-16-59-47.bag
 
-Though the file name will be different for your bag (since it is derived from the date and time).
+不过你的 bag 文件名会不同（因为它是根据日期和时间派生的）。
 
-Playing back topic data with rosbag and ROS 1 Bridge
-----------------------------------------------------
+使用 rosbag 和 ROS 1 Bridge 回放话题数据
+----------------------------------------
 
-Now that we have a bag file you can use any of the ROS 1 tools to introspect the bag file, like ``rosbag info <bag file>``, ``rostopic list -b <bag file>``, or ``rqt_bag <bag file>``.
-However, we can also playback bag data into ROS 2 using ``rosbag play`` and the ROS 1 <=> ROS 2 ``dynamic_bridge``.
+现在我们有了一个 bag 文件，你可以使用任何 ROS 1 工具来检视这个 bag 文件，比如 ``rosbag info <bag file>``、``rostopic list -b <bag file>`` 或 ``rqt_bag <bag file>``。
+不过，我们也可以使用 ``rosbag play`` 和 ROS 1 <=> ROS 2 的 ``dynamic_bridge`` 将 bag 数据回放到 ROS 2 中。
 
-First close out all the shells you opened for the previous tutorial, stopping any running programs.
+首先，关闭你为上一个教程打开的所有 shell，停止所有正在运行的程序。
 
-Then in a new shell start the ``roscore``:
+然后在一个新 shell 中启动 ``roscore``：
 
 .. tabs::
 
@@ -204,7 +204,7 @@ Then in a new shell start the ``roscore``:
         $ . ~/ros_catkin_ws/install_isolated/setup.bash
         $ roscore
 
-Then run the ``dynamic_bridge`` in another shell:
+然后在另一个 shell 中运行 ``dynamic_bridge``：
 
 .. tabs::
 
@@ -226,7 +226,7 @@ Then run the ``dynamic_bridge`` in another shell:
        $ export ROS_MASTER_URI=http://localhost:11311
        $ ros2 run ros1_bridge dynamic_bridge --bridge-all-topics
 
-Then play the bag data back with ``rosbag play`` in another new shell, using the ``--loop`` option so that we don't have to keep restarting it for short bags:
+然后在另一个新 shell 中用 ``rosbag play`` 回放 bag 数据，使用 ``--loop`` 选项，这样对于较短的 bag 我们就不必反复重启它：
 
 .. tabs::
 
@@ -246,11 +246,11 @@ Then play the bag data back with ``rosbag play`` in another new shell, using the
 
 .. note::
 
-   Make sure to replace ``path/to/bag_file`` with the path to the bag file you want to play back.
+   请确保将 ``path/to/bag_file`` 替换为你想要回放的 bag 文件的路径。
 
 ----
 
-Now that the data is being played back and the bridge is running we can see the data coming across in ROS 2.
+现在数据正在回放且桥接正在运行，我们可以在 ROS 2 中看到传过来的数据。
 
 .. code-block:: console
 
@@ -263,7 +263,7 @@ Now that the data is being played back and the bridge is running we can see the 
    /parameter_events
    $ ros2 topic echo /odom
 
-You can also see the image being played from the bag by using the ``showimage`` tool:
+你还可以使用 ``showimage`` 工具看到从 bag 中回放的图像：
 
 .. code-block:: console
 

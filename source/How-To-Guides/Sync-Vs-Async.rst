@@ -5,40 +5,40 @@
 
 .. _SyncAsync:
 
-Synchronous vs. asynchronous service clients
-============================================
+同步与异步服务客户端
+====================
 
-**Level:** Intermediate
+**级别：** 中级
 
-**Time:** 10 minutes
+**时间：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
 
-Introduction
-------------
+引言
+----
 
-This guide is intended to warn users of the risks associated with the Python synchronous service client ``call()`` API.
-It is very easy to mistakenly cause deadlock when calling services synchronously, so we do not recommend using ``call()``.
+本指南旨在提醒用户注意 Python 同步服务客户端 ``call()`` API 相关的风险。
+在同步调用服务时很容易误导致死锁，因此我们不推荐使用 ``call()``。
 
-We provide an example on how to use ``call()`` correctly for experienced users who wish to use synchronous calls and are aware of the pitfalls.
-We also highlight possible scenarios for deadlock that accompany it.
+我们提供了一个关于如何正确使用 ``call()`` 的示例，供那些希望使用同步调用并了解其陷阱的有经验用户参考。
+我们还指出了随之而来的几种可能的死锁场景。
 
-Because we recommend avoiding sync calls, this guide will also address the features and usage of the recommended alternative, async calls (``call_async()``).
+由于我们建议避免同步调用，本指南还将介绍推荐替代方案——异步调用（``call_async()``）的特性与用法。
 
-The C++ service call API is only available in async, so the comparisons and examples in this guide pertain to Python services and clients.
-The definition of async given here generally applies to C++, with some exceptions.
+C++ 服务调用 API 仅提供异步形式，因此本指南中的比较和示例均针对 Python 服务与客户端。
+这里给出的异步定义通常也适用于 C++，但有一些例外。
 
-1 Synchronous calls
--------------------
+1 同步调用
+----------
 
-A synchronous client will block the calling thread when sending a request to a service until a response has been received; nothing else can happen on that thread during the call.
-The call can take arbitrary amounts of time to complete.
-Once complete, the response returns directly to the client.
+同步客户端在向服务发送请求时会阻塞调用线程，直到收到响应为止；在调用期间该线程上无法进行其他操作。
+调用可能耗时任意长的时间。
+一旦完成，响应会直接返回给客户端。
 
-The following is an example of how to correctly execute a synchronous service call from a client node, similar to the async node in the :doc:`Simple Service and Client <../Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Service-And-Client>` tutorial.
+下面是一个如何从客户端节点正确执行同步服务调用的示例，它类似于 :doc:`简单服务与客户端 <../Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Service-And-Client>` 教程中的异步节点。
 
 .. code-block:: python
 
@@ -85,19 +85,19 @@ The following is an example of how to correctly execute a synchronous service ca
   if __name__ == '__main__':
       main()
 
-Note inside ``main()`` that the client calls ``rclpy.spin`` in a separate thread.
-Both ``send_request`` and ``rclpy.spin`` are blocking, so they need to be on separate threads.
+请注意，在 ``main()`` 中客户端在单独的线程里调用 ``rclpy.spin``。
+``send_request`` 和 ``rclpy.spin`` 都是阻塞的，因此它们必须位于不同的线程上。
 
-1.1 Sync deadlock
------------------
+1.1 同步死锁
+------------
 
-There are several ways that the synchronous ``call()`` API can cause deadlock.
+同步 ``call()`` API 有多种方式可能导致死锁。
 
-As mentioned in the comments of the example above, failing to create a separate thread to spin ``rclpy`` is one cause of deadlock.
-When a client is blocking a thread waiting for a response, but the response can only be returned on that same thread, the client will never stop waiting, and nothing else can happen.
+正如上面示例的注释中所提到的，未能创建单独的线程来 spin ``rclpy`` 是导致死锁的原因之一。
+当客户端阻塞了一个线程等待响应，而响应只能在同一线程上返回时，客户端将永远等待下去，其他任何事情都无法进行。
 
-Another cause of deadlock is blocking ``rclpy.spin`` by calling a service synchronously in a subscription, timer callback or service callback.
-For example, if the synchronous client's ``send_request`` is placed in a callback:
+导致死锁的另一个原因是在订阅、定时器回调或服务回调中同步调用服务，从而阻塞了 ``rclpy.spin``。
+例如，如果把同步客户端的 ``send_request`` 放在回调中：
 
 .. code-block:: python
 
@@ -110,24 +110,24 @@ For example, if the synchronous client's ``send_request`` is placed in a callbac
 
   rclpy.spin(minimal_client)
 
-Deadlock occurs because ``rclpy.spin`` will not preempt the callback with the ``send_request`` call.
-In general, callbacks should only perform light and fast operations.
+发生死锁是因为 ``rclpy.spin`` 不会因 ``send_request`` 调用而抢占该回调。
+一般来说，回调只应执行轻量且快速的操作。
 
 .. warning::
 
-  When deadlock occurs, you will not receive any indication that the service is blocked.
-  There will be no warning or exception thrown, no indication in the stack trace, and the call will not fail.
+  发生死锁时，你不会收到任何表明服务被阻塞的提示。
+  不会有警告或异常抛出，堆栈跟踪中也没有任何迹象，调用也不会失败。
 
-2 Asynchronous calls
---------------------
+2 异步调用
+----------
 
-Async calls in ``rclpy`` are entirely safe and the recommended method of calling services.
-They can be made from anywhere without running the risk of blocking other ROS and non-ROS processes, unlike sync calls.
+``rclpy`` 中的异步调用是完全安全的，也是推荐的服务调用方式。
+与同步调用不同，它们可以从任何地方发出，而不会有阻塞其他 ROS 和非 ROS 进程的风险。
 
-An asynchronous client will immediately return ``future``, a value that indicates whether the call and response is finished (not the value of the response itself), after sending a request to a service.
-The returned ``future`` may be queried for a response at any time.
+异步客户端在向服务发送请求后会立即返回 ``future``，它是一个指示调用和响应是否已完成的值（而不是响应本身的值）。
+返回的 ``future`` 可以随时查询其响应。
 
-Since sending a request doesn't block anything, a loop can be used to both spin ``rclpy`` and check ``future`` in the same thread, for example:
+由于发送请求不会阻塞任何东西，因此可以在同一个线程中用循环既 spin ``rclpy`` 又检查 ``future``，例如：
 
 .. code-block:: python
 
@@ -136,16 +136,16 @@ Since sending a request doesn't block anything, a loop can be used to both spin 
         if future.done():
             #Get response
 
-The :doc:`Simple Service and Client <../Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Service-And-Client>` tutorial for Python illustrates how to perform an async service call and retrieve the ``future`` using a loop.
+:doc:`简单服务与客户端 <../Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Service-And-Client>` Python 教程演示了如何执行异步服务调用并使用循环获取 ``future``。
 
-The ``future`` can also be retrieved using a timer or callback, like in `this example <https://github.com/ros2/examples/blob/{REPOS_FILE_BRANCH}/rclpy/services/minimal_client/examples_rclpy_minimal_client/client_async_callback.py>`_, a dedicated thread, or by another method.
-It is up to you, as the caller, to decide how to store ``future``, check on its status, and retrieve your response.
+``future`` 也可以使用定时器或回调来获取，例如 `这个示例 <https://github.com/ros2/examples/blob/{REPOS_FILE_BRANCH}/rclpy/services/minimal_client/examples_rclpy_minimal_client/client_async_callback.py>`_ 中那样，或者使用专用线程，或通过其他方法。
+作为调用者，你需要自行决定如何存储 ``future``、检查其状态以及获取响应。
 
-Summary
--------
+总结
+----
 
-It is not recommended to implement a synchronous service client.
-They are susceptible to deadlock, but will not provide any indication of issue when deadlock occurs.
-If you must use synchronous calls, the example in section `1 Synchronous calls`_ is a safe method of doing so.
-You should also be aware of the conditions that cause deadlock outlined in section `1.1 Sync deadlock`_.
-We recommend using async service clients instead.
+不推荐实现同步服务客户端。
+它们容易发生死锁，而且在发生死锁时不会提供任何问题提示。
+如果你必须使用同步调用，`1 同步调用`_ 小节中的示例是一种安全的做法。
+你还应了解 `1.1 同步死锁`_ 小节中概述的导致死锁的各种条件。
+我们建议改用异步服务客户端。

@@ -1,7 +1,7 @@
-Visualizing Data and Teleoperating with Phantom Bridge
-======================================================
+使用 Phantom Bridge 可视化数据与远程操作
+========================================
 
-Redirecting to `https://docs.phntm.io/bridge <https://docs.phntm.io/bridge>`_...
+正在重定向到 `https://docs.phntm.io/bridge <https://docs.phntm.io/bridge>`_...
 
 .. raw:: html
 

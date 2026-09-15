@@ -1,46 +1,46 @@
-Marker: Points and Lines (C++)
-==============================
+Marker：点和线（C++）
+=====================
 
-**Goal:** Show how to use ``visualization_msgs/msg/Marker`` messages to send points and lines to RViz.
+**目标：** 展示如何使用 ``visualization_msgs/msg/Marker`` 消息将点和线发送到 RViz。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 15 Minutes
+**时间：** 15 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 3
    :local:
 
 .. note::
 
-   This tutorial assumes that you have completed :doc:`Marker: Sending Basic Shapes <../Marker-Sending-Basic-Shapes/Marker-Sending-Basic-Shapes>`.
+   本教程假设你已经完成了 :doc:`Marker：发送基本形状 <../Marker-Sending-Basic-Shapes/Marker-Sending-Basic-Shapes>`。
 
-Intro
------
-In :doc:`Marker: Sending Basic Shapes <../Marker-Sending-Basic-Shapes/Marker-Sending-Basic-Shapes>` you learned how to send simple shapes to RViz using visualization markers.
-You can send more than just simple shapes, and this tutorial introduces the ``POINTS``, ``LINE_STRIP``, and ``LINE_LIST`` marker types.
-For a full list of types, see :doc:`Marker: Display types <../Marker-Display-types/Marker-Display-types>`.
+引言
+----
+在 :doc:`Marker：发送基本形状 <../Marker-Sending-Basic-Shapes/Marker-Sending-Basic-Shapes>` 中，你学习了如何使用可视化标记向 RViz 发送简单形状。
+你可以发送的不仅仅是简单形状，本教程介绍 ``POINTS``、``LINE_STRIP`` 和 ``LINE_LIST`` 标记类型。
+有关类型的完整列表，请参见 :doc:`Marker：显示类型 <../Marker-Display-types/Marker-Display-types>`。
 
-Using Points, Line Strips, and Line Lists
------------------------------------------
-The ``POINTS``, ``LINE_STRIP``, and ``LINE_LIST`` markers all use the ``points`` member of the ``visualization_msgs/msg/Marker`` message.
-The ``POINTS`` type places a point at each point added.
-The ``LINE_STRIP`` type uses each point as a vertex in a connected set of lines, where point 0 is connected to point 1, 1 to 2, 2 to 3, and so on.
-The ``LINE_LIST`` type creates unconnected lines out of each pair of points, such as point 0 to 1, 2 to 3, and so on.
+使用点、线带和线列表
+--------------------
+``POINTS``、``LINE_STRIP`` 和 ``LINE_LIST`` 标记都使用 ``visualization_msgs/msg/Marker`` 消息的 ``points`` 成员。
+``POINTS`` 类型在每个添加的点处放置一个点。
+``LINE_STRIP`` 类型将每个点作为一组连接线的顶点，其中点 0 连接到点 1，1 连接到 2，2 连接到 3，依此类推。
+``LINE_LIST`` 类型由每对点创建不相连的线，例如点 0 到 1，2 到 3，依此类推。
 
 
-The code
+代码
+^^^^
+从 `visualization_tutorials 仓库 <https://github.com/ros-visualization/visualization_tutorials>`_ 获取包。
+本教程的代码位于 ``visualization_marker_tutorials`` 包中。
+你可以在 `points_and_lines.cpp <https://github.com/ros-visualization/visualization_tutorials/blob/ros2/visualization_marker_tutorials/src/points_and_lines.cpp>`_ 中阅读它。
+
+代码解析
 ^^^^^^^^
-Get the package from the `visualization_tutorials repository <https://github.com/ros-visualization/visualization_tutorials>`_.
-The code for this tutorial lives in the ``visualization_marker_tutorials`` package.
-You can read it in `points_and_lines.cpp <https://github.com/ros-visualization/visualization_tutorials/blob/ros2/visualization_marker_tutorials/src/points_and_lines.cpp>`_.
+现在让我们分解代码，跳过上一个教程中已经解释过的部分。
+创建的整体效果是一个旋转的螺旋线，每个顶点处有向上延伸的线。
 
-The code explained
-^^^^^^^^^^^^^^^^^^
-Now let's break down the code, skipping things that were explained in the previous tutorial.
-The overall effect created is a rotating helix with lines sticking upwards from each vertex.
-
-We start with the headers used by the node, including ``cmath`` for the helix and the messages used for markers and points.
+我们从节点使用的头文件开始，包括用于螺旋线的 ``cmath`` 以及用于标记和点的消息。
 
 .. code-block:: c++
 
@@ -54,8 +54,8 @@ We start with the headers used by the node, including ``cmath`` for the helix an
    #include "geometry_msgs/msg/point.hpp"
    #include "visualization_msgs/msg/marker.hpp"
 
-This should look familiar.
-We initialize ROS 2, create a node, create a publisher on the ``visualization_marker`` topic, and set the loop rate.
+这应该看起来很熟悉。
+我们初始化 ROS 2，创建一个节点，在 ``visualization_marker`` 话题上创建一个发布者，并设置循环速率。
 
 .. code-block:: c++
 
@@ -65,14 +65,14 @@ We initialize ROS 2, create a node, create a publisher on the ``visualization_ma
      "visualization_marker", 10);
    rclcpp::Rate loop_rate(30);
 
-We also create a floating-point variable that will be used to animate the helix over time.
+我们还创建一个浮点变量，用于随时间对螺旋线进行动画。
 
 .. code-block:: c++
 
    float f = 0.0f;
 
-Inside the main loop, we create three ``visualization_msgs/msg/Marker`` messages and initialize all of their shared data.
-By default, a marker message contains a pose whose quaternion is initialized to the identity orientation, so we only need to set the fields that matter for this tutorial.
+在主循环内部，我们创建三个 ``visualization_msgs/msg/Marker`` 消息并初始化它们所有的共享数据。
+默认情况下，标记消息包含一个位姿，其四元数初始化为单位方向，因此我们只需要设置对本教程重要的字段。
 
 .. code-block:: c++
 
@@ -82,8 +82,8 @@ By default, a marker message contains a pose whose quaternion is initialized to 
    points.ns = line_strip.ns = line_list.ns = "points_and_lines";
    points.action = line_strip.action = line_list.action = visualization_msgs::msg::Marker::ADD;
 
-Here we assign three different IDs to the three markers.
-The use of the ``points_and_lines`` namespace ensures they will not collide with other marker publishers.
+这里我们为三个标记分配三个不同的 ID。
+使用 ``points_and_lines`` namespace 确保它们不会与其他标记发布者冲突。
 
 .. code-block:: c++
 
@@ -91,7 +91,7 @@ The use of the ``points_and_lines`` namespace ensures they will not collide with
    line_strip.id = 1;
    line_list.id = 2;
 
-Here we set the marker types to ``POINTS``, ``LINE_STRIP``, and ``LINE_LIST``.
+这里我们将标记类型设置为 ``POINTS``、``LINE_STRIP`` 和 ``LINE_LIST``。
 
 .. code-block:: c++
 
@@ -99,9 +99,9 @@ Here we set the marker types to ``POINTS``, ``LINE_STRIP``, and ``LINE_LIST``.
    line_strip.type = visualization_msgs::msg::Marker::LINE_STRIP;
    line_list.type = visualization_msgs::msg::Marker::LINE_LIST;
 
-The ``scale`` member means different things for these marker types.
-``POINTS`` markers use the ``x`` and ``y`` members for width and height respectively, while ``LINE_STRIP`` and ``LINE_LIST`` markers use only the ``x`` component, which defines the line width.
-Scale values are in meters.
+``scale`` 成员对这些标记类型意味着不同的东西。
+``POINTS`` 标记分别使用 ``x`` 和 ``y`` 成员表示宽度和高度，而 ``LINE_STRIP`` 和 ``LINE_LIST`` 标记只使用 ``x`` 分量，它定义线宽。
+缩放值以米为单位。
 
 .. code-block:: c++
 
@@ -111,8 +111,8 @@ Scale values are in meters.
    line_strip.scale.x = 0.1;
    line_list.scale.x = 0.1;
 
-Here we set the points to green, the line strip to blue, and the line list to red.
-As with other markers, the alpha channel must be non-zero.
+这里我们将点设置为绿色，线带设置为蓝色，线列表设置为红色。
+与其他标记一样，Alpha 通道必须为非零。
 
 .. code-block:: c++
 
@@ -125,9 +125,9 @@ As with other markers, the alpha channel must be non-zero.
    line_list.color.r = 1.0;
    line_list.color.a = 1.0;
 
-Now we create the vertices for the points and lines.
-We use sine and cosine to generate a helix.
-The ``POINTS`` and ``LINE_STRIP`` markers both require only one point for each vertex, while the ``LINE_LIST`` marker requires two points for each line segment.
+现在我们创建点和线的顶点。
+我们使用正弦和余弦生成螺旋线。
+``POINTS`` 和 ``LINE_STRIP`` 标记每个顶点只需要一个点，而 ``LINE_LIST`` 标记每个线段需要两个点。
 
 .. code-block:: c++
 
@@ -149,7 +149,7 @@ The ``POINTS`` and ``LINE_STRIP`` markers both require only one point for each v
      line_list.points.push_back(p);
    }
 
-Once the marker messages are filled out, we publish all three of them.
+一旦标记消息填充完成，我们发布所有三个消息。
 
 .. code-block:: c++
 
@@ -157,47 +157,47 @@ Once the marker messages are filled out, we publish all three of them.
    marker_pub->publish(line_strip);
    marker_pub->publish(line_list);
 
-Then we sleep, advance the animation phase, and loop back to the top.
+然后我们睡眠，推进动画相位，并循环回顶部。
 
 .. code-block:: c++
 
    loop_rate.sleep();
    f += 0.04f;
 
-Viewing the markers
-^^^^^^^^^^^^^^^^^^^
-Build the package in your workspace:
+查看标记
+^^^^^^^^
+在你的工作空间中构建包：
 
 .. code-block:: console
 
    $ colcon build --packages-select visualization_marker_tutorials
 
-Then source your workspace and run the node:
+然后 source 你的工作空间并运行节点：
 
 .. code-block:: console
 
    $ source install/setup.bash
    $ ros2 run visualization_marker_tutorials points_and_lines
 
-Now run RViz:
+现在运行 RViz：
 
 .. code-block:: console
 
    $ source install/setup.bash
    $ ros2 run rviz2 rviz2
 
-If you have never used RViz before, start with the :doc:`RViz User Guide <../RViz-User-Guide/RViz-User-Guide>`.
+如果你以前从未使用过 RViz，请从 :doc:`RViz 用户指南 <../RViz-User-Guide/RViz-User-Guide>` 开始。
 
-Set up RViz the same way you did in the last tutorial.
-Because we do not have any transforms set up, set the ``Fixed Frame`` to ``my_frame``.
-Then add a ``Marker`` display.
-The default topic, ``visualization_marker``, is the same one being published by the node.
+按照与上一个教程相同的方式设置 RViz。
+因为我们没有设置任何变换，请将 ``Fixed Frame`` 设置为 ``my_frame``。
+然后添加一个 ``Marker`` 显示项。
+默认话题 ``visualization_marker`` 与节点发布的话题相同。
 
-You should see a rotating helix that looks something like this:
+你应该能看到一个旋转的螺旋线，看起来像这样：
 
 .. image:: images/points_and_lines_marker_tutorial.png
 
-Next steps
-----------
-For more information about the markers and options supported by RViz, continue with :doc:`Marker: Display types <../Marker-Display-types/Marker-Display-types>`.
-Try out some of the other marker types.
+下一步
+------
+有关 RViz 支持的标记和选项的更多信息，继续学习 :doc:`Marker：显示类型 <../Marker-Display-types/Marker-Display-types>`。
+试试其他一些标记类型。

@@ -2,64 +2,64 @@
 
   Beta1-Overview
 
-Beta 1 (``Asphalt``)
-====================
+Beta 1（``Asphalt``）
+=====================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Supported Platforms
--------------------
+支持的平台
+----------
 
-We support ROS 2 Beta 1 on three platforms: Ubuntu 16.04 (Xenial), Mac OS X 10.11 (El Capitan), and Windows 8.1 and 10. We provide both binary packages and instructions for how to compile from source for all 3 platforms.
+我们在三个平台上支持 ROS 2 Beta 1：Ubuntu 16.04（Xenial）、Mac OS X 10.11（El Capitan）以及 Windows 8.1 和 10。我们为全部 3 个平台同时提供二进制软件包和从源代码编译的说明。
 
-Features
---------
+功能
+----
 
-Improvements since Alpha 8 release
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+自 Alpha 8 发布以来的改进
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Support for node composition at compile, link, or runtime.
-* A standard lifecycle for managed nodes.
-* Improved support for Quality of Service tuning and tests.
-* `New and updated design documents <https://design.ros2.org/>`__
-* More `tutorials <../../Tutorials>` and `examples <https://github.com/ros2/examples>`__
-* Bridging services to / from ROS 1 (in addition to topics)
+* 支持在编译时、链接时或运行时进行节点组合。
+* 受管节点的标准生命周期。
+* 改进对服务质量调优和测试的支持。
+* `新增和更新的设计文档 <https://design.ros2.org/>`__
+* 更多的 `教程 <../../Tutorials>` 和 `示例 <https://github.com/ros2/examples>`__
+* 与 ROS 1 互相桥接服务（除话题之外）
 
-Selected features from previous Alpha releases
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+先前 Alpha 版本中的部分功能
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For the complete list, see `earlier release notes <../index>`.
+完整列表请参见 `早期发行说明 <../index>`。
 
 
-* C++ and Python implementations of ROS 2 client libraries including APIs for:
+* ROS 2 客户端库的 C++ 和 Python 实现，包括以下 API：
 
-  * Publishing and subscribing to ROS topics
-  * Requesting and replying ROS services (synchronous (C++ only) and asynchronous)
-  * Getting and setting ROS parameters (C++ only, synchronous and asynchronous)
-  * Timer callbacks
-  * Support for interoperability between multiple DDS/RTPS implementations
-  * eProsima Fast RTPS is our default implementation, and is included in the binary packages
-  * RTI Connext is supported: build from source to try it out
-  * We initially supported PrismTech OpenSplice but eventually decided to drop it
+  * 发布和订阅 ROS 话题
+  * 请求和应答 ROS 服务（同步（仅 C++）和异步）
+  * 获取和设置 ROS 参数（仅 C++，同步和异步）
+  * 定时器回调
+  * 支持多个 DDS/RTPS 实现之间的互操作
+  * eProsima Fast RTPS 是我们的默认实现，并包含在二进制软件包中
+  * 支持 RTI Connext：从源代码构建即可试用
+  * 我们最初支持 PrismTech OpenSplice，但最终决定放弃它
 
-* A graph API for network events
-* Distributed discovery
-* Realtime safe code paths for publish and subscribe with compatible DDS implementation (only Connext at the moment)
+* 用于网络事件的图 API
+* 分布式发现
+* 与兼容的 DDS 实现搭配时用于发布和订阅的实时安全代码路径（目前仅 Connext）
 
-  * Support for custom allocators
+  * 支持自定义分配器
 
-* ROS 1 <-> ROS 2 dynamic bridge node
-* Executor threading model in C++
-* Extended ``.msg`` format with new features:
+* ROS 1 <-> ROS 2 动态桥接节点
+* C++ 中的执行器线程模型
+* 扩展的 ``.msg`` 格式，新增以下功能：
 
-  * Bounded arrays
-  * Default values
+  * 有界数组
+  * 默认值
 
-Known issues
-^^^^^^^^^^^^
+已知问题
+^^^^^^^^
 
-* We're tracking issues in various repositories, but the main entry point is the `ros2/ros2 issue tracker <https://github.com/ros2/ros2/issues>`__
-* We'd like to highlight a `known issue <https://github.com/ros2/rmw_fastrtps/issues/81>`__ that we are working with eProsima to fix that results in significantly degrated performance for large messages under FastRTPS.
-  This will be observed when running some of the demos with larger image resolutions.
+* 我们在各个仓库中跟踪问题，但主要的入口是 `ros2/ros2 issue 跟踪器 <https://github.com/ros2/ros2/issues>`__
+* 我们想特别指出一个 `已知问题 <https://github.com/ros2/rmw_fastrtps/issues/81>`__，我们正与 eProsima 合作修复它，该问题会导致 FastRTPS 下大消息的性能显著下降。
+  在运行一些使用较大图像分辨率的演示时会出现该问题。

@@ -1,151 +1,151 @@
-Installation (macOS)
-====================
+安装（macOS）
+=============
 
-**Goal:** Install the ``webots_ros2`` package and run simulation examples on macOS.
+**目标：** 安装 ``webots_ros2`` 软件包，并在 macOS 上运行仿真示例。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 10 minutes
+**时间：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-The ``webots_ros2`` package provides an interface between ROS 2 and Webots.
-It includes several sub-packages, including ``webots_ros2_driver``, which allows you to start Webots and communicate with it.
-Other sub-packages are mainly examples that show multiple possible implementations using the interface.
-In this tutorial, you are going to install the package and learn how to run one of these examples.
+``webots_ros2`` 软件包提供了 ROS 2 与 Webots 之间的接口。
+它包含多个子包，包括 ``webots_ros2_driver``，该子包允许你启动 Webots 并与它通信。
+其他子包主要是示例，展示了使用该接口的多种可能实现。
+在本教程中，你将安装该软件包，并学习如何运行其中一个示例。
 
-Prerequisites
--------------
+前置条件
+--------
 
-It is recommended to understand basic ROS principles covered in the beginner :doc:`../../../../Tutorials`.
-In particular, :doc:`../../../Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace` and :doc:`../../../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package` are useful prerequisites.
+建议理解初学者 :doc:`../../../../Tutorials` 中涵盖的基本 ROS 原理。
+特别是 :doc:`../../../Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace` 和 :doc:`../../../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package` 是有用的前置条件。
 
-It is necessary to install Webots natively on the mac in order to use the ``webots_ros2`` package in the virtual machine as explained below.
-You can follow the `installation procedure <https://cyberbotics.com/doc/guide/installation-procedure>`_ or `build it from sources <https://github.com/cyberbotics/webots/wiki/macOS-installation/>`_.
+如下文所述，为了在虚拟机中使用 ``webots_ros2`` 软件包，必须在 Mac 上原生安装 Webots。
+你可以遵循 `安装步骤 <https://cyberbotics.com/doc/guide/installation-procedure>`_ 或 `从源码构建 <https://github.com/cyberbotics/webots/wiki/macOS-installation/>`_。
 
-Tasks
------
+任务
+----
 
-On macOS, a solution based on UTM virtual machines provides an improved user experience with ROS 2 compared to native macOS installation, as it runs ROS in a Linux environment.
-However, Webots should be installed natively on macOS and it will be able to communicate with the ROS nodes running in the Virtual Machine (VM).
-This solution allows for native 3D hardware acceleration for Webots.
-The VM runs all the ROS part (including RViz) and connects to the host machine through TCP to start Webots.
-A shared folder allows the script to transfer the world and other resource files from the VM to macOS where Webots is running.
+在 macOS 上，基于 UTM 虚拟机的方案相比原生 macOS 安装能带来更好的 ROS 2 使用体验，因为它是在 Linux 环境中运行 ROS。
+但是，Webots 应该原生安装在 macOS 上，它将能够与运行在虚拟机（VM）中的 ROS 节点通信。
+此方案允许 Webots 使用原生 3D 硬件加速。
+VM 运行所有 ROS 部分（包括 RViz），并通过 TCP 连接到主机以启动 Webots。
+一个共享文件夹允许脚本将 world 文件和其他资源文件从 VM 传输到运行 Webots 的 macOS。
 
-The following steps explain how to create the VM image with the installation of the ``webots_ros2`` released package.
-It is also possible to install it from sources.
-In the :ref:`Preconfigured Images` section, you can find already configured images for every release of Webots (starting from R2023a) to download.
+以下步骤解释了如何创建带 ``webots_ros2`` 发布包安装的 VM 镜像。
+也可以从源码安装。
+在 :ref:`Preconfigured Images` 一节中，你可以找到每个 Webots 发行版（从 R2023a 开始）已配置好的镜像供下载。
 
-1 Create the VM image
-^^^^^^^^^^^^^^^^^^^^^^
+1 创建 VM 镜像
+^^^^^^^^^^^^^^
 
-Install UTM on your macOS machine.
-The link can be found on the `official UTM website <https://mac.getutm.app/>`_.
+在你的 macOS 机器上安装 UTM。
+链接可以在 `UTM 官网 <https://mac.getutm.app/>`_ 上找到。
 
-Download the ``.iso`` image of `Ubuntu 22.04 <https://cdimage.ubuntu.com/jammy/daily-live/current/>`_ for Humble and Rolling or `Ubuntu 20.04 <https://cdimage.ubuntu.com/focal/daily-live/pending/>`_ for Foxy.
-Be sure to download the image corresponding to your CPU architecture.
+下载 `Ubuntu 22.04 <https://cdimage.ubuntu.com/jammy/daily-live/current/>`_ 的 ``.iso`` 镜像（用于 Humble 和 Rolling）或 `Ubuntu 20.04 <https://cdimage.ubuntu.com/focal/daily-live/pending/>`_ 的 ``.iso`` 镜像（用于 Foxy）。
+请务必下载与你 CPU 架构对应的镜像。
 
-In the UTM software:
+在 UTM 软件中：
 
-* Create a new image and choose ``Virtualize`` option.
-* Select the ISO image you have downloaded in the ``Boot ISO Image`` field.
-* Leave all hardware settings at default (including hardware acceleration disabled).
-* In the ``Shared Directory`` window, select a folder that will be used by ``webots_ros2`` to transfer all the Webots assets to the host.
-  In this example, the selected folder is ``/Users/username/shared``.
-* Leave all the remaining parameters as default.
-* Start the VM.
-  Note that you can select another shared folder each time you start the VM.
-* During the first launch of the VM, install Ubuntu and choose a username for your account.
-  In this example, the username is ``ubuntu``.
-* Once Ubuntu is installed, close the VM, remove the iso image from the CD/DVD field and restart the VM.
+* 创建一个新镜像，并选择 ``Virtualize`` 选项。
+* 在 ``Boot ISO Image`` 字段中选择你已下载的 ISO 镜像。
+* 将所有硬件设置保留默认值（包括禁用硬件加速）。
+* 在 ``Shared Directory`` 窗口中，选择一个将被 ``webots_ros2`` 用于将所有 Webots 资源传输到主机的文件夹。
+  在本示例中，选定的文件夹是 ``/Users/username/shared``。
+* 将其余所有参数保留默认值。
+* 启动 VM。
+  注意，每次启动 VM 时你都可以选择另一个共享文件夹。
+* 在 VM 首次启动期间，安装 Ubuntu 并为你的账户选择一个用户名。
+  在本示例中，用户名是 ``ubuntu``。
+* 一旦 Ubuntu 安装完成，关闭 VM，从 CD/DVD 字段中移除 iso 镜像，然后重新启动 VM。
 
-2 Configure the VM
-^^^^^^^^^^^^^^^^^^
-In this section, ROS 2 is installed in the VM and the shared folder is configured.
-The following instructions and commands are all run inside the VM.
+2 配置 VM
+^^^^^^^^^
+在本节中，ROS 2 被安装在 VM 中，并配置共享文件夹。
+以下说明和命令都在 VM 内部运行。
 
-* Open a terminal in the started VM and install the ROS 2 distribution you need by following the instructions in :doc:`../../../../Installation/Ubuntu-Install-Debs`:
-* Create a folder in the VM to use as a shared folder.
-  In this example, the shared folder in the VM is ``/home/ubuntu/shared``.
+* 在已启动的 VM 中打开终端，按照 :doc:`../../../../Installation/Ubuntu-Install-Debs` 中的说明安装你需要的 ROS 2 发行版：
+* 在 VM 中创建一个文件夹用作共享文件夹。
+  在本示例中，VM 中的共享文件夹是 ``/home/ubuntu/shared``。
 
   .. code-block:: console
 
       $ mkdir /home/ubuntu/shared
 
-* To mount this folder to the host, execute the following command.
-  Don't forget to modify the path to the shared folder, if it is different in your case.
+* 要将此文件夹挂载到主机，请执行以下命令。
+  如果你的共享文件夹路径不同，请不要忘记修改路径。
 
   .. code-block:: console
 
       $ sudo mount -t 9p -o trans=virtio share /home/ubuntu/shared -oversion=9p2000.L
 
-* To automatically mount this folder to the host when starting the VM, add the following line to ``/etc/fstab``.
-  Don't forget to modify the path to the shared folder, if it is different in your case.
+* 要在启动 VM 时自动将此文件夹挂载到主机，请将以下行添加到 ``/etc/fstab``。
+  如果你的共享文件夹路径不同，请不要忘记修改路径。
 
   .. code-block:: console
 
       share     /home/ubuntu/shared     9p      trans=virtio,version=9p2000.L,rw,_netdev,nofail 0       0
 
-* The environment variable ``WEBOTS_SHARED_FOLDER`` must always be set in order for the package to work properly in the VM.
-  This variable specifies the location of the shared folder that is used to exchange data between the host machine and the virtual machine (VM) to the ``webots_ros2`` package.
-  The value to use for this variable should be in the format of ``<host shared folder>:<VM shared folder>``, where ``<host shared folder>`` is the path to the shared folder on the host machine and ``<VM shared folder>`` is the path to the same shared folder on the VM.
+* 环境变量 ``WEBOTS_SHARED_FOLDER`` 必须始终设置，软件包才能在 VM 中正常工作。
+  此变量向 ``webots_ros2`` 软件包指定用于在主机与虚拟机（VM）之间交换数据的共享文件夹位置。
+  此变量应使用的值格式为 ``<主机共享文件夹>:<VM 共享文件夹>``，其中 ``<主机共享文件夹>`` 是主机上共享文件夹的路径，``<VM 共享文件夹>`` 是 VM 上同一个共享文件夹的路径。
 
-  In this example:
+  在本示例中：
 
   .. code-block:: console
 
     $ export WEBOTS_SHARED_FOLDER=/Users/username/shared:/home/ubuntu/shared
 
-  You can add this command line to the ``~/.bashrc`` file to automatically set this environment variable when starting a new terminal.
+  你可以将此命令行添加到 ``~/.bashrc`` 文件中，以便在启动新终端时自动设置此环境变量。
 
-3 Install ``webots_ros2``
-^^^^^^^^^^^^^^^^^^^^^^^^^
+3 安装 ``webots_ros2``
+^^^^^^^^^^^^^^^^^^^^^^
 
-You can either install ``webots_ros2`` from the official released package, or install it from the latest up-to-date sources from `Github <https://github.com/cyberbotics/webots_ros2>`_.
+你可以从官方发布包安装 ``webots_ros2``，也可以从 `Github <https://github.com/cyberbotics/webots_ros2>`_ 上的最新源码安装。
 
 .. tabs::
 
-    .. group-tab:: Install ``webots_ros2`` distributed package
+    .. group-tab:: 安装 ``webots_ros2`` 发布包
 
-        Run the following command in the VM terminal.
+        在 VM 终端中运行以下命令。
 
         .. code-block:: console
 
             $ sudo apt-get install ros-{DISTRO}-webots-ros2
 
-    .. group-tab:: Install ``webots_ros2`` from sources
+    .. group-tab:: 从源码安装 ``webots_ros2``
 
-        Install git.
+        安装 git。
 
         .. code-block:: console
 
             $ sudo apt-get install git
 
-        Create a ROS 2 workspace with its ``src`` directory.
+        创建一个带 ``src`` 目录的 ROS 2 工作空间。
 
         .. code-block:: console
 
             $ mkdir -p ~/ros2_ws/src
 
-        Source the ROS 2 environment.
+        加载 ROS 2 环境。
 
         .. code-block:: console
 
             $ source /opt/ros/{DISTRO}/setup.bash
 
-        Retrieve the sources from Github.
+        从 Github 获取源码。
 
         .. code-block:: console
 
             $ cd ~/ros2_ws
             $ git clone --recurse-submodules https://github.com/cyberbotics/webots_ros2.git src/webots_ros2
 
-        Install the package dependencies.
+        安装软件包依赖。
 
         .. code-block:: console
 
@@ -153,81 +153,81 @@ You can either install ``webots_ros2`` from the official released package, or in
             $ sudo rosdep init && rosdep update
             $ rosdep install --from-paths src --ignore-src --rosdistro {DISTRO}
 
-        Build the package using ``colcon``.
+        使用 ``colcon`` 构建软件包。
 
         .. code-block:: console
 
             $ colcon build
 
-        Source this workspace.
+        加载此工作空间。
 
         .. code-block:: console
 
             $ source install/local_setup.bash
 
-4 Launch the ``webots_ros2_universal_robot`` example
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 启动 ``webots_ros2_universal_robot`` 示例
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As mentioned in previous sections, the package uses the shared folder to communicate with Webots from the VM to the host.
-In order for Webots to be started on the host from the VM's ROS package, a local TCP simulation server must be run.
+如前面几节所述，该软件包使用共享文件夹在 VM 与主机之间与 Webots 通信。
+为了让 Webots 能够从 VM 的 ROS 软件包在主机上启动，必须运行一个本地 TCP 仿真服务器。
 
-The server can be downloaded here: `local_simulation_server.py <https://github.com/cyberbotics/webots-server/blob/main/local_simulation_server.py>`_.
-Specify the Webots installation folder in ``WEBOTS_HOME`` environment variable (e.g. ``/Applications/Webots.app``) and run the server using the following commands in a new terminal on the host (not in the VM):
+服务器可以在此处下载：`local_simulation_server.py <https://github.com/cyberbotics/webots-server/blob/main/local_simulation_server.py>`_。
+在 ``WEBOTS_HOME`` 环境变量中指定 Webots 安装文件夹（例如 ``/Applications/Webots.app``），并在主机上的新终端（不是 VM 中）运行以下命令来启动服务器：
 
 .. code-block:: console
 
         $ export WEBOTS_HOME=/Applications/Webots.app
         $ python3 local_simulation_server.py
 
-In the VM, open a terminal and execute the following commands to start a package:
+在 VM 中打开终端，执行以下命令来启动软件包：
 
-First source the ROS 2 environment, if not done already.
+如果尚未加载，请先加载 ROS 2 环境。
 
 .. code-block:: console
 
         $ source /opt/ros/{DISTRO}/setup.bash
 
-If installed from sources, source your ROS 2 workspace, if not done already.
+如果是从源码安装的，请加载你的 ROS 2 工作空间（如果尚未加载）。
 
 .. code-block:: console
 
         $ cd ~/ros2_ws
         $ source install/local_setup.bash
 
-If not already set in ``~/.bashrc``, set ``WEBOTS_SHARED_FOLDER`` (see previous sections for details).
-Be sure to change the paths according to the location of your respective directories.
+如果尚未在 ``~/.bashrc`` 中设置，请设置 ``WEBOTS_SHARED_FOLDER`` （详见前面几节）。
+请确保根据你各自目录的位置修改路径。
 
 .. code-block:: console
 
         $ export WEBOTS_SHARED_FOLDER=/Users/username/shared:/home/ubuntu/shared
 
-Use the ROS 2 launch command to start demo packages (e.g. ``webots_ros2_universal_robot``).
+使用 ROS 2 launch 命令启动演示软件包（例如 ``webots_ros2_universal_robot``）。
 
 .. code-block:: console
 
         $ ros2 launch webots_ros2_universal_robot multirobot_launch.py
 
-If Webots is closed or the ROS 2 process is interrupted, the local server will automatically wait for a new package launch and the shared folder will be cleaned for the next run.
+如果 Webots 被关闭或 ROS 2 进程被中断，本地服务器将自动等待新的软件包启动，并会清理共享文件夹以备下次运行。
 
 .. _Preconfigured Images:
 
-Pre-configured Images
------------------------
+预配置镜像
+----------
 
-If you don't want to setup the VM from scratch, the following links provide you with pre-configured UTM images for each version of Webots.
-The ``webots_ros2`` version is installed from the official repository (not from sources) and is typically the first one that is compatible with the corresponding Webots version.
-You are welcome to download an image and upgrade the package, or install it from sources if necessary.
+如果你不想从零开始设置 VM，下面的链接为你提供了每个 Webots 版本对应的预配置 UTM 镜像。
+其中的 ``webots_ros2`` 版本是从官方仓库（而不是从源码）安装的，通常是与相应 Webots 版本兼容的第一个版本。
+欢迎你下载镜像并升级该软件包，或者在必要时从源码安装它。
 
-* `Version 2023.0.2 for Webots R2023a <https://cyberbotics.com/files/ros2/webots_ros2_2023_0_2.utm.zip>`_ [6.6 GB]
-* `Version 2023.1.1 for Webots R2023b <https://cyberbotics.com/files/ros2/webots_ros2_2023_1_1.utm.zip>`_ [8.0 GB]
+* `用于 Webots R2023a 的 2023.0.2 版本 <https://cyberbotics.com/files/ros2/webots_ros2_2023_0_2.utm.zip>`_ [6.6 GB]
+* `用于 Webots R2023b 的 2023.1.1 版本 <https://cyberbotics.com/files/ros2/webots_ros2_2023_1_1.utm.zip>`_ [8.0 GB]
 
-When adding the downloaded image to the UTM software, you should also choose the path to the host shared folder before starting the VM in the drop-down menu (e.g. ``/Users/username/shared``).
-Once the VM is started, the ``WEBOTS_SHARED_FOLDER`` environment variable must always be set for the package to work properly in the virtual machine (VM).
-This variable specifies to the ``webots_ros2`` package the location of the shared folder that is used to exchange data between the host machine and the VM.
-The value for this variable should be in the format of ``<host shared folder>:<VM shared folder>``, where ``<host shared folder>`` is the path to the shared folder on the host machine and ``<VM shared folder>`` is the path to the same shared folder on the VM.
+在把下载的镜像添加到 UTM 软件时，你还应该在启动 VM 之前，在下拉菜单中选择主机共享文件夹的路径（例如 ``/Users/username/shared``）。
+一旦 VM 启动，就必须始终设置 ``WEBOTS_SHARED_FOLDER`` 环境变量，软件包才能在虚拟机（VM）中正常工作。
+此变量向 ``webots_ros2`` 软件包指定用于在主机与 VM 之间交换数据的共享文件夹位置。
+此变量应使用的值格式为 ``<主机共享文件夹>:<VM 共享文件夹>``，其中 ``<主机共享文件夹>`` 是主机上共享文件夹的路径，``<VM 共享文件夹>`` 是 VM 上同一个共享文件夹的路径。
 
-In the pre-configured images, ``WEBOTS_SHARED_FOLDER`` is already set in ``~/.bashrc``.
-You will need to update it to use the correct path for the host folder:
+在预配置镜像中，``WEBOTS_SHARED_FOLDER`` 已经在 ``~/.bashrc`` 中设置好了。
+你需要更新它，以使用正确的主机文件夹路径：
 
 .. code-block:: console
 

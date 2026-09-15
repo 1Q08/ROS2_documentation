@@ -2,17 +2,17 @@
 
   The-ROS2-Project/Adopters/Adopters
 
-ROS 2 Adopters
-==============
+ROS 2 采用者
+============
 
-This page showcases organizations and projects using ROS in any capacity.
-It is a community-maintained, self-reported directory.
-If you use ROS, we encourage you to add your project.
+此页面展示在任何场景中使用 ROS 的组织和项目。
+这是一个由社区维护、由用户自行上报的目录。
+如果你在使用 ROS，我们鼓励你把你的项目加入。
 
-To add your organization or project, see :doc:`Adopters/Add-Your-Project`.
+要添加你的组织或项目，请参见 :doc:`Adopters/Add-Your-Project`.
 
-.. Create TOC with the 'Add Your Project' page to silence 'toc.not_included' warning, but hide it
-   since we have a nicer link above
+.. 使用“添加你的项目”页面创建目录，以消除 'toc.not_included' 警告，但将其隐藏，
+   因为上方已有更好的链接
 .. toctree::
    :hidden:
 

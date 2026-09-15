@@ -3,34 +3,34 @@
    Migration-Guide-Python
    The-ROS2-Project/Contributing/Migration-Guide-Python
 
-Migrating Python Packages Reference
-===================================
+迁移 Python 软件包参考
+======================
 
-This page is a reference on how to migrate Python packages from ROS 1 to ROS 2.
-If this is your first time migrating a Python package, then follow :doc:`this guide to migrate an example Python package <./Migrating-Python-Package-Example>` first.
+本页是一份关于如何把 Python 软件包从 ROS 1 迁移到 ROS 2 的参考。
+如果你是第一次迁移 Python 软件包，请先按照 :doc:`这篇指南迁移一个示例 Python 软件包 <./Migrating-Python-Package-Example>` 操作。
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Build tool
-----------
+构建工具
+--------
 
-Instead of using ``catkin_make``, ``catkin_make_isolated`` or ``catkin build`` ROS 2 uses the command line tool `colcon <https://design.ros2.org/articles/build_tool.html>`__ to build and install a set of packages.
-See the :doc:`beginner tutorial <../../Tutorials/Beginner-Client-Libraries/Colcon-Tutorial>` to get started with ``colcon``.
+ROS 2 不再使用 ``catkin_make``、``catkin_make_isolated`` 或 ``catkin build``，而是使用命令行工具 `colcon <https://design.ros2.org/articles/build_tool.html>`__ 来构建和安装一组软件包。
+关于 ``colcon`` 的入门用法，请参阅 :doc:`初级教程 <../../Tutorials/Beginner-Client-Libraries/Colcon-Tutorial>`。
 
-Build system
-------------
+构建系统
+--------
 
-For pure Python packages, ROS 2 uses the standard ``setup.py`` installation mechanism familiar to Python developers.
+对于纯 Python 软件包，ROS 2 使用 Python 开发者熟悉的标准 ``setup.py`` 安装机制。
 
-Update the files to use *setup.py*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+更新文件以使用 *setup.py*
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If the ROS 1 package uses CMake only to invoke the ``setup.py`` file and does not contain anything beside Python code (e.g. no messages, services, etc.) it should be converted into a pure Python package in ROS 2:
+如果 ROS 1 软件包只是用 CMake 来调用 ``setup.py`` 文件，并且除 Python 代码之外没有任何其他内容（例如没有消息、服务等），则应在 ROS 2 中把它转换为纯 Python 软件包：
 
 *
-  Update or add the build type in the ``package.xml`` file:
+  更新或添加 ``package.xml`` 文件中的构建类型：
 
   .. code-block:: xml
 
@@ -39,21 +39,21 @@ If the ROS 1 package uses CMake only to invoke the ``setup.py`` file and does no
      </export>
 
 *
-  Remove the ``CMakeLists.txt`` file
+  删除 ``CMakeLists.txt`` 文件
 
 *
-  Update the ``setup.py`` file to be a standard Python setup script
+  把 ``setup.py`` 文件更新为标准 Python setup 脚本
 
-ROS 2 supports Python 3 only.
-While each package can choose to also support Python 2 it must invoke executables with Python 3 if it uses any API provided by other ROS 2 packages.
+ROS 2 只支持 Python 3。
+虽然每个软件包也可以选择同时支持 Python 2，但如果它使用了其他 ROS 2 软件包提供的任何 API，就必须用 Python 3 来调用可执行文件。
 
-Update source code
-------------------
+更新源代码
+----------
 
-Node Initialization
-^^^^^^^^^^^^^^^^^^^
+节点初始化
+^^^^^^^^^^
 
-In ROS 1:
+在 ROS 1 中：
 
 .. code-block:: python
 
@@ -61,7 +61,7 @@ In ROS 1:
 
    rospy.loginfo('Created node')
 
-In ROS 2:
+在 ROS 2 中：
 
 .. code-block:: python
 
@@ -70,10 +70,10 @@ In ROS 2:
 
    node.get_logger().info('Created node')
 
-ROS Parameters
-^^^^^^^^^^^^^^
+ROS 参数
+^^^^^^^^
 
-In ROS 1:
+在 ROS 1 中：
 
 .. code-block:: python
 
@@ -85,7 +85,7 @@ In ROS 1:
 
   rospy.logwarn('port: ' + port)
 
-In ROS 2:
+在 ROS 2 中：
 
 .. code-block:: python
 
@@ -97,10 +97,10 @@ In ROS 2:
 
    node.get_logger().warn('port: ' + port)
 
-Creating a Publisher
-^^^^^^^^^^^^^^^^^^^^
+创建发布者
+^^^^^^^^^^
 
-In ROS 1:
+在 ROS 1 中：
 
 .. code-block:: python
 
@@ -108,7 +108,7 @@ In ROS 1:
    # or
    pub = rospy.Publisher('chatter', String, queue_size=10)
 
-In ROS 2:
+在 ROS 2 中：
 
 .. code-block:: python
 
@@ -116,10 +116,10 @@ In ROS 2:
    # or
    pub = node.create_publisher(String, 'chatter', 10)
 
-Creating a Subscriber
-^^^^^^^^^^^^^^^^^^^^^
+创建订阅者
+^^^^^^^^^^
 
-In ROS 1:
+在 ROS 1 中：
 
 .. code-block:: python
 
@@ -127,7 +127,7 @@ In ROS 1:
    # or
    sub = rospy.Subscriber('chatter', String, callback, queue_size=10)
 
-In ROS 2:
+在 ROS 2 中：
 
 .. code-block:: python
 
@@ -135,25 +135,25 @@ In ROS 2:
    # or
    sub = node.create_subscription(String, 'chatter', callback, 10)
 
-Creating a Service
-^^^^^^^^^^^^^^^^^^
+创建服务
+^^^^^^^^
 
-In ROS 1:
+在 ROS 1 中：
 
 .. code-block:: python
 
    srv = rospy.Service('add_two_ints', AddTwoInts, add_two_ints_callback)
 
-In ROS 2:
+在 ROS 2 中：
 
 .. code-block:: python
 
    srv = node.create_service(AddTwoInts, 'add_two_ints', add_two_ints_callback)
 
-Creating a Service Client
-^^^^^^^^^^^^^^^^^^^^^^^^^
+创建服务客户端
+^^^^^^^^^^^^^^
 
-In ROS 1:
+在 ROS 1 中：
 
 .. code-block:: python
 
@@ -161,7 +161,7 @@ In ROS 1:
    add_two_ints = rospy.ServiceProxy('add_two_ints', AddTwoInts)
    resp = add_two_ints(req)
 
-In ROS 2:
+在 ROS 2 中：
 
 .. code-block:: python
 
@@ -173,5 +173,5 @@ In ROS 2:
 
 .. warning::
 
-   Do not use ``rclpy.spin_until_future_complete`` in a ROS 2 callback.
-   For more details see the :doc:`sync deadlock article <../Sync-Vs-Async>`.
+   不要在 ROS 2 回调中使用 ``rclpy.spin_until_future_complete``。
+   更多细节请参阅 :doc:`同步与异步死锁文章 <../Sync-Vs-Async>`。

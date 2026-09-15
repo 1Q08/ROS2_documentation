@@ -2,51 +2,51 @@
 
     Tutorials/Pluginlib
 
-Creating and using plugins (C++)
-================================
+创建和使用插件（C++）
+=====================
 
-**Goal:** Learn to create and load a simple plugin using ``pluginlib``.
+**目标：** 学习如何使用 ``pluginlib`` 创建和加载一个简单的插件。
 
-**Tutorial level:** Beginner
+**教程级别：** 入门
 
-**Time:** 20 minutes
+**时间：** 20 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 3
    :local:
 
-Background
-----------
+背景
+----
 
-This tutorial is derived from `<http://wiki.ros.org/pluginlib>`_ and `Writing and Using a Simple Plugin Tutorial <http://wiki.ros.org/pluginlib/Tutorials/Writing%20and%20Using%20a%20Simple%20Plugin>`_.
+本教程源自 `<http://wiki.ros.org/pluginlib>`_ 以及 `编写和使用简单插件教程 <http://wiki.ros.org/pluginlib/Tutorials/Writing%20and%20Using%20a%20Simple%20Plugin>`_。
 
-``pluginlib`` is a C++ library for loading and unloading plugins from within a ROS package.
-Plugins are dynamically loadable classes that are loaded from a runtime library (i.e. shared object, dynamically linked library).
-With pluginlib, you do not have to explicitly link your application against the library containing the classes -- instead ``pluginlib`` can open a library containing exported classes at any point without the application having any prior awareness of the library or the header file containing the class definition.
-Plugins are useful for extending/modifying application behavior without needing the application source code.
+``pluginlib`` 是一个 C++ 库，用于在 ROS 包中加载和卸载插件。
+插件是动态可加载的类，它们从运行时库（即共享对象、动态链接库）中加载。
+使用 pluginlib，你不必显式地将你的应用程序与包含这些类的库链接——相反，``pluginlib`` 可以在任意时刻打开包含导出类的库，而应用程序事先并不知道该库或包含类定义的头文件。
+插件对于在不需要应用程序源代码的情况下扩展/修改应用程序行为非常有用。
 
-Prerequisites
--------------
+前置条件
+--------
 
-This tutorial assumes basic C++ knowledge and that you have successfully :doc:`installed ROS 2 <../../Installation>`.
+本教程假设你具备基本的 C++ 知识，并已成功 :doc:`安装 ROS 2 <../../Installation>`。
 
-Tasks
------
+任务
+----
 
-In this tutorial, you will create two new packages, one that defines the base class, and another that provides the plugins.
-The base class will define a generic polygon class, and then our plugins will define specific shapes.
+在本教程中，你将创建两个新包，一个定义基类，另一个提供插件。
+基类将定义一个通用的多边形类，然后我们的插件将定义具体的形状。
 
-1 Create the Base Class Package
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 创建基类包
+^^^^^^^^^^^^
 
-Create a new empty package in your ``ros2_ws/src`` folder with the following command:
+使用以下命令在你的 ``ros2_ws/src`` 文件夹中创建一个新的空包：
 
 .. code-block:: console
 
   $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 --dependencies pluginlib --node-name area_node polygon_base
 
 
-Open your favorite editor, edit ``ros2_ws/src/polygon_base/include/polygon_base/regular_polygon.hpp``, and paste the following inside of it:
+打开你喜欢的编辑器，编辑 ``ros2_ws/src/polygon_base/include/polygon_base/regular_polygon.hpp``，并将以下内容粘贴进去：
 
 .. code-block:: C++
 
@@ -69,13 +69,13 @@ Open your favorite editor, edit ``ros2_ws/src/polygon_base/include/polygon_base/
 
     #endif  // POLYGON_BASE_REGULAR_POLYGON_HPP
 
-The code above creates an abstract class called ``RegularPolygon``.
-One thing to notice is the presence of the initialize method.
-With ``pluginlib``, a constructor without parameters is required, so if any parameters to the class are needed, we use the initialize method to pass them to the object.
+上面的代码创建了一个名为 ``RegularPolygon`` 的抽象类。
+需要注意的一点是 initialize 方法的存在。
+对于 ``pluginlib``，必须有一个无参构造函数，所以如果类需要任何参数，我们就使用 initialize 方法将它们传递给对象。
 
-We need to make this header available to other classes by exporting it as an interface library.
-To do so, open ``~/ros2_ws/src/polygon_base/CMakeLists.txt`` for editing
-and add the following lines after the ``find_package(pluginlib REQUIRED)`` command:
+我们需要通过将这个头文件导出为接口库，使其对其他类可用。
+为此，打开 ``~/ros2_ws/src/polygon_base/CMakeLists.txt`` 进行编辑，
+并在 ``find_package(pluginlib REQUIRED)`` 命令之后添加以下几行：
 
 .. code-block:: cmake
 
@@ -106,7 +106,7 @@ and add the following lines after the ``find_package(pluginlib REQUIRED)`` comma
       DESTINATION share/${PROJECT_NAME}/cmake
     )
 
-And add this commands before the ``ament_package`` command:
+并在 ``ament_package`` 命令之前添加这些命令：
 
 .. code-block:: cmake
 
@@ -120,22 +120,22 @@ And add this commands before the ``ament_package`` command:
       export_${PROJECT_NAME}
     )
 
-We will return to this package later to write our test node.
+我们稍后会回到这个包来编写我们的测试节点。
 
-2 Create the Plugin Package
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 创建插件包
+^^^^^^^^^^^^
 
-Now we're going to write two non-virtual implementations of our abstract class.
-Create a second empty package in your ``ros2_ws/src`` folder with the following command:
+现在我们要编写抽象类的两个非虚实现。
+使用以下命令在你的 ``ros2_ws/src`` 文件夹中创建第二个空包：
 
 .. code-block:: console
 
   $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 --dependencies polygon_base pluginlib --library-name polygon_plugins polygon_plugins
 
-2.1 Source code for the plugins
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2.1 插件的源代码
+~~~~~~~~~~~~~~~~
 
-Open ``ros2_ws/src/polygon_plugins/src/polygon_plugins.cpp`` for editing, and paste the following inside of it:
+打开 ``ros2_ws/src/polygon_plugins/src/polygon_plugins.cpp`` 进行编辑，并将以下内容粘贴进去：
 
 .. code-block:: C++
 
@@ -189,20 +189,20 @@ Open ``ros2_ws/src/polygon_plugins/src/polygon_plugins.cpp`` for editing, and pa
     PLUGINLIB_EXPORT_CLASS(polygon_plugins::Square, polygon_base::RegularPolygon)
     PLUGINLIB_EXPORT_CLASS(polygon_plugins::Triangle, polygon_base::RegularPolygon)
 
-The implementation of the Square and Triangle classes is fairly straightforward: save the side length, and use it to calculate the area.
-The only piece that is pluginlib specific is the last three lines, which invokes some magical macros that register the classes as actual plugins.
-Let's go through the arguments to the ``PLUGINLIB_EXPORT_CLASS`` macro:
+Square 和 Triangle 类的实现相当直接：保存边长，并用它来计算面积。
+唯一与 pluginlib 相关的部分是最后三行，它们调用了一些“神奇的”宏，将这些类注册为真正的插件。
+让我们来看看 ``PLUGINLIB_EXPORT_CLASS`` 宏的参数：
 
-1. The fully-qualified type of the plugin class, in this case, ``polygon_plugins::Square``.
-2. The fully-qualified type of the base class, in this case, ``polygon_base::RegularPolygon``.
+1. 插件类的完全限定类型，在本例中是 ``polygon_plugins::Square``。
+2. 基类的完全限定类型，在本例中是 ``polygon_base::RegularPolygon``。
 
-2.2 Plugin Declaration XML
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+2.2 插件声明 XML
+~~~~~~~~~~~~~~~~
 
-The steps above enable plugin instances to be created when the containing library is loaded, but the plugin loader still needs a way to find that library and to know what to reference within that library.
-To this end, we'll also create an XML file that, along with a special export line in the package manifest, makes all the necessary information about our plugins available to the ROS toolchain.
+上述步骤使得当包含库被加载时可以创建插件实例，但插件加载器仍然需要一种方法来找到该库，并知道在该库中引用什么。
+为此，我们还要创建一个 XML 文件，它与包清单中的特殊导出行一起，将所有关于我们插件的必要信息提供给 ROS 工具链。
 
-Create ``ros2_ws/src/polygon_plugins/plugins.xml`` with the following code:
+创建 ``ros2_ws/src/polygon_plugins/plugins.xml``，包含以下代码：
 
 .. code-block:: XML
 
@@ -215,43 +215,43 @@ Create ``ros2_ws/src/polygon_plugins/plugins.xml`` with the following code:
       </class>
     </library>
 
-A couple things to note:
+有几点需要注意：
 
-1. The ``library`` tag gives the relative path to a library that contains the plugins that we want to export.
-   In ROS 2, that is just the name of the library.
-   In ROS 1, it contained the prefix ``lib`` or sometimes ``lib/lib`` (i.e. ``lib/libpolygon_plugins``), but here it is simpler.
-2. The ``class`` tag declares a plugin that we want to export from our library.
-   Let's go through its parameters:
+1. ``library`` 标签给出包含我们要导出的插件的库的相对路径。
+   在 ROS 2 中，那只是库的名称。
+   在 ROS 1 中，它包含前缀 ``lib`` 或有时是 ``lib/lib`` （即 ``lib/libpolygon_plugins``），但在这里更简单。
+2. ``class`` 标签声明了一个我们要从库中导出的插件。
+   让我们来看看它的参数：
 
-  * ``type``: The fully qualified type of the plugin.
-    For us, that's ``polygon_plugins::Square``.
-  * ``base_class``: The fully qualified base class type for the plugin.
-    For us, that's ``polygon_base::RegularPolygon``.
-  * ``description``: A description of the plugin and what it does.
-  * ``name`` (optional): A lookup name (i.e. magic name) used by the class loader.
+  * ``type``：插件的完全限定类型。
+    对我们来说，就是 ``polygon_plugins::Square``。
+  * ``base_class``：插件的完全限定基类类型。
+    对我们来说，就是 ``polygon_base::RegularPolygon``。
+  * ``description``：插件及其功能的描述。
+  * ``name`` （可选）：类加载器使用的查找名称（即魔术名称）。
 
-2.3 CMake Plugin Declaration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2.3 CMake 插件声明
+~~~~~~~~~~~~~~~~~~
 
-The last step is to export your plugins via ``CMakeLists.txt``.
-This is a change from ROS 1, where the exporting was done via ``package.xml``.
-Add the following line to your ``ros2_ws/src/polygon_plugins/CMakeLists.txt`` after the line reading ``find_package(pluginlib REQUIRED)``:
+最后一步是通过 ``CMakeLists.txt`` 导出你的插件。
+这与 ROS 1 不同，在 ROS 1 中导出是通过 ``package.xml`` 完成的。
+在 ``ros2_ws/src/polygon_plugins/CMakeLists.txt`` 中 ``find_package(pluginlib REQUIRED)`` 那一行之后添加以下行：
 
 .. code-block:: cmake
 
     pluginlib_export_plugin_description_file(polygon_base plugins.xml)
 
-The arguments to the ``pluginlib_export_plugin_description_file`` command are:
+``pluginlib_export_plugin_description_file`` 命令的参数是：
 
-1. The package with the base class, i.e. ``polygon_base``.
-2. The relative path to the Plugin Declaration xml, i.e. ``plugins.xml``.
+1. 包含基类的包，即 ``polygon_base``。
+2. 插件声明 xml 的相对路径，即 ``plugins.xml``。
 
-3 Use the Plugins
-^^^^^^^^^^^^^^^^^
+3 使用插件
+^^^^^^^^^^
 
-Now it's time to use the plugins.
-This can be done in any package, but here we're going to do it in the base package.
-Edit ``ros2_ws/src/polygon_base/src/area_node.cpp`` to contain the following:
+现在是时候使用插件了。
+这可以在任何包中完成，但这里我们将在基类包中完成。
+编辑 ``ros2_ws/src/polygon_base/src/area_node.cpp`` 使其包含以下内容：
 
 .. code-block:: C++
 
@@ -285,30 +285,30 @@ Edit ``ros2_ws/src/polygon_base/src/area_node.cpp`` to contain the following:
       return 0;
     }
 
-The ``ClassLoader`` is the key class to understand, defined in the ``class_loader.hpp`` `header file <https://github.com/ros/pluginlib/blob/ros2/pluginlib/include/pluginlib/class_loader.hpp>`_:
+``ClassLoader`` 是需要理解的关键类，定义在 ``class_loader.hpp`` `头文件 <https://github.com/ros/pluginlib/blob/ros2/pluginlib/include/pluginlib/class_loader.hpp>`_ 中：
 
- * It is templated with the base class, i.e. ``polygon_base::RegularPolygon``.
- * The first argument is a string for the package name of the base class, i.e. ``polygon_base``.
- * The second argument is a string with the fully qualified base class type for the plugin, i.e. ``polygon_base::RegularPolygon``.
+ * 它以基类为模板参数，即 ``polygon_base::RegularPolygon``。
+ * 第一个参数是基类包名的字符串，即 ``polygon_base``。
+ * 第二个参数是插件基类完全限定类型的字符串，即 ``polygon_base::RegularPolygon``。
 
-There are a number of ways to instantiate an instance of the class.
-In this example, we're using shared pointers.
-We just need to call ``createSharedInstance`` with a reference to the plugin: This can be either the fully-qualified type of the plugin class (the ``type`` attribute of the declaration XML file, e.g. ``polygon_plugins::Square``), or the optional magic name (the ``name`` attribute of the declaration XML file, e.g., ``awesome_triangle``).
+有多种方式可以实例化类的实例。
+在这个例子中，我们使用共享指针。
+我们只需要用插件的引用调用 ``createSharedInstance``：这可以是插件类的完全限定类型（声明 XML 文件的 ``type`` 属性，例如 ``polygon_plugins::Square``），也可以是可选的魔术名称（声明 XML 文件的 ``name`` 属性，例如 ``awesome_triangle``）。
 
-Important note: the ``polygon_base`` package in which this node is defined does NOT depend on the ``polygon_plugins`` class.
-The plugins will be loaded dynamically without any dependency needing to be declared.
-Furthermore, we're instantiating the classes with hardcoded plugin names, but you can also do so dynamically with parameters, etc.
+重要提示：定义此节点的 ``polygon_base`` 包并不依赖于 ``polygon_plugins`` 类。
+插件将被动态加载，而无需声明任何依赖。
+此外，我们使用硬编码的插件名称来实例化类，但你也可以使用参数等动态地完成此操作。
 
-4 Build and run
-^^^^^^^^^^^^^^^
+4 构建并运行
+^^^^^^^^^^^^
 
-Navigate back to the root of your workspace, ``ros2_ws``, and build your new packages:
+返回到工作空间的根目录 ``ros2_ws``，并构建你的新包：
 
 .. code-block:: console
 
     $ colcon build --packages-select polygon_base polygon_plugins
 
-From ``ros2_ws``, be sure to source the setup files:
+从 ``ros2_ws`` 出发，务必 source 安装文件：
 
 .. tabs::
 
@@ -330,14 +330,14 @@ From ``ros2_ws``, be sure to source the setup files:
 
       $ call install/setup.bat
 
-The ``ros2 plugin`` command is provided by the ``ros2plugin`` package.
-If this command is unavailable on a Debian package installation, install it with:
+``ros2 plugin`` 命令由 ``ros2plugin`` 包提供。
+如果在 Debian 包安装上此命令不可用，请使用以下命令安装它：
 
 .. code-block:: console
 
    $ sudo apt install ros-{DISTRO}-ros2plugin
 
-You can verify that your plugins were successfully registered by listing them:
+你可以通过列出它们来验证你的插件是否已成功注册：
 
 .. code-block:: console
 
@@ -346,7 +346,7 @@ You can verify that your plugins were successfully registered by listing them:
         Plugin(name='polygon_plugins::Square', type='polygon_plugins::Square', base='polygon_base::RegularPolygon')
         Plugin(name='polygon_plugins::Triangle', type='polygon_plugins::Triangle', base='polygon_base::RegularPolygon')
 
-Now run the node:
+现在运行节点：
 
 .. code-block:: console
 
@@ -354,8 +354,8 @@ Now run the node:
      Triangle area: 43.30
      Square area: 100.00
 
-Summary
--------
+总结
+----
 
-Congratulations!
-You've just written and used your first plugins.
+恭喜你！
+你刚刚编写并使用了你的第一个插件。

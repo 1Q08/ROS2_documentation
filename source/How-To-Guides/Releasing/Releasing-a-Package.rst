@@ -5,8 +5,8 @@
     Tutorials/Releasing-a-ROS-2-package-with-bloom
     How-To-Guides/Releasing-a-ROS-2-package-with-bloom
 
-Releasing a Package
-===================
+发布软件包
+==========
 
 .. toctree::
    :hidden:
@@ -17,18 +17,18 @@ Releasing a Package
    Release-Team-Repository
    Release-Track
 
-**Releasing a package makes your package available on the public ROS 2 buildfarm.**
-This will:
+**发布软件包会让你自己的软件包出现在公共 ROS 2 构建农场（buildfarm）中。**
+这样做将会：
 
-* Make your package available to be installed via package managers (e.g. ``apt`` on Ubuntu) for all supported Linux platforms in a ROS distribution as described in `REP 2000 <https://reps.openrobotics.org/rep-2000/>`_.
-* Allow your package to have API documentation automatically generated.
-* Make your package part of the `ROS Index <https://index.ros.org>`_.
-* (Optionally) Allow you to have automatic CI run for pull requests in your repository.
+* 让你的软件包可以在某个 ROS 发行版中所有受支持的 Linux 平台上，通过软件包管理器（例如 Ubuntu 上的 ``apt``）安装，具体规则见 `REP 2000 <https://reps.openrobotics.org/rep-2000/>`_。
+* 让你的软件包可以自动生成 API 文档。
+* 让你的软件包被收录进 `ROS Index <https://index.ros.org>`_。
+* （可选）让你可以为仓库中的拉取请求启用自动 CI。
 
-**Follow one of the guides below to get your package released:**
+**请按照下列指南之一来发布你的软件包：**
 
-* :doc:`Index Your Packages <Index-Your-Packages>` - if this is the first release for the package
-* :doc:`First Time Release <First-Time-Release>` - if this is the first release for the package, but it is already indexed
-* :doc:`Subsequent Releases <Subsequent-Releases>` - if you are releasing a new version of a package that has already been released
+* :doc:`索引你的软件包 <Index-Your-Packages>` —— 如果这是该软件包的首次发布
+* :doc:`首次发布 <First-Time-Release>` —— 如果这是该软件包的首次发布，但它已被索引
+* :doc:`后续发布 <Subsequent-Releases>` —— 如果你要发布的是已发布软件包的新版本
 
-After successfully following the instructions, your package will be released into the ROS ecosystem on the next distro synchronization!
+成功按照说明操作之后，你的软件包将在下一次发行版同步时发布到 ROS 生态系统中！

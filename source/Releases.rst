@@ -1,24 +1,24 @@
 .. _Releases:
 
-Distributions
-=============
+发行版
+======
 
-What is a Distribution?
------------------------
+什么是发行版？
+--------------
 
-A ROS distribution is a versioned set of ROS packages.
-These are akin to Linux distributions (e.g. Ubuntu).
-The purpose of the ROS distributions is to let developers work against a relatively stable codebase until they are ready to roll everything forward.
-Therefore once a distribution is released, we try to limit changes to bug fixes and non-breaking improvements for the core packages (every thing under ros-desktop-full).
-That generally applies to the whole community, but for "higher" level packages, the rules are less strict, and so it falls to the maintainers of a given package to avoid breaking changes.
+ROS 发行版是一组带版本号的 ROS 包。
+它们类似于 Linux 发行版（例如 Ubuntu）。
+ROS 发行版的目的是让开发者可以基于相对稳定的代码库进行开发，直到他们准备好将一切向前推进。
+因此，一旦某个发行版发布，我们会尽量把核心包（ros-desktop-full 下的所有内容）的变更限制在缺陷修复和不破坏兼容性的改进上。
+这一原则大体上适用于整个社区，但对于层次“更高”的包，规则没有那么严格，因此避免破坏性变更的责任就落到了相应包的维护者身上。
 
 .. _list_of_distributions:
 
-List of Distributions
----------------------
+发行版列表
+----------
 
-Below is a list of current and historic ROS 2 distributions.
-Rows in the table marked in blue are the currently supported distributions.
+下面列出了当前的和历史上的 ROS 2 发行版。
+表中以蓝色标记的行是当前受支持的发行版。
 
 .. toctree::
    :hidden:
@@ -110,10 +110,10 @@ Rows in the table marked in blue are the currently supported distributions.
    :header-rows: 1
    :widths: 35 25 30 20 10
 
-   * - Distro
-     - Release date
+   * - 发行版
+     - 发布日期
      - Logo
-     - EOL date
+     - 停止支持日期
      - ROS Boss
    * - :doc:`Lyrical Luth <Releases/Release-Lyrical-Luth>`
      - May 22, 2026
@@ -196,22 +196,22 @@ Rows in the table marked in blue are the currently supported distributions.
      - December 2016
      -
 
-Future Distributions
---------------------
+未来的发行版
+------------
 
-For details on upcoming features see the :doc:`roadmap <The-ROS2-Project/Roadmap>`.
+有关即将推出的功能的详细信息，请参阅 :doc:`路线图 <The-ROS2-Project/Roadmap>`。
 
-There is a new ROS 2 distribution released yearly on May 23rd (`World Turtle Day <https://www.worldturtleday.org/>`_).
+每年 5 月 23 日都会发布一个新的 ROS 2 发行版（`世界海龟日 <https://www.worldturtleday.org/>`_）。
 
 .. list-table::
    :class: future-distros
    :header-rows: 1
    :widths: 35 30 20 15
 
-   * - Distro
-     - Release date
+   * - 发行版
+     - 发布日期
      - Logo
-     - EOL date
+     - 停止支持日期
    * - :doc:`Makoa Mata-mata <Releases/Release-Makoa-Mata-mata>`
      - May 2027
      - TBD
@@ -220,27 +220,27 @@ There is a new ROS 2 distribution released yearly on May 23rd (`World Turtle Day
 
 .. _rolling_distribution:
 
-Rolling Distribution
---------------------
+Rolling 发行版
+--------------
 
-:doc:`ROS 2 Rolling Ridley <Releases/Release-Rolling-Ridley>` is the rolling development distribution of ROS 2.
-It is described in `REP 2002 <https://reps.openrobotics.org/rep-2002/>`_ and was first introduced in June 2020.
+:doc:`ROS 2 Rolling Ridley <Releases/Release-Rolling-Ridley>` 是 ROS 2 的滚动开发发行版。
+它在 `REP 2002 <https://reps.openrobotics.org/rep-2002/>`_ 中做了描述，于 2020 年 6 月首次引入。
 
-The Rolling distribution of ROS 2 serves two purposes:
+ROS 2 的 Rolling 发行版有两个用途：
 
-1. it is a staging area for future stable distributions of ROS 2, and
-2. it is a collection of the most recent development releases.
+1. 它是未来 ROS 2 稳定发行版的暂存区，以及
+2. 它汇集了最新的开发版本。
 
-As the name implies, Rolling is continuously updated and **can have in-place updates that include breaking changes**.
-We recommend that most people use the most recent stable distribution instead (see :ref:`list_of_distributions`).
+顾名思义，Rolling 会持续更新，**且可能包含破坏性变更的原地更新**。
+我们建议大多数人改用最新的稳定发行版（参见 :ref:`发行版列表 <list_of_distributions>`）。
 
-Packages released into the Rolling distribution will be automatically released into future stable distributions of ROS 2.
-:doc:`Releasing a ROS 2 package <../How-To-Guides/Releasing/Releasing-a-Package>` into the Rolling distribution follows the same procedures as all other ROS 2 distributions.
+发布到 Rolling 发行版中的包会自动被发布到未来 ROS 2 的稳定发行版中。
+将 :doc:`ROS 2 包发布 <../How-To-Guides/Releasing/Releasing-a-Package>` 到 Rolling 发行版，遵循与其他所有 ROS 2 发行版相同的流程。
 
-Cross-Distribution Communications
----------------------------------
+跨发行版通信
+------------
 
-Nodes are not guaranteed to be able to communicate across distributions.
-For example, a node built & running against Humble is not guaranteed to be able to communicate correctly with a node built & running against Iron.
-It may or may not work, but it is not supported and should not be relied upon.
-Note that :ref:`cross-vendor (single-distro) communications are also not guaranteed <different-middleware-vendors-cross-vendor-communication>`.
+并不保证节点能够跨发行版相互通信。
+例如，针对 Humble 构建并运行的节点，不保证能与针对 Iron 构建并运行的节点正确通信。
+它可能行也可能不行，但这不受支持，也不应依赖。
+请注意，:ref:`跨厂商（单一发行版）通信同样不受保证 <different-middleware-vendors-cross-vendor-communication>`。

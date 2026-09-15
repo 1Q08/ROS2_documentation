@@ -4,16 +4,16 @@
 
 .. _interfaces-topics-services-actions:
 
-Interfaces (topics, services, actions)
-======================================
+接口（主题、服务、动作）
+========================
 
-Interfaces in ROS define how nodes exchange data.
-This article explains the different types of ROS interface and the differences between them.
-With this information, you'll be able to select the right interfaces for your purposes.
+ROS 中的接口定义了节点如何交换数据。
+本文介绍 ROS 接口的不同类型以及它们之间的差异。
+借助这些信息，您将能够为自己的用途选择合适的接口。
 
-**Area: ROS-framework | Content-type: concept | Experience: beginner**
+**领域：ROS-framework | 内容类型：concept | 经验等级：beginner**
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
@@ -25,30 +25,30 @@ With this information, you'll be able to select the right interfaces for your pu
    About-Services
    About-Actions
 
-Summary
--------
+概述
+----
 
-ROS nodes typically communicate through the following three types of interfaces:
+ROS 节点通常通过以下三种接口进行通信：
 
-* Topics: For continuous data streams.
-* Services: For synchronous request/response interactions (short tasks which happen immediately).
-* Actions: For long-running tasks with feedback (tasks that may take some time to complete).
+* 主题：用于连续数据流。
+* 服务：用于同步请求/响应交互（很快完成的短任务）。
+* 动作：用于带反馈的长时间任务（可能需要一段时间才能完成）。
 
-For consistent communication, each interface uses definitions provided in ``.msg``, ``.srv``, or ``.action`` files.
+为保证通信一致性，每种接口都使用 ``.msg``、``.srv`` 或 ``.action`` 文件中提供的定义。
 
-:doc:`Learn more about nodes <About-Nodes>`
+:doc:`了解有关节点的更多信息 <About-Nodes>`
 
-Topics
-------
+主题
+----
 
-The topic interface is meant for continuous data streams, for example, streaming sensor data or the status of your robot.
-Topic definitions are stored in ``.msg`` files.
-Topics implement a publish/subscribe pattern.
-A node publishes data to a topic, and other nodes subscribe to receive that data.
-This interface type has the following main characteristics:
+主题接口适用于连续数据流，例如传感器数据流或机器人状态。
+主题定义存储在 ``.msg`` 文件中。
+主题实现发布/订阅模式。
+一个节点向主题发布数据，其他节点订阅以接收该数据。
+这种接口类型具有以下主要特征：
 
-* Asynchronous, one-way communication
-* Multiple publishers and subscribers can share the same topic
+* 异步、单向通信
+* 多个发布者和订阅者可以共享同一个主题
 
 .. mermaid::
 
@@ -57,40 +57,40 @@ This interface type has the following main characteristics:
     T -->|Delivers messages| S1[Subscriber node]
     T -->|Delivers messages| S2[Subscriber node]
 
-Topic keys identify individual publishers on a topic so nodes and tools can distinguish where messages come from.
-Each topic key makes it easier to track data sources when several publishers share the same topic.
+主题键可以识别某个主题上的各个发布者，因此节点和工具可以区分消息来自哪里。
+每个主题键都让多个发布者共享同一主题时，跟踪数据源更容易。
 
-Topic statistics
-----------------
-Topic statistics are built-in measurements that help you understand how messages behave when a subscription receives them.
-When enabled, they automatically track two things:
+主题统计
+--------
+主题统计是内置度量，用于帮助您理解订阅接收消息时消息的行为。
+启用后，它会自动跟踪两件事：
 
-:Message age: How old a message is when it arrives, based on its timestamp.
-:Message period: The time between incoming messages.
+:消息年龄：消息到达时基于时间戳计算它有多老。
+:消息周期：连续进入消息的时间间隔。
 
-For both message age and period, ROS calculates the average, minimum, maximum, standard deviation, and the number of samples, using a moving window that updates every time a new message arrives.
-These calculations run in constant time and memory using the dedicated utilities.
-When you enable topic statistics for a subscription, ROS publishes the collected data at regular intervals as a ``MetricsMessage`` on a statistics topic.
-This gives you a clear view of timing patterns, delays, and irregularities, making it easier to assess system performance or diagnose problems related to the message flow.
+对于消息年龄和消息周期，ROS 会使用移动窗口在每次新消息到来时计算平均值、最小值、最大值、标准差以及采样数量。
+这些计算在常量时间和内存中完成，使用专用工具。
+当您为某个订阅启用主题统计时，ROS 会以固定间隔在一个统计主题上发布收集到的 ``MetricsMessage``。
+这让您可以清楚了解时序模式、延迟和不规则性，更容易评估系统性能或诊断与消息流相关的问题。
 
 .. tip::
 
-   The default interval is 1 second.
-   The default statistics topic is ``/statistics``.
+   默认间隔为 1 秒。
+   默认统计主题为 ``/statistics``。
 
-:doc:`Learn how to enable topic statistics </Tutorials/Advanced/Topic-Statistics-Tutorial/Topic-Statistics-Tutorial>`
+:doc:`了解如何启用主题统计 </Tutorials/Advanced/Topic-Statistics-Tutorial/Topic-Statistics-Tutorial>`
 
-Services
---------
+服务
+----
 
-The service interface is meant for synchronous request/response interactions, for example, when you want to send a query requesting the configuration of a specific robot.
-Service definitions are stored in ``.srv`` files.
-Services implement a request/response pattern.
-A client sends a request, and a server replies with a response.
-This interface type has the following main characteristics:
+服务接口适用于同步请求/响应交互，例如想向某个特定机器人发送查询并获取其配置时。
+服务定义存储在 ``.srv`` 文件中。
+服务实现请求/响应模式。
+客户端发送请求，服务器回复响应。
+这种接口类型具有以下主要特征：
 
-* Synchronous communication
-* Ideal for short-lived operations that require confirmation, or provide a result in response to a request
+* 同步通信
+* 非常适合需要确认或根据请求返回结果的短期操作
 
 .. mermaid::
 
@@ -100,16 +100,16 @@ This interface type has the following main characteristics:
     Service client->>Service server: Request
     Service server-->>Service client: Response
 
-Actions
--------
+动作
+----
 
-The action interface is meant for long-running tasks with feedback, for example, moving a robot to a specific position, or asking the robot to perform a complex motion.
-Action definitions are stored in ``.action`` files.
-Actions allow clients to send goals, receive feedback during the execution, cancel if needed, and return a result if available.
-This interface type has the following main characteristics:
+动作接口适用于带反馈的长时间任务，例如将机器人移动到指定位置，或要求机器人执行复杂运动。
+动作定义存储在 ``.action`` 文件中。
+动作允许客户端发送目标、在执行期间接收反馈、必要时取消，并在可用时返回结果。
+这种接口类型具有以下主要特征：
 
-* Asynchronous, with feedback and result
-* Suitable for operations that take time
+* 异步，带反馈和结果
+* 适用于需要较长运行时间的操作
 
 .. mermaid::
 
@@ -120,11 +120,11 @@ This interface type has the following main characteristics:
     Action server-->>Action client: Provides feedback (periodic)
     Action server-->>Action client: Sends a result
 
-Key differences between ROS interfaces
---------------------------------------
+ROS 接口之间的关键差异
+----------------------
 
-All three interfaces enable communication between nodes, but each serves a different purpose.
-The table below summarizes the differences between ROS interface types:
+三种接口都能在节点之间进行通信，但每种接口都有不同目的。
+下表总结了 ROS 接口类型之间的差异：
 
 +--------------+----------------------+-----------------------+-----------------+--------------------+---------------+
 |              | Pattern              | Direction             | Provided result | Typical use case   | Cancellation  |

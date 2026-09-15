@@ -3,99 +3,99 @@
     Building-Realtime-rt_preempt-kernel-for-ROS-2
     Tutorials/Building-Realtime-rt_preempt-kernel-for-ROS-2
 
-Building a real-time Linux kernel [community-contributed]
-=========================================================
+构建实时 Linux 内核 [社区贡献]
+==============================
 
-This tutorial begins with a clean Ubuntu 20.04.1 install on Intel x86_64.
-Actual kernel is 5.4.0-54-generic, but we will install the Latest Stable RT_PREEMPT Version.
-To build the kernel you need at least 30GB free disk space.
+本教程基于在 Intel x86_64 上全新安装的 Ubuntu 20.04.1。
+当前内核为 5.4.0-54-generic，但我们将安装最新的稳定版 RT_PREEMPT。
+构建内核至少需要 30GB 的可用磁盘空间。
 
-Check `this wiki <https://wiki.linuxfoundation.org/realtime/start>`_ for the latest stable version, at the time of writing this is "Latest Stable Version 5.4-rt".
-If we click on the `link <http://cdn.kernel.org/pub/linux/kernel/projects/rt/5.4/>`_, we get the exact version.
-Currently it is ``patch-5.4.78-rt44.patch.gz``.
+请查看 `此 wiki <https://wiki.linuxfoundation.org/realtime/start>`_ 以获取最新的稳定版本，撰写本文时最新稳定版本为“Latest Stable Version 5.4-rt”。
+点击 `该链接 <http://cdn.kernel.org/pub/linux/kernel/projects/rt/5.4/>`_ 即可获得确切的版本号。
+目前为 ``patch-5.4.78-rt44.patch.gz``。
 
 .. image:: images/realtime-kernel-patch-version.png
 
-We create a directory in our home dir with
+我们在主目录中创建一个目录：
 
 .. code-block:: console
 
    $ mkdir ~/kernel
 
-and switch into it with
+然后进入该目录：
 
 .. code-block:: console
 
    $ cd ~/kernel
 
-We can go with a browser to `this page <https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/>`_ and see if the version is there.
-You can download it from the site and move it manually from /Downloads to the /kernel folder, or download it using wget by right clicking the link using "copy link location".
-Example:
+我们可以用浏览器打开 `此页面 <https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/>`_ ，查看其中是否有该版本。
+你可以从该网站下载它，并手动将其从 /Downloads 移动到 /kernel 文件夹，也可以右键单击链接选择“复制链接地址”，然后使用 wget 下载。
+例如：
 
 .. code-block:: console
 
    $ wget https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-5.4.78.tar.gz
 
-unpack it with
+使用以下命令解压：
 
 .. code-block:: console
 
    $ tar -xzf linux-5.4.78.tar.gz
 
-download rt_preempt patch matching the Kernel version we just downloaded over at `kernel.org <http://cdn.kernel.org/pub/linux/kernel/projects/rt/5.4/>`_
+从 `kernel.org <http://cdn.kernel.org/pub/linux/kernel/projects/rt/5.4/>`_ 下载与我们刚刚下载的内核版本匹配的 rt_preempt 补丁
 
 .. code-block:: console
 
    $ wget http://cdn.kernel.org/pub/linux/kernel/projects/rt/5.4/older/patch-5.4.78-rt44.patch.gz
 
-unpack it with
+使用以下命令解压：
 
 .. code-block:: console
 
    $ gunzip patch-5.4.78-rt44.patch.gz
 
-Then switch into the linux directory with
+然后进入 linux 目录：
 
 .. code-block:: console
 
    $ cd linux-5.4.78/
 
-and patch the kernel with the realtime patch
+并使用实时补丁为内核打补丁
 
 .. code-block:: console
 
    $ patch -p1 < ../patch-5.4.78-rt44.patch
 
-We simply want to use the config of our Ubuntu installation, so we get the Ubuntu config with
+我们只想使用 Ubuntu 安装自带的配置，因此用以下命令获取 Ubuntu 配置：
 
 .. code-block:: console
 
    $ cp /boot/config-5.4.0-54-generic .config
 
-Open Software & Updates.
-in the Ubuntu Software menu tick the 'Source code' box
+打开 Software & Updates。
+在 Ubuntu Software 菜单中勾选“Source code”复选框。
 
-We need some tools to build kernel, install them with
+构建内核需要一些工具，安装它们：
 
 .. code-block:: console
 
    $ sudo apt-get build-dep linux
    $ sudo apt-get install libncurses-dev flex bison openssl libssl-dev dkms libelf-dev libudev-dev libpci-dev libiberty-dev autoconf fakeroot
 
-To enable all Ubuntu configurations, we simply use
+要启用所有 Ubuntu 配置，只需使用
 
 .. code-block:: console
 
    $ yes '' | make oldconfig
 
-Then we need to enable rt_preempt in the kernel.
-We call
+接下来我们需要在内核中启用 rt_preempt。
+执行
 
 .. code-block:: console
 
    $ make menuconfig
 
-and set the following
+并设置以下选项
 
 .. code-block:: bash
 
@@ -127,15 +127,15 @@ and set the following
       -> Default CPUFreq governor (<choice> [=y])
        (X) performance
 
-Save and exit menuconfig.
-Now we're going to build the kernel which will take quite some time.
-(10-30min on a modern cpu)
+保存并退出 menuconfig。
+现在我们开始构建内核，这将花费相当长的时间。
+（在现代 CPU 上需要 10-30 分钟）
 
 .. code-block:: console
 
    $ make -j `nproc` deb-pkg
 
-After the build is finished check the deb packages
+构建完成后，检查 deb 软件包
 
 .. code-block:: console
 
@@ -143,20 +143,20 @@ After the build is finished check the deb packages
    ../linux-headers-5.4.78-rt41_5.4.78-rt44-1_amd64.deb  ../linux-image-5.4.78-rt44-dbg_5.4.78-rt44-1_amd64.deb
    ../linux-image-5.4.78-rt41_5.4.78-rt44-1_amd64.deb    ../linux-libc-dev_5.4.78-rt44-1_amd64.deb
 
-Then we install all kernel deb packages
+然后安装所有内核 deb 软件包
 
 .. code-block:: console
 
    $ sudo dpkg -i ../*.deb
 
-Now the real time kernel should be installed.
-Reboot the system:
+现在实时内核应该已经安装完成。
+重启系统：
 
 .. code-block:: console
 
    $ sudo reboot
 
-And check the new kernel version:
+并检查新的内核版本：
 
 .. code-block:: console
 

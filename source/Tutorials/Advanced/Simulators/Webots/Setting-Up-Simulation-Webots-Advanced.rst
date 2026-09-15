@@ -1,44 +1,44 @@
-Setting up a robot simulation (Advanced)
-========================================
+搭建机器人仿真（高级）
+======================
 
-**Goal:** Extend a robot simulation with an obstacle avoider node.
+**目标：** 使用避障节点扩展机器人仿真。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 20 minutes
+**用时：** 20 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-In this tutorial you will extend the package created in the first part of the tutorial: :doc:`./Setting-Up-Simulation-Webots-Basic`.
-The aim is to implement a ROS 2 node that avoids obstacles using the robot's distance sensors.
-This tutorial focuses on using robot devices with the ``webots_ros2_driver`` interface.
+在本教程中，你将扩展教程第一部分 :doc:`./Setting-Up-Simulation-Webots-Basic` 中创建的包。
+目标是实现一个 ROS 2 节点，利用机器人的距离传感器避障。
+本教程重点介绍如何使用 ``webots_ros2_driver`` 接口操作机器人设备。
 
-Prerequisites
--------------
+前置条件
+--------
 
-This is a continuation of the first part of the tutorial: :doc:`./Setting-Up-Simulation-Webots-Basic`.
-It is mandatory to start with the first part to set up the custom packages and necessary files.
+这是教程第一部分的延续：:doc:`./Setting-Up-Simulation-Webots-Basic`。
+必须先完成第一部分，以搭建自定义包和所需文件。
 
-This tutorial is compatible with version 2023.1.0 of ``webots_ros2`` and Webots R2023b, as well as upcoming versions.
+本教程兼容 ``webots_ros2`` 的 2023.1.0 版本和 Webots R2023b，以及之后的版本。
 
-Tasks
------
+任务
+----
 
-1 Updating ``my_robot.urdf``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 更新 ``my_robot.urdf``
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-As mentioned in :doc:`./Setting-Up-Simulation-Webots-Basic`, ``webots_ros2_driver`` contains plugins to interface most of Webots devices with ROS 2 directly.
-These plugins can be loaded using the ``<device>`` tag in the URDF file of the robot.
-The ``reference`` attribute should match the Webots device ``name`` parameter.
-The list of all existing interfaces and the corresponding parameters can be found `on the devices reference page <https://github.com/cyberbotics/webots_ros2/wiki/References-Devices>`_.
-For available devices that are not configured in the URDF file, the interface will be automatically created and default values will be used for ROS parameters (e.g. ``update rate``, ``topic name``, and ``frame name``).
+如 :doc:`./Setting-Up-Simulation-Webots-Basic` 所述，``webots_ros2_driver`` 包含插件，可以直接将大多数 Webots 设备与 ROS 2 接口相连。
+这些插件可以通过机器人 URDF 文件中的 ``<device>`` 标签加载。
+``reference`` 属性应与 Webots 设备的 ``name`` 参数匹配。
+所有现有接口及其对应参数的列表可以在 `设备参考页面 <https://github.com/cyberbotics/webots_ros2/wiki/References-Devices>`_ 上找到。
+对于未在 URDF 文件中配置的可用设备，接口将被自动创建，ROS 参数将使用默认值（例如 ``update rate``、``topic name`` 和 ``frame name``）。
 
-In ``my_robot.urdf`` replace the whole contents with:
+在 ``my_robot.urdf`` 中，将全部内容替换为：
 
 .. tabs::
 
@@ -53,38 +53,38 @@ In ``my_robot.urdf`` replace the whole contents with:
             :language: xml
 
 
-In addition to your custom plugin, the ``webots_ros2_driver`` will parse the ``<device>`` tags referring to the **DistanceSensor** nodes and use the standard parameters in the ``<ros>`` tags to enable the sensors and name their topics.
+除了你的自定义插件外，``webots_ros2_driver`` 还会解析指向 **DistanceSensor** 节点的 ``<device>`` 标签，并使用 ``<ros>`` 标签中的标准参数来启用传感器并命名它们的话题。
 
-2 Creating a ROS node to avoid obstacles
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 创建避障 ROS 节点
+^^^^^^^^^^^^^^^^^^^
 
 .. tabs::
 
     .. group-tab:: Python
 
-        The robot will use a standard ROS node to detect the wall and send motor commands to avoid it.
-        In the ``my_package/my_package/`` folder, create a file named ``obstacle_avoider.py`` with this code:
+        机器人将使用一个标准 ROS 节点来检测墙壁并发送电机命令以避开它。
+        在 ``my_package/my_package/`` 文件夹中，创建一个名为 ``obstacle_avoider.py`` 的文件，代码如下：
 
         .. literalinclude:: Code/obstacle_avoider.py
             :language: python
 
-        This node will create a publisher for the command and subscribe to the sensors topics here:
+        此节点将为命令创建一个发布者，并在此处订阅传感器话题：
 
         .. literalinclude:: Code/obstacle_avoider.py
             :language: python
             :dedent: 8
             :lines: 14-17
 
-        When a measurement is received from the left sensor it will be copied to a member field:
+        当从左传感器接收到测量值时，它将被复制到一个成员字段：
 
         .. literalinclude:: Code/obstacle_avoider.py
             :language: python
             :dedent: 4
             :lines: 19-20
 
-        Finally, a message will be sent to the ``/cmd_vel`` topic when a measurement from the right sensor is received.
-        The ``command_message`` will register at least a forward speed in ``linear.x`` in order to make the robot move when no obstacle is detected.
-        If any of the two sensors detect an obstacle, ``command_message`` will also register a rotational speed in ``angular.z`` in order to make the robot turn right.
+        最后，当从右传感器接收到测量值时，将向 ``/cmd_vel`` 话题发送一条消息。
+        当未检测到障碍物时，``command_message`` 将至少在 ``linear.x`` 中注册一个前进速度，使机器人移动。
+        如果两个传感器中的任何一个检测到障碍物，``command_message`` 还将在 ``angular.z`` 中注册一个旋转速度，使机器人向右转。
 
         .. literalinclude:: Code/obstacle_avoider.py
             :language: python
@@ -93,81 +93,81 @@ In addition to your custom plugin, the ``webots_ros2_driver`` will parse the ``<
 
     .. group-tab:: C++
 
-        The robot will use a standard ROS node to detect the wall and send motor commands to avoid it.
-        In the ``my_package/include/my_package`` folder, create a header file named ``ObstacleAvoider.hpp`` with this code:
+        机器人将使用一个标准 ROS 节点来检测墙壁并发送电机命令以避开它。
+        在 ``my_package/include/my_package`` 文件夹中，创建一个名为 ``ObstacleAvoider.hpp`` 的头文件，代码如下：
 
         .. literalinclude:: Code/ObstacleAvoider.hpp
             :language: cpp
 
-        In the ``my_package/src`` folder, create a source file named ``ObstacleAvoider.cpp`` with this code:
+        在 ``my_package/src`` 文件夹中，创建一个名为 ``ObstacleAvoider.cpp`` 的源文件，代码如下：
 
         .. literalinclude:: Code/ObstacleAvoider.cpp
             :language: cpp
 
-        This node will create a publisher for the command and subscribe to the sensors topics here:
+        此节点将为命令创建一个发布者，并在此处订阅传感器话题：
 
         .. literalinclude:: Code/ObstacleAvoider.cpp
             :language: cpp
             :lines: 6-16
 
-        When a measurement is received from the left sensor it will be copied to a member field:
+        当从左传感器接收到测量值时，它将被复制到一个成员字段：
 
         .. literalinclude:: Code/ObstacleAvoider.cpp
             :language: cpp
             :lines: 19-22
 
-        Finally, a message will be sent to the ``/cmd_vel`` topic when a measurement from the right sensor is received.
-        The ``command_message`` will register at least a forward speed in ``linear.x`` in order to make the robot move when no obstacle is detected.
-        If any of the two sensors detect an obstacle, ``command_message`` will also register a rotational speed in ``angular.z`` in order to make the robot turn right.
+        最后，当从右传感器接收到测量值时，将向 ``/cmd_vel`` 话题发送一条消息。
+        当未检测到障碍物时，``command_message`` 将至少在 ``linear.x`` 中注册一个前进速度，使机器人移动。
+        如果两个传感器中的任何一个检测到障碍物，``command_message`` 还将在 ``angular.z`` 中注册一个旋转速度，使机器人向右转。
 
         .. literalinclude:: Code/ObstacleAvoider.cpp
             :language: cpp
             :lines: 24-38
 
 
-3 Updating additional files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 更新其他文件
+^^^^^^^^^^^^^^
 
-You have to modify these two other files to launch your new node.
+你必须修改以下两个文件来启动你的新节点。
 
 .. tabs::
 
     .. group-tab:: Python
 
-        Edit ``setup.py`` and replace ``'console_scripts'`` with:
+        编辑 ``setup.py``，将 ``'console_scripts'`` 替换为：
 
         .. literalinclude:: Code/setup_sensor.py
             :language: python
             :dedent: 8
             :lines: 24-27
 
-        This will add an entry point for the ``obstacle_avoider`` node.
+        这将为 ``obstacle_avoider`` 节点添加一个入口点。
 
     .. group-tab:: C++
 
-        Edit ``CMakeLists.txt`` and add the compilation and installation of the ``obstacle_avoider``:
+        编辑 ``CMakeLists.txt``，添加 ``obstacle_avoider`` 的编译和安装：
 
         .. literalinclude:: Code/CMakeLists_sensor.txt
             :language: cmake
 
 
-Go to the file ``robot_launch.py`` and replace it with:
+转到 ``robot_launch.py`` 文件，并将其替换为：
 
 .. literalinclude:: Code/robot_launch_sensor.py
     :language: python
 
-This will create an ``obstacle_avoider`` node that will be included in the ``LaunchDescription``.
+这将创建一个 ``obstacle_avoider`` 节点，并将其包含在 ``LaunchDescription`` 中。
 
-4 Test the obstacle avoidance code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 测试避障代码
+^^^^^^^^^^^^^^
 
-Launch the simulation from a terminal in your ROS 2 workspace:
+从 ROS 2 工作空间中的终端启动仿真：
 
 .. tabs::
 
     .. group-tab:: Linux
 
-        From a terminal in your ROS 2 workspace run:
+        在 ROS 2 工作空间中的终端运行：
 
         .. code-block:: console
 
@@ -177,7 +177,7 @@ Launch the simulation from a terminal in your ROS 2 workspace:
 
     .. group-tab:: Windows
 
-        From a terminal in your WSL ROS 2 workspace run:
+        在 WSL ROS 2 工作空间中的终端运行：
 
         .. code-block:: console
 
@@ -186,20 +186,20 @@ Launch the simulation from a terminal in your ROS 2 workspace:
             $ source install/local_setup.bash
             $ ros2 launch my_package robot_launch.py
 
-        Be sure to use the ``/mnt`` prefix in front of your path to the Webots installation folder to access the Windows file system from WSL.
+        请务必在 Webots 安装文件夹的路径前使用 ``/mnt`` 前缀，以从 WSL 访问 Windows 文件系统。
 
     .. group-tab:: macOS
 
-        In a terminal of the host machine (not in the VM), if not done already, specify the Webots installation folder (e.g. ``/Applications/Webots.app``) and start the server using the following commands:
+        在主机（不是 VM）的终端中，如果尚未指定，请指定 Webots 安装文件夹（例如 ``/Applications/Webots.app``），并使用以下命令启动服务器：
 
         .. code-block:: console
 
             $ export WEBOTS_HOME=/Applications/Webots.app
             $ python3 local_simulation_server.py
 
-        Note that the server keeps running once the ROS 2 nodes are ended.
-        You don't need to restart it every time you want to launch a new simulation.
-        From a terminal in the Linux VM in your ROS 2 workspace, build and launch your custom package with:
+        请注意，一旦 ROS 2 节点结束，服务器仍会继续运行。
+        每次想要启动新仿真时，你无需重启它。
+        在 Linux VM 的 ROS 2 工作空间中的终端，构建并启动你的自定义包：
 
         .. code-block:: console
 
@@ -208,20 +208,20 @@ Launch the simulation from a terminal in your ROS 2 workspace:
             $ source install/local_setup.bash
             $ ros2 launch my_package robot_launch.py
 
-Your robot should go forward and before hitting the wall it should turn clockwise.
-You can press ``Ctrl+F10`` in Webots or go to the ``View`` menu, ``Optional Rendering`` and ``Show DistanceSensor Rays`` to display the range of the distance sensors of the robot.
+你的机器人应该向前移动，在撞墙之前应该顺时针转向。
+你可以在 Webots 中按 ``Ctrl+F10``，或转到 ``View`` 菜单、``Optional Rendering`` 和 ``Show DistanceSensor Rays``，以显示机器人距离传感器的测距范围。
 
 .. image:: Image/Robot_turning_clockwise.png
 
-Summary
--------
+总结
+----
 
-In this tutorial, you extended the basic simulation with a obstacle avoider ROS 2 node that publishes velocity commands based on the distance sensor values of the robot.
+在本教程中，你使用一个避障 ROS 2 节点扩展了基础仿真，该节点根据机器人的距离传感器值发布速度命令。
 
-Next steps
-----------
+下一步
+------
 
-You might want to improve the plugin or create new nodes to change the behavior of the robot.
-You can also implement a reset handler to automatically restart your ROS nodes when the simulation is reset from the Webots interface:
+你可能想要改进插件或创建新节点以改变机器人的行为。
+你还可以实现一个重置处理器，以便在从 Webots 界面重置仿真时自动重启你的 ROS 节点：
 
-* :doc:`./Simulation-Reset-Handler`.
+* :doc:`./Simulation-Reset-Handler`。

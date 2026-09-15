@@ -6,48 +6,48 @@
 
 .. _MigratingLaunch:
 
-Migrating Launch Files
-======================
+迁移启动文件
+============
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-While launch files in ROS 1 are always specified using `XML <https://wiki.ros.org/roslaunch/XML>`__ files, ROS 2 supports both XML and YAML files.
-ROS 2 also supports Python launch scripts to enable more flexibility (see `launch package <https://github.com/ros2/launch/tree/{REPOS_FILE_BRANCH}/launch>`__).
-However, for typical use cases, XML and YAML should be preferred over Python.
+ROS 1 中的启动文件始终使用 `XML <https://wiki.ros.org/roslaunch/XML>`__ 文件指定，而 ROS 2 同时支持 XML 和 YAML 文件。
+ROS 2 还支持 Python 启动脚本，以实现更大的灵活性（参见 `launch 软件包 <https://github.com/ros2/launch/tree/{REPOS_FILE_BRANCH}/launch>`__）。
+不过对于典型用例，应优先使用 XML 和 YAML 而不是 Python。
 
-This guide describes how to write ROS 2 XML launch files for an easy migration from ROS 1.
+本指南介绍如何编写 ROS 2 XML 启动文件，以便轻松地从 ROS 1 迁移过来。
 
-Background
-----------
+背景
+----
 
-A description of the ROS 2 launch system can be found in :doc:`Launch System tutorial <../../../Tutorials/Intermediate/Launch/Launch-system>`.
+ROS 2 启动系统的说明参见 :doc:`启动系统教程 <../../../Tutorials/Intermediate/Launch/Launch-system>`。
 
 
-Migrating tags
---------------
+迁移标签
+--------
 
 launch
 ^^^^^^
 
-* `Available in ROS 1 <https://wiki.ros.org/roslaunch/XML/launch>`__.
-* ``launch`` is the root element of any ROS 2 launch XML file.
+* `ROS 1 中可用 <https://wiki.ros.org/roslaunch/XML/launch>`__.
+* ``launch`` 是任何 ROS 2 启动 XML 文件的根元素。
 
 node
 ^^^^
 
-* `Available in ROS 1 <https://wiki.ros.org/roslaunch/XML/node>`__.
-* Launches a new node.
-* Differences from ROS 1:
+* `ROS 1 中可用 <https://wiki.ros.org/roslaunch/XML/node>`__.
+* 启动一个新节点。
+* 与 ROS 1 的区别：
 
-   * ``type`` attribute is now ``exec``.
-   * ``ns`` attribute is now ``namespace``.
-   * ``required="true"`` is now ``on_exit="shutdown"``.
-   * The following attributes aren't available: ``machine``, ``respawn_delay``, ``clear_params``.
+   * ``type`` 属性现在是 ``exec``。
+   * ``ns`` 属性现在是 ``namespace``。
+   * ``required="true"`` 现在是 ``on_exit="shutdown"``。
+   * 以下属性不可用：``machine``、``respawn_delay``、``clear_params``。
 
-Example
-~~~~~~~
+示例
+~~~~
 
 .. code-block:: xml
 
@@ -59,15 +59,15 @@ Example
 param
 ^^^^^
 
-* `Available in ROS 1 <https://wiki.ros.org/roslaunch/XML/param>`__.
-* Used for passing a parameter to a node.
-* There's no global parameter concept in ROS 2.
-  For that reason, it can only be used nested in a ``node`` tag.
-  Some attributes aren't supported in ROS 2: ``type``, ``textfile``, ``binfile``, ``executable``.
-* The ``command`` attribute is now ``value="$(command '...' )"``.
+* `ROS 1 中可用 <https://wiki.ros.org/roslaunch/XML/param>`__.
+* 用于向节点传递参数。
+* ROS 2 中没有全局参数的概念。
+  因此，它只能嵌套在 ``node`` 标签中使用。
+  ROS 2 不支持某些属性：``type``、``textfile``、``binfile``、``executable``。
+* ``command`` 属性现在是 ``value="$(command '...' )"``。
 
-Example
-~~~~~~~
+示例
+~~~~
 
 .. code-block:: xml
 
@@ -77,10 +77,10 @@ Example
       </node>
    </launch>
 
-Type inference rules
-~~~~~~~~~~~~~~~~~~~~
+类型推断规则
+~~~~~~~~~~~~
 
-Here are some examples of how to write parameters:
+下面是一些如何编写参数的示例：
 
 .. code-block:: xml
 
@@ -107,11 +107,11 @@ Here are some examples of how to write parameters:
       <param name="strange_separator" value="'1'//'2'//'3'" value-sep="//"/>
    </node>
 
-Parameter grouping
-~~~~~~~~~~~~~~~~~~
+参数分组
+~~~~~~~~
 
-In ROS 2, ``param`` tags are allowed to be nested.
-For example:
+在 ROS 2 中，``param`` 标签允许嵌套。
+例如：
 
 .. code-block:: xml
 
@@ -124,12 +124,12 @@ For example:
       </param>
    </node>
 
-That will create two parameters:
+这会创建两个参数：
 
-* A ``group1.group2.my_param`` of value ``1``, hosted by node ``/an_absolute_ns/my_node``.
-* A ``group1.another_param`` of value ``2`` hosted by node ``/an_absolute_ns/my_node``.
+* 一个值为 ``1`` 的 ``group1.group2.my_param``，由节点 ``/an_absolute_ns/my_node`` 承载。
+* 一个值为 ``2`` 的 ``group1.another_param``，由节点 ``/an_absolute_ns/my_node`` 承载。
 
-It's also possible to use full parameter names:
+也可以使用完整参数名：
 
 .. code-block:: xml
 
@@ -141,12 +141,12 @@ It's also possible to use full parameter names:
 rosparam
 ^^^^^^^^
 
-* `Available in ROS 1 <https://wiki.ros.org/roslaunch/XML/rosparam>`__.
-* Loads parameters from a yaml file.
-* It has been replaced with a ``from`` attribute in ``param`` tags.
+* `ROS 1 中可用 <https://wiki.ros.org/roslaunch/XML/rosparam>`__.
+* 从 yaml 文件加载参数。
+* 它已被 ``param`` 标签中的 ``from`` 属性取代。
 
-Example
-~~~~~~~
+示例
+~~~~
 
 .. code-block:: xml
 
@@ -157,12 +157,12 @@ Example
 remap
 ^^^^^
 
-* `Available in ROS 1 <https://wiki.ros.org/roslaunch/XML/remap>`__.
-* Used to pass remapping rules to a node.
-* It can only be used within ``node`` tags.
+* `ROS 1 中可用 <https://wiki.ros.org/roslaunch/XML/remap>`__.
+* 用于向节点传递重映射规则。
+* 它只能用在 ``node`` 标签内部。
 
-Example
-~~~~~~~
+示例
+~~~~
 
 .. code-block:: xml
 
@@ -178,48 +178,48 @@ Example
 include
 ^^^^^^^
 
-* `Available in ROS 1 <https://wiki.ros.org/roslaunch/XML/include>`__.
-* Allows including another launch file.
-* Differences from ROS 1:
+* `ROS 1 中可用 <https://wiki.ros.org/roslaunch/XML/include>`__.
+* 允许包含另一个启动文件。
+* 与 ROS 1 的区别：
 
-   * Available in ROS 1, included content was scoped.
-     In ROS 2, it's not.
-     This means the values of ``arg`` tags are propagated into included launch files as if ``pass_all_args="true"`` were used in ROS 1.
-     However, this propagation only works for args that have a default value (in the inner/included launch file).
-     Required args have to be passed explicitly.
-     Nest includes in ``group`` tags to scope them (see also ``group`` attributes ``scoped`` and ``forwarding`` ).
-   * ``ns`` attribute is not supported.
-     See example of ``push_ros_namespace`` tag for a workaround.
-   * ``arg`` tag nested in an ``include`` tag is now ``let``.
-     However, ``arg`` is still supported for now.
-   * ``let`` tags nested in an ``include`` tag don't support conditionals (``if``, ``unless``) or the ``description`` attribute.
-   * There is no support for nested ``env`` tags.
-     ``set_env`` and ``unset_env`` can be used instead.
-   * Both ``clear_params`` and ``pass_all_args`` attributes aren't supported.
-     ROS 2 launch behaves as if ``pass_all_args`` were set to true (see above).
+   * 在 ROS 1 中，被包含的内容是有作用域的。
+     在 ROS 2 中则没有。
+     这意味着 ``arg`` 标签的值会被传播到被包含的启动文件中，就如同在 ROS 1 中使用了 ``pass_all_args="true"`` 一样。
+     不过，这种传播只对（在内层/被包含的启动文件中）具有默认值的 arg 有效。
+     必需的 arg 必须显式传递。
+     把 include 嵌套在 ``group`` 标签中以限定其作用域（另见 ``group`` 的 ``scoped`` 和 ``forwarding`` 属性）。
+   * 不支持 ``ns`` 属性。
+     参见 ``push_ros_namespace`` 标签的示例以了解变通方法。
+   * 嵌套在 ``include`` 标签中的 ``arg`` 标签现在是 ``let``。
+     不过目前仍然支持 ``arg``。
+   * 嵌套在 ``include`` 标签中的 ``let`` 标签不支持条件判断（``if``、``unless``）和 ``description`` 属性。
+   * 不支持嵌套的 ``env`` 标签。
+     可以改用 ``set_env`` 和 ``unset_env``。
+   * ``clear_params`` 和 ``pass_all_args`` 两个属性都不受支持。
+     ROS 2 launch 的行为就仿佛把 ``pass_all_args`` 设为 true（见上文）。
 
-Examples
-~~~~~~~~
+示例
+~~~~
 
-See `Replacing an include tag`_.
+参见 `替换 include 标签`_。
 
 arg
 ^^^
 
-* `Available in ROS 1 <https://wiki.ros.org/roslaunch/XML/arg>`__.
-* ``arg`` is used for declaring a launch argument, or to pass an argument when using ``include`` tags.
-* Differences from ROS 1:
+* `ROS 1 中可用 <https://wiki.ros.org/roslaunch/XML/arg>`__.
+* ``arg`` 用于声明启动参数，或者在使用 ``include`` 标签时传递参数。
+* 与 ROS 1 的区别：
 
-   * ``value`` attribute is not allowed.
-     Use ``let`` tag for this.
-   * ``doc`` is now ``description``.
-   * When nested within an ``include`` tag:
+   * 不允许使用 ``value`` 属性。
+     请为此使用 ``let`` 标签。
+   * ``doc`` 现在是 ``description``。
+   * 当嵌套在 ``include`` 标签中时：
 
-      * Use ``let`` instead of ``arg``.
-      * ``if``, ``unless``, and ``description`` attributes aren't allowed.
+      * 使用 ``let`` 而不是 ``arg``。
+      * 不允许使用 ``if``、``unless`` 和 ``description`` 属性。
 
-Example
-~~~~~~~
+示例
+~~~~
 
 .. code-block:: xml
 
@@ -233,34 +233,34 @@ Example
       </node>
    </launch>
 
-Passing an argument to the launch file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+向启动文件传递参数
+~~~~~~~~~~~~~~~~~~
 
-In the XML launch file above, the ``topic_name`` defaults to the name ``chatter``, but can be configured on the command-line.
-Assuming the above launch configuration is in a file named ``mylaunch.xml``, a different topic name can be used by launching it with the following:
+在上面的 XML 启动文件中，``topic_name`` 默认为名称 ``chatter``，但可以在命令行上配置。
+假设上面的启动配置位于名为 ``mylaunch.xml`` 的文件中，则可以通过如下方式启动它来使用不同的话题名称：
 
 .. code-block:: console
 
    $ ros2 launch mylaunch.xml topic_name:=custom_topic_name
 
-There is some additional information about passing command-line arguments in :doc:`Using Substitutions <../../../Tutorials/Intermediate/Launch/Using-Substitutions>`.
+有关传递命令行参数的更多信息，参见 :doc:`使用替换符 <../../../Tutorials/Intermediate/Launch/Using-Substitutions>`。
 
 env
 ^^^
 
-* `Available in ROS 1 <https://wiki.ros.org/roslaunch/XML/env>`__.
-* Sets an environment variable.
-* It has been replaced with ``env``, ``set_env`` and ``unset_env``:
+* `ROS 1 中可用 <https://wiki.ros.org/roslaunch/XML/env>`__.
+* 设置环境变量。
+* 它已被 ``env``、``set_env`` 和 ``unset_env`` 取代：
 
-   * ``env`` can only be used nested in a ``node`` or ``executable`` tag.
-     ``if`` and ``unless`` tags aren't supported.
-   * ``set_env`` can be nested within the root tag ``launch`` or in ``group`` tags.
-     It accepts the same attributes as ``env``, and also ``if`` and ``unless`` tags.
-   * ``unset_env`` unsets an environment variable.
-     It accepts a ``name`` attribute and conditionals.
+   * ``env`` 只能嵌套在 ``node`` 或 ``executable`` 标签中使用。
+     不支持 ``if`` 和 ``unless`` 标签。
+   * ``set_env`` 可以嵌套在根标签 ``launch`` 中或 ``group`` 标签中。
+     它接受与 ``env`` 相同的属性，并且还接受 ``if`` 和 ``unless`` 标签。
+   * ``unset_env`` 取消设置环境变量。
+     它接受 ``name`` 属性和条件判断。
 
-Example
-~~~~~~~
+示例
+~~~~
 
 .. code-block:: xml
 
@@ -281,27 +281,27 @@ Example
 group
 ^^^^^
 
-* `Available in ROS 1 <https://wiki.ros.org/roslaunch/XML/group>`__.
-* Allows limiting the scope of launch configurations.
-  Usually used together with ``let``, ``include`` and ``push_ros_namespace`` tags.
-* Differences from ROS 1:
+* `ROS 1 中可用 <https://wiki.ros.org/roslaunch/XML/group>`__.
+* 允许限定启动配置的作用域。
+  通常与 ``let``、``include`` 和 ``push_ros_namespace`` 标签一起使用。
+* 与 ROS 1 的区别：
 
-   * There is no ``ns`` attribute.
-     See the new ``push_ros_namespace`` tag as a workaround.
-   * ``clear_params`` attribute isn't available.
-   * It doesn't accept ``remap`` nor ``param`` tags as children.
-   * It has two new attributes: ``scoped`` and ``forwarding`` (both are true by default).
-     If ``scoped`` is false, the group does not introduce a new variable scope, so actions done to variables inside the group also affect the outside variables.
-     If ``forwarding`` is false, no outside launch configurations ( ``arg`` ) are available inside the group.
-     This can be useful to isolate an included launch file and thus prevent collisions in argument names.
+   * 没有 ``ns`` 属性。
+     可以使用新增的 ``push_ros_namespace`` 标签作为变通方法。
+   * ``clear_params`` 属性不可用。
+   * 它不接受 ``remap`` 和 ``param`` 作为子标签。
+   * 它有两个新属性：``scoped`` 和 ``forwarding`` （默认都为 true）。
+     如果 ``scoped`` 为 false，则该 group 不会引入新的变量作用域，因此对组内变量所做的操作也会影响组外的变量。
+     如果 ``forwarding`` 为 false，则组内无法使用外部的启动配置（ ``arg`` ）。
+     这对于隔离被包含的启动文件、从而避免参数名冲突很有用。
 
 .. _launch-prefix-example:
 
-Example
-~~~~~~~
+示例
+~~~~
 
-``launch-prefix`` configuration affects both ``executable`` and ``node`` tags' actions.
-This example will use ``time`` as a prefix if ``use_time_prefix_in_talker`` argument is ``1``, only for the talker.
+``launch-prefix`` 配置会同时影响 ``executable`` 和 ``node`` 标签的动作。
+本例中，如果 ``use_time_prefix_in_talker`` 参数为 ``1``，则仅对 talker 使用 ``time`` 作为前缀。
 
 .. code-block:: xml
 
@@ -317,26 +317,26 @@ This example will use ``time`` as a prefix if ``use_time_prefix_in_talker`` argu
 machine
 ^^^^^^^
 
-It is not supported at the moment.
+目前尚不支持。
 
 test
 ^^^^
 
-It is not supported at the moment.
+目前尚不支持。
 
-New tags in ROS 2
------------------
+ROS 2 中的新标签
+----------------
 
 set_env and unset_env
 ^^^^^^^^^^^^^^^^^^^^^
 
-See `env`_ tag description.
+参见 `env`_ 标签说明。
 
 push_ros_namespace
 ^^^^^^^^^^^^^^^^^^
 
-``include`` and ``group`` tags don't accept an ``ns`` attribute.
-This action can be used as a workaround:
+``include`` 和 ``group`` 标签不接受 ``ns`` 属性。
+可以把这个动作作为变通方法使用：
 
 .. code-block:: xml
 
@@ -359,26 +359,26 @@ This action can be used as a workaround:
 let
 ^^^
 
-It's a replacement of ``arg`` tag with a value attribute.
+它用于替代带 value 属性的 ``arg`` 标签。
 
 .. code-block:: xml
 
    <let name="foo" value="asd"/>
 
-``let`` and ``arg`` serve two different purposes in ROS 2:
+在 ROS 2 中，``let`` 和 ``arg`` 的用途不同：
 
-* ``let`` sets a launch configuration value.
-* ``arg`` declares a launch argument/configuration and optionally provides a default value.
-  The value can separately be set from the CLI or when including the given launch file.
-  If no value is set, the default value is used if one was provided, otherwise an error is reported.
+* ``let`` 设置启动配置的值。
+* ``arg`` 声明一个启动参数/配置，并可选地提供默认值。
+  该值可以单独从命令行设置，也可以在包含该启动文件时设置。
+  如果没有设置值，则在提供了默认值时使用默认值，否则会报告错误。
 
 executable
 ^^^^^^^^^^
 
-It allows running any executable.
+它允许运行任意可执行文件。
 
-Example
-~~~~~~~
+示例
+~~~~
 
 .. code-block:: xml
 
@@ -386,10 +386,10 @@ Example
       <env name="LD_LIBRARY" value="/lib/some.so"/>
    </executable>
 
-Replacing an include tag
-------------------------
+替换 include 标签
+-----------------
 
-In order to include a launch file under a **namespace** as in ROS 1 then the ``include`` tags must be nested in a ``group`` tag.
+为了像 ROS 1 那样在 **命名空间** 下包含启动文件，``include`` 标签必须嵌套在 ``group`` 标签中。
 
 .. code-block:: xml
 
@@ -397,7 +397,7 @@ In order to include a launch file under a **namespace** as in ROS 1 then the ``i
       <include file="another_launch_file"/>
    </group>
 
-Then, instead of using the ``ns`` attribute, add the ``push_ros_namespace`` action tag to specify the namespace:
+然后，不再使用 ``ns`` 属性，而是添加 ``push_ros_namespace`` 动作标签来指定命名空间：
 
 .. code-block:: xml
 
@@ -406,38 +406,38 @@ Then, instead of using the ``ns`` attribute, add the ``push_ros_namespace`` acti
       <include file="another_launch_file"/>
    </group>
 
-Nesting ``include`` tags under a ``group`` tag is only required when specifying a namespace
+只有在指定命名空间时，才需要把 ``include`` 标签嵌套在 ``group`` 标签下
 
-Substitutions
--------------
+替换符
+------
 
-Documentation about ROS 1's substitutions can be found in `roslaunch XML wiki <https://wiki.ros.org/roslaunch/XML>`__.
-Substitutions syntax hasn't changed, i.e. it still follows the ``$(substitution-name arg1 arg2 ...)`` pattern.
-There are, however, some changes w.r.t. ROS 1:
+关于 ROS 1 替换符的文档可以在 `roslaunch XML wiki <https://wiki.ros.org/roslaunch/XML>`__ 中找到。
+替换符语法没有变化，即仍然遵循 ``$(substitution-name arg1 arg2 ...)`` 模式。
+不过，相对于 ROS 1 有一些变化：
 
-* ``env`` and ``optenv`` tags have been replaced by the ``env`` tag.
-  ``$(env <NAME>)`` will fail if the environment variable doesn't exist.
-  ``$(env <NAME> '')`` does the same as ROS 1's ``$(optenv <NAME>)``.
-  ``$(env <NAME> <DEFAULT>)`` does the same as ROS 1's ``$(env <NAME> <DEFAULT>)`` or ``$(optenv <NAME> <DEFAULT>)``.
-* ``find`` has been replaced with ``find-pkg-share`` (substituting the share directory of an installed package).
-  Alternatively ``find-pkg-prefix`` will return the root of an installed package.
-* There is a new ``exec-in-pkg`` substitution.
-  e.g.: ``$(exec-in-pkg <exec_name> <package_name>)``.
-* There is a new ``find-exec`` substitution.
-* ``arg`` has been replaced with ``var``.
-  It looks at configurations defined either with ``arg`` or ``let`` tag.
-* ``eval`` and ``dirname`` substitutions require escape characters for string values, e.g. ``if="$(eval '\'$(var variable)\' == \'val1\'')"``.
-  You can also use HTML escapes like ``&quot;`` .
-* ``eval`` does not pass configurations ( ``arg`` ) as local Python variables.
-  They have to be accessed via ``$(var name)``.
-* The argument of ``eval`` has to be a quoted string in ROS 2.
-  That is also the reason why quotes inside the expression have to be escaped.
+* ``env`` 和 ``optenv`` 标签已被 ``env`` 标签取代。
+  如果环境变量不存在，``$(env <NAME>)`` 会失败。
+  ``$(env <NAME> '')`` 的作用与 ROS 1 的 ``$(optenv <NAME>)`` 相同。
+  ``$(env <NAME> <DEFAULT>)`` 的作用与 ROS 1 的 ``$(env <NAME> <DEFAULT>)`` 或 ``$(optenv <NAME> <DEFAULT>)`` 相同。
+* ``find`` 已被 ``find-pkg-share`` 取代（替换为已安装软件包的 share 目录）。
+  或者，``find-pkg-prefix`` 会返回已安装软件包的根目录。
+* 新增了 ``exec-in-pkg`` 替换符。
+  例如：``$(exec-in-pkg <exec_name> <package_name>)``。
+* 新增了 ``find-exec`` 替换符。
+* ``arg`` 已被 ``var`` 取代。
+  它会查找由 ``arg`` 或 ``let`` 标签定义的配置。
+* ``eval`` 和 ``dirname`` 替换符要求字符串值使用转义字符，例如 ``if="$(eval '\'$(var variable)\' == \'val1\'')"``。
+  你也可以使用 ``&quot;`` 这样的 HTML 转义。
+* ``eval`` 不会把配置（ ``arg`` ）作为局部 Python 变量传入。
+  必须通过 ``$(var name)`` 访问它们。
+* 在 ROS 2 中，``eval`` 的参数必须是带引号的字符串。
+  这也是表达式内部的引号必须转义的原因。
 
-Type inference rules
---------------------
+类型推断规则
+------------
 
-The rules that were shown in ``Type inference rules`` subsection of ``param`` tag applies to any attribute.
-For example:
+``param`` 标签的 ``类型推断规则`` 小节中展示的规则适用于任何属性。
+例如：
 
 .. code-block:: xml
 
@@ -454,5 +454,5 @@ For example:
    <!--Correct version.-->
    <tag3 attr-expecting-a-str="don't use a separator"/>
 
-Some attributes accept more than a single type, for example ``value`` attribute of ``param`` tag.
-It's usual that parameters that are of type ``int`` (or ``float``) also accept an ``str``, that will be later substituted and tried to convert to an ``int`` (or ``float``) by the action.
+有些属性可以接受不止一种类型，例如 ``param`` 标签的 ``value`` 属性。
+通常，``int`` （或 ``float``）类型的参数也接受 ``str``，该值稍后会被替换，并由动作尝试转换为 ``int`` （或 ``float``）。

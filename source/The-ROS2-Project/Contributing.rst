@@ -7,58 +7,58 @@
 Contributing
 ============
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 1
    :local:
 
-A few things to remember before you start contributing to the ROS 2 project.
+在你开始为 ROS 2 项目做贡献之前，有几件事需要牢记。
 
-Tenets
-------
+基本原则
+--------
 
-* Respect what came before
+* 尊重前人的成果
 
-  ROS has been around for more than a decade and is used by developers and across the world.
-  Keep a humble attitude and an open mindset while contributing.
+  ROS 已经存在十多年，全世界的开发者都在使用它。
+  在贡献时保持谦逊的态度和开放的心态。
 
-* Engage Open Robotics as early as possible
+* 尽早与 Open Robotics 互动
 
-  * Open Robotics acts as a gate-keeper and advocate for the ROS community.
-    Rely on their expertise and technical judgement from the design phase.
-  * Start discussions with Open Robotics and the community early.
-    Long time ROS contributors may have a clearer vision of the bigger picture.
-    If you implement a feature and send a pull request without discussing with the community first, you are taking the risk of it being rejected, or you may be asked to largely rethink your design.
-  * Opening issues or using Discourse to socialize an idea before starting the implementation is generally preferable.
+  * Open Robotics 充当 ROS 社区的守门人和倡导者。
+    在 **设计阶段** 就依赖他们的专业知识和 **技术判断**。
+  * 尽早与 Open Robotics 和社区展开讨论。
+    长期的 ROS 贡献者可能对全局有更清晰的视野。
+    如果你实现了一个功能并在未先与社区讨论的情况下就提交拉取请求，你可能面临被拒绝的风险，或者被要求大幅重新设计。
+  * 在开始实现之前，先通过提交 issue 或在 Discourse 上交流想法通常是更好的做法。
 
-* Adopt community best-practices whenever possible instead of ad-hoc processes
+* 尽可能采用社区最佳实践，而不是临时的流程
 
-  Think about your end-user's experience when developing and contributing.
-  Avoid using non-standard tools or libraries that may not be accessible to everyone.
+  在开发和贡献时，要站在最终用户的角度考虑他们的体验。
+  避免使用可能无法被所有人访问的非标准工具或库。
 
-* Think about the community as a whole
+* 从社区整体出发思考
 
-  Think about the bigger picture.
-  There are developers building different robots with different constraints.
-  ROS needs to accommodate requirements of the whole community.
+  考虑全局。
+  有开发者在使用不同的机器人，面临着不同的约束。
+  ROS 需要满足整个社区的需求。
 
-There are a number of ways you can contribute to the ROS 2 project.
+你可以通过多种方式为 ROS 2 项目做贡献。
 
-Discussions and support
------------------------
+讨论与支持
+----------
 
-Some of the easiest ways to contribute to ROS 2 involve engaging in community discussions and support.
-You can find more information on how to pitch in on the :doc:`Contact <../../Contact>` page.
+为 ROS 2 做贡献最简单的方式之一就是参与社区讨论和支持。
+你可以在 :doc:`联系 <../../Contact>` 页面上找到更多关于如何参与的信息。
 
-Contributing code
------------------
+贡献代码
+--------
 
-Setting up your development environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+搭建你的开发环境
+^^^^^^^^^^^^^^^^
 
-To get started, you'll want to install from source; follow :ref:`the source installation instructions <building-from-source>` for your platform.
+要开始，你需要从源码安装；请按照适用于你平台的 :ref:`源码安装说明 <building-from-source>` 进行操作。
 
-Development Guides
-^^^^^^^^^^^^^^^^^^
+开发指南
+^^^^^^^^
 
 .. toctree::
    :titlesonly:
@@ -72,37 +72,37 @@ Development Guides
    Contributing/Contributing-to-code
    Contributing/Contributing-To-ROS-2-Documentation
 
-What to work on
-^^^^^^^^^^^^^^^
+可以开展哪些工作
+^^^^^^^^^^^^^^^^
 
-We have identified a number of tasks that could be worked on by community members: they can be listed by `searching across the ROS 2 repositories for issues labeled as "help wanted" <https://github.com/search?q=user%3Aament+user%3Aros2+is%3Aopen+label%3A"help+wanted"&type=Issues>`__.
-If you see something on that list that you would like to work on, please comment on the item to let others know that you are looking into it.
+我们已经确定了一些可以由社区成员开展的任务：可以通过 `在 ROS 2 仓库中搜索标记为 "help wanted" 的 issue <https://github.com/search?q=user%3Aament+user%3Aros2+is%3Aopen+label%3A"help+wanted"&type=Issues>`__ 来列出它们。
+如果你在该列表中看到想要开展的工作，请在该条目下评论，让其他人知道你已经着手处理。
 
-We also have a label for issues that we think should be more accessible for first-time contributors, `labeled "good first issue" <https://github.com/search?q=user%3Aament+user%3Aros2+is%3Aopen+label%3A%22good+first+issue%22&type=Issues>`__.
-If you are interested in contributing to the ROS 2 project, we encourage you to take a look at those issues first.
-If you'd like to cast a wider net, we welcome contributions on any open issue (or others that you might propose), particularly tasks that have a milestone signifying they're targeted for the next ROS 2 release (the milestone will be the next release's e.g. 'crystal').
+我们还有一个标签，用于标记我们认为对首次贡献者更友好的 issue，即 `标记为 "good first issue" 的 issue <https://github.com/search?q=user%3Aament+user%3Aros2+is%3Aopen+label%3A%22good+first+issue%22&type=Issues>`__。
+如果你有兴趣为 ROS 2 项目做贡献，我们鼓励你先看看这些 issue。
+如果你想扩大范围，我们欢迎你对任何开放的 issue（或你提出的其他 issue）做出贡献，尤其是带有里程碑（表示它们是为下一个 ROS 2 发行版而设的）的任务（里程碑将是下一个发行版的名称，例如 'crystal'）。
 
-If you have some code to contribute that fixes a bug or improves documentation, please submit it as a pull request to the relevant repository.
-For larger changes, it is a good idea to discuss the proposal `on the ROS 2 forum <https://discourse.openrobotics.org/c/ros/111>`__ before you start to work on it so that you can identify if someone else is already working on something similar.
-If your proposal involves changes to the APIs, it is especially recommended that you discuss the approach before starting work.
+如果你有修复 bug 或改进文档的代码要贡献，请将其以拉取请求的形式提交到相关的仓库。
+对于较大的改动，最好在开始工作之前先在 `ROS 2 论坛 <https://discourse.openrobotics.org/c/ros/111>`__ 上讨论该提案，这样可以确认是否已有其他人在做类似的工作。
+如果你的提案涉及 API 的改动，尤其建议在开始工作之前先讨论方案。
 
-Becoming a core maintainer
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+成为核心维护者
+^^^^^^^^^^^^^^
 
-The ROS 2 maintainers ensure that the project is generally making progress.
-The responsibilities of the maintainers include:
+ROS 2 维护者确保项目总体上有序推进。
+维护者的职责包括：
 
-* Reviewing incoming code contributions for style, quality, and overall fit into the goals of the repository/ROS 2.
-* Ensuring that CI continues to stay green.
-* Merging pull requests that meet the quality and CI standards above.
-* Addressing issues opened up by users.
+* 审查传入的代码贡献，检查其风格、质量以及与仓库/ROS 2 总体目标的契合度。
+* 确保 CI 保持绿灯。
+* 合并满足上述质量和 CI 标准的拉取请求。
+* 处理用户提交的 issue。
 
-Each repository in the `ros2 <https://github.com/ros2>`__ and `ament <https://github.com/ament>`__ organizations has a separate set of maintainers.
-Becoming a maintainer of one or more of those repositories is an invitation-only process, and generally involves the following steps:
+`ros2 <https://github.com/ros2>`__ 和 `ament <https://github.com/ament>`__ 组织中的每个仓库都有一组独立的维护者。
+成为其中某个或多个仓库的维护者是一个仅限邀请的流程，通常包括以下步骤：
 
-* Within the last year, have a substantial number of code contributions to the repository.
-* Within the last year, do a substantial number of reviews on incoming pull requests to the repository.
+* 在过去一年内，对仓库有大量代码贡献。
+* 在过去一年内，对传入仓库的拉取请求做了大量审查。
 
-Approximately every 3 months, the ROS 2 team will review the contributions in all of the repositories and send out invitations to new maintainers.
-Once the invitation is accepted, the new maintainer will be asked to go through a short training process on the mechanisms and policies of the ROS 2 repositories.
-After that training process is completed, the new maintainer will be given write access to the appropriate repositories.
+大约每 3 个月，ROS 2 团队会审查所有仓库中的贡献，并向新的维护者发出邀请。
+邀请被接受后，新维护者将被要求完成一个关于 ROS 2 仓库机制和策略的简短培训流程。
+培训流程完成后，新维护者将获得对相应仓库的写权限。

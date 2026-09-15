@@ -1,16 +1,16 @@
-You will need to add the ROS 2 apt repository to your system.
+你需要将 ROS 2 的 apt 仓库添加到你的系统中。
 
-First ensure that the `Ubuntu Universe repository <https://help.ubuntu.com/community/Repositories/Ubuntu>`_ is enabled.
+首先确保 `Ubuntu Universe 仓库 <https://help.ubuntu.com/community/Repositories/Ubuntu>`_ 已启用。
 
 .. code-block:: console
 
    $ sudo apt install software-properties-common
    $ sudo add-apt-repository universe
 
-The `ros-apt-source <https://github.com/ros-infrastructure/ros-apt-source/>`_ packages provide keys and apt source configuration for the various ROS repositories.
+`ros-apt-source <https://github.com/ros-infrastructure/ros-apt-source/>`_ 软件包为各个 ROS 仓库提供密钥和 apt 源配置。
 
-Installing the ros2-apt-source package will configure ROS 2 repositories for your system.
-Updates to repository configuration will occur automatically when new versions of this package are released to the ROS repositories.
+安装 ros2-apt-source 软件包会为你的系统配置 ROS 2 仓库。
+当该软件包的新版本发布到 ROS 仓库时，仓库配置会自动更新。
 
 .. code-block:: console
 

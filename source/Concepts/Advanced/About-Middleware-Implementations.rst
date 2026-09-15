@@ -2,64 +2,64 @@
 
    Concepts/About-Middleware-Implementations
 
-ROS 2 middleware implementations
-================================
+ROS 2 中间件实现
+================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
 .. include:: ../../../global_substitutions.txt
 
-ROS middleware implementations are sets of |packages| that implement some of the internal ROS interfaces, e.g. the ``rmw``, ``rcl``, and ``rosidl`` |APIs|.
+ROS 中间件实现是一组 |packages|，它们实现了某些内部 ROS 接口，例如 ``rmw``、``rcl`` 和 ``rosidl`` |APIs|。
 
-For a more practical in-depth overview of how ROS 2 integrates with different middleware implementations, see :doc:`the middleware implementation tutorial <../../Tutorials/Advanced/Creating-An-RMW-Implementation>`.
+关于 ROS 2 如何与不同中间件实现集成的更实用的深入概览，请参阅 :doc:`中间件实现教程 <../../Tutorials/Advanced/Creating-An-RMW-Implementation>`。
 
-Common Packages for DDS Middleware Packages
--------------------------------------------
+DDS 中间件包的公共包
+--------------------
 
-All of the current ROS middleware implementations are based on full or partial DDS implementations.
-For example, there is a middleware implementation that uses RTI's Connext DDS and an implementation which uses eProsima's Fast DDS.
-Because of this, there are some shared |packages| amongst most DDS based middleware implementations.
+当前所有 ROS 中间件实现都基于完整或部分的 DDS 实现。
+例如，有一个中间件实现使用 RTI 的 Connext DDS，还有一个实现使用 eProsima 的 Fast DDS。
+因此，在大多数基于 DDS 的中间件实现中，存在一些共享的 |packages|。
 
-In the `ros2/rosidl_dds <https://github.com/ros2/rosidl_dds>`_ repository on |GitHub|_, there is the following |package|:
+在 |GitHub|_ 上的 `ros2/rosidl_dds <https://github.com/ros2/rosidl_dds>`_ 仓库中，有以下 |package|：
 
--  ``rosidl_generator_dds_idl``: provides tools to generate DDS ``.idl`` files from ``rosidl`` files, e.g. ``.msg`` files, ``.srv`` files, etc.
+-  ``rosidl_generator_dds_idl``：提供从 ``rosidl`` 文件（例如 ``.msg`` 文件、``.srv`` 文件等）生成 DDS ``.idl`` 文件的工具。
 
-The ``rosidl_generator_dds_idl`` |package| generates a DDS ``.idl`` file for each ``rosidl`` file, e.g. ``.msg`` file, defined by |packages| containing messages.
-Currently DDS based ROS middleware implementations make use of this generator's output ``.idl`` files to generate pre-compiled type support that is vendor specific.
+``rosidl_generator_dds_idl`` |package| 会为包含消息的 |packages| 所定义的每个 ``rosidl`` 文件（例如 ``.msg`` 文件）生成一个 DDS ``.idl`` 文件。
+目前，基于 DDS 的 ROS 中间件实现会利用该生成器输出的 ``.idl`` 文件，来生成特定于厂商的预编译类型支持。
 
 .. _about-middleware-impls_struct_dds:
 
-Structure of ROS Middleware Implementations
--------------------------------------------
+ROS 中间件实现的结构
+--------------------
 
-A ROS middleware implementation is typically made up of a few |packages| in a single repository:
+一个 ROS 中间件实现通常由单个仓库中的几个 |packages| 组成：
 
-- ``<implementation_name>_cmake_module``: contains CMake Module for discovering and exposing required dependencies
-- ``rmw_<implementation_name>_<language>``: contains the implementation of the ``rmw`` |API| in a particular language, typically C++
-- ``rosidl_typesupport_<implementation_name>_<language>``: contains tools to generate static type support code for ``rosidl`` files, tailored to the implementation in a particular language, typically C or C++
+- ``<implementation_name>_cmake_module``：包含用于发现和暴露所需依赖项的 CMake 模块
+- ``rmw_<implementation_name>_<language>``：包含用特定语言（通常是 C++）实现的 ``rmw`` |API|
+- ``rosidl_typesupport_<implementation_name>_<language>``：包含为 ``rosidl`` 文件生成静态类型支持代码的工具，这些代码针对特定语言（通常是 C 或 C++）的实现而定制
 
-The ``<implementation_name>_cmake_module`` |package| contains any CMake Modules and functions needed to find the supporting dependencies for the middleware implementation.
-For example, ``rti_connext_dds_cmake_module`` provides wrapper logic around the CMake Module shipped with RTI Connext DDS to make sure that all packages that depend on it will select the same installation of RTI Connext DDS.
-Similarly, ``fastrtps_cmake_module`` includes a CMake Module to find eProsima's Fast DDS and ``gurumdds_cmake_module`` includes a CMake Module to find GurumNetworks GurumDDS.
-Not all implementations will have a package like this: for example, Eclipe's Cyclone DDS already provides a CMake Module which is used directly by its RMW implementation without the need of additional wrappers.
+``<implementation_name>_cmake_module`` |package| 包含查找该中间件实现所需支撑依赖项时用到的任何 CMake 模块和函数。
+例如，``rti_connext_dds_cmake_module`` 围绕 RTI Connext DDS 随附的 CMake 模块提供了包装逻辑，以确保所有依赖它的包都会选择同一个 RTI Connext DDS 安装。
+类似地，``fastrtps_cmake_module`` 包含一个用于查找 eProsima 的 Fast DDS 的 CMake 模块，而 ``gurumdds_cmake_module`` 包含一个用于查找 GurumNetworks GurumDDS 的 CMake 模块。
+并非所有实现都会有这样的包：例如，Eclipe 的 Cyclone DDS 已经提供了一个 CMake 模块，其 RMW 实现直接使用它，无需额外的包装器。
 
-The ``rmw_<implementation_name>_<language>`` |package| implements the ``rmw`` C |API| in a particular language.
-The implementation itself can be C++, it just must expose the header's symbols as ``extern "C"`` so that C applications can link against it.
+``rmw_<implementation_name>_<language>`` |package| 用特定语言实现 ``rmw`` C |API|。
+实现本身可以是 C++，只是必须以 ``extern "C"`` 形式暴露头文件中的符号，以便 C 应用可以链接它。
 
-The ``rosidl_typesupport_<implementation_name>_<language>`` |package| provides a generator which generates DDS code in a particular language.
-This is done using the ``.idl`` files generated by the ``rosidl_generator_dds_idl`` |package| and the DDS IDL code generator provided by the DDS vendor.
-It also generates code for converting ROS message structures to and from DDS message structures.
-This generator is also responsible for creating a shared library for the message package it is being used in, which is specific to the messages in the message package and to the DDS vendor being used.
+``rosidl_typesupport_<implementation_name>_<language>`` |package| 提供一个生成器，用于生成特定语言的 DDS 代码。
+这是利用 ``rosidl_generator_dds_idl`` |package| 生成的 ``.idl`` 文件以及 DDS 厂商提供的 DDS IDL 代码生成器来完成的。
+它还会生成用于在 ROS 消息结构与 DDS 消息结构之间相互转换的代码。
+该生成器还负责为使用它的消息包创建一个共享库，该共享库特定于该消息包中的消息以及所使用的 DDS 厂商。
 
-As mentioned above, the ``rosidl_typesupport_introspection_<language>`` may be used instead of a vendor specific type support package if an rmw implementation supports runtime interpretation of messages.
-This ability to programmatically send and receive types over topics without generating code beforehand is achieved by supporting the `DDS X-Types Dynamic Data standard <https://www.omg.org/spec/DDS-XTypes/>`_.
-As such, rmw implementations may provide support for the X-Types standard, and/or provide a package for type support generated at compile time specific to their DDS implementation.
+如上所述，如果某个 rmw 实现支持在运行时解释消息，则可以使用 ``rosidl_typesupport_introspection_<language>`` 来替代厂商特定的类型支持包。
+这种无需预先生成代码即可在话题上以编程方式收发类型的能力，是通过支持 `DDS X-Types 动态数据标准 <https://www.omg.org/spec/DDS-XTypes/>`_ 来实现的。
+因此，rmw 实现可以提供对 X-Types 标准的支持，和/或提供一个针对其 DDS 实现在编译时生成的类型支持包。
 
-As an example of an rmw implementation repository, the ``Eclipse Cyclone DDS`` ROS middleware implementation is on |GitHub|_ at `ros2/rmw_cyclonedds <https://github.com/ros2/rmw_cyclonedds>`_.
+作为一个 rmw 实现仓库的例子，``Eclipse Cyclone DDS`` ROS 中间件实现在 |GitHub|_ 上的地址是 `ros2/rmw_cyclonedds <https://github.com/ros2/rmw_cyclonedds>`_。
 
-The rmw implementation for ``Fast DDS`` is on |GitHub|_ at `ros2/rmw_fastrtps_cpp <https://github.com/ros2/rmw_fastrtps_cpp>`_.
+``Fast DDS`` 的 rmw 实现在 |GitHub|_ 上的地址是 `ros2/rmw_fastrtps_cpp <https://github.com/ros2/rmw_fastrtps_cpp>`_。
 
-The rmw implementation for ``Connext DDS`` is on |GitHub|_ at `ros2/rmw_connextdds <https://github.com/ros2/rmw_connextdds>`_.
+``Connext DDS`` 的 rmw 实现在 |GitHub|_ 上的地址是 `ros2/rmw_connextdds <https://github.com/ros2/rmw_connextdds>`_。
 
-The rmw implementation for ``GurumDDS`` is on |GitHub|_ at `ros/rmw_gurumdds <https://github.com/ros2/rmw_gurumdds>`_.
+``GurumDDS`` 的 rmw 实现在 |GitHub|_ 上的地址是 `ros/rmw_gurumdds <https://github.com/ros2/rmw_gurumdds>`_。

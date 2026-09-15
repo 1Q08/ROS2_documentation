@@ -1,7 +1,7 @@
-Lyrical Luth Supported Platforms
-================================
+Lyrical Luth 支持的平台
+=======================
 
-ROS Lyrical supports the following platforms according to :doc:`the platform support tiers <../../The-ROS2-Project/Platform-Support-Tiers>`:
+ROS Lyrical 根据 :doc:`平台支持层级 <../../The-ROS2-Project/Platform-Support-Tiers>` 支持以下平台：
 
 +--------------+-------------------+-------------------+---------------+-------------------+-----------+-----------------+----------------+
 | Architecture | Ubuntu Resolute   | Ubuntu Noble*     | Windows 11    | RHEL 10           | macOS     | Debian Trixie*  | OpenEmbedded / |
@@ -14,23 +14,23 @@ ROS Lyrical supports the following platforms according to :doc:`the platform sup
 | arm32        | Tier 3            | Tier 3            |               |                   |           | Tier 3          | Tier 3         |
 +--------------+-------------------+-------------------+---------------+-------------------+-----------+-----------------+----------------+
 
-* ``*`` Early EOL per :doc:`the platform EOL policy <../../The-ROS2-Project/Platform-EOL-Policy>`
-    * Ubuntu Noble is supported until ``2029-06-01``
-    * Debian Trixie is supported until ``2028-08-09``
-* ``[d]`` You may install ROS Lyrical on this platform using Distribution-specific packaegs (Debian, RPM, etc.).
-* ``[a]`` You may install ROS Lyrical by downloading an archive containing pre-built packages for all packages in the `ROS Lyrical ros2.repos file <https://github.com/ros2/ros2/blob/lyrical/ros2.repos>`__
+* ``*`` 根据 :doc:`平台 EOL 政策 <../../The-ROS2-Project/Platform-EOL-Policy>` 提前终止支持
+    * Ubuntu Noble 支持至 ``2029-06-01``
+    * Debian Trixie 支持至 ``2028-08-09``
+* ``[d]`` 你可以使用发行版专属的软件包（Debian、RPM 等）在此平台上安装 ROS Lyrical。
+* ``[a]`` 你可以下载包含 `ROS Lyrical ros2.repos 文件 <https://github.com/ros2/ros2/blob/lyrical/ros2.repos>`__ 中所有软件包预构建版本的归档包来安装 ROS Lyrical
 
-To use ROS Lyrical on any Tier 3 platform, you must build ROS Lyrical from source.
+若要在任何第 3 层级平台上使用 ROS Lyrical，你必须从源码构建 ROS Lyrical。
 
-Minimum Language Requirements
------------------------------
+最低语言要求
+------------
 
 * `C++20 <https://discourse.openrobotics.org/t/ros-2-lyrical-c-version/52551>`__
 * C17
 * Python 3.12 - 3.14
 
-Dependency Requirements
------------------------
+依赖项要求
+----------
 
 +---------------+-----------------+---------------+---------------+----------+----------+------------------+--------------------+
 |               | Required Support                |                             Recommended Support                             |
@@ -58,23 +58,16 @@ Dependency Requirements
 | PCL           | 1.15.1          | N/A           | 1.14.0        | 1.15.0*  | 1.15.1   | 1.15.0           | 6.12.0             |
 +---------------+-----------------+---------------+---------------+----------+----------+------------------+--------------------+
 
-\" \* \" means that this is not the upstream version (available on the
-official Operating System repositories) but a package distributed by
-OSRF or the community (package built and distributed on custom
-repositories).
+\" \* \" 表示这不是上游版本（官方操作系统仓库中提供的版本），而是由 OSRF 或社区分发的软件包（在自定义仓库中构建并分发的软件包）。
 
-\" \*\* \" means that the dependency may see multiple version changes,
-because the dependency uses a package manager that continually updates
-the dependency without a stable API.
+\" \*\* \" 表示该依赖项可能会有多个版本变化，因为它所使用的软件包管理器会在没有稳定 API 的情况下持续更新该依赖项。
 
-This document only captures the version at the first release of a ROS
-distribution and will not be updated as the dependencies move forward.
-These versions are thus a low watermark.
+本文档只记录 ROS 发行版首次发布时的版本，并且不会随依赖项的演进而更新。因此，这些版本是一个最低水位线。
 
-Middleware Implementation support
----------------------------------
+中间件实现支持
+--------------
 
-The default middleware in ROS Lyrical is **rmw_fastrtps_cpp**.
+ROS Lyrical 中的默认中间件是 **rmw_fastrtps_cpp**。
 
 +---------------+-----------------+---------------+---------------+----------+----------+------------------+--------------------+
 | Middleware    | Ubuntu Resolute | Windows 11    | Ubuntu Noble  | RHEL 10  | macOS    | Debian Trixie    | OpenEmbedded       |
@@ -103,5 +96,4 @@ The default middleware in ROS Lyrical is **rmw_fastrtps_cpp**.
 | rmw_fastrtps_dynamic_cpp  | eProsima Fast-DDS       | Tier 2        | All Architectures             |
 +---------------------------+-------------------------+---------------+-------------------------------+
 
-Middleware implementation support is dependent upon the platform support tier.
-For example, a Tier 1 middleware implementation on a Tier 2 platform will only receive Tier 2 support.
+中间件实现支持取决于平台支持层级。例如，第 2 层级平台上的第 1 层级中间件实现，只能获得第 2 层级的支持。

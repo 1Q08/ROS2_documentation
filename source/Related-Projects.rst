@@ -1,35 +1,35 @@
 
-Related Projects
-================
+相关项目
+========
 
 Gazebo
 ------
 
-**Gazebo** `(gazebosim.org) <https://gazebosim.org/>`_ and its predecessor Gazebo Classic are the first open source choice for 3D physics simulation of ROS-based robots.
+**Gazebo** `(gazebosim.org) <https://gazebosim.org/>`_ 及其前身 Gazebo Classic 是基于 ROS 的机器人 3D 物理仿真的首选开源方案。
 
-Large Community Projects
-------------------------
+大型社区项目
+------------
 
-Large community projects involve multiple developers from all over the globe and are typically backed by a dedicated working group (cf. :doc:`The-ROS2-Project/Governance`).
+大型社区项目涉及来自全球各地的多位开发者，通常由专门的工作组提供支持（参见 :doc:`The-ROS2-Project/Governance`）。
 
-* **ros2_control** `(control.ros.org) <https://control.ros.org/>`_: Flexible framework for real-time control of robots implemented with ROS 2.
-* **Navigation2** `(nav2.org) <https://nav2.org/>`_: Comprehensive and flexible navigation stack for mobile robots using ROS 2.
-* **MoveIt** `(moveit.ai) <https://moveit.ai/>`_: A rich platform for building manipulation applications featuring advanced kinematics, motion planning, control, collision checking, and much more.
-* **micro-ROS** `(micro.ros.org) <https://micro.ros.org/>`_: A platform for putting ROS 2 onto microcontrollers, starting at less than 100 kB of RAM.
+* **ros2_control** `(control.ros.org) <https://control.ros.org/>`_：使用 ROS 2 实现的机器人实时控制的灵活框架。
+* **Navigation2** `(nav2.org) <https://nav2.org/>`_：使用 ROS 2 的移动机器人综合且灵活的导航栈。
+* **MoveIt** `(moveit.ai) <https://moveit.ai/>`_：用于构建操作应用的丰富平台，具备高级运动学、运动规划、控制、碰撞检测等功能。
+* **micro-ROS** `(micro.ros.org) <https://micro.ros.org/>`_：将 ROS 2 移植到微控制器上的平台，内存需求低至不足 100 kB。
 
-Further Community Projects
---------------------------
+更多社区项目
+------------
 
-The global ROS community develops and maintains hundreds of further packages on top of the core ROS 2 stack.
-Some of them come with their own websites for documentation.
-Your best entry point to discover these works is the **ROS Index** `(index.ros.org) <https://index.ros.org/packages/>`_.
+全球 ROS 社区在核心 ROS 2 技术栈之上开发和维护了数百个其他包。
+其中一些带有自己的文档网站。
+发现这些成果的最佳入口是 **ROS Index** `(index.ros.org) <https://index.ros.org/packages/>`_。
 
-*Hint for developers:* If you maintain a ``README.md`` file in the root of your package folder (which is not necessarily the root of your repository), this file is rendered into the overview page of your package at `index.ros.org <https://index.ros.org/packages/>`_.
-The file may be used for documenting your package and supersedes the package documentation pages in the ROS Wiki from ROS 1.
-See the `fmi_adapter package <https://index.ros.org/p/fmi_adapter/#{DISTRO}>`_ as an example.
+*开发者提示：* 如果您在包文件夹的根目录（不一定是仓库的根目录）中维护一个 ``README.md`` 文件，该文件会被渲染到 `index.ros.org <https://index.ros.org/packages/>`_ 上您包的概览页面中。
+该文件可用于记录您的包，并取代 ROS 1 时代 ROS Wiki 中的包文档页面。
+参见 `fmi_adapter 包 <https://index.ros.org/p/fmi_adapter/#{DISTRO}>`_ 作为示例。
 
-Company-driven Projects
------------------------
+公司主导的项目
+--------------
 
 .. toctree::
    :maxdepth: 1

@@ -1,140 +1,140 @@
 .. _AboutROS:
 
-About ROS
-=========
+关于 ROS
+========
 
-ROS (Robot Operating System) is an open-source ecosystem that provides the framework, tools, and libraries for building, deploying, running, and maintaining robotic applications.
-This article introduces the main areas of the ecosystem and outlines their intended use.
+ROS（机器人操作系统）是一个开源生态系统，提供用于构建、部署、运行和维护机器人应用的框架、工具和库。
+本文介绍该生态系统的主要领域，并概述它们的预期用途。
 
-**Area: ROS-framework, ROS-tools, ROS-capabilities | Content-type: about | Experience: beginner**
+**领域：ROS 框架、ROS 工具、ROS 能力 | 内容类型：关于 | 经验水平：初学者**
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Summary
--------
+概述
+----
 
-ROS is used in many areas of robotics.
-In logistics, it helps robots move goods in warehouses by providing navigation, mapping, motion control, and coordination between multiple robots.
-In manufacturing, it enables advanced tasks such as automated pick-and-place operations using vision systems for accurate handling.
-In healthcare, ROS supports robotic systems that assist with patient care and improve efficiency in clinical workflows.
+ROS 用于机器人学的许多领域。
+在物流领域，它通过提供导航、建图、运动控制以及多机器人之间的协调，帮助机器人在仓库中搬运货物。
+在制造业，它支持诸如使用视觉系统进行精确处理的自动抓取放置操作等高级任务。
+在医疗领域，ROS 支持辅助患者护理并提高临床工作流程效率的机器人系统。
 
-Watch the `ROS video`_ for a quick introduction.
+观看 `ROS 视频`_ 快速了解。
 
-.. _ROS video: https://vimeo.com/237016358
+.. _ROS 视频: https://vimeo.com/237016358
 
-The ecosystem
--------------
+生态系统
+--------
 
-Despite its name, ROS is actually not an operating system in the traditional sense, but a set of tools and libraries that help developers create robots using various platforms and programming languages.
+尽管名为操作系统，ROS 实际上并不是传统意义上的操作系统，而是一组工具和库，帮助开发者使用各种平台和编程语言创建机器人。
 
 .. image:: images/ROS-ecosystem.gif
-  :alt: Animated high level diagram of the ROS ecosystem
+  :alt: ROS 生态系统的高层动画示意图
 
-Framework
----------
+框架
+----
 
-The ROS framework is the “plumbing” which allows for communication between parts of a robot, and within parts of a robot.
-It includes messaging, standard interfaces, and support for multiple programming languages and platforms.
+ROS 框架是“管道”，它使机器人的各部分之间以及各部分内部能够通信。
+它包括消息传递、标准接口，以及对多种编程语言和平台的支持。
 
-For example, the framework handles sending data from a camera to a processing node or passing commands from a planning system to a motor controller.
-It also provides the structure for sharing software across systems, so developers can build modular and reusable solutions.
+例如，该框架负责将数据从摄像头发送到处理节点，或将命令从规划系统传递给电机控制器。
+它还提供了在系统间共享软件的结构，因此开发者可以构建模块化且可复用的解决方案。
 
-ROS consists of the following basic components:
+ROS 由以下基本组件构成：
 
-* Nodes
-* Interfaces (topics, services and actions)
-* Parameters
-* Client libraries
+* 节点
+* 接口（话题、服务和动作）
+* 参数
+* 客户端库
 
-Tools
------
+工具
+----
 
-Tools in ROS help developers build, test, and monitor robotic systems.
-They do not add new robot behaviours but make development easier.
+ROS 中的工具帮助开发者构建、测试和监控机器人系统。
+它们不会增加新的机器人行为，但能让开发更容易。
 
-For example, visualisation tools can be used to display a robot's sensors, position, and environment in 3D during testing, which is common in projects involving drones or mobile robots.
-With launch control tools, developers can define and verify how a robot starts up and manages its operation before actual deployment.
-Data recording and playback tools allow you to register robot behaviour for later inspection, which is particularly useful when debugging why the robot did something wrong.
+例如，可视化工具可在测试期间以 3D 方式显示机器人的传感器、位置和环境，这在涉及无人机或移动机器人的项目中很常见。
+借助启动控制工具，开发者可以在实际部署之前定义并验证机器人如何启动和管理其运行。
+数据录制与回放工具让您可以记录机器人行为以供日后检查，这在调试机器人为何出错时特别有用。
 
-The core set of tools provided by ROS allows you to handle the following elements of the development workflow:
+ROS 提供的核心工具集让您可以处理开发工作流中的以下环节：
 
-* Introspection
-* Analysis
-* Node management
-* Debugging
-* Builds
-* Visualization
-* Package documentation
+* 内省
+* 分析
+* 节点管理
+* 调试
+* 构建
+* 可视化
+* 包文档
 
-Capabilities
-------------
+能力
+----
 
-Capabilities in ROS are ready-to-use packages that offer common functions for robots, such as manipulation, motion planning, and perception.
-These packages allow developers to add advanced behaviours without starting from scratch.
+ROS 中的能力是开箱即用的包，为机器人提供常见功能，例如操作、运动规划和感知。
+这些包让开发者无需从零开始就能添加高级行为。
 
-For example, manipulation packages can control robotic arms for tasks like picking and placing objects in automated workflows.
-Motion planning packages allow robots to move from one point to another by calculating safe paths in their environment.
-Perception packages enable robots to detect and recognise objects or people, supporting tasks such as retrieving objects or working in environments where the robot needs to respond to what it sees.
-Different implementations of the same capabilities allow developers to switch implementations and experiment to find the best implementation for their needs.
+例如，操作包可以控制机械臂，在自动化工作流中完成抓取和放置物体之类的任务。
+运动规划包通过计算机器人在其环境中的安全路径，让机器人可以从一点移动到另一点。
+感知包使机器人能够检测和识别物体或人员，支持取回物体或在机器人需要对其所见做出反应的环境中工作等任务。
+同一能力的多种实现让开发者可以切换实现并进行对比实验，以找到最符合自身需求的实现。
 
 .. note::
-    Apart from the packages maintained by Open Robotics, you can also choose from many packages contributed by the ROS community.
+    除了 Open Robotics 维护的包之外，您还可以从 ROS 社区贡献的众多包中进行选择。
 
-ROS offers the following core capabilities either out of the box, or through supported third-party solutions:
+ROS 通过开箱即用或受支持的第三方解决方案提供以下核心能力：
 
-* Simulation
-* Motion planning
-* Navigation
-* Manipulation
-* Perception
+* 仿真
+* 运动规划
+* 导航
+* 操作
+* 感知
 
-Community
----------
+社区
+----
 
-Community in ROS is the global network of developers, researchers, companies, and contributors who help our library of open-source software grow and improve.
-People can contribute to plumbing, tools, and capabilities, and thanks to the community, it is easy to share code, exchange ideas, and work together on projects.
+ROS 社区是由开发者、研究人员、公司和贡献者组成的全球网络，他们共同帮助我们的开源软件库成长和完善。
+人们可以为管道、工具和能力做出贡献；得益于这个社区，分享代码、交流想法和协同开展项目都变得很容易。
 
-Integrations
-------------
+集成
+----
 
-ROS works with other Open Robotics platforms to make development and deployment easier.
+ROS 与其他 Open Robotics 平台协同工作，使开发和部署更加容易。
 
-* `Gazebo`_: Offers physics-based simulation, so developers can test robots in a virtual environment before using real hardware.
-* `Open-RMF`_ (Robotics Middleware Framework): Helps different robots work together and interact with building systems like lifts and doors.
-* `ros-controls`_: Enables real-time control of robots using ROS.
+* `Gazebo`_：提供基于物理的仿真，因此开发者可以在使用真实硬件之前，在虚拟环境中测试机器人。
+* `Open-RMF`_\ （机器人中间件框架）：帮助不同的机器人协同工作，并与电梯和门等楼宇系统交互。
+* `ros-controls`_：支持使用 ROS 实时控制机器人。
 
 .. _Gazebo: https://gazebosim.org/home
 .. _Open-RMF: https://www.open-rmf.org/
 .. _ros-controls: https://control.ros.org/rolling/index.html
 
-These integrations make it simpler to design, test, and manage robots in complex environments on any budget and with any team size.
+这些集成让设计、测试和管理复杂环境中的机器人变得更简单，无论预算多少、团队规模多大。
 
-ROS distributions
------------------
+ROS 发行版
+----------
 
-A ROS distribution is a packaged set of ROS software released on a regular schedule.
-Each distribution provides a stable version of the core libraries and tools, plus many community packages.
-This makes it easier for developers to work with a consistent codebase and keep projects compatible.
+ROS 发行版是按固定周期发布的一整套打包好的 ROS 软件。
+每个发行版都提供核心库和工具的稳定版本，以及许多社区包。
+这让开发者更容易基于一致的代码库开展工作，并保持项目兼容。
 
-ROS has two main versions:
+ROS 有两个主要版本：
 
-* `ROS 1`_: The original framework.
-* ROS 2: The current and actively developed version.
+* `ROS 1`_：最初的框架。
+* ROS 2：当前正在积极开发的版本。
 
 .. _ROS 1: https://index.ros.org/
 
-ROS 1 has reached the end of development, with no new releases planned, while ROS 2 continues to be developed and releases new distributions every year.
-These distributions include updates and improvements, so developers can choose between stability and the latest features.
+ROS 1 已走到开发尽头，不再计划发布新版本，而 ROS 2 仍在持续开发，并且每年发布新的发行版。
+这些发行版包含更新和改进，因此开发者可以在稳定性与最新特性之间做出选择。
 
-Supported systems
------------------
+支持的平台
+----------
 
-ROS runs on Ubuntu, Windows, and macOS, but we strongly recommend that you use a Tier 1 platform for your ROS distribution.
-ROS on macOS is supported by the community, and we do not recommended it for new users.
+ROS 可在 Ubuntu、Windows 和 macOS 上运行，但我们强烈建议您为所使用的 ROS 发行版选择 Tier 1 平台。
+macOS 上的 ROS 由社区支持，我们不建议新用户使用。
 
-Ubuntu support depends on the ROS distribution, with each distribution requiring a specific Ubuntu LTS (long-term support) release.
-Other platforms may require building from source or using containers.
+Ubuntu 支持情况取决于 ROS 发行版，每个发行版都需要特定版本的 Ubuntu LTS（长期支持）发行版。
+其他平台可能需要从源代码构建或使用容器。
 
-:doc:`See full details of currently supported platforms and support tiers <./Releases/Release-Rolling-Ridley>`
+:doc:`查看当前支持的平台和支持层级的完整详情 <./Releases/Release-Rolling-Ridley>`

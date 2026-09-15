@@ -2,50 +2,49 @@
 
   Release-Ardent-Apalone
 
-Ardent Apalone (``ardent``)
-===========================
+Ardent Apalone（``ardent``）
+============================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Welcome to the first non-beta release of ROS 2 software named *Ardent Apalone*!
+欢迎使用 ROS 2 软件的第一个非 beta 版本，代号 *Ardent Apalone*！
 
-Supported Platforms
--------------------
+支持的平台
+----------
 
-This version of ROS 2 is supported on three platforms:
+此版本的 ROS 2 支持三个平台：
 
 
-* Ubuntu 16.04 (Xenial)
-* Mac macOS 10.12 (Sierra)
+* Ubuntu 16.04（Xenial）
+* Mac macOS 10.12（Sierra）
 * Windows 10
 
-Binary packages as well as instructions for how to compile from source are provided for all 3 platforms (see `install instructions <../../Installation>` as well as `documentation <https://docs.ros2.org/ardent/>`__).
+所有 3 个平台都提供了二进制软件包以及从源代码编译的说明（参见 `安装说明 <../../Installation>` 以及 `文档 <https://docs.ros2.org/ardent/>`__）。
 
 +--------------+-----------------------+----------------------+--------------------+
-|                                  Required support                                |
+|                                    必需的支持                                    |
 +--------------+-----------------------+----------------------+--------------------+
-| Architecture | Ubuntu Xenial (16.04) | MacOS Sierra (10.12) | Windows 10 (VS2015)|
+|     架构     | Ubuntu Xenial (16.04) | MacOS Sierra (10.12) |Windows 10 (VS2015) |
 +==============+=======================+======================+====================+
 | amd64        | X                     | X                    | X                  |
 +--------------+-----------------------+----------------------+--------------------+
 | arm64        | X                     |                      |                    |
 +--------------+-----------------------+----------------------+--------------------+
 
-Minimum language requirements:
+最低语言要求：
 
 - C11[^2]
 - C++14
 - Python 3.5
 
-[^2]: C11 is required, but support for some non-compliant systems is
-    also provided, e.g. MSVC.
+[^2]: 需要 C11，但也为一些不符合标准的系统提供了支持，例如 MSVC。
 
-Dependency Requirements:
+依赖项要求：
 
 +--------------+----------------+------------+--------------+
-| Package      | Ubuntu Xenial  | MacOS**    | Windows 10** |
+|    软件包    | Ubuntu Xenial  |  MacOS**   | Windows 10** |
 +==============+================+============+==============+
 | CMake        | 3.5.1          | 3.11.0     | 3.10.2       |
 +--------------+----------------+------------+--------------+
@@ -61,96 +60,92 @@ Dependency Requirements:
 +--------------+----------------+------------+--------------+
 | Qt           | 5.5.1          | 5.10.0     | 5.10.0       |
 +--------------+----------------+------------+--------------+
-| **Linux only (used for turtlebot demo)**                  |
+|            **仅 Linux（用于 turtlebot 演示）**            |
 +--------------+----------------+------------+--------------+
 | PCL          | 1.7.2          | N/A        | N/A          |
 +--------------+----------------+------------+--------------+
 
-\" \* \" means that this is not the upstream version (available on the
-official Operating System repositories) but a package distributed by
-OSRF or the community (package built and distributed on custom
-repositories).
+\" \* \" 表示这不是上游版本（即官方操作系统软件仓库中提供的版本），而是
+由 OSRF 或社区分发的软件包（在自定义仓库中构建并分发）。
 
-\" \*\* \" Rolling distributions will see multiple version changes of
-these dependencies during their lifetime.
+\" \*\* \" 滚动发行版在其生命周期内会看到这些依赖项的多个版本变化。
 
-This document only captures the version at the first release of a ROS
-distribution and will not be updated as the dependencies move forward.
-These versions are thus a low watermark.
+本文档仅记录某个 ROS 发行版首次发布时的版本，随着依赖项向前演进，本文档不会更新。
+因此这些版本是一个最低基准。
 
-Package manager use for dependencies:
+依赖项使用的软件包管理器：
 
-- Ubuntu Xenial: apt
-- MacOS: Homebrew, pip
-- Windows: Chocolatey, pip
+- Ubuntu Xenial：apt
+- MacOS：Homebrew、pip
+- Windows：Chocolatey、pip
 
-Build System Support:
+构建系统支持：
 
 - ament_cmake
 - cmake
 - setuptools
 
-Middleware Implementation Support:
+中间件实现支持：
 
 - eProsima Fast-RTPS
 - RTI Connext
 - ADLINK OpenSplice
 
-Features
---------
+功能
+----
 
-New features in this ROS 2 release
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+此 ROS 2 发行版中的新功能
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-* Distributed discovery, publish / subscribe, request / response communication
+* 分布式发现、发布 / 订阅、请求 / 响应通信
 
-  * Provided by a C API
-  * Implemented using different vendors:
+  * 由 C API 提供
+  * 使用不同供应商的实现：
 
-    * eProsima's Fast RTPS as well as ADLINK's OpenSplice (from binary and source)
-    * RTI's Connext (only from source)
+    * eProsima 的 Fast RTPS 以及 ADLINK 的 OpenSplice（二进制和源代码）
+    * RTI 的 Connext（仅源代码）
 
-  * Numerous quality of service settings for handling non-ideal networks
-  * DDS Security support (with Connext and Fast RTPS)
+  * 大量服务质量设置，用于处理非理想网络
+  * DDS 安全性支持（配合 Connext 和 Fast RTPS）
 
-* C++ and Python 3 client libraries
+* C++ 和 Python 3 客户端库
 
-  * Sharing common code in C to unify the implementation
-  * Execution model separated from the nodes, composable nodes
-  * Node-specific parameters (only in C++ atm)
-  * Life cycle (only in C++ atm)
-  * Optionally intra-process communication using the same API (only in C++)
+  * 在 C 中共享公共代码以统一实现
+  * 执行模型与节点分离，可组合节点
+  * 节点特定参数（目前仅 C++）
+  * 生命周期（目前仅 C++）
+  * 可选地使用相同 API 进行进程内通信（仅 C++）
 
-* Message definitions (with bounded arrays and strings as well as default values)
-* Command line tools (e.g. ``ros2 run``)
-* ``rviz`` with a few display types (the Windows version will likely follow in a few weeks)
-* File system-based resource index (querying information without recursive crawling)
-* Realtime safe code paths for pub / sub (with compatible DDS implementations only)
-* Bridge between ROS 1 and ROS 2
-* HSR demo `see Beta 3 <Beta3-Overview>`
-* Turtlebot demo `see Beta 2 <Beta2-Overview>`
+* 消息定义（包含有界数组和字符串以及默认值）
+* 命令行工具（例如 ``ros2 run``）
+* ``rviz`` 及少量显示类型（Windows 版本很可能在几周后推出）
+* 基于文件系统的资源索引（无需递归遍历即可查询信息）
+* 发布 / 订阅的实时安全代码路径（仅限兼容的 DDS 实现）
+* ROS 1 与 ROS 2 之间的桥接
+* HSR 演示 `参见 Beta 3 <Beta3-Overview>`
+* Turtlebot 演示 `参见 Beta 2 <Beta2-Overview>`
 
-For a more detailed description please see the `Features <../../The-ROS2-Project/Features>` page.
+更详细的说明请参见 `功能 <../../The-ROS2-Project/Features>` 页面。
 
-Changes since Beta 3 release
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+自 Beta 3 发布以来的变更
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-Improvements since the Beta 3 release:
+自 Beta 3 发布以来的改进：
 
 
 * ``rviz``
-* Different initialization options for message data structures in C++ (see `design doc <https://design.ros2.org/articles/generated_interfaces_cpp.html#constructors>`__)
-* Logging API improvements, now also used in the demos
-* Time support in C++ with different clocks
-* wait-for-service support in the Python client library
-* Draft implementation of `REP 149 <https://reps.openrobotics.org/rep-0149/>`__ specifying format 3 of the package manifest files
+* C++ 中消息数据结构的多种初始化选项（参见 `设计文档 <https://design.ros2.org/articles/generated_interfaces_cpp.html#constructors>`__）
+* 日志 API 改进，现在也用于演示程序
+* C++ 中支持使用不同时钟的时间
+* Python 客户端库中的等待服务（wait-for-service）支持
+* `REP 149 <https://reps.openrobotics.org/rep-0149/>`__ 的草案实现，规定了软件包标记文件的格式 3
 
-Known Issues
-------------
+已知问题
+--------
 
 
-* Fast RTPS performance with larger data like the image demo
-* Using Connext it is currently not allowed for two topics with the same base name but different namespaces to have a different type (see `issue <https://github.com/ros2/rmw_connext/issues/234>`__).
-* Listing of node names (e.g. using ``ros2 node list``) does not work across some rmw implementations.
-* On Windows Python launch files might hang when trying to abort using ``Ctrl-C`` (see `issue <https://github.com/ros2/launch/issues/64>`__). In order to continue using the shell which is blocked by the hanging command you might want to end the hanging Python process using the process monitor.
+* 处理镜像演示等较大数据时 Fast RTPS 的性能问题
+* 使用 Connext 时，目前不允许两个基本名称相同但命名空间不同的话题具有不同的类型（参见 `issue <https://github.com/ros2/rmw_connext/issues/234>`__）。
+* 节点名称的列举（例如使用 ``ros2 node list``）在部分 rmw 实现中无法工作。
+* 在 Windows 上，Python 启动文件在被中止（使用 ``Ctrl-C``）时可能会挂起（参见 `issue <https://github.com/ros2/launch/issues/64>`__）。为了继续使用被挂起命令阻塞的 shell，你可以使用进程监视器结束挂起的 Python 进程。

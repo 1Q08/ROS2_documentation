@@ -4,37 +4,37 @@
 
 .. _LearningAboutTf2AndTimeCpp:
 
-Using time (C++)
-================
+使用时间（C++）
+===============
 
-**Goal:** Learn how to get a transform at a specific time and wait for a transform to be available on the tf2 tree using ``lookupTransform()`` function.
+**目标：** 学习如何使用 ``lookupTransform()`` 函数在特定时间获取变换，并等待变换在 tf2 树上可用。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 10 minutes
+**时长：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-In previous tutorials, we recreated the turtle demo by writing a :doc:`tf2 broadcaster <Writing-A-Tf2-Broadcaster-Cpp>` and a :doc:`tf2 listener <Writing-A-Tf2-Listener-Cpp>`.
-We also learned how to :doc:`add a new frame to the transformation tree <Adding-A-Frame-Cpp>` and learned how tf2 keeps track of a tree of coordinate frames.
-This tree changes over time, and tf2 stores a time snapshot for every transform (for up to 10 seconds by default).
-Until now we used the ``lookupTransform()`` function to get access to the latest available transforms in that tf2 tree, without knowing at what time that transform was recorded.
-This tutorial will teach you how to get a transform at a specific time.
+在之前的教程中，我们通过编写 :doc:`tf2 广播器 <Writing-A-Tf2-Broadcaster-Cpp>` 和 :doc:`tf2 监听器 <Writing-A-Tf2-Listener-Cpp>` 重新实现了海龟演示。
+我们还学习了如何 :doc:`向变换树添加新坐标系 <Adding-A-Frame-Cpp>`，以及 tf2 如何跟踪坐标系构成的树。
+这棵树会随时间变化，tf2 会为每个变换存储一份时间快照（默认最多保存 10 秒）。
+到目前为止，我们使用 ``lookupTransform()`` 函数来访问该 tf2 树中最新可用的变换，而不必知道该变换是在什么时间记录的。
+本教程将教你如何在特定时间获取变换。
 
-Tasks
------
+任务
+----
 
-1 Update the listener node
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 更新监听器节点
+^^^^^^^^^^^^^^^^
 
-Let's go back to where we ended in the :doc:`adding a frame tutorial <Adding-A-Frame-Cpp>`.
-Go to the ``learning_tf2_cpp`` package.
-Open ``turtle_tf2_listener.cpp`` and take a look at the ``lookupTransform()`` call:
+让我们回到 :doc:`添加坐标系教程 <Adding-A-Frame-Cpp>` 结束的地方。
+进入 ``learning_tf2_cpp`` 软件包。
+打开 ``turtle_tf2_listener.cpp``，看看 ``lookupTransform()`` 的调用：
 
 .. code-block:: C++
 
@@ -43,17 +43,17 @@ Open ``turtle_tf2_listener.cpp`` and take a look at the ``lookupTransform()`` ca
       fromFrameRel,
       tf2::TimePointZero);
 
-You can see that we specified a time equal to 0 by calling ``tf2::TimePointZero``.
+可以看到，我们通过调用 ``tf2::TimePointZero`` 将时间指定为 0。
 
 .. note::
 
-    The ``tf2`` package has it's own time type ``tf2::TimePoint``, which is different from ``rclcpp::Time``.
-    Many APIs in the package ``tf2_ros`` automatically convert between ``rclcpp::Time`` and ``tf2::TimePoint``.
+    ``tf2`` 软件包有自己的时间类型 ``tf2::TimePoint``，它不同于 ``rclcpp::Time``。
+    ``tf2_ros`` 软件包中的许多 API 会自动在 ``rclcpp::Time`` 和 ``tf2::TimePoint`` 之间进行转换。
 
-    ``rclcpp::Time(0, 0, this->get_clock()->get_clock_type())`` could have been used here, but it would have been converted to ``tf2::TimePointZero`` anyways.
+    这里本可以使用 ``rclcpp::Time(0, 0, this->get_clock()->get_clock_type())``，但无论如何它都会被转换为 ``tf2::TimePointZero``。
 
-For tf2, time 0 means "the latest available" transform in the buffer.
-Now, change this line to get the transform at the current time, ``this->get_clock()->now()``:
+对于 tf2 来说，时间 0 表示缓冲区中“最新可用”的变换。
+现在，把这行改为在当前时间 ``this->get_clock()->now()`` 获取变换：
 
 .. code-block:: C++
 
@@ -63,7 +63,7 @@ Now, change this line to get the transform at the current time, ``this->get_cloc
       fromFrameRel,
       now);
 
-Now try to run the launch file.
+现在试着运行该 launch 文件。
 
 .. code-block:: console
 
@@ -72,19 +72,19 @@ Now try to run the launch file.
    require extrapolation into the future.  Requested time 1629873136.345539 but the latest data
    is at time 1629873136.338804, when looking up transform from frame [turtle1] to frame [turtle2]
 
-The output tells you that the frame does not exist or that the data is in the future.
+输出表明该坐标系不存在，或者数据来自未来。
 
-To understand why is this happening we need to understand how buffers work.
-Firstly, each listener has a buffer where it stores all the coordinate transforms coming from the different tf2 broadcasters.
-Secondly, when a broadcaster sends out a transform, it takes some time before that transform gets into the buffer (usually a couple of milliseconds).
-As a result, when you request a frame transform at time "now", you should wait a few milliseconds for that information to arrive.
+要理解为什么会发生这种情况，我们需要了解缓冲区是如何工作的。
+首先，每个监听器都有一个缓冲区，用于存储来自各个 tf2 广播器的所有坐标变换。
+其次，当广播器发出一个变换时，该变换需要一些时间才能进入缓冲区（通常为几毫秒）。
+因此，当你在“现在”这一时刻请求坐标系变换时，应当等待几毫秒让该信息到达。
 
-2 Fix the listener node
-^^^^^^^^^^^^^^^^^^^^^^^
+2 修复监听器节点
+^^^^^^^^^^^^^^^^
 
-tf2 provides a nice tool that will wait until a transform becomes available.
-You use this by adding a timeout parameter to ``lookupTransform()``.
-To fix this, edit your code as shown below (add the last timeout parameter):
+tf2 提供了一个很好的工具，它会等待直到某个变换可用。
+你只需为 ``lookupTransform()`` 添加一个超时参数即可使用它。
+要修复这个问题，请按下所示修改你的代码（添加最后一个超时参数）：
 
 .. code-block:: C++
 
@@ -95,13 +95,13 @@ To fix this, edit your code as shown below (add the last timeout parameter):
       now,
       50ms);
 
-The ``lookupTransform()`` can take four arguments, where the last one is an optional timeout.
-It will block for up to that duration waiting for it to timeout.
+``lookupTransform()`` 可以接受四个参数，其中最后一个是可选的超时时间。
+它最多会阻塞该时长，等待超时。
 
-3 Check the results
-^^^^^^^^^^^^^^^^^^^
+3 检查结果
+^^^^^^^^^^
 
-You can now run the launch file.
+现在你可以运行该 launch 文件了。
 
 .. tabs::
 
@@ -123,10 +123,10 @@ You can now run the launch file.
 
         $ ros2 launch learning_tf2_cpp turtle_tf2_demo_launch.py
 
-You should notice that ``lookupTransform()`` will actually block until the transform between the two turtles becomes available (this will usually take a few milliseconds).
-Once the timeout has been reached (fifty milliseconds in this case), an exception will be raised only if the transform is still not available.
+你应该会注意到，``lookupTransform()`` 实际上会阻塞，直到两只海龟之间的变换可用（通常只需要几毫秒）。
+一旦达到超时时间（这里为五十毫秒），只有在变换仍然不可用时才会抛出异常。
 
-Summary
--------
+概述
+----
 
-In this tutorial, you learned how to acquire a transform at a specific timestamp and how to wait for a transform to be available on the tf2 tree when using the ``lookupTransform()`` function.
+在本教程中，你学习了如何获取特定时间戳的变换，以及在使用 ``lookupTransform()`` 函数时如何等待变换在 tf2 树上变为可用。

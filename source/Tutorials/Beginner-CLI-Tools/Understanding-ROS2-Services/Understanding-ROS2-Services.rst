@@ -4,53 +4,53 @@
 
 .. _ROS2Services:
 
-Understanding services
-======================
+理解服务
+========
 
-**Goal:** Learn about services in ROS 2 using command line tools.
+**目标：** 使用命令行工具了解 ROS 2 中的服务。
 
-**Tutorial level:** Beginner
+**教程级别：** 入门
 
-**Time:** 10 minutes
+**时间：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-Services are another method of communication for nodes in the ROS graph.
-Services are based on a call-and-response model versus the publisher-subscriber model of topics.
-While topics allow nodes to subscribe to data streams and get continual updates, services only provide data when they are specifically called by a client.
+服务是 ROS 图中节点之间通信的另一种方式。
+服务基于“调用-响应”模型，而话题基于发布者-订阅者模型。
+话题允许节点订阅数据流并持续获得更新，而服务只有在被客户端明确调用时才提供数据。
 
 .. image:: images/Service-SingleServiceClient.gif
 
 .. image:: images/Service-MultipleServiceClient.gif
 
-Prerequisites
--------------
+前置条件
+--------
 
-Some concepts mentioned in this tutorial, like :doc:`Nodes <../Understanding-ROS2-Nodes/Understanding-ROS2-Nodes>` and :doc:`Topics <../Understanding-ROS2-Topics/Understanding-ROS2-Topics>`, were covered in previous tutorials in the series.
+本教程中提到的一些概念，如 :doc:`节点 <../Understanding-ROS2-Nodes/Understanding-ROS2-Nodes>` 和 :doc:`话题 <../Understanding-ROS2-Topics/Understanding-ROS2-Topics>`，已在本系列的先前教程中介绍过。
 
-You will need the :doc:`turtlesim package <../Introducing-Turtlesim/Introducing-Turtlesim>`.
+你需要 :doc:`turtlesim 包 <../Introducing-Turtlesim/Introducing-Turtlesim>`。
 
-As always, don't forget to source ROS 2 in :doc:`every new terminal you open <../Configuring-ROS2-Environment>`.
+和往常一样，别忘了在 :doc:`每一个你新打开的终端 <../Configuring-ROS2-Environment>` 中 source ROS 2。
 
-Tasks
------
+任务
+----
 
-1 Setup
-^^^^^^^
-Start up the two turtlesim nodes, ``/turtlesim`` and ``/teleop_turtle``.
+1 准备
+^^^^^^
+启动两个 turtlesim 节点：``/turtlesim`` 和 ``/teleop_turtle``。
 
-Open a new terminal and run:
+打开一个新终端并运行：
 
 .. code-block:: console
 
   $ ros2 run turtlesim turtlesim_node
 
-Open another terminal and run:
+打开另一个终端并运行：
 
 .. code-block:: console
 
@@ -59,7 +59,7 @@ Open another terminal and run:
 2 ros2 service list
 ^^^^^^^^^^^^^^^^^^^
 
-Running the ``ros2 service list`` command in a new terminal will return a list of all the services currently active in the system:
+在一个新终端中运行 ``ros2 service list`` 命令，将返回系统中当前所有活动服务的列表：
 
 .. code-block:: console
 
@@ -84,41 +84,41 @@ Running the ``ros2 service list`` command in a new terminal will return a list o
   /turtlesim/set_parameters
   /turtlesim/set_parameters_atomically
 
-You will see that both nodes have the same six services with ``parameters`` in their names.
-Nearly every node in ROS 2 has these infrastructure services that parameters are built off of.
-There will be more about parameters in the next tutorial.
-In this tutorial, the parameter services will be omitted from the discussion.
+你会看到两个节点都有六个名称中包含 ``parameters`` 的相同服务。
+ROS 2 中几乎每个节点都有这些参数所依赖的基础设施服务。
+关于参数的更多内容将在下一篇教程中介绍。
+在本教程中，将省略对这些参数服务的讨论。
 
-For now, let's focus on the turtlesim-specific services, ``/clear``, ``/kill``, ``/reset``, ``/spawn``, ``/turtle1/set_pen``, ``/turtle1/teleport_absolute``, and ``/turtle1/teleport_relative``.
-You may recall interacting with some of these services using rqt in the :doc:`Use turtlesim, ros2, and rqt <../Introducing-Turtlesim/Introducing-Turtlesim>` tutorial.
+现在，让我们专注于 turtlesim 特有的服务：``/clear``、``/kill``、``/reset``、``/spawn``、``/turtle1/set_pen``、``/turtle1/teleport_absolute`` 和 ``/turtle1/teleport_relative``。
+你可能还记得在 :doc:`使用 turtlesim、ros2 和 rqt <../Introducing-Turtlesim/Introducing-Turtlesim>` 教程中使用 rqt 与其中一些服务进行过交互。
 
 
 3 ros2 service type
 ^^^^^^^^^^^^^^^^^^^
 
-Services have types that describe how the request and response data of a service is structured.
-Service types are defined similarly to topic types, except service types have two parts: one message for the request and another for the response.
+服务有类型，用于描述服务的请求和响应数据是如何构成的。
+服务类型的定义方式与话题类型类似，只不过服务类型有两个部分：一个用于请求的消息和一个用于响应的消息。
 
-To find out the type of a service, use the command:
+要找出服务的类型，请使用命令：
 
 .. code-block:: console
 
   $ ros2 service type <service_name>
 
-Let's take a look at turtlesim's ``/clear`` service.
-In a new terminal, enter the command:
+让我们看看 turtlesim 的 ``/clear`` 服务。
+在一个新终端中，输入命令：
 
 .. code-block:: console
 
   $ ros2 service type /clear
   std_srvs/srv/Empty
 
-The ``Empty`` type means the service call sends no data when making a request and receives no data when receiving a response.
+``Empty`` 类型意味着该服务调用在发起请求时不发送任何数据，在接收响应时也不接收任何数据。
 
 3.1 ros2 service list -t
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-To see the types of all the active services at the same time, you can append the ``--show-types`` option, abbreviated as ``-t``, to the ``list`` command:
+要同时查看所有活动服务的类型，你可以在 ``list`` 命令后追加 ``--show-types`` 选项（缩写为 ``-t``）：
 
 .. code-block:: console
 
@@ -136,13 +136,13 @@ To see the types of all the active services at the same time, you can append the
 4 ros2 service find
 ^^^^^^^^^^^^^^^^^^^
 
-If you want to find all the services of a specific type, you can use the command:
+如果你想查找某个特定类型的所有服务，可以使用命令：
 
 .. code-block:: console
 
   $ ros2 service find <type_name>
 
-For example, you can find all the ``Empty`` typed services like this:
+例如，你可以这样查找所有 ``Empty`` 类型的服务：
 
 .. code-block:: console
 
@@ -153,27 +153,27 @@ For example, you can find all the ``Empty`` typed services like this:
 5 ros2 interface show
 ^^^^^^^^^^^^^^^^^^^^^
 
-You can call services from the command line, but first you need to know the structure of the input arguments.
+你可以从命令行调用服务，但首先需要知道输入参数的结构。
 
 .. code-block:: console
 
   $ ros2 interface show <type_name>
 
-Try this on the ``/clear`` service's type, ``Empty``:
+试试对 ``/clear`` 服务的类型 ``Empty`` 执行此命令：
 
 .. code-block:: console
 
   $ ros2 interface show std_srvs/srv/Empty
   ---
 
-The ``---`` separates the request structure (above) from the response structure (below).
-But, as you learned earlier, the ``Empty`` type doesn't send or receive any data.
-So, naturally, its structure is blank.
+``---`` 将请求结构（上方）与响应结构（下方）分隔开。
+但是，正如你之前了解到的，``Empty`` 类型不发送或接收任何数据。
+因此，它的结构自然是空白的。
 
-Let's introspect a service with a type that sends and receives data, like ``/spawn``.
-From the results of ``ros2 service list -t``, we know ``/spawn``'s type is ``turtlesim/srv/Spawn``.
+让我们内省一个类型会发送和接收数据的服务，比如 ``/spawn``。
+从 ``ros2 service list -t`` 的结果中，我们知道 ``/spawn`` 的类型是 ``turtlesim/srv/Spawn``。
 
-To see the request and response arguments of the ``/spawn`` service, run the command:
+要查看 ``/spawn`` 服务的请求和响应参数，请运行命令：
 
 .. code-block:: console
 
@@ -185,35 +185,35 @@ To see the request and response arguments of the ``/spawn`` service, run the com
   ---
   string name
 
-The information above the ``---`` line tells us the arguments needed to call ``/spawn``.
-``x``, ``y`` and ``theta`` determine the 2D pose of the spawned turtle, and ``name`` is clearly optional.
+``---`` 行上方的信息告诉了我们调用 ``/spawn`` 所需的参数。
+``x``、``y`` 和 ``theta`` 决定了所生成乌龟的二维位姿，而 ``name`` 显然是可选的。
 
-The information below the line isn't something you need to know in this case, but it can help you understand the data type of the response you get from the call.
+行下方的信息在本例中不是你需要了解的，但它可以帮助你理解从调用中获得的响应的数据类型。
 
 6 ros2 service call
 ^^^^^^^^^^^^^^^^^^^
 
-Now that you know what a service type is, how to find a service's type, and how to find the structure of that type's arguments, you can call a service using:
+既然你已经知道什么是服务类型、如何查找服务的类型，以及如何找到该类型参数的结构，你就可以使用以下命令调用服务了：
 
 .. code-block:: console
 
   $ ros2 service call <service_name> <service_type> <arguments>
 
-The ``<arguments>`` part is optional.
-For example, you know that ``Empty`` typed services don't have any arguments:
+``<arguments>`` 部分是可选的。
+例如，你知道 ``Empty`` 类型的服务没有任何参数：
 
 .. code-block:: console
 
   $ ros2 service call /clear std_srvs/srv/Empty
 
-This command will clear the turtlesim window of any lines your turtle has drawn.
+这条命令将清除 turtlesim 窗口中乌龟已绘制的所有线条。
 
 .. image:: images/clear.png
 
-Now let's spawn a new turtle by calling ``/spawn`` and setting arguments.
-Input ``<arguments>`` in a service call from the command-line need to be in YAML syntax.
+现在让我们通过调用 ``/spawn`` 并设置参数来生成一只新乌龟。
+在命令行中调用服务时输入的 ``<arguments>`` 需要采用 YAML 语法。
 
-Enter the command:
+输入命令：
 
 .. code-block:: console
 
@@ -223,28 +223,28 @@ Enter the command:
   response:
   turtlesim.srv.Spawn_Response(name='turtle2')
 
-You will get this method-style view of what's happening, and then the service response.
+你将看到这种关于所发生事情的方法式视图，然后是服务响应。
 
-Your turtlesim window will update with the newly spawned turtle right away:
+你的 turtlesim 窗口会立即更新，显示新生成的乌龟：
 
 .. image:: images/spawn.png
 
-Summary
--------
+小结
+----
 
-Nodes can communicate using services in ROS 2.
-Unlike a topic - a one way communication pattern where a node publishes information that can be consumed by one or more subscribers - a service is a request/response pattern where a client makes a request to a node providing the service and the service processes the request and generates a response.
+节点可以在 ROS 2 中使用服务进行通信。
+与话题（一种单向通信模式，节点发布可被一个或多个订阅者消费的信息）不同，服务是一种请求/响应模式，客户端向提供服务的节点发起请求，该服务处理请求并生成响应。
 
-You generally don't want to use a service for continuous calls; topics or even actions would be better suited.
+你通常不会想用服务来进行连续调用；话题甚至动作会更合适。
 
-In this tutorial you used command line tools to identify, introspect, and call services.
+在本教程中，你使用命令行工具来识别、内省和调用服务。
 
-Next steps
-----------
+下一步
+------
 
-In the next tutorial, :doc:`../Understanding-ROS2-Parameters/Understanding-ROS2-Parameters`, you will learn about configuring node settings.
+在下一篇教程 :doc:`../Understanding-ROS2-Parameters/Understanding-ROS2-Parameters` 中，你将学习关于配置节点设置的内容。
 
-Related content
----------------
+相关内容
+--------
 
-Check out `this tutorial <https://discourse.ubuntu.com/t/call-services-in-ros-2/15261>`_; it's an excellent realistic application of ROS services using a Robotis robot arm.
+看看 `这个教程 <https://discourse.ubuntu.com/t/call-services-in-ros-2/15261>`_；它是一个使用 Robotis 机械臂的 ROS 服务的优秀实际应用。

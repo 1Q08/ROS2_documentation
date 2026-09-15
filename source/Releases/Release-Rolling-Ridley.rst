@@ -1,43 +1,43 @@
-Rolling Ridley (``rolling``)
-============================
+Rolling Ridley（``rolling``）
+=============================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-*Rolling Ridley* is a rolling development release of ROS 2.
+*Rolling Ridley* 是 ROS 2 的滚动开发发行版。
 
 .. warning::
 
-  Rolling Ridley is continuously updated and is subject to in-place updates which will at times include breaking changes.
-  It is used for ROS 2 development and by maintainers who want their packages released and ready for the next stable distribution.
-  We recommend that most users of ROS 2 use the latest `stable distribution <latest-release>`.
+  Rolling Ridley 会持续更新，并会进行原地更新，这些更新有时会包含破坏性变更。
+  它被用于 ROS 2 的开发，也供那些希望自己的软件包发布并准备好进入下一个稳定发行版的维护者使用。
+  我们建议大多数 ROS 2 用户使用最新的 `稳定发行版 <latest-release>`。
 
-For more information see `REP-2002 <https://reps.openrobotics.org/rep-2002/>`_
+更多信息请参见 `REP-2002 <https://reps.openrobotics.org/rep-2002/>`_
 
-Currently Supported Platforms
------------------------------
+当前支持的平台
+--------------
 
-Rolling Ridley supports the following platforms according to `the platform support tiers <../The-ROS2-Project/Platform-Support-Tiers>`:
+根据 `平台支持层级 <../The-ROS2-Project/Platform-Support-Tiers>`，Rolling Ridley 支持以下平台：
 
-Tier 1 platforms:
+第 1 层级平台：
 
-* Ubuntu 22.04 (Jammy): ``amd64`` and ``arm64``
-* Windows 10 (Visual Studio 2019)
+* Ubuntu 22.04（Jammy）：``amd64`` 和 ``arm64``
+* Windows 10（Visual Studio 2019）
 
-Tier 3 platforms:
+第 3 层级平台：
 
-* Debian Buster (10): ``amd64``, ``arm64`` and ``arm32``
-* Mac macOS 10.14 (Mojave)
-* OpenEmbedded Thud (2.6) / webOS OSE: ``arm32`` and ``x86``
+* Debian Buster（10）：``amd64``、``arm64`` 和 ``arm32``
+* Mac macOS 10.14（Mojave）
+* OpenEmbedded Thud（2.6） / webOS OSE：``arm32`` 和 ``x86``
 
-Installation
-------------
+安装
+----
 
-`Install Rolling Ridley <../../rolling/Installation.html>`__
+`安装 Rolling Ridley <../../rolling/Installation.html>`__
 
-New features and changes in this release
-----------------------------------------
+本次发行版的新功能与变更
+------------------------
 
-Rolling Ridley is an ongoing development distribution.
-Changes between the current stable release and the upcoming one can be found on the page for the `upcoming release <upcoming-release>`.
+Rolling Ridley 是一个持续开发中的发行版。
+当前稳定发行版与即将发布的发行版之间的变更，可在 `即将发布的版本 <upcoming-release>` 页面中找到。

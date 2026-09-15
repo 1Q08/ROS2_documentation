@@ -1,31 +1,31 @@
-Using ROS 2 launch to launch composable nodes
-=============================================
+使用 ROS 2 launch 启动可组合节点
+================================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 1
    :local:
 
-In the :doc:`Composition tutorial <../Tutorials/Intermediate/Composition>`, you learned about composable nodes and how to use them from the command-line.
-In the :doc:`Launch tutorials <../Tutorials/Intermediate/Launch/Launch-Main>`, you learned about launch files and how to use them to manage multiple nodes.
+在 :doc:`组合教程 <../Tutorials/Intermediate/Composition>` 中，你了解了可组合节点以及如何从命令行使用它们。
+在 :doc:`启动教程 <../Tutorials/Intermediate/Launch/Launch-Main>` 中，你了解了启动文件以及如何使用它们来管理多个节点。
 
-This guide will combine the above two topics and teach you how to write launch files for composable nodes.
+本指南将结合上述两个主题，教你如何为可组合节点编写启动文件。
 
-Setup
------
+设置
+----
 
-See the :doc:`installation instructions <../Installation>` for details on installing ROS 2.
+有关安装 ROS 2 的详细信息，请参见 :doc:`安装说明 <../Installation>`。
 
-If you've installed ROS 2 from packages, ensure that you have ``ros-{DISTRO}-image-tools`` installed.
-If you downloaded the archive or built ROS 2 from source, it will already be part of the installation.
+如果你通过软件包安装 ROS 2，请确保已安装 ``ros-{DISTRO}-image-tools``。
+如果你下载了压缩包或从源代码构建了 ROS 2，它已作为安装的一部分存在。
 
-Launch file examples
---------------------
+启动文件示例
+------------
 
-Below is a launch file that launches composable nodes in XML, YAML, and Python.
-The launch files all do the following:
+下面是一个以 XML、YAML 和 Python 形式启动可组合节点的启动文件。
+这些启动文件都会执行以下操作：
 
-* Instantiate a cam2image composable node with remappings, custom parameters, and extra arguments
-* Instantiate a showimage composable node with remappings, custom parameters, and extra arguments
+* 实例化一个 cam2image 可组合节点，并带有重映射、自定义参数和额外参数
+* 实例化一个 showimage 可组合节点，并带有重映射、自定义参数和额外参数
 
 .. tabs::
 
@@ -45,13 +45,13 @@ The launch files all do the following:
       :language: python
 
 
-Loading composable nodes into an existing container
----------------------------------------------------
+将可组合节点加载到已有容器中
+----------------------------
 
-Containers can sometimes be launched by other launch files or from a commandline.
-In that case, you need to add your components to an existing container.
-For this, you may use ``LoadComposableNodes`` to load components into a given container.
-The below example launches the same nodes as above.
+容器有时可以由其他启动文件或从命令行启动。
+在这种情况下，你需要将组件添加到已有容器中。
+为此，你可以使用 ``LoadComposableNodes`` 将组件加载到给定容器中。
+下面的示例启动与上面相同的节点。
 
 .. tabs::
 
@@ -71,23 +71,23 @@ The below example launches the same nodes as above.
       :language: python
 
 
-Using the Launch files from the command-line
---------------------------------------------
+从命令行使用启动文件
+--------------------
 
-Any of the launch files above can be run with ``ros2 launch``.
-Copy the data into a local file, and then run:
+上面任何一个启动文件都可以用 ``ros2 launch`` 运行。
+将数据复制到本地文件，然后运行：
 
 .. code-block:: console
 
   $ ros2 launch <path_to_launch_file>
 
-Intra-process communications
-----------------------------
+进程内通信
+----------
 
-All of the above examples use an extra argument to setup intra-process communication between the nodes.
-For more information on what intra-process communications are, see the :doc:`intra-process comms tutorial <../Tutorials/Demos/Intra-Process-Communication>`.
+上述所有示例都使用了一个额外参数来设置节点之间的进程内通信。
+有关进程内通信的更多信息，请参阅 :doc:`进程内通信教程 <../Tutorials/Demos/Intra-Process-Communication>`。
 
-XML, YAML, or Python: Which should I use?
------------------------------------------
+XML、YAML 还是 Python：我应该使用哪个？
+---------------------------------------
 
-See the :ref:`discussion <launch-file-different-formats-which>` in :doc:`Launch-file-different-formats` for more information.
+更多信息请参见 :doc:`Launch-file-different-formats` 中的 :ref:`讨论 <launch-file-different-formats-which>`。

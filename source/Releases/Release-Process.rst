@@ -1,72 +1,72 @@
-Development process for a release
-=================================
+发行版的开发流程
+================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Each ROS 2 distribution goes through a process of development more than a year long that begins prior to the release of the previous distribution.
-Below is a high-level view of this development process.
-There is no specific due date for the items in this process, but in general earlier items should be completed before later items can be completed.
+每个 ROS 2 发行版都要经历一个为期一年以上的开发流程，该流程在上一发行版发布之前就已开始。
+下面概述了这一开发流程。
+此流程中的各个事项没有具体的截止日期，但一般来说，靠前的事项应先于靠后的事项完成。
 
-For the progress through this process for a specific release, see that release's documentation page.
+关于某个具体发行版在此流程中的进展，请参阅该发行版的文档页面。
 
 .. list-table::
    :class: release-process
    :header-rows: 1
    :widths: 30 70
 
-   * - Item
-     - Notes
-   * - Find the ROS Boss
-     - The "ROS Boss" is the person in charge of shepherding a distribution through the development, release, update, and EOL'ing stages of its life. They are chosen from the internal ROS 2 team at Open Robotics.
-   * - Run process to choose the distribution name
-     - The ROS Boss curates the process of choosing the distribution's name, using input from sources such as the community and potential naming conflicts.
-   * - Create distribution's documentation page
-     - Every distribution has a documentation page that lists its vital statistics, such as planned release date, EOL date, and significant changes since the previous release.
-   * - Set release timeline
-     - The final weeks leading up to release day (usually, World Turtle Day) are hectic and full of deadlines, such as when to freeze the default RMW implementation. These deadlines must be planned well in advance.
-   * - Produce roadmap
-     - While every contributor to ROS has their own planned features for each distribution, we try to maintain an overall roadmap of the new features and significant changes we expect to see in the distribution. The ROS Boss and the leader of the ROS 2 development team at Open Robotics work together with the ROS 2 TSC and other interested parties to produce a roadmap that is achievable in the time available and meets the needs of the ROS community.
-   * - Announce roadmap
-     - The list of planned features and significant changes is made public, via a GitHub issue that will track the progress on developing each item in the roadmap. Of course, this does not mean that the roadmap is fixed at this point, as development plans can change and we always (and frequently do) welcome new contributions even if they are not on the planned roadmap.
-   * - Set target platforms and major dependencies
-     - The target platforms, in terms of operating system, distribution and version, must be set far enough in advance for development work on the infrastructure (such as support in the build farm) to proceed. Similarly, the versions of each major dependency (which Python version, which compiler(s), which version of Eigen, etc.) must also be fixed. This is done via an update to `REP-2000 <https://reps.openrobotics.org/rep-2000/>`__.
-   * - Add platform support to the build farm
-     - The build farm is a critical part of the infrastructure supporting a ROS 2 distribution. It provides continuous integration facilities that help us maintain quality, and it builds the binary packages the community relies on to avoid building ROS 2 and packages from source. If the target platforms differ from the previous ROS 2 distribution, then the necessary support must be added to the build farm.
-   * - Commission logo and related artwork
-     - A well-loved part of every ROS 2 distribution (and ROS distribution!) is the logo. The logo is commissioned from a professional artist based on the chosen distribution name. Based on the logo, other artwork such as the turtlesim icon are also produced.
-   * - Create mailing list for the distribution
-     - Vital for making critical announcements, a mailing list must be set up to contact people interested in knowing something about the distribution, such as that their package is failing to build into a binary on the build farm.
-   * - Create test cases
-     - As the development process enters the final few months, testing begins in earnest. The integration test cases that will be used during the final stages of development must be produced and provided to the release team who will be responsible for executing them.
-   * - Announce upcoming RMW freeze
-     - The RMW freeze is the point at which the default RMW implementation for the new distribution is feature-frozen. This gives developers a stable target to test their packages with, which is particularly important for the client library developers, who need to know what features of the RMW layer will be available for use by client libraries.
-   * - Upgrade dependency packages
-     - Packages depended on by ROS but not ROS software and not available in the platform package manager (such as aptitude for Ubuntu), the so-called "vendor packages", must be updated to the versions specified in REP-2000 (or an appropriate version, for those not listed in REP-2000). This is particularly important on Windows.
-   * - Create a detailed release plan
-     - Planning for the final two months of the development process is performed. This produces a detailed test plan, timelines of when certain packages must be available, and so on. It enables the finding of dependencies between steps in the release process and finding people to perform each of those steps.
-   * - Freeze RMW
-     - The RMW implementation is now feature-frozen. In theory, it can now be exhaustively tested to ensure it is working correctly by release day.
-   * - Announce upcoming overall freeze
-     - The next freeze after freezing the RMW implementation is to freeze the distribution as a whole. This is the point at which the core ROS packages become feature-frozen, giving developers of non-core packages a stable target to test their packages against, and giving distribution testers something to test that won't change right after they've tested it.
-   * - Freeze distribution
-     - From this point on, no new features can be added to any of the core ROS packages. Only bug fixes for the (inevitable) bugs found during the intensive integration test phases of development can be incorporated into the codebase. This means that Rolling Ridley is effectively frozen, temperarily.
-   * - Announce upcoming branch
-     - The branching of the new ROS 2 distribution from Rolling Ridley is an important moment. It is worth preparing for.
-   * - Announce upcoming beta
-     - When the distribution enters beta, it is ready for wider testing by the ROS community. This beta happens soon after the distribution is branched from Rolling Ridely.
-   * - Branch from Rolling Ridley
-     - The new ROS 2 distribution is created by making a new branch from Rolling Ridley. In effect, the new distribution is born at this point in time. Meanwhile, Rolling Ridley is free from the development process and can roll on into the future, once again receiving new features.
-   * - Add distribution to CI
-     - The continuous integration system is updated to allow building using the new distribution's branches and core ROS packages. This means that package developers can run CI for their packages against the new distribution, rather than Rolling Ridley.
-   * - Begin building interim testing tarballs
-     - The elite team of testers who will put the new distribution through its paces need something to test without compiling ROS 2 from source constantly. The build farm is used to produce a set of tarballs containing the distribution at a point in time for the testers to test.
-   * - Add distribution documentation
-     - Detailed documentation about the distribution, such as the significant changes since the previous distribution, is added to the ROS 2 documentation site.
-   * - Announce beta
-     - The beta release of the distribution is made and the ROS community as a whole is invited to contribute to testing it (for those who aren't already doing so). At this point, the more testers the better, because the distribution needs to be put through as wide a range of scenarios as possible to find bugs before the release.
-   * - Final release preparations
-     - As the new distribution enters is absolutely-completely-everything-frozen phase, the final preparations are made for the release. These include things like producing binary packages using the build farm so there will be something to release.
-   * - Release
-     - The big day, which if all goes to plan coincides with World Turtle Day on May 23rd. The distribution's binary packages are made available in the release repository, and an announcement is made. Parties are held and the ROS 2 development team takes a well-earned break.
+   * - 事项
+     - 说明
+   * - 确定 ROS Boss
+     - “ROS Boss”是负责引导某个发行版经历其生命周期的开发、发布、更新和终止支持（EOL）各阶段的人。他们由 Open Robotics 内部的 ROS 2 团队中选出。
+   * - 运行选定发行版名称的流程
+     - ROS Boss 主持发行版名称的选定流程，并参考来自社区等来源的意见以及可能的命名冲突。
+   * - 创建发行版的文档页面
+     - 每个发行版都有一个文档页面，列出其关键信息，例如计划发布日期、EOL 日期以及自上一发行版以来的重要变更。
+   * - 设定发布日程
+     - 临近发布日（通常是世界海龟日）的最后几周异常忙碌，充满了各种截止期限，例如何时冻结默认 RMW 实现。这些截止期限必须提前很久规划好。
+   * - 制定路线图
+     - 虽然每位 ROS 贡献者对自己在每个发行版中要实现的功能各有规划，但我们会尽量维护一份总体路线图，列出预期在该发行版中出现的新功能和重要变更。ROS Boss 与 Open Robotics 的 ROS 2 开发团队负责人会与 ROS 2 TSC 及其他相关方共同制定一份在可用时间内可实现、且满足 ROS 社区需求的路线图。
+   * - 公布路线图
+     - 计划的功能和重要变更清单会通过一个 GitHub issue 公之于众，该 issue 将跟踪路线图中每一项的开发进展。当然，这并不意味着路线图此时就已固定不变，因为开发计划可能发生变化，而且我们始终（并且经常）欢迎新的贡献，即使它们不在既定路线图上。
+   * - 设定目标平台和主要依赖项
+     - 目标平台（就操作系统、发行版和版本而言）必须提前足够久设定，以便基础设施方面的开发工作（例如构建农场中的支持）得以进行。同样，每个主要依赖项的版本（使用哪个 Python 版本、哪些编译器、哪个 Eigen 版本等）也必须确定。这通过更新 `REP-2000 <https://reps.openrobotics.org/rep-2000/>`__ 来完成。
+   * - 为构建农场添加平台支持
+     - 构建农场是支持 ROS 2 发行版的基础设施中的关键部分。它提供持续集成设施，帮助我们保持质量，并构建社区所依赖的二进制软件包，以免从源代码构建 ROS 2 和软件包。如果目标平台与上一 ROS 2 发行版不同，则必须向构建农场添加必要的支持。
+   * - 委托制作徽标和相关美术作品
+     - 每个 ROS 2 发行版（以及 ROS 发行版！）中深受喜爱的一个部分就是徽标。徽标由专业艺术家根据选定的发行版名称委托制作。基于该徽标，还会制作其他美术作品，例如 turtlesim 图标。
+   * - 为发行版创建邮件列表
+     - 邮件列表对于发布关键公告至关重要，因此必须建立邮件列表，以便联系那些有兴趣了解发行版相关信息的人，例如他们的软件包在构建农场上无法构建为二进制包。
+   * - 创建测试用例
+     - 随着开发流程进入最后几个月，测试工作正式开始。必须编写将在开发最后阶段使用的集成测试用例，并提供给负责执行这些用例的发布团队。
+   * - 公布即将进行的 RMW 冻结
+     - RMW 冻结是指新发行版的默认 RMW 实现功能冻结的时间点。这为开发者提供了一个稳定的目标来测试其软件包，这对客户端库开发者尤为重要，因为他们需要知道 RMW 层的哪些功能可供客户端库使用。
+   * - 升级依赖软件包
+     - 被 ROS 依赖但不属于 ROS 软件、且不在平台软件包管理器（例如 Ubuntu 的 aptitude）中提供的软件包，即所谓的“供应商软件包”，必须更新到 REP-2000 中指定的版本（对于未列入 REP-2000 的软件包，则更新到合适的版本）。这在 Windows 上尤为重要。
+   * - 制定详细的发布计划
+     - 对开发流程最后两个月进行规划。这会产出一份详细的测试计划、某些软件包必须可用的时间线等。它有助于发现发布流程各步骤之间的依赖关系，并找到执行每个步骤的人员。
+   * - 冻结 RMW
+     - RMW 实现此时已功能冻结。理论上，现在可以对它进行详尽测试，以确保它在发布日能正常工作。
+   * - 公布即将进行的整体冻结
+     - 在冻结 RMW 实现之后的下一步冻结，是整体冻结该发行版。这是核心 ROS 软件包功能冻结的时间点，为非核心软件包的开发者提供了一个稳定的目标来测试其软件包，也让发行版测试人员有不会在测试后立即变动的内容可供测试。
+   * - 冻结发行版
+     - 从此时起，任何核心 ROS 软件包都不能再添加新功能。只有针对开发过程中密集集成测试阶段发现的（不可避免的）缺陷所做的修复才能并入代码库。这意味着 Rolling Ridley 实际上被暂时冻结了。
+   * - 公布即将创建的分支
+     - 从 Rolling Ridley 分支出新的 ROS 2 发行版是一个重要时刻，值得为此做好准备。
+   * - 公布即将发布的 beta 版
+     - 当发行版进入 beta 阶段时，它已准备好接受 ROS 社区更广泛的测试。此 beta 阶段在发行版从 Rolling Ridley 分支出来后不久进行。
+   * - 从 Rolling Ridley 创建分支
+     - 新的 ROS 2 发行版是通过从 Rolling Ridley 创建一个新分支而产生的。实际上，新发行版就在此时诞生。与此同时，Rolling Ridley 摆脱了该开发流程，可以继续向未来滚动，再次接收新功能。
+   * - 将发行版加入 CI
+     - 持续集成系统会更新，以允许使用新发行版的分支和核心 ROS 软件包进行构建。这意味着软件包开发者可以针对新发行版（而非 Rolling Ridley）为其软件包运行 CI。
+   * - 开始构建临时测试用的 tarball
+     - 那些将对新发行版进行全面检验的精英测试团队需要一些可测试的内容，而不必不断从源代码编译 ROS 2。构建农场用于产出一组 tarball，其中包含某一时间点的发行版，供测试人员测试。
+   * - 添加发行版文档
+     - 关于该发行版的详细文档（例如自上一发行版以来的重要变更）会被添加到 ROS 2 文档站点。
+   * - 公布 beta 版
+     - 发行版的 beta 版本发布，并邀请整个 ROS 社区（以及那些尚未参与的人）为其测试做出贡献。此时，测试人员越多越好，因为需要让该发行版经历尽可能广泛的场景，以便在发布前发现缺陷。
+   * - 最终的发布准备工作
+     - 随着新发行版进入彻底、完全、一切冻结的阶段，就要为发布做最后的准备。这包括使用构建农场产出二进制软件包，以便有内容可供发布。
+   * - 发布
+     - 大喜之日——如果一切按计划进行，这一天会与 5 月 23 日的世界海龟日重合。发行版的二进制软件包会在发布仓库中提供，并会发布公告。人们举办派对，ROS 2 开发团队则享受当之无愧的休息。

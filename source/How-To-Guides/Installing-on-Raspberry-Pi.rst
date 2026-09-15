@@ -1,52 +1,52 @@
-ROS 2 on Raspberry Pi
-=====================
+树莓派上的 ROS 2
+================
 
-ROS 2 is supported on both 32 bit (arm32) and 64 bit (arm64) ARM processors.
-However, you can see `here <https://reps.openrobotics.org/rep-2000/>`__ that arm64 receives Tier 1 support, while arm32 is Tier 3.
-Tier 1 support means distribution specific packages and binary archives are available, while Tier 3 requires the user to compile ROS 2 from source.
+ROS 2 同时支持 32 位（arm32）和 64 位（arm64）ARM 处理器。
+不过，你可以在 `这里 <https://reps.openrobotics.org/rep-2000/>`__ 看到，arm64 获得 Tier 1 支持，而 arm32 属于 Tier 3。
+Tier 1 支持意味着有发行版专用的软件包和二进制归档可用，而 Tier 3 则要求用户从源码编译 ROS 2。
 
-The fastest and simplest way to use ROS 2 is to use a Tier 1 supported configuration.
+使用 ROS 2 最快、最简单的方式是使用 Tier 1 支持的配置。
 
-This would mean either installing 64 bit Ubuntu on to the Raspberry Pi, or using the 64 bit version of Raspberry Pi OS and running ROS 2 in Docker.
+这意味着要么在树莓派上安装 64 位 Ubuntu，要么使用 64 位版本的 Raspberry Pi OS 并在 Docker 中运行 ROS 2。
 
-Ubuntu Linux on Raspberry Pi with binary ROS 2 install
-------------------------------------------------------
+在树莓派上使用 Ubuntu Linux 并安装二进制版 ROS 2
+------------------------------------------------
 
-Ubuntu for Raspberry Pi is available `here <https://ubuntu.com/download/raspberry-pi>`__.
+适用于树莓派的 Ubuntu 可在 `这里 <https://ubuntu.com/download/raspberry-pi>`__ 获取。
 
-Make sure to confirm that you have selected the correct version as described in `REP-2000 <https://reps.openrobotics.org/rep-2000/>`__.
+请务必确认你选择的版本与 `REP-2000 <https://reps.openrobotics.org/rep-2000/>`__ 中描述的一致。
 
-You can now install ROS 2 using the normal binary installation instructions for Ubuntu Linux.
+现在你便可以按照 Ubuntu Linux 的常规二进制安装说明来安装 ROS 2。
 
-Raspberry Pi OS with ROS 2 in docker
-------------------------------------
+使用 Raspberry Pi OS 并在 docker 中运行 ROS 2
+---------------------------------------------
 
-Raspberry Pi OS 64 bit version is `available here <https://www.raspberrypi.com/software/operating-systems/>`__.
+Raspberry Pi OS 64 位版本可在 `这里获取 <https://www.raspberrypi.com/software/operating-systems/>`__。
 
-Raspberry Pi OS is based on Debian which receives Tier 3 support, but it can run Ubuntu docker containers for Tier 1 support.
+Raspberry Pi OS 基于 Debian，属于 Tier 3 支持，但它可以运行 Ubuntu docker 容器以获得 Tier 1 支持。
 
-After flashing the OS, `install Docker <https://docs.docker.com/engine/install/debian/#install-using-the-convenience-script>`__.
+刷写操作系统之后，`安装 Docker <https://docs.docker.com/engine/install/debian/#install-using-the-convenience-script>`__。
 
-The official ROS 2 Docker images can be found `here <https://hub.docker.com/_/ros/tags>`__.
+官方 ROS 2 Docker 镜像可在 `这里 <https://hub.docker.com/_/ros/tags>`__ 找到。
 
-You may choose from ros-core, ros-base, or perception.
-See `here <https://reps.openrobotics.org/rep-2001/>`__ for more information on these variants.
+你可以从 ros-core、ros-base 或 perception 中选择。
+关于这些变体的更多信息，请参见 `这里 <https://reps.openrobotics.org/rep-2001/>`__。
 
-Fetch and run an image:
+拉取并运行镜像：
 
 .. code-block:: console
 
     $ docker pull ros:{DISTRO}-ros-core
     $ docker run -it --rm ros:{DISTRO}-ros-core
 
-You can also build images yourself:
+你也可以自行构建镜像：
 
-Clone the `docker_images git repo <https://github.com/osrf/docker_images>`__ onto the Raspberry Pi, change in to the directory linked above, then to the directory with your preferred variant.
+将 `docker_images git 仓库 <https://github.com/osrf/docker_images>`__ 克隆到树莓派上，切换到上面链接的目录，然后进入你偏好的变体所在的目录。
 
-Inside of the directory, build the container with:
+在该目录内，使用以下命令构建容器：
 
 .. code-block:: console
 
     $ docker build -t ros_docker .
 
-On a supported system it will only take a minute or two to build the docker containers, as the source code is already built in to binaries.
+在受支持的系统中，构建 docker 容器只需一两分钟，因为源代码已经构建成二进制文件。

@@ -2,36 +2,36 @@
 
   Beta2-Overview
 
-Beta 2 (``r2b2``)
-=================
+Beta 2（``r2b2``）
+==================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Supported Platforms
--------------------
+支持的平台
+----------
 
-We support ROS 2 Beta 2 on three platforms: Ubuntu 16.04 (Xenial), macOS 10.12 (Sierra), and Windows 10.
-We provide both binary packages and instructions for how to compile from source for all 3 platforms (see `install instructions <../../Installation>` as well as `documentation <https://docs.ros2.org/beta2/>`__).
+我们在三个平台上支持 ROS 2 Beta 2：Ubuntu 16.04（Xenial）、macOS 10.12（Sierra）和 Windows 10。
+对于全部 3 个平台，我们既提供二进制软件包，也提供从源代码编译的说明（参见 `安装说明 <../../Installation>` 以及 `文档 <https://docs.ros2.org/beta2/>`__）。
 
-Features
---------
+功能
+----
 
-Improvements since Beta 1 release
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+自 Beta 1 发布以来的改进
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-* DDS_Security support (aka SROS2, see `sros2 <https://github.com/ros2/sros2>`__)
-* Debian packages for Ubuntu Xenial
-* Typesupport has been redesigned so that you only build a single executable and can choose one of the available RMW implementations by setting an environment variable (see `documentation <../../How-To-Guides/Working-with-multiple-RMW-implementations>`).
-* Namespace support for nodes and topics (see `design article <https://design.ros2.org/articles/topic_and_service_names.html>`__, see known issues below).
-* A set of command-line tools using the extensible ``ros2`` command (see `conceptual article <../../Concepts/Basic/About-Command-Line-Tools>`).
-* A set of macros for logging messages in C / C++ (see API docs of `rcutils <https://docs.ros2.org/beta2/api/rcutils/index.html>`__).
+* DDS_Security 支持（即 SROS2，参见 `sros2 <https://github.com/ros2/sros2>`__）
+* 适用于 Ubuntu Xenial 的 Debian 软件包
+* 类型支持（typesupport）经过重新设计，因此你只需构建一个可执行文件，并通过设置环境变量即可选择可用的 RMW 实现之一（参见 `文档 <../../How-To-Guides/Working-with-multiple-RMW-implementations>`）。
+* 节点和话题的命名空间支持（参见 `设计文章 <https://design.ros2.org/articles/topic_and_service_names.html>`__，另见下文的已知问题）。
+* 一组使用可扩展 ``ros2`` 命令的命令行工具（参见 `概念文章 <../../Concepts/Basic/About-Command-Line-Tools>`）。
+* 一组用于在 C / C++ 中记录日志消息的宏（参见 `rcutils <https://docs.ros2.org/beta2/api/rcutils/index.html>`__ 的 API 文档）。
 
-New demo application
-^^^^^^^^^^^^^^^^^^^^
+新的演示应用
+^^^^^^^^^^^^
 
-* `Turtlebot 2 demos <https://github.com/ros2/turtlebot2_demo>`__ using the following repositories that have been (partially) converted to ROS 2 (Linux only):
+* `Turtlebot 2 演示 <https://github.com/ros2/turtlebot2_demo>`__，使用了以下已（部分）转换为 ROS 2 的仓库（仅 Linux）：
 
   * `ros_astra_camera <https://github.com/ros2/ros_astra_camera.git>`__
   * `depthimage_to_laserscan <https://github.com/ros2/depthimage_to_laserscan.git>`__
@@ -44,48 +44,48 @@ New demo application
   * `joystick_drivers <https://github.com/ros2/joystick_drivers.git>`__
   * `teleop_twist_joy <https://github.com/ros2/teleop_twist_joy.git>`__
 
-* `Dummy_robot demo <../Tutorials/Demos/dummy-robot-demo>`:
+* `Dummy_robot 演示 <../Tutorials/Demos/dummy-robot-demo>`：
 
   * `robot_model <https://github.com/ros2/robot_model>`__
   * `robot_state_publisher <https://github.com/ros2/robot_state_publisher>`__
 
-Selected features from previous Alpha/Beta releases
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+先前 Alpha/Beta 发行版中的部分功能
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For the complete list, see `earlier release notes <../index>`.
+完整列表请参见 `早期发行说明 <../index>`。
 
 
-* C++ and Python implementations of ROS 2 client libraries including APIs for:
+* ROS 2 客户端库的 C++ 和 Python 实现，包括以下 API：
 
-  * Publishing and subscribing to ROS topics
-  * Requesting and replying ROS services (synchronous (C++ only) and asynchronous)
-  * Getting and setting ROS parameters (C++ only, synchronous and asynchronous)
-  * Timer callbacks
+  * 发布和订阅 ROS 话题
+  * 请求和回复 ROS 服务（同步（仅 C++）和异步）
+  * 获取和设置 ROS 参数（仅 C++，同步和异步）
+  * 定时器回调
 
-* Support for interoperability between multiple DDS/RTPS implementations
+* 支持多种 DDS/RTPS 实现之间的互操作性
 
-  * eProsima Fast RTPS is our default implementation, and is included in the binary packages
-  * RTI Connext is supported: build from source to try it out
-  * We initially supported PrismTech OpenSplice but support for it is currently on hold
+  * eProsima Fast RTPS 是我们的默认实现，并包含在二进制软件包中
+  * 支持 RTI Connext：从源代码构建即可试用
+  * 我们最初支持 PrismTech OpenSplice，但目前其支持处于暂停状态
 
-* A graph API for network events
-* Distributed discovery
-* Realtime safe code paths for publish and subscribe with compatible DDS implementation (only Connext at the moment)
+* 用于网络事件的计算图 API
+* 分布式发现
+* 在兼容的 DDS 实现（目前仅 Connext）下，发布和订阅的实时安全代码路径
 
-  * Support for custom allocators
+  * 支持自定义分配器
 
-* ROS 1 <-> ROS 2 dynamic bridge node
-* Executor threading model (C++ only)
-* Component model to compose nodes at compile / link / runtime
-* Managed component using a standard lifecycle
-* Extended ``.msg`` format with new features:
+* ROS 1 <-> ROS 2 动态桥接节点
+* 执行器线程模型（仅 C++）
+* 组件模型，可在编译 / 链接 / 运行时组合节点
+* 使用标准生命周期的受管组件
+* 扩展的 ``.msg`` 格式，新增以下功能：
 
-  * Bounded arrays
-  * Default values
+  * 有界数组
+  * 默认值
 
-Known issues
-^^^^^^^^^^^^
+已知问题
+^^^^^^^^
 
-* We're tracking issues in various repositories, but the main entry point is the `ros2/ros2 issue tracker <https://github.com/ros2/ros2/issues>`__
-* We'd like to highlight a `known issue <https://github.com/ros2/rmw_connext/issues/234>`__ that we are looking into which doesn't allow two topics with the same base name but different namespaces to have a different type when using ``rmw_connext_cpp``.
-* Services with long responses are not working with Fast-RTPS. The fix, while not being part of beta2, is available upstream so you can work around this issue by building from source using Fast-RTPS master branch.
+* 我们在多个仓库中跟踪 issue，但主要入口是 `ros2/ros2 issue 跟踪器 <https://github.com/ros2/ros2/issues>`__
+* 我们要特别指出一个我们正在调查的 `已知 issue <https://github.com/ros2/rmw_connext/issues/234>`__：在使用 ``rmw_connext_cpp`` 时，它不允许基名相同但命名空间不同的两个话题具有不同的类型。
+* 响应较长的服务在 Fast-RTPS 下无法正常工作。相关修复虽未包含在 beta2 中，但已在上游提供，因此你可以使用 Fast-RTPS master 分支从源代码构建来规避此问题。

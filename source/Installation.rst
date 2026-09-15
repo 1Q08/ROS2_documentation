@@ -1,10 +1,10 @@
 .. _InstallationGuide:
 .. _RollingInstall:
 
-Installation
-============
+安装
+====
 
-Options for installing ROS 2 {DISTRO_TITLE_FULL}:
+安装 ROS 2 {DISTRO_TITLE_FULL} 的选项：
 
 .. toctree::
    :hidden:
@@ -21,66 +21,66 @@ Options for installing ROS 2 {DISTRO_TITLE_FULL}:
 
 .. _binary-package-platforms:
 
-Binary packages
----------------
+二进制包
+--------
 
-Binaries are only created for the Tier 1 operating systems listed in `REP-2000 <https://reps.openrobotics.org/rep-2000/#rolling-ridley-june-2020---ongoing>`__.
-If you are not running any of the following operating systems you may need to build from source or use a :doc:`container solution <How-To-Guides/Run-2-nodes-in-single-or-separate-docker-containers>` to run ROS 2 on your platform.
+二进制包仅为 `REP-2000 <https://reps.openrobotics.org/rep-2000/#rolling-ridley-june-2020---ongoing>`__ 中列出的 Tier 1 操作系统构建。
+如果您没有运行以下任一操作系统，可能需要从源代码构建，或使用 :doc:`容器方案 <How-To-Guides/Run-2-nodes-in-single-or-separate-docker-containers>` 在您的平台上运行 ROS 2。
 
-We provide ROS 2 binary packages for the following platforms:
+我们为以下平台提供 ROS 2 二进制包：
 
 * Ubuntu Linux (amd64 / aarch64) - Jammy Jellyfish (22.04)
 
-  * :doc:`deb packages <Installation/Ubuntu-Install-Debs>` (recommended)
-  * :doc:`binary archive <Installation/Alternatives/Ubuntu-Install-Binary>`
+  * :doc:`deb 包 <Installation/Ubuntu-Install-Debs>`\ （推荐）
+  * :doc:`二进制归档 <Installation/Alternatives/Ubuntu-Install-Binary>`
 
 * Red Hat Enterprise Linux 8 (amd64)
 
-  * :doc:`RPM packages <Installation/RHEL-Install-RPMs>` (recommended)
-  * :doc:`binary archive <Installation/Alternatives/RHEL-Install-Binary>`
+  * :doc:`RPM 包 <Installation/RHEL-Install-RPMs>`\ （推荐）
+  * :doc:`二进制归档 <Installation/Alternatives/RHEL-Install-Binary>`
 
 * Windows 10 (amd64)
 
-  * :doc:`Windows Binary (VS 2019) <Installation/Windows-Install-Binary>`
+  * :doc:`Windows 二进制包 (VS 2019) <Installation/Windows-Install-Binary>`
 
 .. _building-from-source:
 
-Building from source
---------------------
+从源代码构建
+------------
 
-We support building ROS 2 from source on the following platforms:
+我们支持在以下平台上从源代码构建 ROS 2：
 
 * :doc:`Ubuntu Linux 22.04 <Installation/Alternatives/Ubuntu-Development-Setup>`
 * :doc:`Windows 10 <Installation/Alternatives/Windows-Development-Setup>`
 * :doc:`RHEL-8 <Installation/Alternatives/RHEL-Development-Setup>`
 * :doc:`macOS <Installation/Alternatives/macOS-Development-Setup>`
 
-Which install should you choose?
---------------------------------
+您该选择哪种安装方式？
+----------------------
 
-Installing from binary packages or from source will both result in a fully-functional and usable ROS 2 install.
-Differences between the options depend on what you plan to do with ROS 2.
+从二进制包安装或从源代码安装，二者都会得到功能完整且可用的 ROS 2 安装。
+这些选项之间的差异取决于您打算用 ROS 2 做什么。
 
-**Binary packages** are for general use and provide an already-built install of ROS 2.
-This is great for people who want to dive in and start using ROS 2 as-is, right away.
+**二进制包** 面向一般用途，提供已经构建好的 ROS 2 安装。
+这非常适合那些希望立即上手、直接使用 ROS 2 的用户。
 
-Linux users have two options for installing binary packages:
+Linux 用户有两种安装二进制包的选择：
 
-- Packages (debs or RPMS, depending on the platform)
-- binary archive
+- 包（deb 或 RPM，取决于平台）
+- 二进制归档
 
-Installing from packages is the recommended method, as it installs necessary dependencies automatically and also updates alongside regular system updates.
-However, you need root access in order to install deb packages.
-If you don't have root access, the binary archive is the next best choice.
+从包安装是推荐的方法，因为它会自动安装必要的依赖，并随常规系统更新一同更新。
+但是，安装 deb 包需要 root 权限。
+如果您没有 root 权限，二进制归档是次优选择。
 
-Windows users who choose to install from binary packages only have the binary archive option
-(deb packages are exclusive to Ubuntu/Debian).
+选择从二进制包安装的 Windows 用户只有二进制归档这一个选项
+（deb 包仅适用于 Ubuntu/Debian）。
 
-**Building from source** is meant for developers looking to alter or explicitly omit parts of ROS 2's base.
-It is also recommended for platforms that don't support binaries.
-Building from source also gives you the option to install the absolute latest version of ROS 2.
+**从源代码构建** 面向希望修改或显式省略 ROS 2 基础部分的开发者。
+对于不支持二进制包的平台，也推荐这种方式。
+从源代码构建还让您可以选择安装最新版本的 ROS 2。
 
-Contributing to ROS 2 core?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+想为 ROS 2 核心做贡献？
+^^^^^^^^^^^^^^^^^^^^^^^
 
-If you plan to contribute directly to ROS 2 core packages, you can install the :doc:`latest development from source <Installation/Alternatives/Latest-Development-Setup>` which shares installation instructions with the :ref:`Rolling distribution <rolling_distribution>`.
+如果您打算直接为 ROS 2 核心包做贡献，可以 :doc:`从源代码安装最新开发版 <Installation/Alternatives/Latest-Development-Setup>`，其安装说明与 :ref:`Rolling 发行版 <rolling_distribution>` 相同。

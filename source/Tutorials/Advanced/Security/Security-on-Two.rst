@@ -4,34 +4,34 @@
 
 .. _Security-on-Two:
 
-Ensuring security across machines
-=================================
+确保跨机器的安全性
+==================
 
-**Goal:** Make two different machines communicate securely.
+**目标：** 让两台不同的机器安全地通信。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 5 minutes
+**时长：** 5 分钟
 
-.. contents:: Contents
+.. contents:: 目录
   :depth: 2
   :local:
 
 
-Background
-----------
+背景
+----
 
-The previous tutorials have used two ROS nodes on the same machine sending all network communications over the localhost interface.
-Let's extend that scenario to involve multiple machines, since the benefits of authentication and encryption then become more obvious.
+之前的教程在同一台机器上使用两个 ROS 节点，所有网络通信都通过 localhost 接口进行。
+让我们把该场景扩展到多台机器，这样可以更明显地体现身份验证和加密带来的好处。
 
-Suppose that the machine with the keystore created in the previous demo has a hostname ``Alice``, and that we want to also use another machine with hostname ``Bob`` for our multi-machine ``talker/listener`` demo.
-We need to move some keys from ``Alice`` to ``Bob`` to allow SROS 2 to authenticate and encrypt the transmissions.
+假设上一个演示中创建了密钥库的那台机器的主机名为 ``Alice``，而我们还想使用另一台主机名为 ``Bob`` 的机器来进行多机 ``talker/listener`` 演示。
+我们需要把一些密钥从 ``Alice`` 移动到 ``Bob``，以便 SROS 2 能够对传输进行身份验证和加密。
 
 
-Create the second keystore
---------------------------
+创建第二个密钥库
+----------------
 
-Begin by creating an empty keystore on ``Bob``; the keystore is actually just an empty directory:
+先在 ``Bob`` 上创建一个空密钥库；密钥库实际上只是一个空目录：
 
 .. tabs::
 
@@ -60,11 +60,11 @@ Begin by creating an empty keystore on ``Bob``; the keystore is actually just an
       $ exit
 
 
-Copy files
-----------
+复制文件
+--------
 
-Next copy the keys and certificates for the ``talker`` program from ``Alice`` to ``Bob``.
-Since the keys are just text files, we can use ``scp`` to copy them.
+接下来把 ``talker`` 程序的密钥和证书从 ``Alice`` 复制到 ``Bob``。
+由于这些密钥只是文本文件，我们可以使用 ``scp`` 来复制它们。
 
 .. tabs::
 
@@ -91,28 +91,28 @@ Since the keys are just text files, we can use ``scp`` to copy them.
 
 .. warning::
 
-  Note that in this case the entire keystore is shared across the different machines which may not be the desired behavior, as it may result in a security risk.
-  Please refer to :doc:`Deployment-Guidelines` for more information in this regard.
+  请注意，在这种情况下整个密钥库会在不同机器之间共享，这可能并非你期望的行为，因为它可能带来安全风险。
+  有关这方面的更多信息，请参阅 :doc:`Deployment-Guidelines`。
 
-That will be very quick, since it's just copying some very small text files.
-Now, we're ready to run a multi-machine talker/listener demo!
+这会非常快，因为只是复制一些非常小的文本文件。
+现在，我们准备运行多机 talker/listener 演示！
 
 
-Launch the nodes
-----------------
+启动节点
+--------
 
-Once the environment is set up, run the talker on ``Bob``:
+环境设置完成后，在 ``Bob`` 上运行 talker：
 
 .. code-block:: console
 
   $ ros2 run demo_nodes_cpp talker --ros-args --enclave /talker_listener/talker
 
-and launch the listener on ``Alice``:
+并在 ``Alice`` 上启动 listener：
 
 .. code-block:: console
 
   $ ros2 run demo_nodes_py listener --ros-args --enclave /talker_listener/listener
 
-Alice will now be receiving encrypted messages from Bob.
+现在 Alice 将从 Bob 接收加密消息。
 
-With two machines successfully communicating using both encryption and authentication, you can use the same procedure to add more machines to your ROS graph.
+在两台机器成功使用加密和身份验证进行通信后，你可以用同样的步骤向 ROS 图中添加更多机器。

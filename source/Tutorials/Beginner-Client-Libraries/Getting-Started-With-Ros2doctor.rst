@@ -4,42 +4,42 @@
 
 .. _Ros2Doctor:
 
-Using ``ros2doctor`` to identify issues
-=======================================
+使用 ``ros2doctor`` 识别问题
+============================
 
-**Goal:** Identify issues in your ROS 2 setup using the ``ros2doctor`` tool.
+**目标：** 使用 ``ros2doctor`` 工具识别你的 ROS 2 设置中的问题。
 
-**Tutorial level:** Beginner
+**教程级别：** 入门
 
-**Time:** 10 minutes
+**时间：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-When your ROS 2 setup is not running as expected, you can check its settings with the ``ros2doctor`` tool.
+当你的 ROS 2 设置未按预期运行时，你可以使用 ``ros2doctor`` 工具检查其设置。
 
-``ros2doctor`` checks all aspects of ROS 2, including platform, version, network, environment, running systems and more, and warns you about possible errors and reasons for issues.
+``ros2doctor`` 会检查 ROS 2 的方方面面，包括平台、版本、网络、环境、运行中的系统等等，并就可能的错误和问题原因向你发出警告。
 
-Prerequisites
--------------
+前置条件
+--------
 
-``ros2doctor`` is part of the ``ros2cli`` package.
-As long as you have ``ros2cli`` installed (which any normal install should have), you will be able to use ``ros2doctor``.
+``ros2doctor`` 是 ``ros2cli`` 包的一部分。
+只要安装了 ``ros2cli`` （任何正常的安装都应该有），你就能使用 ``ros2doctor``。
 
-This tutorial uses :doc:`turtlesim <../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>` to illustrate some of the examples.
+本教程使用 :doc:`turtlesim <../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>` 来说明一些示例。
 
-Tasks
------
+任务
+----
 
-1 Check your setup
-^^^^^^^^^^^^^^^^^^
+1 检查你的设置
+^^^^^^^^^^^^^^
 
-Let's examine your general ROS 2 setup as a whole with ``ros2doctor``.
-First, source ROS 2 in a new terminal, then enter the command:
+让我们用 ``ros2doctor`` 整体检查你的常规 ROS 2 设置。
+首先，在一个新终端中导入 ROS 2，然后输入命令：
 
 
 .. code-block:: console
@@ -47,31 +47,31 @@ First, source ROS 2 in a new terminal, then enter the command:
     $ ros2 doctor
     All <n> checks passed
 
-This will conduct checks over all your setup modules and return warnings and errors.
-If your ROS 2 setup is in perfect shape, you'll see a message similar to the one above.
+这会对你的所有设置模块进行检查，并返回警告和错误。
+如果你的 ROS 2 设置处于完美状态，你会看到类似上面的消息。
 
-However, it's not unusual to have a few warnings returned.
-A ``UserWarning`` doesn't mean your setup is unusable; it's more likely just an indication that something is configured in a way that's not ideal.
+但是，返回几条警告并不罕见。
+``UserWarning`` 并不意味着你的设置不可用；它更可能只是提示某个东西的配置方式不够理想。
 
-If you do receive a warning, it will look something like this:
+如果你确实收到了警告，它会看起来像这样：
 
 .. code-block:: console
 
     <path>: <line>: UserWarning: <message>
 
-For example, ``ros2doctor`` will find this warning if you're using an unstable ROS 2 distribution:
+例如，如果你使用的是不稳定的 ROS 2 发行版，``ros2doctor`` 会发现这个警告：
 
 .. code-block:: console
 
     UserWarning: Distribution <distro> is not fully supported or tested. To get more consistent features, download a stable version at https://index.ros.org/doc/ros2/Installation/
 
-If ``ros2doctor`` only finds warnings in your system, you will still receive the ``All <n> checks passed`` message.
+如果 ``ros2doctor`` 只在你的系统中发现警告，你仍然会收到 ``All <n> checks passed`` 消息。
 
-Most checks are categorized as warnings as opposed to errors.
-It's mostly up to you, the user, to determine the importance of the feedback ``ros2doctor`` returns.
-If it does find a rare error in your setup, indicated by ``UserWarning: ERROR:``, the check is considered failed.
+大多数检查都被归类为警告而非错误。
+``ros2doctor`` 返回的反馈的重要性，主要由你（用户）来决定。
+如果它确实在你的设置中发现了一个罕见的错误（以 ``UserWarning: ERROR:`` 表示），那么该检查被认为是失败的。
 
-You will see a message similar to the following list of issue feedback:
+你会看到类似以下问题反馈列表的消息：
 
 .. code-block:: console
 
@@ -79,30 +79,30 @@ You will see a message similar to the following list of issue feedback:
 
   Failed modules:  network
 
-An error indicates the system is missing important settings or functions that are crucial to ROS 2.
-Errors should be addressed to ensure the system functions properly.
+错误表示系统缺少对 ROS 2 至关重要的设置或功能。
+应该解决错误，以确保系统正常运行。
 
-2 Check a system
-^^^^^^^^^^^^^^^^
+2 检查一个系统
+^^^^^^^^^^^^^^
 
-You can also examine a running ROS 2 system to identify possible causes for issues.
-To see ``ros2doctor`` working on a running system, let's run turtlesim, which has nodes actively communicating with each other.
+你也可以检查一个正在运行的 ROS 2 系统，以识别问题的可能原因。
+要看到 ``ros2doctor`` 在运行中的系统上的工作，让我们运行 turtlesim，它有一些节点在积极相互通信。
 
-Start up the system by opening a new terminal, sourcing ROS 2, and entering the command:
+通过打开一个新终端、导入 ROS 2 并输入以下命令来启动系统：
 
 .. code-block:: console
 
     $ ros2 run turtlesim turtlesim_node
 
-Open another terminal and source ROS 2 to run the teleop controls:
+打开另一个终端并导入 ROS 2 以运行 teleop 控制：
 
 .. code-block:: console
 
     $ ros2 run turtlesim turtle_teleop_key
 
-Now run ``ros2doctor`` again in its own terminal.
-You will see the warnings and errors you had the last time you ran ``ros2doctor`` on your setup if you had any.
-Following those will be a couple new warnings relating to the system itself:
+现在在它自己的终端中再次运行 ``ros2doctor``。
+如果你上次运行时有警告和错误，你将看到它们。
+紧随其后的将是一些与系统本身相关的新警告：
 
 .. code-block:: console
 
@@ -110,11 +110,11 @@ Following those will be a couple new warnings relating to the system itself:
     UserWarning: Publisher without subscriber detected on /turtle1/color_sensor.
     UserWarning: Publisher without subscriber detected on /turtle1/pose.
 
-It seems that the ``/turtlesim`` node publishes data to two topics that aren't being subscribed to, and ``ros2doctor`` thinks this could possibly lead to issues.
+看起来 ``/turtlesim`` 节点向两个没有被订阅的话题发布数据，而 ``ros2doctor`` 认为这可能会导致问题。
 
-If you run commands to echo the ``/color_sensor`` and ``/pose`` topics, those warnings will disappear because the publishers will have subscribers.
+如果你运行命令来回显 ``/color_sensor`` 和 ``/pose`` 话题，这些警告就会消失，因为发布者将拥有订阅者。
 
-You can try this by opening two new terminals while turtlesim is still running, sourcing ROS 2 in each, and running each of the following commands in their own terminal:
+你可以在 turtlesim 仍在运行时打开两个新终端，在每个终端中导入 ROS 2，并在各自的终端中运行以下每个命令来尝试：
 
 .. code-block:: console
 
@@ -124,32 +124,32 @@ You can try this by opening two new terminals while turtlesim is still running, 
 
     $ ros2 topic echo /turtle1/pose
 
-Then run ``ros2doctor`` in its terminal again.
-The ``publisher without subscriber`` warnings will be gone.
-(Make sure to enter ``Ctrl+C`` in the terminals where you ran ``echo``).
+然后再次在其终端中运行 ``ros2doctor``。
+``publisher without subscriber`` 警告将消失。
+（务必在运行 ``echo`` 的终端中输入 ``Ctrl+C``）。
 
-Now try exiting either the turtlesim window or quitting the teleop and running ``ros2doctor`` again.
-You'll see more warnings indicating ``publisher without subscriber`` or ``subscriber without publisher`` for different topics, now that one node in the system isn't available.
+现在尝试退出 turtlesim 窗口或退出 teleop，然后再次运行 ``ros2doctor``。
+你将看到更多警告，指示不同话题的 ``publisher without subscriber`` 或 ``subscriber without publisher``，因为现在系统中的某个节点不可用了。
 
-In a complex system with many nodes, ``ros2doctor`` would be invaluable for identifying possible reasons for communication issues.
+在拥有许多节点的复杂系统中，``ros2doctor`` 对于识别通信问题的可能原因将非常有价值。
 
-3 Get a full report
-^^^^^^^^^^^^^^^^^^^
+3 获取完整报告
+^^^^^^^^^^^^^^
 
-While ``ros2doctor`` will let you know warnings about your network, system, etc., running it with the ``--report`` argument will give you much more detail to help you analyze issues.
+虽然 ``ros2doctor`` 会告知你关于网络、系统等的警告，但使用 ``--report`` 参数运行它可以为你提供更多细节，以帮助你分析问题。
 
-You might want to use ``--report`` if you get a warning about your network setup and want to find out exactly what part of your configuration is causing the warning.
+如果你收到关于网络设置的警告，并想找出配置中到底哪个部分导致了该警告，你可能需要使用 ``--report``。
 
-It's also very helpful when you need to open a support ticket to get help with ROS 2.
-You can copy and paste the relevant parts of your report into the ticket so the people helping you can better understand your environment and provide better assistance.
+当你需要提交支持工单以获得 ROS 2 帮助时，它也很有用。
+你可以将报告中的相关部分复制粘贴到工单中，这样帮助你的人就能更好地理解你的环境并提供更好的帮助。
 
-To get a full report, enter the following command in the terminal:
+要获取完整报告，请在终端中输入以下命令：
 
 .. code-block:: console
 
     $ ros2 doctor --report
 
-Which will return a list of information categorized into five groups:
+这将返回一个分成五组的信息列表：
 
 .. code-block:: console
 
@@ -168,8 +168,8 @@ Which will return a list of information categorized into five groups:
   TOPIC LIST
   ...
 
-You can crosscheck the information here against the warnings you get when running ``ros2 doctor``.
-For example, if ``ros2doctor`` returned the warning (mentioned earlier) that your distribution is "not fully supported or tested", you might take a look at the ``ROS 2 INFORMATION`` section of the report:
+你可以将这里的信息与你运行 ``ros2 doctor`` 时得到的警告进行交叉核对。
+例如，如果 ``ros2doctor`` 返回了（前面提到的）你的发行版“未完全支持或测试”的警告，你可能会查看报告的 ``ROS 2 INFORMATION`` 部分：
 
 .. code-block:: console
 
@@ -178,25 +178,25 @@ For example, if ``ros2doctor`` returned the warning (mentioned earlier) that you
   distribution status    : prerelease
   release platforms      : {'<platform>': ['<version>']}
 
-Here you can see the ``distribution status`` is ``prerelease``, which explains why it's not fully supported.
+在这里你可以看到 ``distribution status`` 是 ``prerelease``，这解释了为什么它未被完全支持。
 
 
-Summary
--------
+小结
+----
 
-``ros2doctor`` will inform you of problems in your ROS 2 setup and running systems.
-You can get a deeper look at information behind those warnings by using the ``--report`` argument.
+``ros2doctor`` 会告知你 ROS 2 设置和运行系统中的问题。
+你可以通过使用 ``--report`` 参数更深入地了解这些警告背后的信息。
 
-Keep in mind, ``ros2doctor`` is not a debug tool; it won't help with errors in your code or on the implementation side of your system.
+请记住，``ros2doctor`` 不是一个调试工具；它不会帮助你处理代码中的错误或系统实现方面的问题。
 
 
-Related content
----------------
+相关内容
+--------
 
-`ros2doctor's README <https://github.com/ros2/ros2cli/tree/{REPOS_FILE_BRANCH}/ros2doctor>`__ will tell you more about different arguments.
-You might want to take a look around the ``ros2doctor`` repo as well, since it's fairly beginner friendly and a great place to get started with contributing.
+`ros2doctor 的 README <https://github.com/ros2/ros2cli/tree/{REPOS_FILE_BRANCH}/ros2doctor>`__ 会告诉你更多关于不同参数的信息。
+你可能也想浏览一下 ``ros2doctor`` 仓库，因为它相当适合初学者，是开始参与贡献的好地方。
 
-Next steps
-----------------
+下一步
+------
 
-You've completed the beginner level tutorials!
+你已完成入门级教程！

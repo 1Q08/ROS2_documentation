@@ -1,5 +1,5 @@
-Beginner: CLI tools
-===================
+初学者：CLI 工具
+================
 
 .. toctree::
    :maxdepth: 1

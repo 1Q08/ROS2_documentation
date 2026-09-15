@@ -2,93 +2,93 @@
 
    Concepts/About-Security
 
-ROS 2 Security
-==============
+ROS 2 安全
+==========
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
-Overview
---------
+概述
+----
 
-ROS 2 includes the ability to secure communications among nodes within the ROS 2 computational graph.
-Similar to discovery, security happens through the underlying ROS 2 middleware (provided it has support for the corresponding security plugins).
-No additional software installation is needed to enable security; however, the middleware requires configuration files for each ROS graph participant.
-These files enable encryption and authentication, and define policies both for individual nodes and for the overall ROS graph.
-ROS 2 also adds a master "on/off" switch to control security behavior.
+ROS 2 具备保护 ROS 2 计算图中节点间通信安全的能力。
+与发现类似，安全性是通过底层 ROS 2 中间件实现的（前提是它支持相应的安全插件）。
+启用安全不需要额外安装任何软件；不过，中间件需要为每个 ROS 图参与者提供配置文件。
+这些文件启用加密和认证，并为单个节点和整个 ROS 图定义策略。
+ROS 2 还增加了一个总「开关」来控制安全行为。
 
-ROS utilities can create the authoritative `trust anchor <https://en.wikipedia.org/wiki/Trust_anchor>`_ for a ROS application, or an external certificate authority can be used.
+ROS 工具可以为 ROS 应用创建权威的 `信任锚 <https://en.wikipedia.org/wiki/Trust_anchor>`_，也可以使用外部证书颁发机构。
 
-Built-in ROS 2 security features enable control over communications throughout the ROS graph.
-This not only allows for encrypting data in transit between ROS domain participants, but also enables authentication of participants sending data, ensures the integrity of data being sent, and enables domain-wide access controls.
+ROS 2 内置的安全功能可以控制整个 ROS 图中的通信。
+这不仅允许对 ROS 域参与者之间传输的数据进行加密，还可以对发送数据的参与者进行认证、确保所发送数据的完整性，并实现域范围的访问控制。
 
-ROS 2 security services are provided by the underlying `Data Distribution Service (DDS) <https://www.omg.org/spec/DDS/>`_ which is used for communications between nodes.
-DDS vendors provide open source and commercial DDS implementations that work with ROS.
-However, in order to create a specification-compliant implementation of DDS, all vendors must include security plugins as outlined in the `DDS Security Specification <https://www.omg.org/spec/DDS-SECURITY/About-DDS-SECURITY/>`_.
-ROS security features take advantage of these DDS security plugins to provide policy-based encryption, authentication and access control.
-DDS and ROS security is enabled through predefined configuration files and environment variables.
-
-
-The Security Enclave
---------------------
-
-A security enclave encapsulates a single policy for protecting ROS communications.
-The enclave may set policy for multiple nodes, for an entire ROS graph, or any combination of protected ROS processes and devices.
-Security enclaves can be flexibly mapped to processes, users, or devices at deployment.
-Adjusting this default behavior becomes important for optimizing communications and for complex systems.
-See the ROS 2 Security Enclaves `design document <https://design.ros2.org/articles/ros2_security_enclaves.html>`_ for additional details.
+ROS 2 的安全服务由底层用于节点间通信的 `数据分发服务（DDS） <https://www.omg.org/spec/DDS/>`_ 提供。
+DDS 厂商提供了可与 ROS 配合使用的开源和商业 DDS 实现。
+不过，为了创建符合规范的 DDS 实现，所有厂商都必须包含 `DDS 安全规范 <https://www.omg.org/spec/DDS-SECURITY/About-DDS-SECURITY/>`_ 中所规定的安全插件。
+ROS 安全功能利用这些 DDS 安全插件，提供基于策略的加密、认证和访问控制。
+DDS 和 ROS 的安全性通过预定义的配置文件和环变量启用。
 
 
-Security Files
---------------
-
-A `ROS 2 security enclave <https://design.ros2.org/articles/ros2_security_enclaves.html>`_ is established with six files as outlined by the DDS specification.
-Three of these files define an enclave's identity, while three other files define the permissions to be granted to the enclave.
-All six files reside in a single directory, and nodes launched without a qualified enclave path use files in the default root level enclave.
-
-Enclave Identity
-^^^^^^^^^^^^^^^^
-
-The Identity Certificate Authority file ``identity_ca.cert.pem`` acts as the trust anchor used to identify participants.
-Each enclave also holds its unique identifying certificate in the file ``cert.pem``, and the associated private key in the file ``key.pem``.
-Because the ``cert.pem`` certificate has been signed by identity certificate, when a participant presents this certificate to other domain members, they are able to validate the participant's identity using their own copy of the identity certificate.
-This valid certificate exchange allows the enclave to securely establish trusted communications with other participants.
-The enclave does not not share the ``key.pem`` private key, but only uses it for decryption and message signing.
-
-Enclave Permissions
-^^^^^^^^^^^^^^^^^^^
-
-The Permissions Certificate Authority file ``permissions_ca.cert.pem`` serves as the trust anchor to grant permissions to security enclaves.
-This certificate is used to create the signed file ``governance.p7s``, an XML document which defines domain-wide protection policies.
-Similarly the XML file ``permissions.p7s`` outlines permissions of this particular enclave and has been signed by the Permissions CA.
-Domain members use a copy of the permissions CA to validate these signed files and grant the requested access.
-
-Although these two certificate authorities enable separate workflows for identity and permissions, often the same certificate serves as both the identity and the permissions authority.
-
-Private Keys
-^^^^^^^^^^^^
-
-The identity and permissions certificates also have associated private key files.
-Add new enclaves to the domain by signing their Certificate Signing Request (CSR) with the identity certificate's private key.
-Similarly, grant permissions for a new enclave by signing a permissions XML document with the permission certificate's private key.
-
-
-Security Environment Variables
+安全安全域（Security Enclave）
 ------------------------------
 
-The environment variable ``ROS_SECURITY_ENABLE`` acts as the enclave's master "on/off" switch for ROS 2 security features.
-Security has been turned off by default, so security features will not be enabled even when the proper security files are present.
-In order to enable ROS 2 security, set this environment variable to ``true`` (case sensitive).
-
-Once security has been enabled, the environment variable ``ROS_SECURITY_STRATEGY`` defines how domain participants handle problems when launching participants.
-Security features depend on certificates and properly signed configuration files, yet by default, an improperly configured participant will still launch successfully but without security features.
-In order to enforce strict compliance with security settings and fail to launch non-compliant enclaves, set this environment variable to ``Enforce`` (case sensitive).
-
-Additional security-related environment variables can be found in the `ROS 2 DDS-Security Integration design document <https://design.ros2.org/articles/ros2_dds_security.html>`_.
-These variables generally assist ROS in managing enclaves and locating the security files.
+安全域封装了用于保护 ROS 通信的单一策略。
+安全域可以为多个节点、整个 ROS 图，或受保护 ROS 进程与设备的任意组合设置策略。
+部署时，安全域可以灵活地映射到进程、用户或设备。
+调整这种默认行为对于优化通信以及复杂系统而言变得很重要。
+更多细节请参阅 ROS 2 安全域 `设计文档 <https://design.ros2.org/articles/ros2_security_enclaves.html>`_。
 
 
-Learn More
+安全文件
+--------
+
+按照 DDS 规范的规定，一个 `ROS 2 安全安全域 <https://design.ros2.org/articles/ros2_security_enclaves.html>`_ 由六个文件建立。
+其中三个文件定义安全域的身份，另外三个文件定义授予该安全域的权限。
+所有六个文件都存放在同一个目录中，而未使用限定安全域路径启动的节点会使用默认根级安全域中的文件。
+
+安全域身份
+^^^^^^^^^^
+
+身份证书颁发机构文件 ``identity_ca.cert.pem`` 充当用于识别参与者的信任锚。
+每个安全域还在文件 ``cert.pem`` 中保存自己唯一的标识证书，并在文件 ``key.pem`` 中保存相关的私钥。
+由于 ``cert.pem`` 证书已由身份证书签名，当某个参与者向其他域成员出示该证书时，它们可以使用自己副本的身份证书来验证该参与者的身份。
+这种有效的证书交换使安全域能够与其他参与者安全地建立可信通信。
+安全域不会共享 ``key.pem`` 私钥，而只是将其用于解密和消息签名。
+
+安全域权限
+^^^^^^^^^^
+
+权限证书颁发机构文件 ``permissions_ca.cert.pem`` 充当向安全域授予权限的信任锚。
+该证书用于创建已签名的文件 ``governance.p7s``，这是一个定义域范围保护策略的 XML 文档。
+类似地，XML 文件 ``permissions.p7s`` 描述了这个特定安全域的权限，并已由权限 CA 签名。
+域成员使用权限 CA 的一份副本验证这些已签名文件，并授予所请求的访问权限。
+
+尽管这两个证书颁发机构分别为身份和权限启用了不同的工作流，但通常同一个证书既充当身份颁发机构，也充当权限颁发机构。
+
+私钥
+^^^^
+
+身份证书和权限证书也有相关的私钥文件。
+通过用身份证书的私钥签署新安全域的证书签名请求（CSR），将新安全域添加到域中。
+类似地，通过用权限证书的私钥签署权限 XML 文档，为新安全域授予权限。
+
+
+安全环变量
 ----------
 
-For more information and hands-on exercises enabling ROS 2 communications security, see the :doc:`../../Tutorials/Advanced/Security/Introducing-ros2-security`.
+环变量 ROS_SECURITY_ENABLE 充当安全域的总「开关」，用于控制 ROS 2 安全功能。
+安全默认处于关闭状态，因此即使存在正确的安全文件，安全功能也不会被启用。
+要启用 ROS 2 安全，请将该环变量设为 true（区分大小写）。
+
+启用安全后，环变量 ROS_SECURITY_STRATEGY 定义域参与者在启动参与者时如何处理问题。
+安全功能依赖于证书和正确签名的配置文件，但默认情况下，配置不正确的参与者仍会成功启动，只是不带安全功能。
+要强制严格遵守安全设置，使不符合要求的安全域启动失败，请将该环变量设为 Enforce（区分大小写）。
+
+其他与安全相关的环变量可以在 `ROS 2 DDS-Security 集成设计文档 <https://design.ros2.org/articles/ros2_dds_security.html>`_ 中找到。
+这些变量通常帮助 ROS 管理安全域并定位安全文件。
+
+
+了解更多
+--------
+
+有关启用 ROS 2 通信安全的更多信息和动手练习，请参阅 :doc:`../../Tutorials/Advanced/Security/Introducing-ros2-security`。

@@ -1,52 +1,52 @@
 .. BuildFarmTesting:
 
-Testing Your Code with the ROS Build Farm
-=========================================
+使用 ROS 构建农场测试你的代码
+=============================
 
-The `ROS 2 Build Farm <https://build.ros2.org/>`_ is incredibly powerful.
-In addition to creating binaries, it will also test pull requests by compiling and running all the tests for your ROS packages before the PR is merged.
+The `ROS 2 构建农场 <https://build.ros2.org/>`_ 功能非常强大。
+除了生成二进制文件外，它还会在 PR 合并之前，通过编译并运行你的 ROS 软件包的所有测试来测试拉取请求。
 
-There are four prerequisites.
+有四个前提条件。
 
- * The GitHub user `@ros-pull-request-builder <https://github.com/ros-pull-request-builder>`_ must have access to the repository.
- * The GitHub repository must have the webhooks set up.
- * `Your package must be indexed in rosdistro </How-To-Guides/Releasing/Index-Your-Packages>`
- * The ``test_pull_requests`` flag must be true.
-
-
-GitHub Access
--------------
-
-You can give access to the PR Builder either at the GitHub organization level OR just to the single GitHub repository.
-
-GitHub Organization
-^^^^^^^^^^^^^^^^^^^
-
-#. Open `https://github.com/orgs/%YOUR_ORG%/people <https://github.com/orgs/%YOUR_ORG%/people>`_
-   (while replacing ``%YOUR_ORG%`` with the appropriate organization)
-#. Click ``Invite Member`` and enter ``ros-pull-request-builder``
+ * GitHub 用户 `@ros-pull-request-builder <https://github.com/ros-pull-request-builder>`_ 必须拥有该仓库的访问权限。
+ * GitHub 仓库必须配置好 webhook。
+ * `你的软件包必须被索引到 rosdistro 中 </How-To-Guides/Releasing/Index-Your-Packages>`
+ * ``test_pull_requests`` 标志必须为 true。
 
 
-GitHub Repository
-^^^^^^^^^^^^^^^^^
+GitHub 访问权限
+---------------
 
-#. Open `https://github.com/%YOUR_ORG%/%YOUR_REPO%/settings/access <https://github.com/%YOUR_ORG%/%YOUR_REPO%/settings/access>`_
-   (while replacing ``%YOUR_ORG%/%YOUR_REPO$`` with the appropriate organization/repo)
-#. Click ``Add people`` and enter ``ros-pull-request-builder``
-#. Select ``Admin`` or ``Write`` for their role.
-   (see next section)
+你可以在 GitHub 组织级别授予 PR Builder 访问权限，也可以仅授予单个 GitHub 仓库。
+
+GitHub 组织
+^^^^^^^^^^^
+
+#. 打开 `https://github.com/orgs/%YOUR_ORG%/people <https://github.com/orgs/%YOUR_ORG%/people>`_
+   （并将 ``%YOUR_ORG%`` 替换为相应的组织）
+#. 点击 ``Invite Member`` 并输入 ``ros-pull-request-builder``
 
 
-WebHooks
+GitHub 仓库
+^^^^^^^^^^^
+
+#. 打开 `https://github.com/%YOUR_ORG%/%YOUR_REPO%/settings/access <https://github.com/%YOUR_ORG%/%YOUR_REPO%/settings/access>`_
+   （并将 ``%YOUR_ORG%/%YOUR_REPO$`` 替换为相应的组织/仓库）
+#. 点击 ``Add people`` 并输入 ``ros-pull-request-builder``
+#. 为其角色选择 ``Admin`` 或 ``Write``。
+   （参见下一节）
+
+
+Web 钩子
 --------
 
-If you grant full administrative rights to ``ros-pull-request-builder``, it will automatically setup the hooks.
+如果你授予 ``ros-pull-request-builder`` 完整的管理员权限，它会自动设置这些钩子。
 
-Alternatively, you can avoid the need for full administrative rights by setting them up with only **write** permissions.
+或者，你也可以只用 **write** 权限来设置它们，从而无需完整的管理员权限。
 
-#. Open `https://github.com/%YOUR_ORG%/%YOUR_REPO%/settings/hooks/new <https://github.com/%YOUR_ORG%/%YOUR_REPO%/settings/hooks/new>`_)
-#. Enter ``"https://build.ros2.org/ghprbhook/`` as the Payload URL
-#. Check the following options:
+#. 打开 `https://github.com/%YOUR_ORG%/%YOUR_REPO%/settings/hooks/new <https://github.com/%YOUR_ORG%/%YOUR_REPO%/settings/hooks/new>`_）
+#. 输入 ``"https://build.ros2.org/ghprbhook/`` 作为 Payload URL
+#. 勾选以下选项：
     * Let me select individual events.
     * Issue comments
     * Pull requests
@@ -55,11 +55,11 @@ Alternatively, you can avoid the need for full administrative rights by setting 
 test_pull_requests
 ------------------
 
-For each ROS distro that you want pull request testing for, you must enable the ``test_pull_requests`` flag in the appropriate section of the `rosdistro <https://github.com/ros/rosdistro/>`_.
+对于每个你想进行拉取请求测试的 ROS 发行版，你必须在 `rosdistro <https://github.com/ros/rosdistro/>`_ 的相应部分启用 ``test_pull_requests`` 标志。
 
- * **Option 1** - You have the option when running `bloom </How-To-Guides/Releasing/Releasing-a-Package>` to turn on pull request testing.
- * **Option 2** - You can **carefully** manually edit the appropriate file in the rosdistro repo, and make a new pull request.
-   `Example <https://github.com/ros/rosdistro/blob/3c295f76b0755989e9ed526c0b5f28a5f6a94da3/rolling/distribution.yaml#L4708>`_.
-   `Documented in REP 143 <http://docs.ros.org/en/independent/api/rep/html/rep-0143.html#distribution-file>`_.
+ * **选项 1** - 在运行 `bloom </How-To-Guides/Releasing/Releasing-a-Package>` 时，你可以选择开启拉取请求测试。
+ * **选项 2** - 你可以 **小心地** 手动编辑 rosdistro 仓库中的相应文件，并创建一个新的拉取请求。
+   `示例 <https://github.com/ros/rosdistro/blob/3c295f76b0755989e9ed526c0b5f28a5f6a94da3/rolling/distribution.yaml#L4708>`_。
+   `REP 143 中的文档 <http://docs.ros.org/en/independent/api/rep/html/rep-0143.html#distribution-file>`_。
 
-Note that after the pull request has been added, the job will usually not be created until the nightly Jenkins reconfiguration.
+请注意，在添加拉取请求后，通常要等到 nightly Jenkins 重新配置完成后才会创建该作业。

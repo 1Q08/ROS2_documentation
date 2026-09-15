@@ -1,7 +1,7 @@
-Make sure you have a locale which supports ``UTF-8``.
-If you are in a minimal environment (such as a docker container), the locale may be something minimal like ``C``.
-We test with the following settings.
-However, it should be fine if you're using a different UTF-8 supported locale.
+确保你拥有支持 ``UTF-8`` 的 locale。
+如果你处于最小化环境（例如 docker 容器）中，locale 可能是像 ``C`` 这样的最小设置。
+我们使用以下设置进行测试。
+不过，即使你使用其他支持 UTF-8 的 locale，也应该没有问题。
 
 .. code-block:: console
 

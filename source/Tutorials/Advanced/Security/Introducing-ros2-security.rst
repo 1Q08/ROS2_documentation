@@ -5,39 +5,39 @@
 .. _sros2:
 .. _ROS-2-Security-Tutorials:
 
-Setting up security
-===================
+设置安全性
+==========
 
-**Goal:** Set up security with ``sros2``.
+**目标：** 使用 ``sros2`` 设置安全性。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 15 minutes
+**耗时：** 15 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
 
-Background
-----------
+背景
+----
 
-The ``sros2`` package provides the tools and instructions to use ROS 2 on top of DDS-Security.
-The security features have been tested across platforms (Linux, macOS, and Windows) as well as across different languages (C++ and Python).
-The SROS2 has been designed to work with any secure middleware, although not all middleware is open source and support varies depending on the ROS distribution in use.
-
-
-Installation
-------------
-
-Typically security is available following installation using the :doc:`ROS 2 Installation Guide <../../../Installation>` and the :doc:`configuration guide <../../Beginner-CLI-Tools/Configuring-ROS2-Environment>`.
-However, if you intend to install from source or switch middleware implementations, consider the following caveats:
+``sros2`` 包提供了在 DDS-Security 之上使用 ROS 2 的工具和说明。
+这些安全特性已在多种平台（Linux、macOS 和 Windows）以及多种语言（C++ 和 Python）上经过测试。
+SROS2 被设计为能与任何安全中间件配合使用，但并非所有中间件都是开源的，并且其支持程度因所使用的 ROS 发行版而异。
 
 
-Installing from source
-^^^^^^^^^^^^^^^^^^^^^^
+安装
+----
 
-Before installing from source, you will need to have a recent version openssl (1.0.2g or later) installed:
+通常，按照 :doc:`ROS 2 安装指南 <../../../Installation>` 和 :doc:`配置指南 <../../Beginner-CLI-Tools/Configuring-ROS2-Environment>` 安装后，安全性即可用。
+但是，如果你打算从源码安装或切换中间件实现，请考虑以下注意事项：
+
+
+从源码安装
+^^^^^^^^^^
+
+从源码安装之前，你需要安装一个较新版本的 openssl（1.0.2g 或更高版本）：
 
 .. tabs::
 
@@ -54,8 +54,8 @@ Before installing from source, you will need to have a recent version openssl (1
 
       $ brew install openssl
 
-    You will need to have OpenSSL on your library path to run DDS-Security demos.
-    Run the following command, and consider adding to your ``~/.bash_profile``:
+    你需要将 OpenSSL 放到库路径上才能运行 DDS-Security 演示。
+    运行以下命令，并考虑将其添加到你的 ``~/.bash_profile`` 中：
 
     .. code-block:: console
 
@@ -65,33 +65,32 @@ Before installing from source, you will need to have a recent version openssl (1
 
   .. group-tab:: Windows
 
-    If you don't have OpenSSL installed, please follow :ref:`these instructions <windows-install-binary-installing-prerequisites>`
+    如果你尚未安装 OpenSSL，请遵循 :ref:`这些说明 <windows-install-binary-installing-prerequisites>`。
 
-Fast DDS requires an additional CMake flag to build the security plugins, so the colcon invocation needs to be modified to pass:
+Fast DDS 需要一个额外的 CMake 标志来构建安全插件，因此需要修改 colcon 调用以传入：
 
 .. code-block:: console
 
   $ colcon build --symlink-install --cmake-args -DSECURITY=ON --packages-select fastrtps rmw_fastrtps_cpp rmw_fastrtps_dynamic_cpp rmw_fastrtps_shared_cpp
 
 
-Selecting an alternate middleware
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+选择备用中间件
+^^^^^^^^^^^^^^
 
-If you choose not to use the default middleware implementation, be sure to :doc:`change your RMW implementation <../../../Installation/RMW-Implementations/>` before proceeding.
+如果你选择不使用默认的中间件实现，请务必在继续之前 :doc:`更改你的 RMW 实现 <../../../Installation/RMW-Implementations/>`。
 
-ROS 2 allows you to change the RMW implementation at runtime.
-See `how to work with multiple RMW implementations <../../../How-To-Guides/Working-with-multiple-RMW-implementations>` to explore different middleware implementations.
+ROS 2 允许你在运行时更改 RMW 实现。
+参见 `如何使用多个 RMW 实现 <../../../How-To-Guides/Working-with-multiple-RMW-implementations>` 以探索不同的中间件实现。
 
-Note that secure communication between vendors is not supported.
+请注意，不同厂商之间的安全通信不受支持。
 
 
+运行演示
+--------
 
-Run the demo
-------------
-
-1) Create a folder for the security files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  Begin by creating folder to store all the files necessary for this demo:
+1) 为安全文件创建一个文件夹
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  首先创建一个文件夹，用于存储本演示所需的所有文件：
 
   .. tabs::
 
@@ -113,11 +112,11 @@ Run the demo
 
         $ md C:\dev\ros2\sros2_demo
 
-2) Generate a keystore
-^^^^^^^^^^^^^^^^^^^^^^^
+2) 生成密钥库（keystore）
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Use the ``sros2`` utilities to create the keystore.
-Files in the keystore will be used to enable security for all the participants in the ROS 2 graph.
+使用 ``sros2`` 工具创建密钥库。
+密钥库中的文件将用于为 ROS 2 图中的所有参与者启用安全性。
 
 .. tabs::
 
@@ -142,12 +141,12 @@ Files in the keystore will be used to enable security for all the participants i
       $ cd sros2_demo
       $ ros2 security create_keystore demo_keystore
 
-3) Generate keys and certificates
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3) 生成密钥和证书
+^^^^^^^^^^^^^^^^^
 
-Once the keystore is created, create keys and certificates for each node with security enabled.
-For our demo, that includes the talker and listener nodes.
-This command uses the ``create_enclave`` feature which is covered in more detail in the next tutorial.
+密钥库创建完成后，为每个启用安全性的节点创建密钥和证书。
+对于我们的演示，这包括 talker 和 listener 节点。
+此命令使用 ``create_enclave`` 功能，该功能将在下一个教程中更详细地介绍。
 
 .. tabs::
 
@@ -173,20 +172,20 @@ This command uses the ``create_enclave`` feature which is covered in more detail
       $ ros2 security create_enclave demo_keystore /talker_listener/listener
 
 
-    If ``unable to write 'random state'`` appears then set the environment variable ``RANDFILE``.
+    如果出现 ``unable to write 'random state'``，请设置环境变量 ``RANDFILE``。
 
     .. code-block:: console
 
       $ set RANDFILE=C:\dev\ros2\sros2_demo\.rnd
 
-    Then re-run the commands above.
+    然后重新运行上面的命令。
 
 
-4) Configure environment variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4) 配置环境变量
+^^^^^^^^^^^^^^^
 
-Three environment variables allow the middleware to locate encryption materials and enable (and possibly enforce) security.
-These and other security-related environment variables are described in the `ROS 2 DDS-Security Integration design document <https://design.ros2.org/articles/ros2_dds_security.html>`_.
+三个环境变量允许中间件定位加密材料，并启用（以及可能强制执行）安全性。
+这些以及其他与安全相关的环境变量在 `ROS 2 DDS-Security 集成设计文档 <https://design.ros2.org/articles/ros2_dds_security.html>`_ 中有描述。
 
 .. tabs::
 
@@ -214,41 +213,41 @@ These and other security-related environment variables are described in the `ROS
       $ set ROS_SECURITY_ENABLE=true
       $ set ROS_SECURITY_STRATEGY=Enforce
 
-These variables need to be defined in each terminal used for the demo.
-For convenience you can add them to your boot environment.
+这些变量需要在用于演示的每个终端中定义。
+为了方便，你可以将它们添加到你的启动环境中。
 
 
-5) Run the ``talker/listener`` demo
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5) 运行 ``talker/listener`` 演示
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Begin the demo by launching the talker node.
+通过启动 talker 节点开始演示。
 
 .. code-block:: console
 
   $ ros2 run demo_nodes_cpp talker --ros-args --enclave /talker_listener/talker
 
-In another terminal, do the same to launch the ``listener`` node.
-The environment variables in this terminal must be properly set as described in step 4 above.
+在另一个终端中，同样启动 ``listener`` 节点。
+此终端中的环境变量必须如上面第 4 步所述正确设置。
 
 .. code-block:: console
 
   $ ros2 run demo_nodes_py listener --ros-args --enclave /talker_listener/listener
 
-These nodes will be communicating using authentication and encryption!
-If you look at the packet contents (for example, using ``tcpdump`` or ``Wireshark`` as covered in another tutorial), you can see that the messages are encrypted.
+这些节点将使用身份验证和加密进行通信！
+如果你查看数据包内容（例如使用 ``tcpdump`` 或 ``Wireshark``，如另一个教程所述），可以看到消息已加密。
 
-Note: You can switch between the C++ (demo_nodes_cpp) and Python (demo_nodes_py) packages arbitrarily.
+注意：你可以在 C++（demo_nodes_cpp）和 Python（demo_nodes_py）包之间任意切换。
 
-These nodes are able to communicate because we have created the appropriate keys and certificates for them.
+这些节点之所以能够通信，是因为我们为它们创建了适当的密钥和证书。
 
-Leave both nodes running as you use ``ros2cli`` and answer the questions below.
+在使用 ``ros2cli`` 并回答下面的问题时，让两个节点保持运行。
 
 
-6) Use ``ros2cli`` with security
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6) 使用 ``ros2cli`` 配合安全性
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To use ``ros2cli`` to iterate with ROS 2 secured network, you need to provide it with override enclave by ``ROS_SECURITY_ENCLAVE_OVERRIDE`` environmental variable.
-Open an another terminal and set up the following environmental variables.
+要使用 ``ros2cli`` 与 ROS 2 安全网络交互，你需要通过 ``ROS_SECURITY_ENCLAVE_OVERRIDE`` 环境变量为其提供覆盖 enclave。
+打开另一个终端并设置以下环境变量。
 
 .. tabs::
 
@@ -280,7 +279,7 @@ Open an another terminal and set up the following environmental variables.
       $ set ROS_SECURITY_ENCLAVE_OVERRIDE=/talker_listener/listener
 
 
-Now you can use ``ros2cli`` to communicate with ROS 2 secured network.
+现在你可以使用 ``ros2cli`` 与 ROS 2 安全网络通信。
 
 .. code-block:: console
 
@@ -299,57 +298,58 @@ Now you can use ``ros2cli`` to communicate with ROS 2 secured network.
 
 .. note::
 
-  Avoid using ros2 daemon because it may not have security enclaves, and enough time duration should be given for the discovery in ROS 2 secured network.
+  避免使用 ros2 daemon，因为它可能没有安全 enclave；而且在 ROS 2 安全网络中应给予足够的时间进行发现。
 
 
-Take the Quiz!
---------------
-
-.. tabs::
-
-  .. group-tab:: Question 1
-
-    Open another terminal session, but **do not** set the environment variables so that security is not enabled.
-    Start the listener.
-    What do you expect to happen?
-
-  .. group-tab:: Answer 1
-
-    The listener launches but does not receive any messages.
-    All traffic is encrypted, and without security enabled the listener does not receive anything.
-
+做个测验！
+----------
 
 .. tabs::
 
-  .. group-tab:: Question 2
+  .. group-tab:: 问题 1
 
-    Stop the listener, set the environment variable ``ROS_SECURITY_ENABLE`` to ``true`` and start the listener again.
-    What results do you expect this time?
+    打开另一个终端会话，但 **不要** 设置环境变量，以便不启用安全性。
+    启动 listener。
+    你预期会发生什么？
 
-  .. group-tab:: Answer 2
+  .. group-tab:: 答案 1
 
-    The listener still launches but does not receive messages.
-    Although security has now been enabled, it is not been configured properly since ROS is unable to locate the key files.
-    The listener launches, but in non-secure mode since security is not enforced, which means that although the properly configured talker is sending encrypted messages, this listener is unable to decrypt them.
+    listener 启动但不会收到任何消息。
+    所有流量都已加密，未启用安全性时 listener 收不到任何内容。
+
 
 .. tabs::
 
-  .. group-tab:: Question 3
+  .. group-tab:: 问题 2
 
-    Stop the listener and set ``ROS_SECURITY_STRATEGY`` to ``Enforce``.
-    What happens now?
+    停止 listener，将环境变量 ``ROS_SECURITY_ENABLE`` 设置为 ``true``，然后再次启动 listener。
+    这次你预期会有什么结果？
 
-  .. group-tab:: Answer 3
+  .. group-tab:: 答案 2
 
-    The listener fails to launch.
-    Security has been enabled and is being enforced.
-    Since it still is not properly configured, an error is thrown rather than launching in non-secure mode.
+    listener 仍然启动但收不到消息。
+    虽然现在已经启用了安全性，但由于 ROS 无法定位密钥文件，它没有被正确配置。
+    listener 会启动，但处于非安全模式，因为安全性未被强制执行；这意味着尽管配置正确的 talker 正在发送加密消息，此 listener 却无法解密它们。
+
+.. tabs::
+
+  .. group-tab:: 问题 3
+
+    停止 listener，并将 ``ROS_SECURITY_STRATEGY`` 设置为 ``Enforce``。
+    现在会发生什么？
+
+  .. group-tab:: 答案 3
+
+    listener 无法启动。
+    安全性已启用且被强制执行。
+    由于它仍未正确配置，因此会抛出一个错误，而不是以非安全模式启动。
 
 
-Learn More!
------------
+了解更多！
+----------
 
-Are you ready to go further with ROS Security?
-Take a look at the `Secure Turtlebot2 Demo <https://github.com/ros-swg/turtlebot3_demo>`_.
-You'll find a functioning and complex implementation of ROS 2 security, ready to try out your own custom scenarios.
-Be sure to create pull requests and issues here so we can continue improving security support in ROS!
+准备好进一步深入了解 ROS 安全了吗？
+看看 `Secure Turtlebot2 Demo <https://github.com/ros-swg/turtlebot3_demo>`_。
+你会找到一个功能完善且复杂的 ROS 2 安全实现，可以尝试你自己的自定义场景。
+请务必在这里创建拉取请求和 issue，以便我们继续改进 ROS 中的安全支持！
+

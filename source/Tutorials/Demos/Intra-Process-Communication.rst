@@ -3,42 +3,42 @@
     Intra-Process-Communication
     Tutorials/Intra-Process-Communication
 
-Setting up efficient intra-process communication
-================================================
+设置高效的进程内通信
+====================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-ROS applications typically consist of a composition of individual "nodes" which perform narrow tasks and are decoupled from other parts of the system.
-This promotes fault isolation, faster development, modularity, and code reuse, but it often comes at the cost of performance.
-After ROS 1 was initially developed, the need for efficient composition of nodes became obvious and Nodelets were developed.
-In ROS 2 we aim to improve on the design of Nodelets by addressing some fundamental problems that required restructuring of nodes.
+ROS 应用通常由多个单独的“节点”组合而成，这些节点执行狭窄的任务，并与系统的其他部分解耦。
+这促进了故障隔离、更快的开发、模块化和代码复用，但往往以性能为代价。
+在 ROS 1 最初开发之后，对节点高效组合的需求变得显而易见，于是开发了 Nodelets。
+在 ROS 2 中，我们旨在通过解决一些需要重构节点的根本问题来改进 Nodelets 的设计。
 
-In this demo we'll be highlighting how nodes can be composed manually, by defining the nodes separately but combining them in different process layouts without changing the node's code or limiting its abilities.
+在本演示中，我们将重点介绍如何通过分别定义节点、但在不更改节点代码或限制其能力的情况下，将它们组合到不同的进程布局中，从而手动组合节点。
 
-Installing the demos
---------------------
+安装演示
+--------
 
-See the :doc:`installation instructions <../../Installation>` for details on installing ROS 2.
+有关安装 ROS 2 的详细信息，请参阅 :doc:`安装说明 <../../Installation>`。
 
-If you've installed ROS 2 from packages, ensure that you have ``ros-{DISTRO}-intra-process-demo`` installed.
-If you downloaded the archive or built ROS 2 from source, it will already be part of the installation.
+如果你是通过软件包安装 ROS 2 的，请确保已安装 ``ros-{DISTRO}-intra-process-demo``。
+如果你下载了归档文件或从源代码构建了 ROS 2，它将已经是安装的一部分。
 
-Running and understanding the demos
------------------------------------
+运行和理解演示
+--------------
 
-There are a few different demos: some are toy problems designed to highlight features of the intra-process communications functionality and some are end to end examples which use OpenCV and demonstrate the ability to recombine nodes into different configurations.
+有几个不同的演示：一些是旨在突出进程内通信功能特性的玩具问题，另一些是端到端的示例，它们使用 OpenCV 并展示了将节点重组为不同配置的能力。
 
-The two node pipeline demo
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+双节点管道演示
+^^^^^^^^^^^^^^
 
-This demo is designed to show that the intra-process publish/subscribe connection can result in zero-copy transport of messages when publishing and subscribing with ``std::unique_ptr``\ s.
+本演示旨在展示，当使用 ``std::unique_ptr``\ s 进行发布和订阅时，进程内的发布/订阅连接可以实现消息的零拷贝传输。
 
-First let's take a look at the source:
+首先让我们看一下源代码：
 
 https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/intra_process_demo/src/two_node_pipeline/two_node_pipeline.cpp
 
@@ -124,16 +124,16 @@ https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/intra_process_demo/src/tw
      return 0;
    }
 
-As you can see by looking at the ``main`` function, we have a producer and a consumer node, we add them to a single threaded executor, and then call spin.
+通过查看 ``main`` 函数你可以看到，我们有一个 producer（生产者）和一个 consumer（消费者）节点，我们将它们添加到一个单线程执行器中，然后调用 spin。
 
-If you look at the "producer" node's implementation in the ``Producer`` struct, you can see that we have created a publisher which publishes on the "number" topic and a timer which periodically creates a new message, prints out its address in memory and its content's value and then publishes it.
+如果你查看 ``Producer`` 结构体中“producer”节点的实现，你会看到我们创建了一个在“number”话题上发布的发布者，以及一个定时器，它定期创建新消息，打印其在内存中的地址和内容值，然后发布它。
 
-The "consumer" node is a bit simpler, you can see its implementation in the ``Consumer`` struct, as it only subscribes to the "number" topic and prints the address and value of the message it receives.
+“consumer”节点则简单一些，你可以在 ``Consumer`` 结构体中看到它的实现，它只订阅“number”话题并打印它收到的消息的地址和值。
 
-The expectation is that the producer will print out an address and value and the consumer will print out a matching address and value.
-This demonstrates that intra-process communication is indeed working and unnecessary copies are avoided, at least for simple graphs.
+预期是 producer 会打印出一个地址和值，而 consumer 会打印出匹配的地址和值。
+这表明进程内通信确实在工作，并且避免了不必要的拷贝，至少对于简单的图来说是如此。
 
-Let's run the demo by executing ``ros2 run intra_process_demo two_node_pipeline`` executable (don't forget to source the setup file first):
+让我们通过执行 ``ros2 run intra_process_demo two_node_pipeline`` 可执行文件来运行演示（别忘了先 source 安装文件）：
 
 .. code-block:: console
 
@@ -151,25 +151,25 @@ Let's run the demo by executing ``ros2 run intra_process_demo two_node_pipeline`
     Received message with value: 5, and address: 0x7fb02303cea0
    [...]
 
-One thing you'll notice is that the messages tick along at about one per second.
-This is because we told the timer to fire at about once per second.
+你会注意到的一点是，消息大约每秒到达一次。
+这是因为我们让定时器大约每秒触发一次。
 
-Also you may have noticed that the first message (with value ``0``) does not have a corresponding "Received message ..." line.
-This is because publish/subscribe is "best effort" and we do not have any "latching" like behavior enabled.
-This means that if the publisher publishes a message before the subscription has been established, the subscription will not receive that message.
-This race condition can result in the first few messages being lost.
-In this case, since they only come once per second, usually only the first message is lost.
+你可能还注意到，第一条消息（值为 ``0``）没有对应的“Received message ...”行。
+这是因为发布/订阅是“尽力而为”的，我们没有启用任何类似“锁存”（latching）的行为。
+这意味着如果发布者在订阅建立之前发布了消息，订阅将不会收到该消息。
+这种竞争条件可能导致前几条消息丢失。
+在本例中，由于它们每秒只来一次，通常只有第一条消息会丢失。
 
-Finally, you can see that "Published message..." and "Received message ..." lines with the same value also have the same address.
-This shows that the address of the message being received is the same as the one that was published and that it is not a copy.
-This is because we're publishing and subscribing with ``std::unique_ptr``\ s which allow ownership of a message to be moved around the system safely.
-You can also publish and subscribe with ``const &`` and ``std::shared_ptr``, but zero-copy will not occur in that case.
+最后，你可以看到具有相同值的“Published message...”和“Received message ...”行也具有相同的地址。
+这表明收到的消息的地址与发布的消息的地址相同，它不是一份拷贝。
+这是因为我们使用 ``std::unique_ptr``\ s 进行发布和订阅，它们允许消息的所有权在系统中安全地移动。
+你也可以使用 ``const &`` 和 ``std::shared_ptr`` 进行发布和订阅，但在这种情况下不会发生零拷贝。
 
-The cyclic pipeline demo
-^^^^^^^^^^^^^^^^^^^^^^^^
+循环管道演示
+^^^^^^^^^^^^
 
-This demo is similar to the previous one, but instead of the producer creating a new message for each iteration, this demo only ever uses one message instance.
-This is achieved by creating a cycle in the graph and "kicking off" communication by externally making one of the nodes publish before spinning the executor:
+本演示与前一个类似，但不同之处在于，本演示中 producer 不会在每次迭代时创建新消息，而是始终只使用一个消息实例。
+这是通过在图中创建一个循环，并在旋转执行器之前由外部让其中一个节点发布消息来“启动”通信实现的：
 
 https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/intra_process_demo/src/cyclic_pipeline/cyclic_pipeline.cpp
 
@@ -253,15 +253,15 @@ https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/intra_process_demo/src/cy
      return 0;
    }
 
-Unlike the previous demo, this demo uses only one Node, instantiated twice with different names and configurations.
-The graph ends up being ``pipe1`` -> ``pipe2`` -> ``pipe1`` ... in a loop.
+与前一个演示不同，本演示只使用一个 Node，以不同的名称和配置实例化两次。
+最终的图是 ``pipe1`` -> ``pipe2`` -> ``pipe1`` ... 这样的循环。
 
-The line ``pipe1->pub->publish(std::move(msg));`` kicks the process off, but from then on the messages are passed back and forth between the nodes by each one calling publish within its own subscription callback.
+``pipe1->pub->publish(std::move(msg));`` 这一行启动了整个过程，但从那时起，消息由每个节点在自己的订阅回调中调用 publish 而在节点之间来回传递。
 
-The expectation here is that the nodes pass the message back and forth, once a second, incrementing the value of the message each time.
-Because the message is being published and subscribed to as a ``unique_ptr`` the same message created at the beginning is continuously used.
+这里的预期是，节点每秒一次来回传递消息，每次都递增消息的值。
+由于消息是作为 ``unique_ptr`` 发布和订阅的，因此最初创建的同一条消息被持续使用。
 
-To test those expectations, let's run it:
+为了测试这些预期，让我们运行它：
 
 .. code-block:: console
 
@@ -291,66 +291,66 @@ To test those expectations, let's run it:
      sleeping for 1 second...
    [...]
 
-You should see ever increasing numbers on each iteration, starting with 42... because 42, and the whole time it reuses the same message, as demonstrated by the pointer addresses which do not change, which avoids unnecessary copies.
+你应该会看到每次迭代中不断增加的数字，从 42 开始……因为就是 42，而且整个过程一直在复用同一条消息，这一点由不变的指针地址所证明，从而避免了不必要的拷贝。
 
-The image pipeline demo
-^^^^^^^^^^^^^^^^^^^^^^^
+图像管道演示
+^^^^^^^^^^^^
 
-In this demo we'll use OpenCV to capture, annotate, and then view images.
+在本演示中，我们将使用 OpenCV 来捕获、注释，然后查看图像。
 
 .. note::
 
-  If you are on macOS and these examples do not work or you receive an error like ``ddsi_conn_write failed -1``, then you'll need to increase your system wide UDP packet size:
+  如果你使用的是 macOS 且这些示例无法运行，或者你收到类似 ``ddsi_conn_write failed -1`` 的错误，那么你需要增大系统范围的 UDP 数据包大小：
 
   .. code-block:: console
 
     $ sudo sysctl -w net.inet.udp.recvspace=209715
     $ sudo sysctl -w net.inet.udp.maxdgram=65500
 
-  These changes will not persist after a reboot.
+  这些更改在重启后不会保留。
 
-Simple pipeline
-~~~~~~~~~~~~~~~
+简单管道
+~~~~~~~~
 
-First we'll have a pipeline of three nodes, arranged as such: ``camera_node`` -> ``watermark_node`` -> ``image_view_node``
+首先，我们将有一个由三个节点组成的管道，排列如下：``camera_node`` -> ``watermark_node`` -> ``image_view_node``
 
-The ``camera_node`` reads from camera device ``0`` on your computer, writes some information on the image and publishes it.
-The ``watermark_node`` subscribes to the output of the ``camera_node`` and adds more text before publishing it too.
-Finally, the ``image_view_node`` subscribes to the output of the ``watermark_node``, writes more text to the image and then visualizes it with ``cv::imshow``.
+``camera_node`` 从你计算机上的摄像头设备 ``0`` 读取，在图像上写入一些信息并发布它。
+``watermark_node`` 订阅 ``camera_node`` 的输出，在发布之前添加更多文本。
+最后，``image_view_node`` 订阅 ``watermark_node`` 的输出，在图像上写入更多文本，然后用 ``cv::imshow`` 将其可视化。
 
-In each node the process id and the pointer address of the ROS message is written onto the image with ``cv::putText``.
-The watermark and image view nodes are designed to modify the image without copying it and so the addresses imprinted on the image should all be the same as long as the nodes are in the same process and the graph remains organized in a pipeline as sketched above.
+在每个节点中，进程 ID 和 ROS 消息的指针地址都会用 ``cv::putText`` 写到图像上。
+watermark 和 image view 节点的设计目标是修改图像而不拷贝它，因此只要节点在同一个进程中，且图保持上面描述的管道组织方式，图像上印出的地址应该全部相同。
 
 .. note::
 
-   On some systems (we've seen it happen on Linux), the address printed to the screen might not change.
-   This is because the same unique pointer is being reused.
-   In this situation, the pipeline is still running.
+  在某些系统上（我们在 Linux 上见到过），打印到屏幕上的地址可能不会改变。
+  这是因为同一个唯一指针被复用了。
+  在这种情况下，管道仍在运行。
 
-Let's run the demo by executing the following executable:
+让我们通过执行以下可执行文件来运行演示：
 
 .. code-block:: console
 
    $ ros2 run intra_process_demo image_pipeline_all_in_one
 
-You should see something like this:
+你应该会看到类似这样的画面：
 
 
 .. image:: images/intra-process-demo-pipeline-single-window.png
 
 
-You can pause the rendering of the image by pressing the spacebar and you can resume by pressing the spacebar again.
-You can also press ``q`` or ``ESC`` to exit.
+你可以按空格键暂停图像的渲染，再次按空格键可以继续。
+你也可以按 ``q`` 或 ``ESC`` 退出。
 
-If you pause the image viewer, you should be able to compare the addresses written on the image and see that they are the same.
+如果你暂停图像查看器，你应该能够比较写在图像上的地址，并看到它们是相同的。
 
-Pipeline with two image viewers
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+带两个图像查看器的管道
+~~~~~~~~~~~~~~~~~~~~~~
 
-Now let's look at an example just like the one above, except it has two image view nodes.
-All the nodes are still in the same process, but now there will be two instances of the ``image_view_node`` and so two image view windows should show up.
-(Note for macOS users: your image view windows might be on top of each other).
-Let's run it with the command:
+现在让我们看一个与上面类似的例子，只是它有两个 image view 节点。
+所有节点仍然在同一个进程中，但现在会有两个 ``image_view_node`` 实例，因此应该会出现两个图像查看窗口。
+（macOS 用户注意：你的图像查看窗口可能会重叠在一起）。
+让我们用以下命令运行它：
 
 .. code-block:: console
 
@@ -360,34 +360,34 @@ Let's run it with the command:
 .. image:: images/intra-process-demo-pipeline-two-windows-copy.png
 
 
-Just like the last example, you can pause the rendering with the spacebar and continue by pressing the spacebar a second time.
-You can stop the updating to inspect the pointers written to the screen.
+就像上一个例子一样，你可以用空格键暂停渲染，再次按空格键继续。
+你可以停止更新以检查写入屏幕的指针。
 
-As you can see in the example image above, we have one image with all of the pointers the same and then another image with the same pointers as the first image for the first two entries, but the last pointer on the second image is different.
-To understand why this is happening consider the graph's topology:
+正如你在上面的示例图像中看到的，我们有一张图像，其中所有指针都相同；然后另一张图像的前两项指针与第一张图像相同，但第二张图像上的最后一个指针不同。
+要理解为什么会这样，请考虑图的拓扑结构：
 
 .. code-block:: bash
 
    camera_node -> watermark_node -> image_view_node
                                  -> image_view_node2
 
-The link between the ``camera_node`` and the ``watermark_node`` can use the same pointer without copying because there is only one intra-process subscription to which the message should be delivered.
-But for the link between the ``watermark_node`` and the two image view nodes the relationship is one to many, so if the image view nodes were using ``unique_ptr`` callbacks then it would be impossible to deliver the ownership of the same pointer to both.
-It can be, however, delivered to one of them.
-Which one would get the original pointer is not defined, but instead is simply the last to be delivered.
-And so one of the images being viewed is the original, with all the pointers the same, and the other is a copy of the original image, made between the ``watermark_node`` and one of the ``image_view_node`` instances, which will have a different pointer for the third line of text.
+``camera_node`` 和 ``watermark_node`` 之间的连接可以使用相同的指针而无需拷贝，因为只有一个进程内订阅需要投递消息。
+但对于 ``watermark_node`` 和两个 image view 节点之间的连接，关系是一对多的，因此如果 image view 节点使用 ``unique_ptr`` 回调，就不可能把同一个指针的所有权投递给两者。
+不过，它可以投递给其中一个。
+哪个会得到原始指针是不确定的，实际上只是最后被投递的那个。
+因此，正在被查看的图像中，一张是原始图像，所有指针都相同；另一张是原始图像的副本，在 ``watermark_node`` 和其中一个 ``image_view_node`` 实例之间生成，其第三行文本的指针会不同。
 
-Pipeline with inter-process viewer
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+带进程间查看器的管道
+~~~~~~~~~~~~~~~~~~~~
 
-One other important thing to get right is to avoid interruption of the intra-process zero-copy behavior when inter-process subscriptions are made.
-To test this we can run the first image pipeline demo, ``image_pipeline_all_in_one``, and then run an instance of the stand alone ``image_view_node`` (don't forget to prefix them with ``ros2 run intra_process_demo`` in the terminal).
-This will look something like this:
+另一件需要做对的重要事情是，在进行进程间订阅时避免中断进程内的零拷贝行为。
+为了测试这一点，我们可以先运行第一个图像管道演示 ``image_pipeline_all_in_one``，然后再运行一个独立的 ``image_view_node`` 实例（别忘了在终端中给它们加上 ``ros2 run intra_process_demo`` 前缀）。
+看起来会像这样：
 
 
 .. image:: images/intra-process-demo-pipeline-inter-process.png
 
 
-It's hard to pause both images at the same time so the images may not line up, but the important thing to notice is that the ``image_pipeline_all_in_one`` image view shows the same address for each step.
-This means that the intra-process zero-copy is preserved even when an external view is subscribed as well.
-You can also see that the inter-process image view has different process IDs for the first two lines of text and the process ID of the standalone image viewer in the third line of text.
+很难同时暂停两幅图像，所以图像可能对不齐，但需要注意的重要一点是，``image_pipeline_all_in_one`` 的图像视图在每个步骤都显示相同的地址。
+这意味着即使同时订阅了外部视图，进程内的零拷贝也被保留了。
+你还可以看到，进程间图像视图的前两行文本有不同的进程 ID，而第三行文本是独立图像查看器的进程 ID。

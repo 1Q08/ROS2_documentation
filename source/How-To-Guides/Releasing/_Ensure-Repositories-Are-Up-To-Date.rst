@@ -1,5 +1,5 @@
-Make sure that:
+请确认以下事项：
 
-* Your repository is hosted on a remote such as GitHub.
-* You have a clone of the repository on your computer and are on the right branch.
-* Both the remote repository and your clone are up-to-date.
+* 你的仓库托管在某个远程服务器上（例如 GitHub）。
+* 你在计算机上拥有该仓库的克隆，并且处于正确的分支上。
+* 远程仓库和你本地的克隆都是最新的。

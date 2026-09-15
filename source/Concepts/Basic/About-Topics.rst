@@ -1,54 +1,54 @@
-Topics
-======
+话题
+====
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
-Topics are one of the three primary styles of interfaces provided by ROS 2.
-Topics should be used for continuous data streams, like sensor data, robot state, etc.
+话题是 ROS 2 提供的三种主要接口风格之一。
+话题应用于连续的数据流，例如传感器数据、机器人状态等。
 
-As stated earlier, ROS 2 is a strongly-typed, anonymous publish/subscribe system.
-Let's break down that sentence and explain it a bit more.
+如前所述，ROS 2 是一个强类型、匿名的发布/订阅系统。
+我们来拆解这句话，进一步解释一下。
 
-Publish/Subscribe
------------------
-
-A publish/subscribe system is one in which there are producers of data (publishers) and consumers of data (subscribers).
-The publishers and subscribers know how to contact each other through the concept of a "topic", which is a common name so that the entities can find each other.
-For instance, when you create a publisher, you must also give it a string that is the name of the topic; the same goes for the subscriber.
-Any publishers and subscribers that are on the same topic name can directly communicate with each other.
-There may be zero or more publishers and zero or more subscribers on any particular topic.
-When data is published to the topic by any of the publishers, all subscribers in the system will receive the data.
-This system is also known as a "bus", since it somewhat resembles a device bus from electrical engineering.
-This concept of a bus is part of what makes ROS 2 a powerful and flexible system.
-Publishers and subscribers can come and go as needed, meaning that debugging and introspection are natural extensions to the system.
-For instance, if you want to record data, you can use the ``ros2 bag record`` command.
-Under the hood, ``ros2 bag record`` creates a new subscriber to whatever topic you tell it, without interrupting the flow of data to the other parts of the system.
-
-Anonymous
+发布/订阅
 ---------
 
-Another fact mentioned in the introduction is that ROS 2 is "anonymous".
-This means that when a subscriber gets a piece of data, it doesn't generally know or care which publisher originally sent it (though it can find out if it wants).
-The benefit to this architecture is that publishers and subscribers can be swapped out at will without affecting the rest of the system.
+发布/订阅系统是这样一种系统：其中既有数据的生产者（发布者），也有数据的消费者（订阅者）。
+发布者和订阅者通过「话题」这一概念相互联系：话题是一个公共名称，使各个实体能够找到彼此。
+例如，创建发布者时，您还必须为它指定一个字符串作为话题名称；订阅者也是如此。
+处于同一话题名称上的任何发布者和订阅者都可以直接相互通信。
+任何特定话题上都可以有零个或多个发布者以及零个或多个订阅者。
+当任一发布者向该话题发布数据时，系统中的所有订阅者都会收到该数据。
+这种系统也称为「总线」，因为它有点类似于电气工程中的设备总线。
+总线这一概念正是使 ROS 2 成为一个强大而灵活的系统的因素之一。
+发布者和订阅者可以按需来去，这意味着调试和自省是该系统天然的扩展能力。
+例如，如果您想记录数据，可以使用 ``ros2 bag record`` 命令。
+在底层，``ros2 bag record`` 会针对您指定的任何话题创建一个新的订阅者，而不会打断数据流向系统其他部分的流程。
 
-Strongly-typed
---------------
+匿名
+----
 
-Finally, the introduction also mentioned that the publish/subscribe system is "strongly-typed".
-That has two meanings in this context:
+引言中提到的另一点是 ROS 2 是「匿名」的。
+这意味着当订阅者收到一条数据时，它通常不知道也不关心最初是哪个发布者发送的（不过如果它想知道，也是可以查出来的）。
+这种架构的好处是：发布者和订阅者可以随意替换，而不会影响系统的其余部分。
 
-1. The types of each field in a ROS message are typed, and that type is enforced at various levels.
-   For instance, if the ROS message contains:
+强类型
+------
+
+最后，引言还提到发布/订阅系统是「强类型」的。
+在此上下文中它有两层含义：
+
+1. ROS 消息中每个字段的类型都是有类型的，并且该类型会在各个层面得到强制保证。
+   例如，如果 ROS 消息包含：
 
    .. code::
 
       uint32 field1
       string field2
 
-   Then the code will ensure that ``field1`` is always an unsigned integer and that ``field2`` is always a string.
+   那么代码将确保 ``field1`` 始终是无符号整数，``field2`` 始终是字符串。
 
-2. The semantics of each field are well-defined.
-   There is no automated mechanism to ensure this, but all of the core ROS types have strong semantics associated with them.
-   For instance, the IMU message contains a 3-dimensional vector for the measured angular velocity, and each of the dimensions is specified to be in radians/second.
-   Other interpretations should not be placed into the message.
+2. 每个字段的语义都是明确定义的。
+   没有自动化机制来保证这一点，但所有 ROS 核心类型都有与之对应的强语义。
+   例如，IMU 消息包含一个表示所测角速度的三维向量，并且每个维度都规定以弧度/秒为单位。
+   不应向该消息中赋予其他解释。

@@ -1,73 +1,73 @@
 .. _TestingMain:
 
-Testing
-=======
+测试
+====
 
-Why automatic tests?
---------------------
+为什么要使用自动化测试？
+------------------------
 
-Here are some of the many good reasons why should we have automated tests:
+以下是我们应当编写自动化测试的众多充分理由中的一些：
 
-* You can make incremental updates to your code more quickly.
-  ROS has hundreds of packages with many interdependencies, so it can be hard to anticipate the problems a small change might cause.
-  If your change passes the unit tests, you can be more confident that you haven't introduced problems — or at least the problems aren't your fault.
-* You can refactor your code with greater confidence.
-  Passing the unit tests verifies that you haven't introduced any bugs while refactoring.
-  This gives you this wonderful freedom from change fear!
-* It leads to better designed code.
-  Unit tests force you to write your code so that it can be more easily tested.
-  This often means keeping your underlying functions and framework separate, which is one of our design goals with ROS code.
-* They prevent recurring bugs (bug regressions).
-  It's a good practice to write a unit test for every bug you fix.
-  In fact, write the unit test before you fix the bug.
-  This will help you to precisely, or even deterministically, reproduce the bug, and much more precisely understand what the problem is.
-  As a result, you will also create a better patch, which you can then test with your regression test to verify that the bug is fixed.
-  That way the bug won't accidentally get reintroduced if the code gets modified later on.
-  It also means that it will be easier to convince the reviewer of the patch that the problem is solved, and the contribution is of high quality.
-* Other people can work on your code more easily (an automatic form of documentation).
-  It can be hard to figure out whether or not you've broken someone else's code when you make a change.
-  The unit tests are a tool for other developers to validate their changes.
-  Automatic tests document your coding decisions, and communicate to other developers automatically about their violation.
-  Thus tests become documentation for your code — a documentation that does not need to be read for the most time, and when it does need to be inspected the test system will precisely indicate what to read (which tests fail).
-  By writing automatic tests you make other contributors faster.
-  This improves the entire ROS project.
-* It is much easier to become a contributor to ROS if we have automated unit tests.
-  It is very difficult for new external developers to contribute to your components.
-  When they make changes to code, they are often doing it in the blind, driven by a lot of guesswork.
-  By providing a harness of automated tests, you help them in the task.
-  They get immediate feedback for their changes.
-  It becomes easier to contribute to a project, and new contributors to join more easily.
-  Also their first contributions are of higher quality, which decreases the workload on maintainers.
-  A win-win!
-* Automatic tests simplify maintainership.
-  Especially for mature packages, which change more slowly, and mostly need to be updated to new dependencies, an automatic test suite helps to very quickly establish whether the package still works.
-  This makes it much easier to decide whether the package is still supported or not.
-* Automatic tests amplify the value of Continuous Integration.
-  Regression tests, along with normal scenario-based requirements tests, contribute to overall body of automated tests for your component.
-  Your component is better tested against evolution of other APIs that it depends on (CI servers will tell you better and more precisely what problems develop in your code).
+* 你可以更快地对代码进行增量更新。
+  ROS 拥有数百个相互依赖关系复杂的软件包，因此很难预见到一处小改动可能引发的问题。
+  如果你的改动通过了单元测试，你就可以更加确信自己没有引入问题——或者至少这些问题不是你的过错。
+* 你可以更有信心地重构代码。
+  通过单元测试可以验证你在重构时没有引入任何缺陷。
+  这会让你拥有一种美妙的、不惧怕改动的自由！
+* 它能带来设计更好的代码。
+  单元测试迫使你以更易于测试的方式编写代码。
+  这通常意味着将底层函数与框架分离开来，而这是我们编写 ROS 代码的设计目标之一。
+* 它们能防止缺陷反复出现（缺陷回归）。
+  为你修复的每一个缺陷编写单元测试是一个很好的做法。
+  事实上，应当先编写单元测试，再去修复缺陷。
+  这有助于你精确地、甚至是确定性地复现该缺陷，并更准确地理解问题所在。
+  这样一来，你还能编写出更好的补丁，然后可以用回归测试来验证缺陷确实已修复。
+  这样，即使之后代码被修改，该缺陷也不会被意外地重新引入。
+  这也意味着更容易让补丁的审查者相信问题已经解决，且该贡献质量很高。
+* 其他人可以更容易地在你的代码上工作（一种自动化的文档形式）。
+  当你做出改动时，很难判断自己是否破坏了别人的代码。
+  单元测试是供其他开发者验证其改动的工具。
+  自动化测试记录你的编码决策，并在这些决策被违反时自动告知其他开发者。
+  因此，测试成为你代码的文档——一份在大多数时候都无需阅读的文档；而当确实需要检查时，测试系统会精确指出应当阅读哪些内容（哪些测试失败了）。
+  通过编写自动化测试，你能让其他贡献者的效率更高。
+  这会改进整个 ROS 项目。
+* 如果我们拥有自动化的单元测试，成为 ROS 贡献者就会容易得多。
+  新的外部开发者要为你的组件做贡献是非常困难的。
+  当他们修改代码时，往往是在盲目地进行，依靠大量猜测。
+  通过提供一套自动化测试框架，你就能在这方面帮助他们。
+  他们能立即获得关于自己改动的反馈。
+  为项目做贡献变得更容易，新贡献者也更容易加入。
+  而且他们最初提交的贡献质量更高，从而减轻了维护者的工作负担。
+  双赢！
+* 自动化测试简化了维护工作。
+  特别是对于变化较慢、大多只需要更新到新依赖项的成熟软件包来说，一套自动化测试可以帮助非常快速地确定该软件包是否仍然可用。
+  这使得判断该软件包是否仍受支持变得容易得多。
+* 自动化测试放大了持续集成的价值。
+  回归测试，连同常规的基于场景的需求测试，共同构成了你的组件的整体自动化测试体系。
+  你的组件能更好地接受其依赖的其他 API 演进的检验（CI 服务器会更好、更精确地告诉你代码中出现了哪些问题）。
 
-Perhaps the most important benefit of writing tests is that tests make you a good citizen.
-Tests influence quality in the long term.
-It is a well accepted practice in many open-source projects.
-By writing regressions tests, you are contributing to long term quality of the ROS ecosystem.
+或许编写测试最重要的好处在于，测试让你成为一个好公民。
+测试从长远来看影响着质量。
+在许多开源项目中，这是一种被广泛接受的实践。
+通过编写回归测试，你正在为 ROS 生态系统的长期质量做出贡献。
 
-Is this all coming for free?
-----------------------------
+这些好处都是免费的吗？
+----------------------
 
-Of course, there is never free lunch.
-To get the benefits of testing, some investment is necessary.
+当然，天下没有免费的午餐。
+为了获得测试带来的好处，必须投入一些精力。
 
-* You need to develop a test, which sometimes may be difficult or costly.
-  Sometimes it might also be nontrivial, as the test should be automatic.
-  Things get particularly hairy if your tests should involve special hardware (they should not: try to use simulation, mock the hardware, or narrow down the test to a smaller software problem) or require external environment, for instance human operators.
-* Regression tests and other automatic tests need to be maintained.
-  When the design of the component changes, a lot of tests become invalidated (for instance they no longer compile, or throw runtime exceptions related to the API design).
-  These tests fail not only because the redesign re-introduced bugs but also because they need to be updated to the new design.
-  Occasionally, with bigger redesigns, old regression tests should be dropped.
-* Large bodies of tests can take a long time to run, which can increase Continuous Integration server costs.
+* 你需要开发测试，这有时可能很困难或代价高昂。
+  有时这也并非易事，因为测试应当是自动化的。
+  如果你的测试需要涉及特殊硬件（不应当如此：试着使用仿真、模拟硬件，或将测试缩小到更小的软件问题上）或需要外部环境（例如人工操作员），情况就会变得格外棘手。
+* 回归测试和其他自动化测试需要维护。
+  当组件的设计发生变化时，许多测试会失效（例如它们无法再编译，或抛出与 API 设计相关的运行时异常）。
+  这些测试失败，不仅因为重新设计重新引入了缺陷，还因为它们需要更新以适配新设计。
+  有时，在进行较大规模的重设计时，应当舍弃旧的回归测试。
+* 大量的测试可能需要很长时间才能运行完，这会增加持续集成服务器的成本。
 
-Available Tutorials:
---------------------
+可用的教程：
+------------
 
 .. toctree::
    :maxdepth: 1

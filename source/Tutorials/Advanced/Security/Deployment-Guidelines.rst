@@ -1,49 +1,49 @@
-Deployment Guidelines
-=====================
+部署指南
+========
 
-**Goal:** Understand the best practices when deploying security artifacts into production systems.
+**目标：** 理解将安全制品部署到生产系统时的最佳实践。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 20 minutes
+**耗时：** 20 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
 
-Background
-----------
+背景
+----
 
-Typical deployment scenarios often involve shipping containerized applications, or packages, into remote systems.
-Special attention should be paid when deploying security enabled applications, requiring users to reason about the sensitivity of packaged files.
+典型的部署场景通常涉及将容器化应用或软件包分发到远程系统中。
+在部署启用安全性的应用时，应特别小心，需要用户对打包文件的敏感性加以考量。
 
-Complying with the `DDS Security standard <https://www.omg.org/spec/DDS-SECURITY/1.1/About-DDS-SECURITY/>`_,
-the ``sros2`` package provides a collection of utilities for managing security under ROS 2 environments in a highly modular and flexible fashion.
+遵循 `DDS Security 标准 <https://www.omg.org/spec/DDS-SECURITY/1.1/About-DDS-SECURITY/>`_，
+``sros2`` 包提供了一组工具，用于在 ROS 2 环境下以高度模块化和灵活的方式管理安全性。
 
-Basic core guidelines on how to organize the different certificates, keys and directories remains a critical factor to avoid compromising the security of the system.
-This includes protection-awareness and criteria for selecting the minimum set of necessary files to be deployed upon remote production systems for minimizing security exposure.
+如何组织不同证书、密钥和目录的基本核心指南，仍然是避免危及系统安全的关键因素。
+这包括防护意识，以及选择部署到远程生产系统上所需最小文件集以避免安全暴露的标准。
 
-Prerequisites
--------------
+前置条件
+--------
 
-* A docker installation with the compose plugin.
-  Please refer to the installation steps detailed in `Docker installation <https://docs.docker.com/engine/install/>`_ and `Compose Plugin <https://docs.docker.com/compose/install>`_.
-* (Recommended) A basic understanding on `ROS 2 Security design <https://design.ros2.org/articles/ros2_dds_security.html>`_.
-* (Recommended) Previous security tutorials completion.
-  In particular:
+* 安装了带有 compose 插件的 docker。
+  请参阅 `Docker 安装 <https://docs.docker.com/engine/install/>`_ 和 `Compose 插件 <https://docs.docker.com/compose/install>`_ 中详述的安装步骤。
+* （推荐）对 `ROS 2 安全设计 <https://design.ros2.org/articles/ros2_dds_security.html>`_ 有基本了解。
+* （推荐）完成前面的安全教程。
+  特别是：
 
     * :doc:`Introducing-ros2-security`
     * :doc:`The-Keystore`
     * :doc:`Access-Controls`
 
-General Guidelines
-------------------
+通用指南
+--------
 
-ROS 2 leverages DDS Security extensions to ensure security on message exchanges within the same enclave.
-The different signed files and certificates within an enclave are generated from the private keys and certificates of a `Certificate Authority (CA) <https://en.wikipedia.org/wiki/Certificate_authority>`_ trusted entity.
-In fact, two different CA's can be selected for identity and permissions, per enclave.
-Those CA artifacts are stored inside ``private/`` and ``public/`` sub-directories of a `Keystore <https://design.ros2.org/articles/ros2_security_enclaves.html>`_ with the following folder structure:
+ROS 2 利用 DDS Security 扩展来确保同一 enclave 内消息交换的安全性。
+enclave 内不同的已签名文件和证书，是由一个受信任的 `证书颁发机构（CA） <https://en.wikipedia.org/wiki/Certificate_authority>`_ 实体的私钥和证书生成的。
+事实上，每个 enclave 可以为身份和权限分别选择两个不同的 CA。
+这些 CA 制品存储在 `密钥库（Keystore） <https://design.ros2.org/articles/ros2_security_enclaves.html>`_ 的 ``private/`` 和 ``public/`` 子目录中，其文件夹结构如下：
 
 .. code-block:: text
 
@@ -56,110 +56,111 @@ Those CA artifacts are stored inside ``private/`` and ``public/`` sub-directorie
   └── public
       └── ...
 
-A good practice for the creation and usage of a certain Certificate Authority on a typical deployment for a production system, is to:
+在生产系统典型部署中，创建和使用某个证书颁发机构的一个良好实践是：
 
-#. Create it within the organization system intended for internal use only.
-#. Generate/modify desired enclaves bearing in mind that:
+#. 在仅供内部使用的组织系统内创建它。
+#. 生成/修改所需的 enclave 时，牢记：
 
-    * Not all the generated enclaves should be deployed to all target devices.
-    * A reasonable way to proceed would be having one enclave per application, allowing for a separation of concerns.
+    * 并非所有生成的 enclave 都应部署到所有目标设备。
+    * 一个合理的做法是每个应用一个 enclave，从而实现关注点分离。
 
-#. Ship ``public/`` alongside with corresponding ``enclaves/`` into the different remote production devices during setup.
-#. Keep and protect ``private/`` keys and/or certification requests in the organization.
+#. 在设置期间，将 ``public/`` 与对应的 ``enclaves/`` 一起分发到不同的远程生产设备中。
+#. 将 ``private/`` 密钥和/或证书请求保留并保护在组织内。
 
-It is important to note that if ``private/`` files are lost, it won't be possible to change access permissions, add or modify security profiles anymore.
+需要注意的是，如果 ``private/`` 文件丢失，将无法再更改访问权限、添加或修改安全配置文件。
 
-In addition, further practices may be taken into consideration:
+此外，还可以考虑进一步的实践：
 
-* Granting read-only permissions to the ``enclaves/`` directory contents.
-* If a PKCS#11 compliant URI is given for generating enclave's private keys, a `Hardware Security Module (HSM) <https://en.wikipedia.org/wiki/Hardware_security_module>`_ could be used to store them.
+* 为 ``enclaves/`` 目录内容授予只读权限。
+* 如果为生成 enclave 的私钥提供了符合 PKCS#11 的 URI，则可以使用 `硬件安全模块（HSM） <https://en.wikipedia.org/wiki/Hardware_security_module>`_ 来存储它们。
 
-The following table depicts a summary of the previous statements relating the Keystore directory with the Recommended location:
+下表总结了前面的陈述，将密钥库目录与推荐位置对应起来：
 
-+------------------------+--------------+---------------+---------------------+
-| Directory / Location   | Organization | Target Device | Material Sensitivity|
-+========================+==============+===============+=====================+
-| public                 |       ✓      |       ✓       |         Low         |
-+------------------------+--------------+---------------+---------------------+
-| private                |       ✓      |       ✕       |         High        |
-+------------------------+--------------+---------------+---------------------+
-| enclaves               |       ✓      |       ✓       |        Medium       |
-+------------------------+--------------+---------------+---------------------+
++-------------+------+----------+------------+
+| 目录 / 位置 | 组织 | 目标设备 | 材料敏感度 |
++=============+======+==========+============+
+| public      | ✓    | ✓        | 低         |
++-------------+------+----------+------------+
+| private     | ✓    | ✕        | 高         |
++-------------+------+----------+------------+
+| enclaves    | ✓    | ✓        | 中         |
++-------------+------+----------+------------+
 
 
-Building a deployment scenario
-------------------------------
 
-To illustrate a simple deployment scenario, a new docker image will be built on top of the one provided by ``ros:<DISTRO>``.
-Starting from the image, three containers will be created with the aim of:
+构建一个部署场景
+----------------
 
-* Initializing the keystore in a local host's shared volume.
-* Simulating two deployed remote devices that interact with each other in a secure way.
+为了说明一个简单的部署场景，将基于 ``ros:<DISTRO>`` 提供的镜像构建一个新的 docker 镜像。
+从这个镜像开始，将创建三个容器，目标是：
 
-In this example, the local host serves as the organization's system.
-Let us start by creating a workspace folder:
+* 在本地主机的共享卷中初始化密钥库。
+* 模拟两个已部署的远程设备，它们以安全的方式相互交互。
+
+在本示例中，本地主机充当组织系统。
+让我们从创建工作区文件夹开始：
 
 .. code-block:: console
 
   $ mkdir ~/security_gd_tutorial
   $ cd ~/security_gd_tutorial
 
-Generating the Docker Image
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+生成 Docker 镜像
+^^^^^^^^^^^^^^^^
 
-In order to build a new docker image, a Dockerfile is required.
-To download the Dockerfile proposed for this tutorial, run:
+为了构建新的 docker 镜像，需要一个 Dockerfile。
+要下载本教程提供的 Dockerfile，请运行：
 
 .. code-block:: console
 
   $ wget https://raw.githubusercontent.com/ros2/ros2_documentation/{DISTRO}/source/Tutorials/Advanced/Security/resources/deployment_gd/Dockerfile
 
-Now, build the docker image with the command:
+现在，使用以下命令构建 docker 镜像：
 
 .. code-block:: console
 
   $ docker build -t ros2_security/deployment_tutorial --build-arg ROS_DISTRO={DISTRO} .
 
-Understanding the compose file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+理解 compose 文件
+^^^^^^^^^^^^^^^^^
 
-A compose configuration file takes an image to create containers as services.
-In this tutorial, three services are defined within the configuration:
+compose 配置文件使用一个镜像来创建作为服务的容器。
+在本教程中，配置中定义了三个服务：
 
-* *keystore-creator*: That, similarly to previous tutorials, it internally initializes a new keystore tree directory.
-  This will create *enclaves/* *public/* and *private/*, which are explained in more detail in `ROS 2 Security enclaves <https://design.ros2.org/articles/ros2_security_enclaves.html>`_.
-  The ``keystore`` directory is configured to be a shared volume across containers.
+* *keystore-creator*：与前面的教程类似，它在内部初始化一个新的密钥库目录树。
+  这将创建 *enclaves/*、*public/* 和 *private/*，这些在 `ROS 2 Security enclaves <https://design.ros2.org/articles/ros2_security_enclaves.html>`_ 中有更详细的说明。
+  ``keystore`` 目录被配置为跨容器共享的卷。
 
-* *listener* and *talker*: Act as the remote device actors in this tutorial.
-  Required ``Security`` environment variables are sourced as well as the necessary keystore files from the shared volume.
+* *listener* 和 *talker*：在本教程中充当远程设备角色。
+  所需的 ``Security`` 环境变量以及来自共享卷的必要密钥库文件都会被加载。
 
-The compose configuration yaml file can be downloaded with:
+compose 配置 yaml 文件可以通过以下方式下载：
 
 .. code-block:: console
 
   $ wget https://raw.githubusercontent.com/ros2/ros2_documentation/{DISTRO}/source/Tutorials/Advanced/Security/resources/deployment_gd/compose.deployment.yaml
 
-Running the example
--------------------
+运行示例
+--------
 
-In the same working directory ``~/security_gd_tutorial``, to start the example run:
+在同一工作目录 ``~/security_gd_tutorial`` 中，运行以下命令启动示例：
 
 .. code-block:: console
 
   $ docker compose -f compose.deployment.yaml up
 
-This should result in the following output:
+这应该会产生以下输出：
 
 - *tutorial-listener-1*: ``Found security directory: /keystore/enclaves/talker_listener/listener``
 - *tutorial-talker-1*: ``Found security directory: /keystore/enclaves/talker_listener/talker``
 - *tutorial-listener-1*: ``Publishing: 'Hello World: <number>'``
 - *tutorial-talker-1*: ``I heard: [Hello World: <number>]``
 
-Examining the containers
-^^^^^^^^^^^^^^^^^^^^^^^^
+检查容器
+^^^^^^^^
 
-While having the containers running that simulate the two remote devices for this tutorial, attach to each of them by opening two different terminals.
-In the first terminal, run:
+在容器运行以模拟本教程中两个远程设备的同时，打开两个不同的终端，分别连接到每个容器。
+在第一个终端中运行：
 
 .. code-block:: console
 
@@ -167,7 +168,7 @@ In the first terminal, run:
   $ cd keystore
   $ tree
 
-In the second terminal, run:
+在第二个终端中运行：
 
 .. code-block:: console
 
@@ -175,7 +176,7 @@ In the second terminal, run:
   $ cd keystore
   $ tree
 
-A similar output to the one depicted below should be obtained:
+应该会得到与下面所示类似的输出：
 
 .. code-block:: bash
 
@@ -217,11 +218,11 @@ A similar output to the one depicted below should be obtained:
        ├── identity_ca.cert.pem
        └── permissions_ca.cert.pem
 
-Note that:
+请注意：
 
-* *private/* folder is not moved but left in the local host (organization).
-* Each one of the deployed devices contain its own minimum enclave required for its application.
+* *private/* 文件夹不会被移动，而是留在本地主机（组织）中。
+* 每个已部署的设备都包含其应用所需的最小 enclave。
 
 .. note::
 
-  For the sake of simplicity, the same CA is used within this enclave for both identity and permissions.
+  为了简单起见，在此 enclave 内，身份和权限使用同一个 CA。

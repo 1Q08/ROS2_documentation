@@ -1,30 +1,30 @@
-Using variants
-==============
+使用变体
+========
 
-Metapackages do not provide software directly but depend on a group of other related packages to provide a convenient installation mechanism for the complete group of packages.
+元软件包本身并不直接提供软件，而是依赖一组其他相关软件包，从而为这整套软件包提供便捷的安装机制。
 [#]_ [#]_
-Variants are a list of official metapackages for commonly useful groups of ROS packages.
+变体是针对常用的一系列 ROS 软件包所提供的一批官方元软件包。
 
 .. [#] https://wiki.debian.org/metapackage
 .. [#] https://help.ubuntu.com/community/MetaPackages
 
-The different variants in ROS 2 are specified in `REP-2001 <https://reps.openrobotics.org/rep-2001/>`_.
+ROS 2 中的不同变体在 `REP-2001 <https://reps.openrobotics.org/rep-2001/>`_ 中规定。
 
-In addition to the official variants, there may be metapackages for specific institutions or robots as described in `REP-108 <https://reps.openrobotics.org/rep-0108/#institution-specific>`_.
+除了官方变体之外，可能还存在针对特定机构或机器人的元软件包，如 `REP-108 <https://reps.openrobotics.org/rep-0108/#institution-specific>`_ 中所述。
 
-Adding variants
----------------
+添加变体
+--------
 
-Additional variants that are of general use to the ROS community can be proposed by contributing an update to `REP-2001 via pull request <https://github.com/openrobotics/reps/blob/main/_posts/rep-2001.md>`_ describing the packages included in the new variant.
-Institution and robot specific variants can be published directly by their respective maintainers and no update to REP-2001 is required.
+可以被 ROS 社区普遍使用的其他变体，可以通过向 `REP-2001 提交拉取请求 <https://github.com/openrobotics/reps/blob/main/_posts/rep-2001.md>`_ 来描述新变体所包含的软件包，从而提出。
+机构和机器人专用的变体可由各自的维护者直接发布，无需更新 REP-2001。
 
-Creating project-specific variants
-----------------------------------
+创建项目专用变体
+----------------
 
-If you are creating ROS packages to use privately in your own projects, you can create variants specific to your projects using the official variants as examples.
-To do so you need only create two files:
+如果你创建 ROS 软件包是为了在自己的项目中私下使用，你可以以官方变体为示例，创建自己项目专用的变体。
+为此，你只需创建两个文件：
 
-#. A minimal variant package is created as a package with the ``ament_cmake`` build type, a ``buildtool_depend`` on ``ament_cmake`` and ``exec_depend`` entries for each package you want to include in the variant.
+#. 最小变体软件包按如下方式创建：一个构建类型为 ``ament_cmake`` 的软件包，具有对 ``ament_cmake`` 的 ``buildtool_depend``，以及为你想要纳入该变体的每个软件包添加 ``exec_depend`` 条目。
 
    .. code-block:: xml
 
@@ -46,7 +46,7 @@ To do so you need only create two files:
       </export>
     </package>
 
-#. A minimal ament_cmake package includes a ``CMakeLists.txt`` which registers the package.xml as an ament package for use in ROS 2.
+#. 一个最小的 ament_cmake 软件包包含一个 ``CMakeLists.txt``，它将 package.xml 注册为可供 ROS 2 使用的 ament 软件包。
 
    .. code-block:: cmake
 
@@ -56,13 +56,13 @@ To do so you need only create two files:
     find_package(ament_cmake REQUIRED)
     ament_package()
 
-You can then build and install your variant package alongside your other private packages.
+随后你就可以将你的变体软件包与其他私有软件包一起构建和安装。
 
-Creating custom variants with platform-specific tools
-*****************************************************
+使用平台专用工具创建自定义变体
+******************************
 
-Some platforms have tools for creating basic packages that do not require a full ROS build farm environment or equivalent infrastructure.
-It is possible to use these tools to create platform-dependent variants.
-This approach does not include support for ROS packaging tools and is platform dependent but requires much less infrastructure to produce if you are creating collections of existing packages rather than a mix of public and private ROS packages.
-For example, on Debian or Ubuntu systems you can use the ``equivs`` utilities.
-The Debian Administrator's handbook has a `Section on meta-packages <https://www.debian.org/doc/manuals/debian-handbook/sect.building-first-package.en.html#id-1.18.5.2>`_.
+某些平台具备用于创建基本软件包的工具，无需完整的 ROS 构建农场环境或同等基础设施。
+可以使用这些工具来创建平台相关的变体。
+这种方法不支持 ROS 打包工具，且与平台相关，但如果你创建的是现有软件包的集合，而不是公共和私有 ROS 软件包的混合，那么它所需的基础设施要少得多。
+例如，在 Debian 或 Ubuntu 系统上你可以使用 ``equivs`` 工具。
+《Debian 管理员手册》中有一 `节关于元软件包的内容 <https://www.debian.org/doc/manuals/debian-handbook/sect.building-first-package.en.html#id-1.18.5.2>`_。

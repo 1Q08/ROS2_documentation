@@ -3,60 +3,60 @@
     FastDDS-Configuration
     Tutorials/FastDDS-Configuration/FastDDS-Configuration
 
-Unlocking the potential of Fast DDS middleware [community-contributed]
-======================================================================
+释放 Fast DDS 中间件的潜力 [社区贡献]
+=====================================
 
-**Goal:** This tutorial will show how to use the extended configuration capabilities of Fast DDS in ROS 2.
+**目标：** 本教程将展示如何在 ROS 2 中使用 Fast DDS 的扩展配置能力。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 20 minutes
+**预计用时：** 20 分钟
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-The interface between the ROS 2 stack and *Fast DDS* is provided by the ROS 2 middleware implementation `rmw_fastrtps <https://github.com/ros2/rmw_fastrtps>`_.
-This implementation is available in all ROS 2 distributions, both from binaries and from sources.
+ROS 2 栈与 *Fast DDS* 之间的接口由 ROS 2 中间件实现 `rmw_fastrtps <https://github.com/ros2/rmw_fastrtps>`_ 提供。
+这个实现在所有 ROS 2 发行版中都可使用，无论是二进制形式还是源码形式。
 
-ROS 2 RMW only allows for the configuration of certain middleware QoS
-(see :doc:`ROS 2 QoS policies <../../Concepts/Intermediate/About-Quality-of-Service-Settings>`).
-However, ``rmw_fastrtps`` offers extended configuration capabilities to take full advantage of the features in *Fast DDS*.
-This tutorial will guide you through a series of examples explaining how to use XML files to unlock this extended configuration.
+ROS 2 RMW 只允许配置某些中间件 QoS
+（参见 :doc:`ROS 2 QoS 策略 <../../Concepts/Intermediate/About-Quality-of-Service-Settings>`）。
+然而，``rmw_fastrtps`` 提供了扩展的配置能力，以充分利用 *Fast DDS* 中的特性。
+本教程将通过一系列示例，解释如何使用 XML 文件来释放这些扩展配置。
 
-In order to get more information about using *Fast DDS* on ROS 2, please check the `following documentation <https://fast-dds.docs.eprosima.com/en/latest/fastdds/ros2/ros2.html>`__.
-
-
-Prerequisites
--------------
-
-This tutorial assumes that you know how to :doc:`create a package <../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>`.
-It also assumes you know how to write a :doc:`simple publisher and subscriber<../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber>` and a :doc:`simple service and client <../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Service-And-Client>`.
-Although the examples are implemented in C++, the same concepts apply to Python packages.
+要获取更多关于在 ROS 2 上使用 *Fast DDS* 的信息，请查看 `以下文档 <https://fast-dds.docs.eprosima.com/en/latest/fastdds/ros2/ros2.html>`__。
 
 
-Mixing synchronous and asynchronous publications in the same node
------------------------------------------------------------------
+前置条件
+--------
 
-In this first example, a node with two publishers, one of them with synchronous publication mode and the other one with asynchronous publication mode, will be created.
+本教程假设你知道如何 :doc:`创建一个包 <../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>`。
+它还假设你知道如何编写一个 :doc:`简单的发布者和订阅者<../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber>` 以及一个 :doc:`简单的服务和客户端 <../Beginner-Client-Libraries/Writing-A-Simple-Cpp-Service-And-Client>`。
+虽然示例是用 C++ 实现的，但相同的概念也适用于 Python 包。
 
-``rmw_fastrtps`` uses synchronous publication mode by default.
 
-With synchronous publication mode the data is sent directly within the context of the user thread.
-This entails that any blocking call occurring during the write operation would block the user thread, thus preventing the application from continuing its operation.
-However, this mode typically yields higher throughput rates at lower latencies, since there is no notification nor context switching between threads.
+在同一节点中混合同步和异步发布
+------------------------------
 
-On the other hand, with asynchronous publication mode, each time the publisher invokes the write operation, the data is copied into a queue,
-a background thread (asynchronous thread) is notified about the addition to the queue, and control of the thread is returned to the user before the data is actually sent.
-The background thread is in charge of consuming the queue and sending the data to every matched reader.
+在第一个示例中，将创建一个包含两个发布者的节点，其中一个使用同步发布模式，另一个使用异步发布模式。
 
-Create the node with the publishers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``rmw_fastrtps`` 默认使用同步发布模式。
 
-First, create a new package named ``sync_async_node_example_cpp`` on a new workspace:
+在同步发布模式下，数据直接在用户线程的上下文中发送。
+这意味着写入操作期间发生的任何阻塞调用都会阻塞用户线程，从而阻止应用程序继续其操作。
+然而，这种模式通常能以较低的延迟获得更高的吞吐量，因为线程之间没有通知，也没有上下文切换。
+
+另一方面，在异步发布模式下，每次发布者调用写入操作时，数据都会被复制到队列中，
+一个后台线程（异步线程）会收到关于队列新增的通知，并且在实际发送数据之前，线程的控制权就返回给了用户。
+后台线程负责消费队列并将数据发送给每一个匹配的读取者。
+
+创建带有发布者的节点
+^^^^^^^^^^^^^^^^^^^^
+
+首先，在新工作空间中创建一个名为 ``sync_async_node_example_cpp`` 的新包：
 
 .. tabs::
 
@@ -85,8 +85,8 @@ First, create a new package named ``sync_async_node_example_cpp`` on a new works
         $ ros2 pkg create --build-type ament_cmake --license Apache-2.0 --dependencies rclcpp std_msgs -- sync_async_node_example_cpp
 
 
-Then, add a file named ``src/sync_async_writer.cpp`` to the package, with the following content.
-Note that the synchronous publisher will be publishing on topic ``sync_topic``, while the asynchronous one will be publishing on topic ``async_topic``.
+然后，向包中添加一个名为 ``src/sync_async_writer.cpp`` 的文件，内容如下。
+请注意，同步发布者将在主题 ``sync_topic`` 上发布，而异步发布者将在主题 ``async_topic`` 上发布。
 
 .. code-block:: C++
 
@@ -112,41 +112,38 @@ Note that the synchronous publisher will be publishing on topic ``sync_topic``, 
             // Create the asynchronous publisher on topic 'async_topic'
             async_publisher_ = this->create_publisher<std_msgs::msg::String>("async_topic", 10);
 
+            // Actions to run every time the timer expires
+            auto timer_callback = [this](){
+
+                // Create a new message to be sent
+                auto sync_message = std_msgs::msg::String();
+                sync_message.data = "SYNC: Hello, world! " + std::to_string(count_);
+
+                // Log the message to the console to show progress
+                RCLCPP_INFO(this->get_logger(), "Synchronously publishing: '%s'", sync_message.data.c_str());
+
+                // Publish the message using the synchronous publisher
+                sync_publisher_->publish(sync_message);
+
+                // Create a new message to be sent
+                auto async_message = std_msgs::msg::String();
+                async_message.data = "ASYNC: Hello, world! " + std::to_string(count_);
+
+                // Log the message to the console to show progress
+                RCLCPP_INFO(this->get_logger(), "Asynchronously publishing: '%s'", async_message.data.c_str());
+
+                // Publish the message using the asynchronous publisher
+                async_publisher_->publish(async_message);
+
+                // Prepare the count for the next message
+                count_++;
+            };
+
             // This timer will trigger the publication of new data every half a second
-            timer_ = this->create_wall_timer(
-                    500ms, std::bind(&SyncAsyncPublisher::timer_callback, this));
+            timer_ = this->create_wall_timer(500ms, timer_callback);
         }
 
     private:
-        /**
-         * Actions to run every time the timer expires
-         */
-        void timer_callback()
-        {
-            // Create a new message to be sent
-            auto sync_message = std_msgs::msg::String();
-            sync_message.data = "SYNC: Hello, world! " + std::to_string(count_);
-
-            // Log the message to the console to show progress
-            RCLCPP_INFO(this->get_logger(), "Synchronously publishing: '%s'", sync_message.data.c_str());
-
-            // Publish the message using the synchronous publisher
-            sync_publisher_->publish(sync_message);
-
-            // Create a new message to be sent
-            auto async_message = std_msgs::msg::String();
-            async_message.data = "ASYNC: Hello, world! " + std::to_string(count_);
-
-            // Log the message to the console to show progress
-            RCLCPP_INFO(this->get_logger(), "Asynchronously publishing: '%s'", async_message.data.c_str());
-
-            // Publish the message using the asynchronous publisher
-            async_publisher_->publish(async_message);
-
-            // Prepare the count for the next message
-            count_++;
-        }
-
         // This timer will trigger the publication of new data every half a second
         rclcpp::TimerBase::SharedPtr timer_;
 
@@ -168,14 +165,14 @@ Note that the synchronous publisher will be publishing on topic ``sync_topic``, 
         return 0;
     }
 
-Now open the ``CMakeLists.txt`` file and add a new executable and name it ``SyncAsyncWriter`` so you can run your node using ``ros2 run``:
+现在打开 ``CMakeLists.txt`` 文件，添加一个新可执行文件并将其命名为 ``SyncAsyncWriter``，这样你就可以使用 ``ros2 run`` 运行你的节点：
 
 .. code-block:: cmake
 
     add_executable(SyncAsyncWriter src/sync_async_writer.cpp)
     ament_target_dependencies(SyncAsyncWriter rclcpp std_msgs)
 
-Finally, add the ``install(TARGETS…)`` section so ``ros2 run`` can find your executable:
+最后，添加 ``install(TARGETS…)`` 部分，以便 ``ros2 run`` 可以找到你的可执行文件：
 
 .. code-block:: cmake
 
@@ -183,7 +180,7 @@ Finally, add the ``install(TARGETS…)`` section so ``ros2 run`` can find your e
         SyncAsyncWriter
         DESTINATION lib/${PROJECT_NAME})
 
-You can clean up your ``CMakeLists.txt`` by removing some unnecessary sections and comments, so it looks like this:
+你可以通过删除一些不必要的部分和注释来清理你的 ``CMakeLists.txt``，使它看起来像这样：
 
 .. code-block:: cmake
 
@@ -212,13 +209,13 @@ You can clean up your ``CMakeLists.txt`` by removing some unnecessary sections a
 
     ament_package()
 
-If this node is built and run now, both publishers will behave the same, publishing asynchronously in both topics, because this is the default publication mode.
-The default publication mode configuration can be changed in runtime during the node launching, using an XML file.
+如果现在构建并运行这个节点，两个发布者的行为将相同，在两个主题上都会异步发布，因为这是默认的发布模式。
+默认发布模式配置可以在节点启动过程中通过 XML 文件在运行时更改。
 
-Create the XML file with the profile configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+创建包含配置文件配置的 XML 文件
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Create a file with name ``SyncAsync.xml`` and the following content:
+创建一个名为 ``SyncAsync.xml`` 的文件，内容如下：
 
 .. code-block:: XML
 
@@ -257,15 +254,15 @@ Create a file with name ``SyncAsync.xml`` and the following content:
 
      </profiles>
 
-Note that several profiles for publisher and subscriber are defined.
-Two default profiles which are defined setting the ``is_default_profile`` to ``true``, and two profiles with names that coincide with those of the previously defined topics: ``sync_topic`` and another one for ``async_topic``.
-These last two profiles set the publication mode to ``SYNCHRONOUS`` or ``ASYNCHRONOUS`` accordingly.
-Note also that all profiles specify a ``historyMemoryPolicy`` value, which is needed for the example to work, and the reason will be explained later on this tutorial.
+请注意，这里为发布者和订阅者定义了多个配置文件。
+有两个默认配置文件，它们通过将 ``is_default_profile`` 设置为 ``true`` 来定义；还有两个名称与之前定义的主题名称相同的配置文件：``sync_topic`` 和另一个用于 ``async_topic`` 的配置文件。
+后两个配置文件分别将发布模式设置为 ``SYNCHRONOUS`` 或 ``ASYNCHRONOUS``。
+还要注意，所有配置文件都指定了一个 ``historyMemoryPolicy`` 值，这是示例运行所必需的，原因将在本教程稍后解释。
 
-Execute the publisher node
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+运行发布者节点
+^^^^^^^^^^^^^^
 
-You will need to export the following environment variables for the XML to be loaded:
+你需要导出以下环境变量，才能加载 XML：
 
 .. tabs::
 
@@ -293,7 +290,7 @@ You will need to export the following environment variables for the XML to be lo
       $ SET RMW_FASTRTPS_USE_QOS_FROM_XML=1
       $ SET FASTRTPS_DEFAULT_PROFILES_FILE=path/to/SyncAsync.xml
 
-Finally, ensure you have sourced your setup files and run the node:
+最后，确保你已经 source 了 setup 文件，然后运行节点：
 
 .. code-block:: console
 
@@ -306,24 +303,21 @@ Finally, ensure you have sourced your setup files and run the node:
     [INFO] [1612972050.994368474] [sync_async_publisher]: Synchronously publishing: 'SYNC: Hello, world! 2'
     [INFO] [1612972050.994549851] [sync_async_publisher]: Asynchronously publishing: 'ASYNC: Hello, world! 2'
 
-Now you have a synchronous publisher and an asynchronous publisher running inside the same node.
+现在，你有了一个同步发布者和一个异步发布者运行在同一个节点内。
 
 
-Create a node with the subscribers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+创建带有订阅者的节点
+^^^^^^^^^^^^^^^^^^^^
 
-Next, a new node with the subscribers that will listen to the ``sync_topic`` and ``async_topic`` publications is going to be created.
-In a new source file named ``src/sync_async_reader.cpp`` write the following content:
+接下来，将创建一个包含订阅者的新节点，这些订阅者将监听 ``sync_topic`` 和 ``async_topic`` 的发布。
+在一个名为 ``src/sync_async_reader.cpp`` 的新源文件中写入以下内容：
 
 .. code-block:: C++
 
-    #include <functional>
     #include <memory>
 
     #include "rclcpp/rclcpp.hpp"
     #include "std_msgs/msg/string.hpp"
-
-    using std::placeholders::_1;
 
     class SyncAsyncSubscriber : public rclcpp::Node
     {
@@ -332,26 +326,23 @@ In a new source file named ``src/sync_async_reader.cpp`` write the following con
         SyncAsyncSubscriber()
             : Node("sync_async_subscriber")
         {
+            // Lambda function to run every time a new message is received
+            auto topic_callback = [this](const std_msgs::msg::String & msg){
+                RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg.data.c_str());
+            };
+
             // Create the synchronous subscriber on topic 'sync_topic'
             // and tie it to the topic_callback
             sync_subscription_ = this->create_subscription<std_msgs::msg::String>(
-                "sync_topic", 10, std::bind(&SyncAsyncSubscriber::topic_callback, this, _1));
+                "sync_topic", 10, topic_callback);
 
             // Create the asynchronous subscriber on topic 'async_topic'
             // and tie it to the topic_callback
             async_subscription_ = this->create_subscription<std_msgs::msg::String>(
-                "async_topic", 10, std::bind(&SyncAsyncSubscriber::topic_callback, this, _1));
+                "async_topic", 10, topic_callback);
         }
 
     private:
-
-        /**
-         * Actions to run every time a new message is received
-         */
-        void topic_callback(const std_msgs::msg::String & msg) const
-        {
-            RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg.data.c_str());
-        }
 
         // A subscriber that listens to topic 'sync_topic'
         rclcpp::Subscription<std_msgs::msg::String>::SharedPtr sync_subscription_;
@@ -369,7 +360,7 @@ In a new source file named ``src/sync_async_reader.cpp`` write the following con
     }
 
 
-Open the ``CMakeLists.txt`` file and add a new executable and name it ``SyncAsyncReader`` under the previous ``SyncAsyncWriter``:
+打开 ``CMakeLists.txt`` 文件，在上一个 ``SyncAsyncWriter`` 下面添加一个新可执行文件并将其命名为 ``SyncAsyncReader``：
 
 .. code-block:: cmake
 
@@ -381,10 +372,10 @@ Open the ``CMakeLists.txt`` file and add a new executable and name it ``SyncAsyn
         DESTINATION lib/${PROJECT_NAME})
 
 
-Execute the subscriber node
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+运行订阅者节点
+^^^^^^^^^^^^^^
 
-With the publisher node running in one terminal, open another one and export the required environment variables for the XML to be loaded:
+在发布者节点在一个终端运行的情况下，打开另一个终端并导出加载 XML 所需的环境变量：
 
 .. tabs::
 
@@ -412,7 +403,7 @@ With the publisher node running in one terminal, open another one and export the
       $ SET RMW_FASTRTPS_USE_QOS_FROM_XML=1
       $ SET FASTRTPS_DEFAULT_PROFILES_FILE=path/to/SyncAsync.xml
 
-Finally, ensure you have sourced your setup files and run the node:
+最后，确保你已经 source 了 setup 文件，然后运行节点：
 
 .. code-block:: console
 
@@ -426,58 +417,58 @@ Finally, ensure you have sourced your setup files and run the node:
     [INFO] [1612972056.995473953] [sync_async_subscriber]: I heard: 'ASYNC: Hello, world! 12'
 
 
-Analysis of the example
-^^^^^^^^^^^^^^^^^^^^^^^
+示例分析
+^^^^^^^^
 
-Configuration profiles XML
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+配置文件 XML
+~~~~~~~~~~~~
 
-The XML file defines several configurations for publishers and subscribers.
-You can have a default publisher configuration profile and several topic-specific publisher profiles.
-The only requirement is that all publisher profiles have a different name and that there is only a single default profile.
-The same goes for subscribers.
+该 XML 文件为发布者和订阅者定义了多个配置。
+你可以有一个默认的发布者配置文件以及多个主题特定的发布者配置文件。
+唯一的要求是所有发布者配置文件都有不同的名称，并且只有一个默认配置文件。
+订阅者也是如此。
 
-In order to define a configuration for a specific topic, just name the profile after the the ROS 2 topic name (like ``/sync_topic`` and ``/async_topic`` in the example),
-and ``rmw_fastrtps`` will apply this profile to all publishers and subscribers for that topic.
-The default configuration profile is identified by the attribute ``is_default_profile`` set to ``true``, and acts as a fallback profile when there is no other one with a name matching the topic name.
+为了给特定主题定义配置，只需将配置文件命名为 ROS 2 主题名（例如示例中的 ``/sync_topic`` 和 ``/async_topic``），
+``rmw_fastrtps`` 就会将该配置文件应用到该主题的所有发布者和订阅者。
+默认配置文件由设置为 ``true`` 的属性 ``is_default_profile`` 标识，并且在没有其他名称与主题名匹配的配置文件时充当回退配置文件。
 
-The environment variable ``FASTRTPS_DEFAULT_PROFILES_FILE`` is used to inform *Fast DDS* the path to the XML file with the configuration profiles to load.
+环境变量 ``FASTRTPS_DEFAULT_PROFILES_FILE`` 用于告知 *Fast DDS* 要加载的包含配置文件的 XML 文件的路径。
 
 RMW_FASTRTPS_USE_QOS_FROM_XML
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Among all the configurable attributes, ``rmw_fastrtps`` treats ``publishMode`` and ``historyMemoryPolicy`` differently.
-By default, these values are set to ``ASYNCHRONOUS`` and ``PREALLOCATED_WITH_REALLOC`` within the ``rmw_fastrtps`` implementation, and the values set on the XML file are ignored.
-In order to use the values in the XML file, the environment variable ``RMW_FASTRTPS_USE_QOS_FROM_XML`` must be set to ``1``.
+在所有可配置属性中，``rmw_fastrtps`` 对 ``publishMode`` 和 ``historyMemoryPolicy`` 的处理方式不同。
+默认情况下，在 ``rmw_fastrtps`` 实现中，这些值被设置为 ``ASYNCHRONOUS`` 和 ``PREALLOCATED_WITH_REALLOC``，而 XML 文件中设置的值会被忽略。
+为了使用 XML 文件中的值，必须将环境变量 ``RMW_FASTRTPS_USE_QOS_FROM_XML`` 设置为 ``1``。
 
-However, this entails **another caveat**: If ``RMW_FASTRTPS_USE_QOS_FROM_XML`` is set, but the XML file does not define
-``publishMode`` or ``historyMemoryPolicy``, these attributes take the *Fast DDS* default value instead of the ``rmw_fastrtps`` default value.
-This is important, especially for ``historyMemoryPolicy``, because the *Fast DDS* default value is ``PREALLOCATED`` which does not work with ROS2 topic data types.
-Therefore, in the example, a valid value for this policy has been explicitly set (``DYNAMIC``).
-
-
-Prioritization of rmw_qos_profile_t
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-ROS 2 QoS contained in `rmw_qos_profile_t <http://docs.ros2.org/latest/api/rmw/structrmw__qos__profile__t.html>`_ are always honored, unless set to ``*_SYSTEM_DEFAULT``.
-In that case, XML values (or *Fast DDS* default values in the absence of XML ones) are applied.
-This means that if any QoS in ``rmw_qos_profile_t`` is set to something other than ``*_SYSTEM_DEFAULT``, the corresponding value in the XML is ignored.
+然而，这带来了 **另一个注意事项**：如果设置了 ``RMW_FASTRTPS_USE_QOS_FROM_XML``，但 XML 文件没有定义
+``publishMode`` 或 ``historyMemoryPolicy``，这些属性将采用 *Fast DDS* 的默认值，而不是 ``rmw_fastrtps`` 的默认值。
+这一点很重要，尤其是对于 ``historyMemoryPolicy``，因为 *Fast DDS* 的默认值是 ``PREALLOCATED``，它不适用于 ROS2 主题数据类型。
+因此，在示例中，已经为这个策略显式设置了一个有效值（``DYNAMIC``）。
 
 
-Using other FastDDS capabilities with XML
------------------------------------------
+rmw_qos_profile_t 的优先级
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Although we have created a node with two publishers with different configuration, it is not easy to check that they are behaving differently.
-Now that the basics of XML profiles have been covered, let us use them to configure something which has some visual effect on the nodes.
-Specifically, a maximum number of matching subscribers on one of the publishers and a partition definition on the other will be set.
-Note that these are only very simple examples among all the configuration attributes that can be tuned on ``rmw_fastrtps`` through XML files.
-Please refer to `*Fast DDS* documentation <https://fast-dds.docs.eprosima.com/en/latest/fastdds/xml_configuration/xml_configuration.html#xml-profiles>`__ to  see the whole list of attributes that can be configured through XML files.
+包含在 `rmw_qos_profile_t <http://docs.ros.org/en/{DISTRO}/p/rmw/generated/structrmw__qos__profile__s.html>`_ 中的 ROS 2 QoS 始终会被遵守，除非设置为 ``*_SYSTEM_DEFAULT``。
+在这种情况下，将应用 XML 值（在没有 XML 值的情况下则为 *Fast DDS* 默认值）。
+这意味着，如果 ``rmw_qos_profile_t`` 中的任何 QoS 被设置为除 ``*_SYSTEM_DEFAULT`` 以外的值，XML 中对应的值将被忽略。
 
-Limiting the number of matching subscribers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add a maximum number of matched subscribers to the ``/async_topic`` publisher profile.
-It should look like this:
+通过 XML 使用其他 FastDDS 能力
+------------------------------
+
+虽然我们已经创建了一个具有两个不同配置发布者的节点，但要检查它们的行为是否不同并不容易。
+现在已经介绍了 XML 配置文件的基础知识，让我们用它们来配置一些对节点有视觉效果的东西。
+具体来说，将在一个发布者上设置匹配订阅者的最大数量，并在另一个发布者上设置分区定义。
+请注意，这些只是可以通过 XML 文件在 ``rmw_fastrtps`` 上调整的所有配置属性中的一些非常简单的示例。
+请参阅 `*Fast DDS* 文档 <https://fast-dds.docs.eprosima.com/en/latest/fastdds/xml_configuration/xml_configuration.html#xml-profiles>`__，查看可以通过 XML 文件配置的属性的完整列表。
+
+限制匹配订阅者的数量
+^^^^^^^^^^^^^^^^^^^^
+
+向 ``/async_topic`` 发布者配置文件添加匹配订阅者的最大数量。
+它应该看起来像这样：
 
 .. code-block:: XML
 
@@ -496,13 +487,13 @@ It should look like this:
         </matchedSubscribersAllocation>
     </publisher>
 
-The number of matching subscribers is being limited to one.
+匹配订阅者的数量被限制为一个。
 
-Now open three terminals and do not forget to source the setup files and to set the required environment variables.
-On the first terminal run the publisher node, and the subscriber node on the other two.
-You should see that only the first subscriber node receives the messages from both topics.
-The second one could not complete the matching process in the ``/async_topic`` because the publisher prevented it, as it had already reached its maximum of matched publishers.
-Consequently, only the messages from the ``/sync_topic`` are going to be received in this third terminal:
+现在打开三个终端，不要忘记 source setup 文件并设置所需的环境变量。
+在第一个终端运行发布者节点，在其他两个终端运行订阅者节点。
+你应该看到只有第一个订阅者节点收到来自两个主题的消息。
+第二个订阅者无法完成 ``/async_topic`` 的匹配过程，因为发布者阻止了它，因为发布者已经达到了匹配发布者的最大数量。
+因此，在第三个终端中只会收到来自 ``/sync_topic`` 的消息：
 
 .. code-block:: console
 
@@ -511,20 +502,20 @@ Consequently, only the messages from the ``/sync_topic`` are going to be receive
     [INFO] [1613127658.088849401] [sync_async_subscriber]: I heard: 'SYNC: Hello, world! 20'
 
 
-Using partitions within the topic
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+在主题中使用分区
+^^^^^^^^^^^^^^^^
 
-The partitions feature can be used to control which publishers and subscribers exchange information within the same topic.
+分区特性可以用于控制哪些发布者和订阅者在同一主题内交换信息。
 
-Partitions introduce a logical entity isolation level concept inside the physical isolation induced by a Domain ID.
-For a publisher to communicate with a subscriber, they have to belong at least to one common partition.
-Partitions represent another level to separate publishers and subscribers beyond domain and topic.
-Unlike domain and topic, an endpoint can belong to several partitions at the same time.
-For certain data to be shared over different domains or topics, there must be a different publisher for each, sharing its own history of changes.
-However, a single publisher can share the same data sample over different partitions using a single topic data change, thus reducing network overload.
+分区在由域 ID 引起的物理隔离内部引入了逻辑实体隔离级别的概念。
+发布者要与订阅者通信，它们必须至少属于一个共同的分区。
+分区代表了在域和主题之外，用于分离发布者和订阅者的另一个层级。
+与域和主题不同，一个端点可以同时属于多个分区。
+要在不同域或主题之间共享某些数据，每个域或主题都必须有不同的发布者，各自共享自己的变更历史。
+然而，一个发布者可以使用单个主题数据变更在不同分区之间共享同一个数据样本，从而减少网络开销。
 
-Let us change the ``/sync_topic`` publisher to partition ``part1`` and create a new ``/sync_topic`` subscriber which uses partition ``part2``.
-Their profiles should now look like this:
+让我们将 ``/sync_topic`` 发布者改到分区 ``part1``，并创建一个使用分区 ``part2`` 的新 ``/sync_topic`` 订阅者。
+它们的配置文件现在应该看起来像这样：
 
 .. code-block:: XML
 
@@ -555,11 +546,11 @@ Their profiles should now look like this:
         </qos>
     </subscriber>
 
-Open two terminals.
-Do not forget to source the setup files and to set the required environment variables.
-On the first terminal run the publisher node, and the subscriber node on the other one.
-You should see that only the ``/async_topic`` messages are reaching the subscriber.
-The ``/sync_topic`` subscriber is not receiving the data as it is in a different partition from the corresponding publisher.
+打开两个终端。
+不要忘记 source setup 文件并设置所需的环境变量。
+在第一个终端运行发布者节点，在另一个终端运行订阅者节点。
+你应该看到只有 ``/async_topic`` 消息到达订阅者。
+``/sync_topic`` 订阅者没有接收到数据，因为它与相应的发布者处于不同的分区。
 
 .. code-block:: console
 
@@ -568,27 +559,27 @@ The ``/sync_topic`` subscriber is not receiving the data as it is in a different
     [INFO] [1612972056.995473953] [sync_async_subscriber]: I heard: 'ASYNC: Hello, world! 12'
 
 
-Configuring a service and a client
-----------------------------------
+配置服务和客户端
+----------------
 
-Services and clients have a publisher and a subscriber each, that communicate through two different topics.
-For example, for a service named ``ping`` there is:
+服务和客户端各有一个发布者和一个订阅者，它们通过两个不同的主题进行通信。
+例如，对于一个名为 ``ping`` 的服务，存在：
 
-* A service subscriber listening to requests on ``/rq/ping``.
-* A service publisher sending responses on ``/rr/ping``.
-* A client publisher sending requests on ``/rq/ping``.
-* A client subscriber listening to responses on ``/rr/ping``.
+* 一个服务订阅者，监听 ``/rq/ping`` 上的请求。
+* 一个服务发布者，在 ``/rr/ping`` 上发送响应。
+* 一个客户端发布者，在 ``/rq/ping`` 上发送请求。
+* 一个客户端订阅者，监听 ``/rr/ping`` 上的响应。
 
-Although you can use these topic names to set the configuration profiles on the XML, sometimes you may wish to apply the same profile to all services or clients on a node.
-Instead of copying the same profile with all topic names generated for all services, you can just create a publisher and subscriber profile pair named ``service``.
-The same can be done for clients creating a pair named ``client``.
+虽然你可以使用这些主题名在 XML 上设置配置文件，但有时你可能希望将同一个配置文件应用到节点上的所有服务或客户端。
+与其为所有服务生成的所有主题名复制同一个配置文件，不如创建一个名为 ``service`` 的发布者和订阅者配置文件对。
+对于客户端也可以这样做，创建一个名为 ``client`` 的对。
 
 
-Create the nodes with the service and client
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+创建带有服务和客户端的节点
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Start creating the node with the service.
-Add a new source file named ``src/ping_service.cpp`` on your package with the following content:
+首先创建带有服务的节点。
+在你的包中添加一个名为 ``src/ping_service.cpp`` 的新源文件，内容如下：
 
 .. code-block:: C++
 
@@ -631,7 +622,7 @@ Add a new source file named ``src/ping_service.cpp`` on your package with the fo
         rclcpp::shutdown();
     }
 
-Create the client in a file named ``src/ping_client.cpp`` with the following content:
+在一个名为 ``src/ping_client.cpp`` 的文件中创建客户端，内容如下：
 
 .. code-block:: C++
 
@@ -681,7 +672,7 @@ Create the client in a file named ``src/ping_client.cpp`` with the following con
         return 0;
     }
 
-Open the ``CMakeLists.txt`` file and add two new executables ``ping_service`` and ``ping_client``:
+打开 ``CMakeLists.txt`` 文件，添加两个新的可执行文件 ``ping_service`` 和 ``ping_client``：
 
 .. code-block:: cmake
 
@@ -701,13 +692,13 @@ Open the ``CMakeLists.txt`` file and add two new executables ``ping_service`` an
         ping_client
         DESTINATION lib/${PROJECT_NAME})
 
-Finally, build the package.
+最后，构建该包。
 
 
-Create the XML profiles for the service and client
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+为服务和客户端创建 XML 配置文件
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Create a file with name ``ping.xml`` with the following content:
+创建一个名为 ``ping.xml`` 的文件，内容如下：
 
 .. code-block:: XML
 
@@ -747,15 +738,15 @@ Create a file with name ``ping.xml`` with the following content:
     </profiles>
 
 
-This configuration file sets the publication mode to ``SYNCHRONOUS`` on the service and to ``ASYNCHRONOUS`` on the client.
-Note that we are only defining the publisher profiles for both the service and the client, but subscriber profiles could be provided too.
+此配置文件将服务的发布模式设置为 ``SYNCHRONOUS``，将客户端的发布模式设置为 ``ASYNCHRONOUS``。
+请注意，我们只为服务和客户端定义了发布者配置文件，但也可以提供订阅者配置文件。
 
 
-Execute the nodes
-^^^^^^^^^^^^^^^^^
+运行节点
+^^^^^^^^
 
-Open two terminals and source the setup files on each one.
-Then set the required environment variables for the XML to be loaded:
+打开两个终端，并在每个终端上 source setup 文件。
+然后设置加载 XML 所需的环境变量：
 
 .. tabs::
 
@@ -784,16 +775,16 @@ Then set the required environment variables for the XML to be loaded:
       $ SET FASTRTPS_DEFAULT_PROFILES_FILE=path/to/ping.xml
 
 
-On the first terminal run the service node.
-You should see the service waiting for requests:
+在第一个终端运行服务节点。
+你应该看到服务在等待请求：
 
 .. code-block:: console
 
     $ ros2 run sync_async_node_example_cpp ping_service
     [INFO] [1612977403.805799037] [ping_server]: Ready to serve.
 
-On the second terminal, run the client node.
-You should see the client sending the request and receiving the response:
+在第二个终端运行客户端节点。
+你应该看到客户端发送请求并接收响应：
 
 
 .. code-block:: console
@@ -802,10 +793,10 @@ You should see the client sending the request and receiving the response:
     [INFO] [1612977404.805799037] [ping_client]: Sending request
     [INFO] [1612977404.825473835] [ping_client]: Response received
 
-At the same time, the output in the server console has been updated:
+与此同时，服务器控制台中的输出已经更新：
 
 .. code-block:: console
 
-    [INFO] [1612977403.805799037] [ping_server]: Ready to serve
+    [INFO] [1612977403.805799037] [ping_server]: Ready to serve.
     [INFO] [1612977404.807314904] [ping_server]: Incoming request
     [INFO] [1612977404.836405125] [ping_server]: Sending back response

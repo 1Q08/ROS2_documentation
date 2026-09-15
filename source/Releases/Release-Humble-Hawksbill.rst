@@ -1,42 +1,42 @@
 .. _humble-release:
 
-Humble Hawksbill (``humble``)
-=============================
+Humble Hawksbill（``humble``）
+==============================
 
 .. toctree::
    :hidden:
 
    Humble-Hawksbill-Complete-Changelog
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-*Humble Hawksbill* is the eighth release of ROS 2.
-What follows is highlights of the important changes and features in Humble Hawksbill since the last release.
-For a list of all of the changes since Galactic, see the `long form changelog <Humble-Hawksbill-Complete-Changelog>`.
+*Humble Hawksbill* 是 ROS 2 的第八个发行版。
+以下是自上一个发行版以来 Humble Hawksbill 中重要变更与特性的亮点。
+有关自 Galactic 以来的所有变更列表，请参阅 `完整变更日志 <Humble-Hawksbill-Complete-Changelog>`_。
 
-Supported Platforms
--------------------
+支持的平台
+----------
 
-Humble Hawksbill supports the following platforms according to `the platform support tiers <../The-ROS2-Project/Platform-Support-Tiers>`:
+Humble Hawksbill 按照 `平台支持层级 <../The-ROS2-Project/Platform-Support-Tiers>`_ 支持以下平台：
 
-Tier 1 platforms:
+Tier 1 平台：
 
-* Ubuntu 22.04 (Jammy): ``amd64`` and ``arm64``
-* Windows 10 (Visual Studio 2019): ``amd64``
+* Ubuntu 22.04 (Jammy)：``amd64`` 和 ``arm64``
+* Windows 10 (Visual Studio 2019)：``amd64``
 
-Tier 2 platforms:
+Tier 2 平台：
 
-* RHEL 8: ``amd64``
+* RHEL 8：``amd64``
 
-Tier 3 platforms:
+Tier 3 平台：
 
-* Ubuntu 20.04 (Focal): ``amd64``
-* macOS: ``amd64``
-* Debian Bullseye: ``amd64``
+* Ubuntu 20.04 (Focal)：``amd64``
+* macOS：``amd64``
+* Debian Bullseye：``amd64``
 
-Targeted platforms:
+目标平台：
 
 +--------------+----------------------+---------------------+------------------+----------------------+------------+----------------------+------------------------------+
 | Architecture | Ubuntu Jammy (22.04) | Windows 10 (VS2019) | RHEL 8           | Ubuntu Focal (20.04) | macOS      | Debian Bullseye (11) | OpenEmbedded / Yocto Project |
@@ -48,18 +48,15 @@ Targeted platforms:
 | arm32        | Tier 3 [s]           |                     |                  | Tier 3 [s]           |            | Tier 3 [s]           | Tier 3 [s]                   |
 +--------------+----------------------+---------------------+------------------+----------------------+------------+----------------------+------------------------------+
 
-The following indicators show what delivery mechanisms are available for
-each platform.
+以下标识说明了各平台可用的交付机制。
 
-\" \[d\] \" Distribution-specific (Debian, RPM, etc.) packages will be
-provided for this platform for packages submitted to the rosdistro.
+\" \[d\] \" 针对提交到 rosdistro 的软件包，将为其提供发行版专用（Debian、RPM 等）软件包。
 
-\" \[a\] \" Binary releases are provided as a single archive per
-platform containing all packages in the Humble ROS 2 repos file[^11].
+\" \[a\] \" 二进制发行版为每个平台提供单个归档文件，其中包含 Humble ROS 2 repos 文件中的所有软件包[^11]。
 
-\" \[s\] \" Compilation from source.
+\" \[s\] \" 从源代码编译。
 
-Middleware Implementation Support:
+中间件实现支持：
 
 +--------------------------+-------------------------+---------------+----------------------------+-------------------------------+
 | Middleware Library       | Middleware Provider     | Support Level | Platforms                  | Architectures                 |
@@ -76,18 +73,17 @@ Middleware Implementation Support:
 +--------------------------+-------------------------+---------------+----------------------------+-------------------------------+
 
 
-\" \* \" means default RMW implementation.
+\" \* \" 表示默认 RMW 实现。
 
-Middleware implementation support is dependent upon the platform support
-tier. For example a Tier 1 middleware implementation on a Tier 2
-platform can only receive Tier 2 support.
+中间件实现支持取决于平台支持层级。
+例如，在 Tier 2 平台上的 Tier 1 中间件实现只能获得 Tier 2 级别的支持。
 
-Minimum language requirements:
+最低语言要求：
 
 - C++17
 - Python 3.6
 
-Dependency Requirements:
+依赖要求：
 
 +------------------+-------------------+-----------------------------------------------------------------------------------------------------------+
 |                  | Required Support  | Recommended Support                                                                                       |
@@ -130,64 +126,58 @@ Dependency Requirements:
 | Gurum DDS        | 2.7.x             | N/A    | 2.7.x        | N/A                                                                               |
 +------------------+----------+--------+--------+--------------+----------+------------------+-----------------------------------------------------+
 
-\" \* \" means that this is not the upstream version (available on the
-official Operating System repositories) but a package distributed by
-OSRF or the community (package built and distributed on custom
-repositories).
+\" \* \" 表示这不是上游版本（可在官方操作系统仓库中获取），而是由 OSRF 或社区分发的软件包（在自定义仓库中构建和分发的软件包）。
 
-\" \*\* \" means that the dependency may see multiple version changes,
-because the dependency uses a package manager that continually updates
-the dependency without a stable API.
+\" \*\* \" 表示该依赖可能会有多次版本变更，因为它使用的包管理器会在没有稳定 API 的情况下持续更新该依赖。
 
-\" \*\*\* \" webOS OSE provides this different version.
+\" \*\*\* \" webOS OSE 提供了这一不同的版本。
 
-This document only captures the version at the first release of a ROS
-distribution and will not be updated as the dependencies move forward.
-These versions are thus a low watermark.
+本文档仅记录 ROS 发行版首次发布时的版本，不会随着依赖的演进更新。
+因此这些版本是一个最低水位线。
 
-Package manager use for dependencies:
+依赖所使用的包管理器：
 
-- Ubuntu, Debian: apt
-- Windows: Chocolatey, pip
-- macOS: Homebrew, pip
-- RHEL: dnf
-- OpenEmbedded: opkg
+- Ubuntu、Debian：apt
+- Windows：Chocolatey、pip
+- macOS：Homebrew、pip
+- RHEL：dnf
+- OpenEmbedded：opkg
 
-Build System Support:
+构建系统支持：
 
 - ament_cmake
 - cmake
 - setuptools
 
-Installation
-------------
+安装
+----
 
-`Install Humble Hawksbill <../../humble/Installation.html>`__
+`安装 Humble Hawksbill <../../humble/Installation.html>`__
 
-Changes in Patch Release 1 (2022-11-23)
----------------------------------------
+补丁版本 1 (2022-11-23) 中的变更
+--------------------------------
 
 ros2topic
 ^^^^^^^^^
 
-``now`` as keyword for ``builtin_interfaces.msg.Time`` and ``auto`` for ``std_msgs.msg.Header``
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-``ros2 topic pub`` now allows to set a ``builtin_interfaces.msg.Time`` message to the current time via the ``now`` keyword.
-Similarly, a ``std_msg.msg.Header`` message will be automatically generated when passed the keyword ``auto``.
-This behavior matches that of ROS 1's ``rostopic`` (http://wiki.ros.org/ROS/YAMLCommandLine#Headers.2Ftimestamps)
+``now`` 作为 ``builtin_interfaces.msg.Time`` 的关键字，``auto`` 作为 ``std_msgs.msg.Header`` 的关键字
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+``ros2 topic pub`` 现在允许通过 ``now`` 关键字将 ``builtin_interfaces.msg.Time`` 消息设置为当前时间。
+类似地，当传入关键字 ``auto`` 时，将自动生成 ``std_msg.msg.Header`` 消息。
+此行为与 ROS 1 的 ``rostopic`` 一致 (http://wiki.ros.org/ROS/YAMLCommandLine#Headers.2Ftimestamps)
 
-Related PR: `ros2/ros2cli#751 <https://github.com/ros2/ros2cli/pull/751>`_
+相关 PR：`ros2/ros2cli#751 <https://github.com/ros2/ros2cli/pull/751>`_
 
-New features in this ROS 2 release
-----------------------------------
+此 ROS 2 发行版中的新特性
+-------------------------
 
 ament_cmake_gen_version_h
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Generating a C/C++ header with version info
-"""""""""""""""""""""""""""""""""""""""""""
-A new CMake function to generate a header with the package version info was added to the ``ament_cmake_gen_version_h`` in `ament/ament_cmake#377 <https://github.com/ament/ament_cmake/pull/377>`__.
-Here's the simplest use case:
+生成带版本信息的 C/C++ 头文件
+"""""""""""""""""""""""""""""
+``ament_cmake_gen_version_h`` 中新增了一个 CMake 函数，用于生成包含软件包版本信息的头文件，见 `ament/ament_cmake#377 <https://github.com/ament/ament_cmake/pull/377>`__。
+以下是最简单的用例：
 
 .. code-block:: CMake
 
@@ -195,15 +185,15 @@ Here's the simplest use case:
     add_library(my_lib ...)
     ament_generate_version_header(my_lib)
 
-It will generate a header with version info from the ``package.xml`` and make it available to targets that link against the ``my_lib`` library.
+它将根据 ``package.xml`` 生成包含版本信息的头文件，并使其对链接 ``my_lib`` 库的目标可用。
 
-How to include the header:
+如何包含该头文件：
 
 .. code-block:: C
 
     #include <my_project/version.h>
 
-Where the header is installed to:
+头文件安装位置：
 
 .. code-block:: cmake
 
@@ -212,12 +202,12 @@ Where the header is installed to:
 launch
 ^^^^^^
 
-Scoping environment variables in group actions
-""""""""""""""""""""""""""""""""""""""""""""""
+在 group action 中限定环境变量的作用域
+""""""""""""""""""""""""""""""""""""""
 
-Similar to launch configurations, now by default, the state of environment variables are scoped to group actions.
+与 launch 配置类似，现在默认情况下，环境变量的状态被限定在 group action 的作用域内。
 
-For example, in the following launch files the executed processe will echo the value ``1`` (before Humble it would echo ``2``):
+例如，在以下 launch 文件中，被执行的进程将回显值 ``1`` （在 Humble 之前它会回显 ``2``）：
 
 .. tabs::
 
@@ -249,32 +239,32 @@ For example, in the following launch files the executed processe will echo the v
                 launch.actions.ExecuteProcess(cmd=['echo', '$FOO'], output='screen', shell=True),
             ])
 
-If you would like disable scoping for launch configurations and and environment variables you can set the ``scoped`` argument (or attribute) to false.
+如果你希望为 launch 配置和环境变量禁用作用域限定，可以将 ``scoped`` 参数（或属性）设置为 false。
 
-Related PR: `ros2/launch#601 <https://github.com/ros2/launch/pull/601>`_
+相关 PR：`ros2/launch#601 <https://github.com/ros2/launch/pull/601>`_
 
 launch_pytest
 """""""""""""
 
-We've added a new package, ``launch_pytest``, that acts as an alternative to ``launch_testing``.
-``launch_pytest`` is a simple pytest plugin that provides pytest fixtures to manage the lifetime of a launch service.
+我们新增了一个软件包 ``launch_pytest``，它是 ``launch_testing`` 的替代方案。
+``launch_pytest`` 是一个简单的 pytest 插件，提供用于管理 launch 服务生命周期的 pytest fixture。
 
-Check out the `package README for details and examples. <https://github.com/ros2/launch/tree/humble/launch_pytest>`_
+请参阅 `软件包 README 以了解详情与示例 <https://github.com/ros2/launch/tree/humble/launch_pytest>`_。
 
-Related PR: `ros2/launch#528 <https://github.com/ros2/launch/pull/528>`_
+相关 PR：`ros2/launch#528 <https://github.com/ros2/launch/pull/528>`_
 
-Allow matching target actions with a callable
-"""""""""""""""""""""""""""""""""""""""""""""
+允许用可调用对象匹配目标 action
+"""""""""""""""""""""""""""""""
 
-Event handlers that take a target action object to match can now also take a callable instead to do the matching.
+事件处理器原本需要传入目标 action 对象来进行匹配，现在也可以改为传入 callable 来完成匹配。
 
-Related PR: `ros2/launch#540 <https://github.com/ros2/launch/pull/540>`_
+相关 PR：`ros2/launch#540 <https://github.com/ros2/launch/pull/540>`_
 
-Access to math module when evaluating Python expressions
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+求值 Python 表达式时可访问 math 模块
+""""""""""""""""""""""""""""""""""""
 
-Inside ``PythonExpression`` substitutions (``eval``) we can now use symbols from Python's math module.
-For example,
+在 ``PythonExpression`` 替换（``eval``）内部，我们现在可以使用 Python 的 math 模块中的符号。
+例如，
 
 .. code-block:: xml
 
@@ -282,12 +272,12 @@ For example,
      <log message="$(eval 'ceil(pi)')" />
    </launch>
 
-Related PR: `ros2/launch#557 <https://github.com/ros2/launch/pull/557>`_
+相关 PR：`ros2/launch#557 <https://github.com/ros2/launch/pull/557>`_
 
-Boolean substitutions
-"""""""""""""""""""""
+布尔替换
+""""""""
 
-New substitutions ``NotSubstitution``, ``AndSubstitution``, and ``OrSubstitution`` provide a convenient way to perform logical operations, for example
+新增的 ``NotSubstitution``、``AndSubstitution`` 和 ``OrSubstitution`` 替换提供了一种便捷的方式来执行逻辑运算，例如
 
 .. code-block:: xml
 
@@ -305,26 +295,26 @@ New substitutions ``NotSubstitution``, ``AndSubstitution``, and ``OrSubstitution
      </group>
    </launch>
 
-Related PR: `ros2/launch#598 <https://github.com/ros2/launch/pull/598>`_
+相关 PR：`ros2/launch#598 <https://github.com/ros2/launch/pull/598>`_
 
-New actions
-"""""""""""
+新增的 action
+"""""""""""""
 
-* ``AppendEnvironmentVariable`` appends a value to an existing environment variable.
+* ``AppendEnvironmentVariable`` 向已有的环境变量追加值。
 
-  * Related PR: `ros2/launch#543 <https://github.com/ros2/launch/pull/543>`_
+  * 相关 PR：`ros2/launch#543 <https://github.com/ros2/launch/pull/543>`_
 
-* ``ResetLaunchConfigurations`` resets any configuration applied to the launch configuration.
+* ``ResetLaunchConfigurations`` 重置应用于 launch 配置的所有配置项。
 
-  * Related PR: `ros2/launch#515 <https://github.com/ros2/launch/pull/515>`_
+  * 相关 PR：`ros2/launch#515 <https://github.com/ros2/launch/pull/515>`_
 
 launch_ros
 ^^^^^^^^^^
 
-Passing ROS arguments to node actions
-"""""""""""""""""""""""""""""""""""""
+向 node action 传递 ROS 参数
+""""""""""""""""""""""""""""
 
-It is now possible to provide `ROS-specific node arguments <../../How-To-Guides/Node-arguments>` directly, without needing to use ``args`` with a leading ``--ros-args`` flag:
+现在可以直接提供 `ROS 特有的节点参数 <../../How-To-Guides/Node-arguments>`_，而无需再通过带前导 ``--ros-args`` 标志的 ``args`` 参数来传递：
 
 .. tabs::
 
@@ -346,7 +336,7 @@ It is now possible to provide `ROS-specific node arguments <../../How-To-Guides/
             exec: talker
             ros_args: '--log-level debug'
 
-The corresponding parameter for the ``Node`` action in Python launch files is ``ros_arguments``:
+Python launch 文件中 ``Node`` action 对应的参数是 ``ros_arguments``：
 
 .. code-block:: python
 
@@ -362,12 +352,12 @@ The corresponding parameter for the ``Node`` action in Python launch files is ``
           ),
       ])
 
-Related PRs: `ros2/launch_ros#249 <https://github.com/ros2/launch_ros/pull/249>`_ and `ros2/launch_ros#253 <https://github.com/ros2/launch_ros/pull/253>`_.
+相关 PR：`ros2/launch_ros#249 <https://github.com/ros2/launch_ros/pull/249>`_ 和 `ros2/launch_ros#253 <https://github.com/ros2/launch_ros/pull/253>`_。
 
-Frontend support for composable nodes
-"""""""""""""""""""""""""""""""""""""
+frontend 对可组合节点的支持
+"""""""""""""""""""""""""""
 
-We can now start node containers and load components into them from frontend launch files, for example:
+现在我们可以从 frontend launch 文件启动 node container 并向其中加载组件，例如：
 
 .. tabs::
 
@@ -405,13 +395,13 @@ We can now start node containers and load components into them from frontend lau
                    plugin: composition::Listener
                    name: listener
 
-Related PR: `ros2/launch_ros#235 <https://github.com/ros2/launch_ros/pull/235>`_
+相关 PR：`ros2/launch_ros#235 <https://github.com/ros2/launch_ros/pull/235>`_
 
-Parameter substitution
-""""""""""""""""""""""
+参数替换
+""""""""
 
-The new ``ParameterSubstitution`` lets you substitute the value of a parameter set previously in launch with the ``SetParameter`` action.
-For example,
+新增的 ``ParameterSubstitution`` 允许你替换此前在 launch 中通过 ``SetParameter`` action 设置的参数值。
+例如，
 
 .. code-block:: xml
 
@@ -420,31 +410,31 @@ For example,
      <log message="Parameter foo has value $(param foo)" />
    </launch>
 
-Related PR: `ros2/launch_ros#297 <https://github.com/ros2/launch_ros/pull/297>`_
+相关 PR：`ros2/launch_ros#297 <https://github.com/ros2/launch_ros/pull/297>`_
 
-New actions
-"""""""""""
+新增的 action
+"""""""""""""
 
-* ``RosTimer`` acts like the launch ``TimerAction``, but uses a ROS clock (so it can use simulation time, for example).
+* ``RosTimer`` 的作用类似于 launch 的 ``TimerAction``，但使用 ROS 时钟（因此例如可以使用仿真时间）。
 
-  * Related PRs: `ros2/launch_ros#244 <https://github.com/ros2/launch_ros/pull/244>`_ and `ros2/launch_ros#264 <https://github.com/ros2/launch_ros/pull/264>`_
+  * 相关 PR：`ros2/launch_ros#244 <https://github.com/ros2/launch_ros/pull/244>`_ 和 `ros2/launch_ros#264 <https://github.com/ros2/launch_ros/pull/264>`_
 
-* ``SetParametersFromFile`` passes a ROS parameters file to all nodes in a launch file (including node components).
+* ``SetParametersFromFile`` 将 ROS 参数文件传递给 launch 文件中的所有节点（包括节点组件）。
 
-  * Related PRs: `ros2/launch_ros#260 <https://github.com/ros2/launch_ros/pull/260>`_ and `ros2/launch_ros#281 <https://github.com/ros2/launch_ros/pull/281>`_
+  * 相关 PR：`ros2/launch_ros#260 <https://github.com/ros2/launch_ros/pull/260>`_ 和 `ros2/launch_ros#281 <https://github.com/ros2/launch_ros/pull/281>`_
 
-SROS2 Security enclaves support Certificate Revocation Lists
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SROS2 安全 enclave 支持证书吊销列表
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Certificate Revocation Lists (CRLs) are a concept where particular certificates can be revoked before their expiration.
-As of Humble, it is now possible to put a CRL in an SROS2 security enclave and have it be honored.
-See `the SROS2 tutorials <https://github.com/ros2/sros2/blob/humble/SROS2_Linux.md#certificate-revocation-lists>`__ for an example of how to use it.
+证书吊销列表（CRL）是一种机制，允许在证书到期之前将其吊销。
+从 Humble 开始，现在可以将 CRL 放入 SROS2 安全 enclave 并使其生效。
+有关使用示例，请参阅 `SROS2 教程 <https://github.com/ros2/sros2/blob/humble/SROS2_Linux.md#certificate-revocation-lists>`__。
 
-Content Filtered Topics
-^^^^^^^^^^^^^^^^^^^^^^^
+内容过滤话题
+^^^^^^^^^^^^
 
-Content Filtered Topics supports a more sophisticated subscription that indicates the subscriber does not want to necessarily see all values of each instance published under the Topic.
-Content Filtered Topics can be used to request content-based subscriptions when underlying RMW implementation supports this feature.
+内容过滤话题支持一种更精细的订阅方式，表示订阅者并不一定希望看到该话题下发布的每个实例的所有取值。
+当底层 RMW 实现支持该特性时，可以使用内容过滤话题来请求基于内容的订阅。
 
 .. list-table:: RMW Content Filtered Topics support
    :widths: 25 25
@@ -456,27 +446,27 @@ Content Filtered Topics can be used to request content-based subscriptions when 
    * - rmw_cyclonedds
      - not supported
 
-To learn more, see the `content_filtering <https://github.com/ros2/examples/blob/humble/rclcpp/topics/minimal_subscriber/content_filtering.cpp>`_ examples.
+要了解更多信息，请参阅 `content_filtering <https://github.com/ros2/examples/blob/humble/rclcpp/topics/minimal_subscriber/content_filtering.cpp>`_ 示例。
 
-Related design PR: `ros2/design#282 <https://github.com/ros2/design/pull/282>`_.
+相关设计 PR：`ros2/design#282 <https://github.com/ros2/design/pull/282>`_。
 
 ros2cli
 ^^^^^^^
 
-``ros2 launch`` has a ``--launch-prefix`` argument
-""""""""""""""""""""""""""""""""""""""""""""""""""
+``ros2 launch`` 具有 ``--launch-prefix`` 参数
+"""""""""""""""""""""""""""""""""""""""""""""
 
-This allows passing a prefix to all executables in a launch file, which is useful in many debugging situations.
-See the associated `pull request <https://github.com/ros2/launch_ros/pull/254>`__, as well as the :ref:`tutorial <launch-prefix-example>` for more information.
+这样可以为 launch 文件中的所有可执行文件传入一个前缀，这在许多调试场景中很有用。
+有关更多信息，请参阅相关的 `pull request <https://github.com/ros2/launch_ros/pull/254>`__，以及 :ref:`教程 <launch-prefix-example>`。
 
-Relatedly, the ``--launch-prefix-filter`` command-line option was added to selectively add the prefix from ``--launch-prefix`` to executables.
-See the `pull request <https://github.com/ros2/launch_ros/pull/261>`__ for more information.
+与此相关，还新增了 ``--launch-prefix-filter`` 命令行选项，用于有选择地将 ``--launch-prefix`` 中的前缀添加到可执行文件上。
+有关更多信息，请参阅该 `pull request <https://github.com/ros2/launch_ros/pull/261>`__。
 
-``ros2 topic echo`` has a ``--flow-style`` argument
-"""""""""""""""""""""""""""""""""""""""""""""""""""
+``ros2 topic echo`` 具有 ``--flow-style`` 参数
+""""""""""""""""""""""""""""""""""""""""""""""
 
-This allows the user to force ``flow style`` for the YAML representation of data on a topic.
-Without this option, the output from ``ros2 topic echo /tf_static`` could look something like:
+这允许用户强制对话题数据的 YAML 表示使用 ``flow style``。
+如果不使用该选项，``ros2 topic echo /tf_static`` 的输出可能类似如下：
 
 .. code-block::
 
@@ -498,76 +488,76 @@ Without this option, the output from ``ros2 topic echo /tf_static`` could look s
         z: 0.0
         w: 1.0
 
-With this option, the output would look something like:
+使用该选项后，输出将类似如下：
 
 .. code-block::
 
   transforms: [{header: {stamp: {sec: 1651172841, nanosec: 433705575}, frame_id: single_rrbot_link3}, child_frame_id: single_rrbot_camera_link, transform: {translation: {x: 0.05, y: 0.0, z: 0.9}, rotation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}]
 
-See the `PyYAML documentation <https://pyyaml.docsforge.com/master/documentation/#dictionaries-without-nested-collections-are-not-dumped-correctly>`__ for more information.
+有关更多信息，请参阅 `PyYAML 文档 <https://pyyaml.docsforge.com/master/documentation/#dictionaries-without-nested-collections-are-not-dumped-correctly>`__。
 
-``ros2 topic echo`` can filter data based on message contents
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+``ros2 topic echo`` 可以根据消息内容过滤数据
+""""""""""""""""""""""""""""""""""""""""""""
 
-This allows the user to only print out data on a topic that matches a certain Python expression.
-For instance, using the following argument will only print out string messages that start with 'foo':
+这允许用户只打印话题中匹配某个 Python 表达式的数据。
+例如，使用以下参数将只打印以 'foo' 开头的字符串消息：
 
 .. code-block::
 
    ros2 topic echo --filter 'm.data.startswith("foo")` /chatter
 
-See the `pull request <https://github.com/ros2/ros2cli/pull/654>`__ for more information.
+有关更多信息，请参阅该 `pull request <https://github.com/ros2/ros2cli/pull/654>`__。
 
 
 rviz2
 ^^^^^
 
-Apply textures to arbitrary triangle lists
-""""""""""""""""""""""""""""""""""""""""""
+为任意三角形列表应用纹理
+""""""""""""""""""""""""
 
-We've added `the ability to apply textures defined via URI to arbitrary triangle lists using UV Coordinates <https://github.com/ros2/rviz/pull/719>`__.
-Now we can create a gradient pull from a texture map instead of the default grayscale.
-This will enable complex coloring of markers.
-To use this, you should use the ``visualization_msgs/Marker.msg`` and fill the ``texture_resource``, ``texture``, ``uv_coordinates`` and ``mesh_file`` fields.
-You can find more information `here <https://github.com/ros2/common_interfaces/pull/153>`__.
+我们新增了 `使用 UV 坐标向任意三角形列表应用通过 URI 定义的纹理的能力 <https://github.com/ros2/rviz/pull/719>`__。
+现在我们可以从纹理贴图生成渐变效果，而不是使用默认的灰度。
+这将实现 marker 的复杂着色。
+要使用它，你应该使用 ``visualization_msgs/Marker.msg`` 并填充 ``texture_resource``、``texture``、``uv_coordinates`` 和 ``mesh_file`` 字段。
+你可以 `在此处 <https://github.com/ros2/common_interfaces/pull/153>`__ 找到更多信息。
 
 .. image:: images/triangle_marker_with_gradient.png
 
-Visualization of mass properties (including inertia)
-""""""""""""""""""""""""""""""""""""""""""""""""""""
+可视化质量属性（包括惯性）
+""""""""""""""""""""""""""
 
-We also added the ability to visualize inertias. To do this, you select enable 'Inertia' in the 'Mass Properties' under the robot model:
+我们还新增了可视化惯性的能力。为此，你需要在机器人模型下的 'Mass Properties' 中启用 'Inertia'：
 
 .. image:: images/rviz_mass_inertia.png
 
-You can see an image of an inertia below.
+你可以在下面看到惯性的图像。
 
 .. image:: images/tb4_inertia.png
 
-Visualize YUV images in RViz
-""""""""""""""""""""""""""""
+在 RViz 中可视化 YUV 图像
+"""""""""""""""""""""""""
 
-It is now possible to directly visualize YUV images inside of RViz, rather than having to convert to RGB first.
-See `ros2/rviz#701 <https://github.com/ros2/rviz/pull/701>`__ for details.
+现在可以直接在 RViz 中可视化 YUV 图像，而无需先转换为 RGB。
+详见 `ros2/rviz#701 <https://github.com/ros2/rviz/pull/701>`__。
 
-Allow rendering of objects > 100 meters
-"""""""""""""""""""""""""""""""""""""""
+允许渲染超过 100 米的物体
+"""""""""""""""""""""""""
 
-By default, RViz only renders objects that are within 100 meters of a camera.
-A new configuration property called "Far Plane Distance" in the rviz camera plugin allows that rendering distance to be configured.
+默认情况下，RViz 只渲染距相机 100 米以内的物体。
+rviz 相机插件中新增了一个名为 "Far Plane Distance" 的配置属性，可用于配置该渲染距离。
 
 .. image:: images/rviz2-far-plane-distance.png
 
-See `ros2/rviz#849 <https://github.com/ros2/rviz/pull/849>`__ for more information.
+有关更多信息，请参阅 `ros2/rviz#849 <https://github.com/ros2/rviz/pull/849>`__。
 
-Changes since the Galactic release
-----------------------------------
+自 Galactic 发行版以来的变更
+----------------------------
 
-C++ headers are installed in a subdirectory
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C++ 头文件安装到子目录中
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-In ROS 2 releases prior to Humble, C++ headers for all packages were installed into a single include directory.
-For instance, in Galactic, the directory structure looks like this (reduced for brevity):
+在 Humble 之前的 ROS 2 发行版中，所有软件包的 C++ 头文件都安装到同一个 include 目录中。
+例如，在 Galactic 中，目录结构如下所示（为简洁起见有所简略）：
 
 .. code::
 
@@ -578,11 +568,11 @@ For instance, in Galactic, the directory structure looks like this (reduced for 
     │   ├── node.hpp
 
 
-This structure can cause serious problems when trying to use overlays.
-That is, it is very possible to get the wrong set of header files due to include directory order.
-See https://colcon.readthedocs.io/en/released/user/overriding-packages.html for a detailed explanation of the problems.
+在使用 overlay 时，这种结构可能会导致严重问题。
+也就是说，由于 include 目录的顺序问题，很可能会获取到错误的头文件集。
+有关这些问题的详细说明，请参阅 https://colcon.readthedocs.io/en/released/user/overriding-packages.html。
 
-To help combat this, in Humble (and in all ROS 2 releases going forward), the directory structure has changed:
+为帮助解决这一问题，在 Humble（以及今后所有 ROS 2 发行版）中，目录结构已发生变化：
 
 .. code::
 
@@ -594,20 +584,20 @@ To help combat this, in Humble (and in all ROS 2 releases going forward), the di
     │   └── rclcpp
     │       ├── node.hpp
 
-Note that downstream packages that use these headers do *not* have to change; using ``#include <rclcpp/node.hpp>`` works as it always did before.
-However, when using IDEs that are looking for include directories, it may be necessary to add the individual include directories to the search path.
+请注意，使用这些头文件的下游软件包 *无需* 变更；使用 ``#include <rclcpp/node.hpp>`` 仍与以前一样有效。
+但是，在使用会查找 include 目录的 IDE 时，可能需要将各个 include 目录添加到搜索路径中。
 
-See https://github.com/ros2/ros2/issues/1150 for more information, including the reasoning behind this change.
+有关更多信息（包括该变更背后的原因），请参阅 https://github.com/ros2/ros2/issues/1150。
 
 common_interfaces
 ^^^^^^^^^^^^^^^^^
 
-Support Textures and Embedded Meshes for Marker Messages
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+为 Marker 消息支持纹理和内嵌网格
+""""""""""""""""""""""""""""""""
 
-These two additions will improve the ability to both visualize data in new ways with standard messages and, simultaneously, enable the ability to track this data in rosbag.
+这两项新增功能既增强了用标准消息以新方式可视化数据的能力，同时也使得能够在 rosbag 中跟踪这些数据。
 
-**Textures** bring the addition of three new fields to markers:
+**纹理** 为 marker 新增了三个字段：
 
 .. code-block:: bash
 
@@ -622,13 +612,13 @@ These two additions will improve the ability to both visualize data in new ways 
    # Location of each vertex within the texture; in the range: [0.0-1.0]
    UVCoordinate[] uv_coordinates
 
-RViz will fully support texture rendering through the embedded format.
+RViz 将完全支持通过内嵌格式进行纹理渲染。
 
-To those familiar with ``mesh_resource``, ``resource_retriever`` should be familiar.
-This will allow the programmer to choose where they want to load data from, either a local file or a networked file.
-In the interest of being able to record all data in a rosbag, the ability to embed the texture image is included.
+对熟悉 ``mesh_resource`` 的人来说，``resource_retriever`` 应该并不陌生。
+这将允许程序员选择数据加载的位置，既可以是本地文件，也可以是网络文件。
+为了能够将所有数据记录到 rosbag 中，还提供了内嵌纹理图像的能力。
 
-**Meshes** were modified in a similar way to add the ability to embed a raw Mesh file for the purpose of recording and are modified in a similar way. The Meshfile message has two fields:
+**网格** 也以类似方式进行了修改，新增了内嵌原始 Mesh 文件的能力以便记录。Meshfile 消息有两个字段：
 
 .. code-block:: bash
 
@@ -639,65 +629,65 @@ In the interest of being able to record all data in a rosbag, the ability to emb
    # This stores the raw text of the mesh file.
    uint8[] data
 
-The embedded ``Meshfile`` message is not yet supported in implementation.
+内嵌的 ``Meshfile`` 消息目前在实现中尚不支持。
 
-Related PRs: `ros2/common_interfaces#153 <https://github.com/ros2/common_interfaces/pull/153>`_ `ros2/rviz#719 <https://github.com/ros2/rviz/pull/719>`_
+相关 PR：`ros2/common_interfaces#153 <https://github.com/ros2/common_interfaces/pull/153>`_ `ros2/rviz#719 <https://github.com/ros2/rviz/pull/719>`_
 
-Added ``PRISM`` type to SolidPrimitive
-""""""""""""""""""""""""""""""""""""""
+为 SolidPrimitive 新增 ``PRISM`` 类型
+"""""""""""""""""""""""""""""""""""""
 
-The ``SolidPrimitive`` message had a new ``PRISM`` type added, along with the appropriate metadata.
-See `ros2/common_interfaces#167 <https://github.com/ros2/common_interfaces/pull/167>`_ for more information.
+``SolidPrimitive`` 消息新增了 ``PRISM`` 类型，以及相应的元数据。
+有关更多信息，请参阅 `ros2/common_interfaces#167 <https://github.com/ros2/common_interfaces/pull/167>`_。
 
 rmw
 ^^^
 
-``struct`` type name suffix changed from ``_t`` to ``_s``
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+``struct`` 类型名后缀从 ``_t`` 变更为 ``_s``
+""""""""""""""""""""""""""""""""""""""""""""
 
-To avoid type name duplication errors between ``struct`` type names and their ``typedef``-ed aliases when generating code documentation, the suffix for all ``struct`` type names has been changed from ``_t`` to ``_s``.
-Aliases with ``_t`` suffixes remain in place.
-Thus, this change is a breaking change only for code that uses full ``struct`` type specifiers i.e. ``struct type_name_t``.
+为避免在生成代码文档时 ``struct`` 类型名与其 ``typedef`` 别名之间出现类型名重复错误，所有 ``struct`` 类型名的后缀都已从 ``_t`` 变更为 ``_s``。
+带 ``_t`` 后缀的别名仍然保留。
+因此，该变更仅对使用完整 ``struct`` 类型说明符（即 ``struct type_name_t``）的代码而言是破坏性变更。
 
-See `ros2/rmw#313 <https://github.com/ros2/rmw/pull/313>`__ for more details.
+有关更多细节，请参阅 `ros2/rmw#313 <https://github.com/ros2/rmw/pull/313>`__。
 
 rmw_connextdds
 ^^^^^^^^^^^^^^
 
-Use Connext 6 by default
-""""""""""""""""""""""""
+默认使用 Connext 6
+""""""""""""""""""
 
-By default, Humble Hawksbill uses Connext 6.0.1 as the DDS implementation for ``rmw_connextdds``.
-It is still possible to use Connext 5.3.1 with ``rmw_connextdds``, but it must be rebuilt from source.
+默认情况下，Humble Hawksbill 使用 Connext 6.0.1 作为 ``rmw_connextdds`` 的 DDS 实现。
+仍然可以将 Connext 5.3.1 与 ``rmw_connextdds`` 一起使用，但必须从源码重新构建。
 
 rcl
 ^^^
 
-``struct`` type name suffix changed from ``_t`` to ``_s``
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+``struct`` 类型名后缀从 ``_t`` 变更为 ``_s``
+""""""""""""""""""""""""""""""""""""""""""""
 
-To avoid type name duplication errors between ``struct`` type names and their ``typedef``-ed aliases when generating code documentation, the suffix for all ``struct`` type names has been changed from ``_t`` to ``_s``.
-Aliases with ``_t`` suffixes remain in place.
-Thus, this change is a breaking change only for code that uses full ``struct`` type specifiers i.e. ``struct type_name_t``.
+为避免在生成代码文档时 ``struct`` 类型名与其 ``typedef`` 别名之间出现类型名重复错误，所有 ``struct`` 类型名的后缀都已从 ``_t`` 变更为 ``_s``。
+带 ``_t`` 后缀的别名仍然保留。
+因此，该变更仅对使用完整 ``struct`` 类型说明符（即 ``struct type_name_t``）的代码而言是破坏性变更。
 
-See `ros2/rcl#932 <https://github.com/ros2/rcl/pull/932>`__ for more details.
+有关更多细节，请参阅 `ros2/rcl#932 <https://github.com/ros2/rcl/pull/932>`__。
 
-ROS_DISABLE_LOANED_MESSAGES environment variable added
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
+新增 ROS_DISABLE_LOANED_MESSAGES 环境变量
+"""""""""""""""""""""""""""""""""""""""""
 
-This environment variable can be used to disable loaned messages support, independently if the rmw supports them or not.
-For more details, see the guide :doc:`Configure Zero Copy Loaned Messages <../How-To-Guides/Configure-ZeroCopy-loaned-messages>`.
+该环境变量可用于禁用 loaned messages 支持，无论该 rmw 是否支持它们。
+有关更多细节，请参阅指南 :doc:`配置零拷贝 loaned messages <../How-To-Guides/Configure-ZeroCopy-loaned-messages>`。
 
 rclcpp
 ^^^^^^
 
-Support Type Adaption for Publishers and Subscriptions
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
+为发布者和订阅支持类型适配
+""""""""""""""""""""""""""
 
-After defining a type adapter, custom data structures can be used directly by publishers and subscribers, which helps to avoid additional work for the programmer and potential sources of errors.
-This is especially useful when working with complex data types, such as when converting OpenCV's ``cv::Mat`` to ROS's ``sensor_msgs/msg/Image`` type.
+在定义了类型适配器之后，发布者和订阅者可以直接使用自定义数据结构，这有助于避免程序员额外的开发工作以及潜在的错误来源。
+这在处理复杂数据类型时特别有用，例如将 OpenCV 的 ``cv::Mat`` 转换为 ROS 的 ``sensor_msgs/msg/Image`` 类型。
 
-Here is an example of a type adapter that converts ``std_msgs::msg::String`` to ``std::string``:
+以下是一个将 ``std_msgs::msg::String`` 转换为 ``std::string`` 的类型适配器示例：
 
 .. code-block:: cpp
 
@@ -730,7 +720,7 @@ Here is an example of a type adapter that converts ``std_msgs::msg::String`` to 
      }
    };
 
-And an example of how the type adapter can be used:
+以下是使用该类型适配器的示例：
 
 .. code-block:: cpp
 
@@ -747,17 +737,17 @@ And an example of how the type adapter can be used:
      10,
      [](const std::string & msg) {...});
 
-To learn more, see the `publisher <https://github.com/ros2/examples/blob/b83b18598b198b4a5ba44f9266c1bb39a393fa17/rclcpp/topics/minimal_publisher/member_function_with_type_adapter.cpp>`_ and `subscription <https://github.com/ros2/examples/blob/b83b18598b198b4a5ba44f9266c1bb39a393fa17/rclcpp/topics/minimal_subscriber/member_function_with_type_adapter.cpp>`_ examples, as well as a more complex `demo <https://github.com/ros2/demos/pull/482>`_.
-For more details, see `REP 2007 <https://reps.openrobotics.org/rep-2007/>`_.
+要了解更多信息，请参阅 `publisher <https://github.com/ros2/examples/blob/b83b18598b198b4a5ba44f9266c1bb39a393fa17/rclcpp/topics/minimal_publisher/member_function_with_type_adapter.cpp>`_ 和 `subscription <https://github.com/ros2/examples/blob/b83b18598b198b4a5ba44f9266c1bb39a393fa17/rclcpp/topics/minimal_subscriber/member_function_with_type_adapter.cpp>`_ 示例，以及更复杂的 `demo <https://github.com/ros2/demos/pull/482>`_。
+有关更多细节，请参阅 `REP 2007 <https://reps.openrobotics.org/rep-2007/>`_。
 
-``Client::asnyc_send_request(request)`` returns a ``std::future`` instead of a ``std::shared_future``
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+``Client::asnyc_send_request(request)`` 返回 ``std::future`` 而非 ``std::shared_future``
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-This change was implemented in `rclcpp#1734 <https://github.com/ros2/rclcpp/pull/1734>`_.
-This breaks API, as ``std::future::get()`` methods extracts the value from the future.
-That means, if that method is called for a second time it will throw an exception.
-That doesn't happen with a ``std::shared_future``, as its ``get()`` method returns a ``const &``.
-Example:
+该变更在 `rclcpp#1734 <https://github.com/ros2/rclcpp/pull/1734>`_ 中实现。
+这会破坏 API，因为 ``std::future::get()`` 方法会从 future 中取出值。
+这意味着，如果该方法被第二次调用，就会抛出异常。
+而 ``std::shared_future`` 不会出现这种情况，因为其 ``get()`` 方法返回 ``const &``。
+示例：
 
 .. code-block:: cpp
 
@@ -767,7 +757,7 @@ Example:
     ...
     do_something_else_with_response(future.get());  // this will throw an exception now!!
 
-should be updated to:
+应修改为：
 
 .. code-block:: cpp
 
@@ -778,14 +768,14 @@ should be updated to:
     ...
     do_something_else_with_response(response);
 
-If a shared future is needed, the ``std::future::share()`` method can be used.
+如果需要 shared future，可以使用 ``std::future::share()`` 方法。
 
-``wait_for_all_acked`` method added to ``Publisher``
-""""""""""""""""""""""""""""""""""""""""""""""""""""
+为 ``Publisher`` 新增 ``wait_for_all_acked`` 方法
+"""""""""""""""""""""""""""""""""""""""""""""""""
 
-This new method will block until all messages in the publisher queue are acked by the matching subscriptions or the specified timeout expires.
-It is only useful for reliable publishers, as in the case of best effort QoS there's no acking.
-Examples:
+该新方法会阻塞，直到发布者队列中的所有消息都被匹配的订阅确认（acked），或者指定的超时时间到期。
+它只对可靠（reliable）发布者有用，因为在 best effort QoS 的情况下不存在确认机制。
+示例：
 
 .. code-block:: cpp
 
@@ -795,327 +785,327 @@ Examples:
     ...
     pub->wait_for_all_acked(); // or pub->wait_for_all_acked(timeout)
 
-For a more complete example, see `here <https://github.com/ros2/examples/blob/humble/rclcpp/topics/minimal_publisher/member_function_with_wait_for_all_acked.cpp>`__.
+如需更完整的示例，请参阅 `此处 <https://github.com/ros2/examples/blob/humble/rclcpp/topics/minimal_publisher/member_function_with_wait_for_all_acked.cpp>`__。
 
-``get_callback_groups`` method removed from ``NodeBase`` and ``Node`` classes
+从 ``NodeBase`` 和 ``Node`` 类中移除 ``get_callback_groups`` 方法
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+``for_each_callback_group()`` 方法通过提供一种线程安全的方式来访问 ``callback_groups_`` 向量，取代了 ``get_callback_groups()``。
+``for_each_callback_group()`` 接受一个函数作为参数，遍历存储的 callback group，并对其中有效的那些调用传入的函数。
+
+有关更多细节，请参阅这个 `pull request <https://github.com/ros2/rclcpp/pull/1723>`_。
+
+``Waitable`` 类的 ``add_to_wait_set`` 方法返回类型从 ``bool`` 变更为 ``void``
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+以前，从 ``Waitable`` 派生并重写 ``add_to_wait_set`` 的类在向 wait set 添加元素失败时会返回 false，因此调用方必须检查这个返回值并抛出或处理错误。
+现在这种错误处理应该直接在 ``add_to_wait_set`` 方法中完成，必要时抛出异常。
+如果没有错误发生，则不需要返回任何内容。
+因此，这对 ``Waitable`` 的下游使用而言是破坏性变更。
 
-``for_each_callback_group()`` method has replaced ``get_callback_groups()`` by providing a thread-safe way to access ``callback_groups_`` vector.
-``for_each_callback_group()`` accepts a function as an argument, iterates over the stored callback groups, and calls the passed function to ones that are valid.
+有关更多细节，请参阅 `ros2/rclcpp#1612 <https://github.com/ros2/rclcpp/pull/1612>`__。
 
-For more details, please refer to this `pull request <https://github.com/ros2/rclcpp/pull/1723>`_.
+``NodeBaseInterface`` 类的 ``get_notify_guard_condition`` 方法返回类型发生变更
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+现在 ``rclcpp`` 使用围绕 ``rcl_guard_condition_t`` 的 ``GuardCondition`` 类封装，因此 ``get_notify_guard_condition`` 返回对节点的 ``rclcpp::GuardCondition`` 的引用。
+因此，这对 ``NodeBaseInterface`` 和 ``NodeBase`` 的下游使用而言是破坏性变更。
 
-``add_to_wait_set`` method from ``Waitable`` class changes its return type from ``bool`` to ``void``
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Before, classes derived from ``Waitable`` overriding ``add_to_wait_set`` were returning false when failing to add elements to the wait set, so the caller had to check this return value and throw or handle the error.
-This error handling should now be done directly on ``add_to_wait_set`` method, throwing if necessary.
-It is not required to return anything if no errors happened.
-Thus, this is a breaking change for downstream uses of ``Waitable``.
+有关更多细节，请参阅 `ros2/rclcpp#1612 <https://github.com/ros2/rclcpp/pull/1612>`__。
 
-See `ros2/rclcpp#1612 <https://github.com/ros2/rclcpp/pull/1612>`__ for more details.
-
-``get_notify_guard_condition`` method return type from ``NodeBaseInterface`` class changed
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Now ``rclcpp`` uses the ``GuardCondition`` class wrapper around ``rcl_guard_condition_t``, so ``get_notify_guard_condition`` returns a reference to the node's ``rclcpp::GuardCondition``.
-Thus, this is a breaking change for downstream uses of ``NodeBaseInterface`` and ``NodeBase``.
-
-See `ros2/rclcpp#1612 <https://github.com/ros2/rclcpp/pull/1612>`__ for more details.
-
-``sleep_until`` and ``sleep_for`` methods added to ``Clock``
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Two new methods were added to allow sleeping on a particular clock in `ros2/rclcpp#1814 <https://github.com/ros2/rclcpp/pull/1814>`__ and `ros2/rclcpp#1828 <https://github.com/ros2/rclcpp/pull/1828>`__.
-``Clock::sleep_until`` will suspend the current thread until the clock reaches a particular time.
-``Clock::sleep_for`` will suspend the current thread until the clock advances a certain amount of time from when the method was called.
-Both methods will wake early if the ``Context`` is shutdown.
+为 ``Clock`` 新增 ``sleep_until`` 和 ``sleep_for`` 方法
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+在 `ros2/rclcpp#1814 <https://github.com/ros2/rclcpp/pull/1814>`__ 和 `ros2/rclcpp#1828 <https://github.com/ros2/rclcpp/pull/1828>`__ 中新增了两个方法，用于在特定时钟上睡眠。
+``Clock::sleep_until`` 会将当前线程挂起，直到该时钟达到特定时间。
+``Clock::sleep_for`` 会将当前线程挂起，直到该时钟从方法被调用时起推进了一定的时长。
+如果 ``Context`` 被关闭，这两个方法都会提前唤醒。
 
 rclcpp_lifecycle
 ^^^^^^^^^^^^^^^^
 
-Active and deactivate transitions of publishers will be triggered automatically
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+发布者的激活与停用转换将自动触发
+""""""""""""""""""""""""""""""""
 
-Before, users needed to override ``LifecylceNode::on_activate()`` and ``LifecylceNode::on_deactivate()`` and call the similarly named methods on ``LifecyclePublisher`` to make the transition actually happen.
-Now, ``LifecylceNode`` provides a default interface of these methods that already do this.
-See the implementation of the ``lifecycle_talker`` node `here <https://github.com/ros2/demos/tree/humble/lifecycle>`__.
+以前，用户需要重写 ``LifecylceNode::on_activate()`` 和 ``LifecylceNode::on_deactivate()``，并在 ``LifecyclePublisher`` 上调用同名方法，才能真正触发转换。
+现在，``LifecylceNode`` 为这些方法提供了默认实现，已经会自动完成这一工作。
+有关 ``lifecycle_talker`` 节点的实现，请参阅 `此处 <https://github.com/ros2/demos/tree/humble/lifecycle>`__。
 
 rclpy
 ^^^^^
 
-Managed nodes
-"""""""""""""
+托管节点
+""""""""
 
-Lifecycle nodes support was added to rclpy.
-A complete demo can be found `here <https://github.com/ros2/demos/tree/humble/lifecycle_py>`__.
+rclpy 中新增了对生命周期节点的支持。
+完整示例可在 `此处 <https://github.com/ros2/demos/tree/humble/lifecycle_py>`__ 找到。
 
-``wait_for_all_acked`` method added to ``Publisher``
-""""""""""""""""""""""""""""""""""""""""""""""""""""
+为 ``Publisher`` 新增 ``wait_for_all_acked`` 方法
+"""""""""""""""""""""""""""""""""""""""""""""""""
 
-Similar to the feature added to rclcpp.
+与 rclcpp 中新增的特性类似。
 
-``sleep_until`` and ``sleep_for`` methods added to ``Clock``
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Two new methods were added to allow sleeping on a particular clock in `ros2/rclpy#858 <https://github.com/ros2/rclpy/pull/858>`__ and `ros2/rclpy#864 <https://github.com/ros2/rclpy/pull/864>`__.
-``sleep_until`` will suspend the current thread until the clock reaches a particular time.
-``sleep_for`` will suspend the current thread until the clock advances a certain amount of time from when the method was called.
-Both methods will wake early if the ``Context`` is shutdown.
+为 ``Clock`` 新增 ``sleep_until`` 和 ``sleep_for`` 方法
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+在 `ros2/rclpy#858 <https://github.com/ros2/rclpy/pull/858>`__ 和 `ros2/rclpy#864 <https://github.com/ros2/rclpy/pull/864>`__ 中新增了两个方法，用于在特定时钟上睡眠。
+``sleep_until`` 会将当前线程挂起，直到该时钟达到特定时间。
+``sleep_for`` 会将当前线程挂起，直到该时钟从方法被调用时起推进了一定的时长。
+如果 ``Context`` 被关闭，这两个方法都会提前唤醒。
 
 ros1_bridge
 ^^^^^^^^^^^
 
-Since there is no official ROS 1 distribution on Ubuntu Jammy and forward, ``ros1_bridge`` is now compatible with the Ubuntu-packaged versions of ROS 1.
-More details about using ``ros1_bridge`` with Jammy packages are available in :doc:`the how-to guides <../How-To-Guides/Using-ros1_bridge-Jammy-upstream>`.
+由于在 Ubuntu Jammy 及更高版本上没有官方的 ROS 1 发行版，``ros1_bridge`` 现在可以与 Ubuntu 打包版本的 ROS 1 兼容。
+有关在 Jammy 软件包中使用 ``ros1_bridge`` 的更多细节，请参阅 :doc:`操作指南 <../How-To-Guides/Using-ros1_bridge-Jammy-upstream>`。
 
 ros2cli
 ^^^^^^^
 
-``ros2`` commands disable output buffering by default
-"""""""""""""""""""""""""""""""""""""""""""""""""""""
+``ros2`` 命令默认禁用输出缓冲
+"""""""""""""""""""""""""""""
 
-Prior to this release, running a command like
+在此发行版之前，运行类似如下的命令
 
 .. code-block::
 
   ros2 echo /chatter | grep "Hello"
 
-would not print any data until the output buffer was full.
-Users could work around this by setting ``PYTHONUNBUFFERED=1``, but that was not very user friendly.
+在输出缓冲区满之前不会打印任何数据。
+用户可以通过设置 ``PYTHONUNBUFFERED=1`` 来绕过这个问题，但这并不十分友好。
 
-Instead, all ``ros2`` commands now do line-buffering by default, so commands like the above work as soon as a newline is printed.
-To disable this behavior and use default python buffering rules, use the option ``--use-python-default-buffering``.
-See the `original issue <https://github.com/ros2/ros2cli/issues/595>`__ and the `pull request <https://github.com/ros2/ros2cli/pull/659>`__ for more information.
+取而代之，所有 ``ros2`` 命令现在默认采用行缓冲，因此上述命令在打印出换行符时就会立即生效。
+要禁用该行为并使用 Python 默认的缓冲规则，请使用选项 ``--use-python-default-buffering``。
+有关更多信息，请参阅 `原始 issue <https://github.com/ros2/ros2cli/issues/595>`__ 和 `pull request <https://github.com/ros2/ros2cli/pull/659>`__。
 
-``ros2 topic pub`` will wait for one matching subscription when using ``--times/--once/-1``
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+使用 ``--times/--once/-1`` 时，``ros2 topic pub`` 会等待一个匹配的订阅
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-When using ``--times/--once/-1`` flags, ``ros2 topic pub`` will wait for one matching subscription to be found before starting to publish.
-This avoids the issue of the ros2cli node starting to publish before discovering a matching subscription, which results in some of the first messages being lost.
-This is particularly unexpected when using a reliable qos profile.
+在使用 ``--times/--once/-1`` 标志时，``ros2 topic pub`` 会在开始发布之前等待发现一个匹配的订阅。
+这避免了 ros2cli 节点在发现匹配订阅之前就开始发布、从而导致最初的部分消息丢失的问题。
+在使用可靠（reliable）QoS 配置时，这一点尤其出乎意料。
 
-The number of matching subscriptions to wait before starting publishing can be configured with the ``-w/--wait-matching-subscriptions`` flags, e.g.:
+可以使用 ``-w/--wait-matching-subscriptions`` 标志配置开始发布前需要等待的匹配订阅数量，例如：
 
 .. code-block:: console
 
    $ ros2 topic pub -1 -w 3 /chatter std_msgs/msg/String "{data: 'foo'}"
 
-to wait for three matching subscriptions before starting to publish.
+以在开始发布前等待三个匹配的订阅。
 
-``-w`` can also be used independently of ``--times/--once/-1`` but it only defaults to one when combined with them, otherwise the ``-w`` default is zero.
+``-w`` 也可以独立于 ``--times/--once/-1`` 使用，但只有在与它们结合使用时其默认值才为 1，否则 ``-w`` 的默认值为零。
 
-See https://github.com/ros2/ros2cli/pull/642 for more details.
+有关更多细节，请参阅 https://github.com/ros2/ros2cli/pull/642。
 
-``ros2 param dump`` default output changed
-""""""""""""""""""""""""""""""""""""""""""
+``ros2 param dump`` 默认输出发生变更
+""""""""""""""""""""""""""""""""""""
 
-  * ``--print`` option for dump command was `deprecated <https://github.com/ros2/ros2cli/pull/638>`_.
+  * dump 命令的 ``--print`` 选项已被 `废弃 <https://github.com/ros2/ros2cli/pull/638>`_。
 
-    It prints to stdout by default:
+    默认情况下，它会输出到 stdout：
 
     .. code-block:: console
 
       $ ros2 param dump /my_node_name
 
-  * ``--output-dir`` option for dump command was `deprecated <https://github.com/ros2/ros2cli/pull/638>`_.
+  * dump 命令的 ``--output-dir`` 选项已被 `废弃 <https://github.com/ros2/ros2cli/pull/638>`_。
 
-    To dump parameters to a file, run:
+    要将参数转储到文件，请运行：
 
     .. code-block:: console
 
       $ ros2 param dump /my_node_name > my_node_name.yaml
 
-``ros2 param set`` now accepts more YAML syntax
-"""""""""""""""""""""""""""""""""""""""""""""""
+``ros2 param set`` 现在接受更多 YAML 语法
+"""""""""""""""""""""""""""""""""""""""""
 
-Previously, attempting to set a string like "off" to a parameter that was of string type did not work.
-That's because ``ros2 param set`` interprets the command-line arguments as YAML, and YAML considers "off" to be a boolean type.
-As of https://github.com/ros2/ros2cli/pull/684 , ``ros2 param set`` now accepts the YAML escape sequence of "!!str off" to ensure that the value is considered a string.
+以前，尝试向字符串类型的参数设置像 "off" 这样的字符串是无法生效的。
+这是因为 ``ros2 param set`` 会将命令行参数解释为 YAML，而 YAML 认为 "off" 是布尔类型。
+自 https://github.com/ros2/ros2cli/pull/684 起，``ros2 param set`` 现在接受 YAML 转义序列 "!!str off"，以确保该值被当作字符串处理。
 
-``ros2 pkg create`` can automatically generate a LICENSE file
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+``ros2 pkg create`` 可自动生成 LICENSE 文件
+"""""""""""""""""""""""""""""""""""""""""""
 
-If the ``--license`` flag is passed to ``ros2 pkg create``, and the license is one of the known licenses, ``ros2 pkg create`` will now automatically generate a LICENSE file in the root of the package.
-For a list of known licenses, run ``ros2 pkg create --license ? <package_name>``.
-See the associated `pull request <https://github.com/ros2/ros2cli/pull/650>`__ for more information.
+如果将 ``--license`` 标志传给 ``ros2 pkg create``，且该许可证属于已知许可证之一，``ros2 pkg create`` 现在会自动在包的根目录下生成 LICENSE 文件。
+要查看已知许可证列表，请运行 ``ros2 pkg create --license ? <package_name>``。
+有关更多信息，请参阅相关的 `pull request <https://github.com/ros2/ros2cli/pull/650>`__。
 
 robot_state_publisher
 ^^^^^^^^^^^^^^^^^^^^^
 
-Added ``frame_prefix`` parameter
-""""""""""""""""""""""""""""""""
-A new parameter ``frame_prefix`` was added in `ros/robot_state_publisher#159 <https://github.com/ros/robot_state_publisher/pull/159>`__.
-This parameter is a string which is prepended to all frame names published by ``robot_state_publisher``.
-Similar to ``tf_prefix`` in the original ``tf`` library in ROS 1, this parameter can be used to publish the same robot description multiple times with different frame names.
+新增 ``frame_prefix`` 参数
+""""""""""""""""""""""""""
+在 `ros/robot_state_publisher#159 <https://github.com/ros/robot_state_publisher/pull/159>`__ 中新增了参数 ``frame_prefix``。
+该参数是一个字符串，会被添加到 ``robot_state_publisher`` 发布的所有坐标系名称之前。
+与 ROS 1 中原始 ``tf`` 库里的 ``tf_prefix`` 类似，该参数可用于以不同的坐标系名称多次发布同一个机器人描述。
 
-Removal of deprecated ``use_tf_static`` parameter
-"""""""""""""""""""""""""""""""""""""""""""""""""
+移除已废弃的 ``use_tf_static`` 参数
+"""""""""""""""""""""""""""""""""""
 
-The deprecated ``use_tf_static`` parameter has been removed from ``robot_state_publisher``.
-This means that static transforms are unconditionally published to the ``/tf_static`` topic, and that the static transforms are published in a ``transient_local`` Quality of Service.
-This was the default behavior, and the behavior which the ``tf2_ros::TransformListener`` class expected before, so most code will not have to be changed.
-Any code that was relying on ``robot_state_publisher`` to periodically publish static transforms to ``/tf`` will have to be updated to subscribe to ``/tf_static`` as a ``transient_local`` subscription instead.
+已从 ``robot_state_publisher`` 中移除废弃的 ``use_tf_static`` 参数。
+这意味着静态变换会无条件地发布到 ``/tf_static`` 话题，并且静态变换会以 ``transient_local`` 服务质量发布。
+这本来就是默认行为，也正是 ``tf2_ros::TransformListener`` 类之前所期望的行为，因此大多数代码无需修改。
+任何依赖 ``robot_state_publisher`` 周期性将静态变换发布到 ``/tf`` 的代码，都必须改为以 ``transient_local`` 订阅的方式订阅 ``/tf_static``。
 
 
 rosidl_cmake
 ^^^^^^^^^^^^
 
-Deprecation of ``rosidl_target_interfaces()``
-"""""""""""""""""""""""""""""""""""""""""""""
+废弃 ``rosidl_target_interfaces()``
+"""""""""""""""""""""""""""""""""""
 
-The CMake function ``rosidl_target_interfaces()`` has been deprecated, and now issues a CMake warning when called.
-Users wanting to use messages/services/actions in the same ROS package that generated them should instead call ``rosidl_get_typesupport_target()`` and then ``target_link_libraries()`` to make their targets depend on the returned typesupport target.
-See https://github.com/ros2/rosidl/pull/606 for more details, and https://github.com/ros2/demos/pull/529 for an example of using the new function.
+CMake 函数 ``rosidl_target_interfaces()`` 已被废弃，现在调用时会发出 CMake 警告。
+如果希望在使用生成消息/服务/动作的同一个 ROS 包中使用它们，应改为调用 ``rosidl_get_typesupport_target()``，然后调用 ``target_link_libraries()``，使目标依赖于返回的 typesupport 目标。
+有关更多细节，请参阅 https://github.com/ros2/rosidl/pull/606，使用新函数的示例请参阅 https://github.com/ros2/demos/pull/529。
 
 
 rviz2
 ^^^^^
 
-* `improved the efficiency of 3-bytes pixel formats <https://github.com/ros2/rviz/pull/743>`__
-* `changed the way inertias are computed to use ignition math rather than Ogre's math libraries <https://github.com/ros2/rviz/pull/751>`__.
+* `提高了 3 字节像素格式的效率 <https://github.com/ros2/rviz/pull/743>`__
+* `将惯量（inertia）的计算方式改为使用 ignition math，而不再使用 Ogre 的数学库 <https://github.com/ros2/rviz/pull/751>`__。
 
 
 geometry2
 ^^^^^^^^^
 
-Deprecation of TF2Error::NO_ERROR, etc
+废弃 TF2Error::NO_ERROR 等
+""""""""""""""""""""""""""
+
+``tf2`` 库使用名为 ``TF2Error`` 的枚举来返回错误。
+遗憾的是，其中的一个枚举值名为 ``NO_ERROR``，它会与 Windows 上的宏冲突。
+为解决该问题，``TF2Error`` 中新增了一组枚举值，每个都带有 ``TF2`` 前缀。
+原有的枚举值仍然可用，但已被废弃，使用时会产生废弃警告。
+所有使用 ``TF2Error`` 枚举值的代码都应更新为使用新的带 ``TF2`` 前缀的错误。
+有关更多细节，请参阅 https://github.com/ros2/geometry2/pull/349。
+
+static_transform_publisher 更直观的命令行参数
+"""""""""""""""""""""""""""""""""""""""""""""
+
+``static_transform_publisher`` 程序过去接收这样的参数：``ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 1 foo bar``。
+前三个数字是平移量 x、y、z，接下来四个是四元数 x、y、z、w，最后两个参数是父坐标系和子坐标系 ID。
+虽然这样可以工作，但存在两个问题：
+
+* 用户必须指定 *所有* 参数，即使只是设置一个数值
+* 阅读命令行很难判断它正在发布什么
+
+为同时解决这两个问题，命令行处理方式已改为使用标志，并且除 ``--frame-id`` 和 ``--child-frame-id`` 之外的所有标志都是可选的。
+因此，上面的命令可以简化为：``ros2 run tf2_ros static_transform_publisher --frame-id foo --child-frame-id bar``
+如果只想修改平移量 x，命令可以是：``ros2 run tf2_ros static_transform_publisher --x 1.5 --frame-id foo --child-frame-id bar``。
+
+在本发行版中仍然允许使用旧式参数，但它们已被废弃，并会打印警告。
+它们将在未来的发行版中被移除。
+有关更多细节，请参阅 https://github.com/ros2/geometry2/pull/392。
+
+变换监听器的 spin 线程不再执行节点回调
 """"""""""""""""""""""""""""""""""""""
 
-The ``tf2`` library uses an enumeration called ``TF2Error`` to return errors.
-Unfortunately, one of the enumerators in there is called ``NO_ERROR``, which conflicts with a macro on Windows.
-To remedy this, a new set of enumerators in ``TF2Error`` were created, each with a ``TF2`` prefix.
-The previous enumerators are still available, but are now deprecated and will print a deprecation warning if used.
-All code that uses the ``TF2Error`` enumerator should be updated to use the new ``TF2`` prefixed errors.
-See https://github.com/ros2/geometry2/pull/349 for more details.
+``tf2_ros::TransformListener`` 不再对传入的节点对象执行 spin。
+取而代之，它会创建一个回调组，以便对其内部创建的实体执行回调。
+这意味着，如果你在创建变换监听器时设置了参数 ``spin_thread=true``，就
+不能再依赖自己的回调被执行。
+你必须在节点上调用 ``spin`` 函数（例如 ``rclcpp::spin``），或者把节点添加到自己的执行器中。
 
-More intuitive command-line arguments for static_transform_publisher
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-The ``static_transform_publisher`` program used to take arguments like: ``ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 1 foo bar``.
-The first three numbers are the translation x, y, and z, the next 4 are the quaternion x, y, z, and w, and the last two arguments are the parent and child frame IDs.
-While this worked, it had a couple of problems:
-
-* The user had to specify *all* of the arguments, even if only setting one number
-* Reading the command-line to figure out what it was publishing was tricky
-
-To fix both of these issues, the command-line handling has been changed to use flags instead, and all flags except for ``--frame-id`` and ``--child-frame-id`` are optional.
-Thus, the above command-line can be simplified to: ``ros2 run tf2_ros static_transform_publisher --frame-id foo --child-frame-id bar``
-To change just the translation x, the command-line would be: ``ros2 run tf2_ros static_transform_publisher --x 1.5 --frame-id foo --child-frame-id bar``.
-
-The old-style arguments are still allowed in this release, but are deprecated and will print a warning.
-They will be removed in future releases.
-See https://github.com/ros2/geometry2/pull/392 for more details.
-
-Transform listener spin thread no longer executes node callbacks
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-``tf2_ros::TransformListener`` no longer spins on the provided node object.
-Instead, it creates a callback group to execute callbacks on the entities it creates internally.
-This means if you have set the parameter ``spin_thread=true`` when creating a transform listener, you
-can no longer depend on your own callbacks to be executed.
-You must call a ``spin`` function on your node (e.g. ``rclcpp::spin``), or add your node to your own executor.
-
-Related pull request: `geometry2#442 <https://github.com/ros2/geometry2/pull/442>`_
+相关 pull request：`geometry2#442 <https://github.com/ros2/geometry2/pull/442>`_
 
 rosbag2
 ^^^^^^^
 
-New playback and recording controls
-"""""""""""""""""""""""""""""""""""
-
-Several pull requests have been added to enhance the user's control over playback of bags.
-Pull request `931 <https://github.com/ros2/rosbag2/pull/931>`_ adds the ability to specify a time stamp to begin playing from.
-Due to pull request `789 <https://github.com/ros2/rosbag2/pull/789>`_ it is now possible to delay the start of playback by a specified interval.
-
-Relatedly, ``rosbag2`` has gained new ways for users to control playback as it is happening.
-Pull request `847 <https://github.com/ros2/rosbag2/pull/847>`_ adds keyboard controls for pausing, resuming, and playing the next message during playback from a terminal.
-It is also possible to start playback paused thanks to pull requests `905 <https://github.com/ros2/rosbag2/pull/905>`_ and `904 <https://github.com/ros2/rosbag2/pull/904>`_, which makes it easy for the user to initiate playback and then step through messages, such as when debugging a pipeline.
-Pull request `836 <https://github.com/ros2/rosbag2/pull/836>`_ adds an interface for seeking within bags, allowing the user to move around within a bag during playback.
-
-Finally, a new snapshot mode has been added to recording in pull request `851 <https://github.com/ros2/rosbag2/pull/851>`_.
-This mode, useful for incident recording, allows recording to begin filling up buffers, but not begin writing data to disc until a service is called.
-
-Burst-mode playback
-"""""""""""""""""""
-
-While the playback of data from a bag in real-time is the most well-known use case for bag files, there are situations where you want the data in the bag as fast as possible.
-With pull request `977 <https://github.com/ros2/rosbag2/pull/977>`_, ``rosbag2`` has gained the ability to "burst" data from the bag.
-In burst mode, the data is played back as fast as possible.
-This is useful in applications such as machine learning.
-
-Zero-Copy playback
+新的回放与录制控制
 """"""""""""""""""
 
-By default, if loaned message can be used, playback messages are published as loaned message.
-This can help to reduce the number of data copies, so there is a greater benefit for sending big data.
-Pull request `981 <https://github.com/ros2/rosbag2/pull/981>`_ adds ``--disable-loan-message`` option for playback.
+新增了多个 pull request，以增强用户对包回放的控制能力。
+Pull request `931 <https://github.com/ros2/rosbag2/pull/931>`_ 增加了指定开始回放时间戳的能力。
+得益于 pull request `789 <https://github.com/ros2/rosbag2/pull/789>`_，现在可以按指定时长延迟回放的开始。
 
-Wait for an acknowledgment
-""""""""""""""""""""""""""
+与此相关，``rosbag2`` 还为用户提供了在回放过程中控制回放的新方式。
+Pull request `847 <https://github.com/ros2/rosbag2/pull/847>`_ 增加了在终端回放期间暂停、恢复和播放下一消息的键盘控制。
+得益于 pull request `905 <https://github.com/ros2/rosbag2/pull/905>`_ 和 `904 <https://github.com/ros2/rosbag2/pull/904>`_，还可以以暂停状态开始回放，这便于用户先启动回放再逐条查看消息，例如在调试数据流水线时。
+Pull request `836 <https://github.com/ros2/rosbag2/pull/836>`_ 增加了在包内跳转的接口，允许用户在回放期间在包内任意移动。
 
-This new option will wait until all published messages are acknowledged by all subscribers or until the timeout elapses in millisecond before play is terminated.
-Especially for the case of sending message with big size in a short time.
-This option is valid only if the publisher's QOS profile is RELIABLE.
-Pull request `951 <https://github.com/ros2/rosbag2/pull/951>`_ adds ``--wait-for-all-acked`` option for playback.
+最后，pull request `851 <https://github.com/ros2/rosbag2/pull/851>`_ 为录制新增了快照模式。
+该模式适用于事件记录场景，它允许录制先开始填充缓冲区，但在服务被调用之前不会开始将数据写入磁盘。
 
-Bag editing
-"""""""""""
+突发模式回放
+""""""""""""
 
-``rosbag2`` is taking steps towards enabling the editing of bags, such as removing all messages for one topic or merging multiple bags into a single bag.
-Pull request `921 <https://github.com/ros2/rosbag2/pull/921>`_ adds bag rewriting and the ``ros2 bag convert`` verb.
+虽然从包中实时回放数据是包文件最常见的用途，但在某些情况下你可能希望尽快获取包中的数据。
+通过 pull request `977 <https://github.com/ros2/rosbag2/pull/977>`_，``rosbag2`` 获得了从包中“突发”（burst）输出数据的能力。
+在突发模式下，数据会以尽可能快的速度回放。
+这在机器学习等应用中很有用。
 
-Other changes
-"""""""""""""
+零拷贝回放
+""""""""""
 
-Pull request `925 <https://github.com/ros2/rosbag2/pull/925>`_ makes ``rosbag2`` ignore "leaf topics" (topics without a publisher) when recording.
-These topics will no longer be automatically added to the bag.
+默认情况下，如果可以使用租借消息（loaned message），回放的消息会以租借消息的形式发布。
+这有助于减少数据拷贝次数，因此对发送大数据尤其有益。
+Pull request `981 <https://github.com/ros2/rosbag2/pull/981>`_ 为回放新增了 ``--disable-loan-message`` 选项。
 
-Known Issues
-------------
+等待确认
+""""""""
 
-* When `installing ROS 2 on an Ubuntu 22.04 Jammy host <../../humble/Installation/Ubuntu-Install-Debians.html>`__ it is important to update your system before installing ROS 2 packages.
-  It is *particularly* important to make sure that ``systemd`` and ``udev`` are updated to the latest available version otherwise installing ``ros-humble-desktop``, which depends on ``libudev1``, could cause the removal of system critical packages.
-  Details can be found in `ros2/ros2#1272 <https://github.com/ros2/ros2/issues/1272>`_ and `Launchpad #1974196 <https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/1974196>`_
+该新选项会一直等待，直到所有已发布的消息都被所有订阅者确认，或者在回放终止前以毫秒为单位的超时时间到期。
+尤其适用于在短时间内发送大尺寸消息的场景。
+该选项仅在发布者的 QOS 配置为 RELIABLE 时有效。
+Pull request `951 <https://github.com/ros2/rosbag2/pull/951>`_ 为回放新增了 ``--wait-for-all-acked`` 选项。
 
-* When ROS 2 apt repositories are available, ROS 1 packages in Ubuntu are not installable.  See the :doc:`ros1_bridge on Ubuntu Jammy <../How-To-Guides/Using-ros1_bridge-Jammy-upstream>` document for more information.
+包编辑
+""""""
 
-* Some major Linux distributions have started patching Python to install packages to ``/usr/local``, which is breaking some parts of ``ament_package`` and builds with ``colcon``.
-  In particular, using Ubuntu Jammy with ``setuptools`` installed from pip will manifest this misbehavior, and is therefore not recommended.
-  There is currently a `proposed solution <https://github.com/colcon/colcon-core/pull/512>`_ which requires further testing before widespread release.
+``rosbag2`` 正在逐步支持包的编辑操作，例如删除某个话题的所有消息，或者将多个包合并为一个包。
+Pull request `921 <https://github.com/ros2/rosbag2/pull/921>`_ 增加了包重写功能以及 ``ros2 bag convert`` 子命令。
 
-* ROS 2 bags that are split by size or duration are not played correctly.
-  Only the last bag recorded is played.
-  It is recommended to avoid splitting bags by size or duration.
-  Details can be found in `ros2/rosbag2#966 <https://github.com/ros2/rosbag2/issues/966>`__.
+其他变更
+""""""""
 
-Release Timeline
-----------------
+Pull request `925 <https://github.com/ros2/rosbag2/pull/925>`_ 使 ``rosbag2`` 在录制时忽略“叶子话题”（没有发布者的话题）。
+这些话题将不再被自动添加到包中。
 
-    Mon. March 21, 2022 - Alpha + RMW freeze
-        Preliminary testing and stabilization of ROS Base [1]_ packages, and API and feature freeze for RMW provider packages.
+已知问题
+--------
 
-    Mon. April 4, 2022 - Freeze
-        API and feature freeze for ROS Base [1]_ packages in Rolling Ridley.
-        Only bug fix releases should be made after this point.
-        New packages can be released independently.
+* 在 `Ubuntu 22.04 Jammy 主机上安装 ROS 2 <../../humble/Installation/Ubuntu-Install-Debians.html>`__ 时，请务必在安装 ROS 2 软件包之前更新系统。
+  特别要确保 ``systemd`` 和 ``udev`` 已更新到可用的最新版本，否则安装依赖 ``libudev1`` 的 ``ros-humble-desktop`` 时可能会导致系统关键软件包被移除。
+  详细信息请参见 `ros2/ros2#1272 <https://github.com/ros2/ros2/issues/1272>`_ 和 `Launchpad #1974196 <https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/1974196>`_
 
-    Mon. April 18, 2022 - Branch
-        Branch from Rolling Ridley.
-        ``rosdistro`` is reopened for Rolling PRs for ROS Base [1]_ packages.
-        Humble development shifts from ``ros-rolling-*`` packages to ``ros-humble-*`` packages.
+* 当 ROS 2 的 apt 仓库可用时，Ubuntu 中的 ROS 1 软件包将无法安装。有关更多信息，请参阅 :doc:`Ubuntu Jammy 上的 ros1_bridge <../How-To-Guides/Using-ros1_bridge-Jammy-upstream>` 文档。
 
-    Mon. April 25, 2022 - Beta
-        Updated releases of ROS Desktop [2]_ packages available.
-        Call for general testing.
+* 一些主流 Linux 发行版开始修改 Python，使软件包安装到 ``/usr/local``，这会破坏 ``ament_package`` 的某些部分以及使用 ``colcon`` 的构建。
+  特别是，在 Ubuntu Jammy 上使用通过 pip 安装的 ``setuptools`` 会出现这种异常行为，因此不推荐这样做。
+  目前有一个 `提议的解决方案 <https://github.com/colcon/colcon-core/pull/512>`_，但在广泛发布之前还需要进一步测试。
 
-    Mon. May 16, 2022 - Release Candidate
-        Release Candidate packages are built.
-        Updated releases of ROS Desktop [2]_ packages available.
+* 按大小或时长拆分的 ROS 2 包无法正确回放。
+  只会回放最后录制的那个包。
+  建议避免按大小或时长拆分包。
+  详细信息请参见 `ros2/rosbag2#966 <https://github.com/ros2/rosbag2/issues/966>`__。
 
-    Thu. May 19, 2022 - Distro Freeze
-        Freeze rosdistro.
-        No PRs for Humble on the ``rosdistro`` repo will be merged (reopens after the release announcement).
+发行时间线
+----------
 
-    Mon. May 23, 2022 - General Availability
-        Release announcement.
-        ``rosdistro`` is reopened for Humble PRs.
+    2022 年 3 月 21 日（周一）- Alpha + RMW 冻结
+        对 ROS Base [1]_ 软件包进行初步测试和稳定化，并冻结 RMW 提供方软件包的 API 和特性。
 
-.. [1] The ``ros_base`` variant is described in `REP 2001 (ros-base) <https://reps.openrobotics.org/rep-2001/#ros-base>`_.
-.. [2] The ``desktop`` variant is described in `REP 2001 (desktop-variants) <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_.
+    2022 年 4 月 4 日（周一）- 冻结
+        冻结 Rolling Ridley 中 ROS Base [1]_ 软件包的 API 和特性。
+        此时间点之后只应发布缺陷修复版本。
+        新软件包可以独立发布。
+
+    2022 年 4 月 18 日（周一）- 分支
+        从 Rolling Ridley 分支。
+        ``rosdistro`` 重新开放接受 ROS Base [1]_ 软件包的 Rolling PR。
+        Humble 的开发从 ``ros-rolling-*`` 软件包转向 ``ros-humble-*`` 软件包。
+
+    2022 年 4 月 25 日（周一）- Beta
+        提供更新后的 ROS Desktop [2]_ 软件包版本。
+        征集广泛测试。
+
+    2022 年 5 月 16 日（周一）- 发布候选
+        构建发布候选（Release Candidate）软件包。
+        提供更新后的 ROS Desktop [2]_ 软件包版本。
+
+    2022 年 5 月 19 日（周四）- 发行版冻结
+        冻结 rosdistro。
+        不会合并 ``rosdistro`` 仓库上针对 Humble 的 PR（在发布公告后重新开放）。
+
+    2022 年 5 月 23 日（周一）- 正式发布
+        发布公告。
+        ``rosdistro`` 重新开放接受 Humble PR。
+
+.. [1] ``ros_base`` 变体的说明见 `REP 2001 (ros-base) <https://reps.openrobotics.org/rep-2001/#ros-base>`_。
+.. [2] ``desktop`` 变体的说明见 `REP 2001 (desktop-variants) <https://reps.openrobotics.org/rep-2001/#desktop-variants>`_。

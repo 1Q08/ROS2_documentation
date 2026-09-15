@@ -4,49 +4,49 @@
    Tutorials/Parameters-YAML-files-migration-guide
    How-To-Guides/Parameters-YAML-files-migration-guide
 
-Migrating Parameters
-====================
+迁移参数
+========
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-In ROS 1, parameters are associated with a central server that allowed retrieving parameters at runtime through the use of the network APIs.
-In ROS 2, parameters are associated per node and are configurable at runtime with ROS services.
+在 ROS 1 中，参数与一个中心服务器相关联，可以通过网络 API 在运行时获取参数。
+在 ROS 2 中，参数与每个节点相关联，并可通过 ROS 服务在运行时进行配置。
 
-* See `ROS 2 Parameter design document <https://design.ros2.org/articles/ros_parameters.html>`_ for more details about the system model.
+* 关于系统模型的更多细节，请参阅 `ROS 2 参数设计文档 <https://design.ros2.org/articles/ros_parameters.html>`_。
 
-* See :doc:`ROS 2 CLI usage <../../Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters>` for a better understanding of how the CLI tools work and its differences with ROS 1 tooling.
+* 关于命令行工具的工作方式及其与 ROS 1 工具的区别，请参阅 :doc:`ROS 2 命令行用法 <../../Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters>`。
 
-Global Parameter Server
------------------------
+全局参数服务器
+--------------
 
-In ROS 1, the ``roscore`` acted like a global parameter blackboard where all nodes could get and set parameters.
-Since there is no central ``roscore`` in ROS 2, that functionality no longer exists.
-The recommended approach in ROS 2 is to use per-node parameters that are closely tied to the nodes that use them.
-If a global blackboard is still needed, it is possible to create a dedicated node for this purpose.
-ROS 2 ships with one in the ``ros-{DISTRO}-demo-nodes-cpp`` package called ``parameter_blackboard``; it can be run with:
+在 ROS 1 中，``roscore`` 类似于一块全局参数黑板，所有节点都可以在上面获取和设置参数。
+由于 ROS 2 中不再有中心的 ``roscore``，该功能已不复存在。
+ROS 2 中推荐的做法是使用与使用它们的节点紧密绑定的按节点参数。
+如果仍然需要一块全局黑板，可以为此创建一个专用节点。
+ROS 2 在 ``ros-{DISTRO}-demo-nodes-cpp`` 软件包中自带一个名为 ``parameter_blackboard`` 的节点，可以用以下命令运行：
 
 .. code-block:: console
 
    $ ros2 run demo_nodes_cpp parameter_blackboard
 
-The code for the ``parameter_blackboard`` is `here <https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/parameters/parameter_blackboard.cpp>`__.
+``parameter_blackboard`` 的代码在 `这里 <https://github.com/ros2/demos/blob/{REPOS_FILE_BRANCH}/demo_nodes_cpp/src/parameters/parameter_blackboard.cpp>`__。
 
-Migrating YAML Parameter Files
-------------------------------
+迁移 YAML 参数文件
+------------------
 
-This guide describes how to adapt ROS 1 parameters files for ROS 2.
+本指南介绍如何为 ROS 2 调整 ROS 1 的参数文件。
 
-YAML file example
-^^^^^^^^^^^^^^^^^
+YAML 文件示例
+^^^^^^^^^^^^^
 
-YAML is used to write parameters files in both ROS 1 and ROS 2.
-The main difference in ROS 2 is that node names must be used to address parameters.
-In addition to the fully qualified node name, we use the key "ros__parameters" to signal the start of parameters for the node.
+ROS 1 和 ROS 2 都使用 YAML 编写参数文件。
+ROS 2 中的主要区别在于必须使用节点名称来寻址参数。
+除了完全限定的节点名称之外，我们还使用键 "ros__parameters" 来标示节点参数的开始。
 
 
-For example, here is a parameters file in ROS 1:
+例如，下面是一个 ROS 1 的参数文件：
 
 .. code-block:: yaml
 
@@ -55,9 +55,9 @@ For example, here is a parameters file in ROS 1:
    ports: [11312, 11311, 21311]
    debug: true
 
-Let's assume that the first two parameters are for a node named ``/lidar_ns/lidar_node_name``, the next parameter is for a node named ``/imu``, and the last parameter we want to set on both nodes.
+假设前两个参数属于名为 ``/lidar_ns/lidar_node_name`` 的节点，下一个参数属于名为 ``/imu`` 的节点，而最后一个参数我们希望在两个节点上都设置。
 
-We would construct our ROS 2 parameters file as follows:
+我们构建的 ROS 2 参数文件如下：
 
 .. code-block:: yaml
 
@@ -73,22 +73,22 @@ We would construct our ROS 2 parameters file as follows:
      ros__parameters:
        debug: true
 
-Note the use of wildcards (``/**``) to indicate that the parameter ``debug`` should be set on any node in any namespace.
+注意这里使用了通配符（``/**``），表示参数 ``debug`` 应在任意命名空间中的任意节点上设置。
 
-Feature parity
-^^^^^^^^^^^^^^
+功能对等性
+^^^^^^^^^^
 
-Some features of ROS 1 parameters files do not exist in ROS 2:
+ROS 1 参数文件的一些功能在 ROS 2 中并不存在：
 
-- Mixed types in a list is not supported yet (`related issue <https://github.com/ros2/rcl/issues/463>`_)
-- ``deg`` and ``rad`` substitutions are not supported
+- 尚不支持列表中的混合类型（`相关 issue <https://github.com/ros2/rcl/issues/463>`_）
+- 不支持 ``deg`` 和 ``rad`` 替换
 
 
-Parameter Atomic Operation
---------------------------
+参数原子操作
+------------
 
-When migrating parameter groups from ROS 1 to ROS 2, there are important differences to consider.
-In ROS 1, ``dynamic_reconfigure`` handles parameter groups atomically, meaning all parameters in a reconfiguration request are processed together in a single callback.
-In ROS 2, the ``set_parameters`` service processes each parameter individually, which may lead to multiple callback invocations.
-To maintain atomic behavior when migrating from ``dynamic_reconfigure``, use the ``set_parameters_atomically`` service, which validates and applies all parameters as a single operation.
-If any parameter fails validation, no parameters will be updated.
+在把参数组从 ROS 1 迁移到 ROS 2 时，有一些重要差异需要考虑。
+在 ROS 1 中，``dynamic_reconfigure`` 以原子方式处理参数组，也就是说一次重配置请求中的所有参数会在单个回调中一起处理。
+在 ROS 2 中，``set_parameters`` 服务会逐个处理每个参数，这可能导致多次回调调用。
+为了在从 ``dynamic_reconfigure`` 迁移时保持原子行为，请使用 ``set_parameters_atomically`` 服务，它会把所有参数作为单个操作进行校验并应用。
+如果任何参数校验失败，则不会更新任何参数。

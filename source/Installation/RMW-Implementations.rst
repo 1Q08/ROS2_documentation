@@ -2,20 +2,20 @@
 
     Installation/DDS-Implementations
 
-RMW implementations
-===================
+RMW 实现
+========
 
-By default, ROS 2 uses DDS as its `middleware <https://design.ros2.org/articles/ros_on_dds.html>`__.
-It is compatible with multiple DDS or RTPS (the DDS wire protocol) vendors.
-There is currently support for eProsima's Fast DDS, RTI's Connext DDS, Eclipse Cyclone DDS, and GurumNetworks GurumDDS.
+默认情况下，ROS 2 使用 DDS 作为其中间件（`middleware <https://design.ros2.org/articles/ros_on_dds.html>`__）。
+它与多个 DDS 或 RTPS（DDS 线协议）厂商兼容。
+目前支持 eProsima 的 Fast DDS、RTI 的 Connext DDS、Eclipse Cyclone DDS 以及 GurumNetworks GurumDDS。
 
-It also supports non DDS RMW implementations such as Zenoh.
+它还支持 Zenoh 等非 DDS 的 RMW 实现。
 
-See `REP-2000 <https://reps.openrobotics.org/rep-2000/>`__ for supported RMW vendors by distribution.
+有关各发行版支持的 RMW 厂商，请参阅 `REP-2000 <https://reps.openrobotics.org/rep-2000/>`__。
 
-The default RMW vendor is eProsima's Fast DDS.
+默认的 RMW 厂商是 eProsima 的 Fast DDS。
 
-Review all the possible options:
+查看所有可选方案：
 
 .. toctree::
    :hidden:
@@ -23,5 +23,5 @@ Review all the possible options:
 
    RMW-Implementations/*
 
-* :doc:`DDS implementations <RMW-Implementations/DDS-Implementations>` explains how to use DDS.
-* :doc:`Non DDS implementations <RMW-Implementations/Non-DDS-Implementations>` explains how to use non DDS implementations.
+* :doc:`DDS 实现 <RMW-Implementations/DDS-Implementations>` 说明如何使用 DDS。
+* :doc:`非 DDS 实现 <RMW-Implementations/Non-DDS-Implementations>` 说明如何使用非 DDS 实现。

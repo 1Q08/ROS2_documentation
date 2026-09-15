@@ -3,9 +3,9 @@
   Guides/Cross-compilation
   Tutorials/Cross-compilation
 
-Cross-compilation
-=================
+交叉编译
+========
 
-The `cross_compile <https://github.com/ros-tooling/cross_compile>`__ tool is not supported anymore.
+`cross_compile <https://github.com/ros-tooling/cross_compile>`__ 工具不再受支持。
 
-An alternative to cross-compilation is to `build multi-platform Docker images <https://github.com/docker/buildx#building-multi-platform-images>`__ using ``docker buildx``.
+交叉编译的替代方案是使用 ``docker buildx`` `构建多平台 Docker 镜像 <https://github.com/docker/buildx#building-multi-platform-images>`__。

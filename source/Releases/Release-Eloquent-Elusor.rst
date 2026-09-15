@@ -1,92 +1,90 @@
-Eloquent Elusor (``eloquent``)
-==============================
+Eloquent Elusor（``eloquent``）
+===============================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-*Eloquent Elusor* is the fifth release of ROS 2.
+*Eloquent Elusor* 是 ROS 2 的第五个发行版。
 
-Supported Platforms
--------------------
+支持的平台
+----------
 
-Eloquent Elusor supports the following platforms according to `the platform support tiers <../The-ROS2-Project/Platform-Support-Tiers>`:
+Eloquent Elusor 根据 `平台支持层级 <../The-ROS2-Project/Platform-Support-Tiers>`，支持以下平台：
 
-Tier 1 platforms:
+第 1 层级平台：
 
-* Ubuntu 18.04 (Bionic): ``amd64`` and ``arm64``
-* Mac macOS 10.14 (Mojave)
-* Windows 10 (Visual Studio 2019)
+* Ubuntu 18.04（Bionic）：``amd64`` 和 ``arm64``
+* Mac macOS 10.14（Mojave）
+* Windows 10（Visual Studio 2019）
 
-Tier 2 platforms:
+第 2 层级平台：
 
-* Ubuntu 18.04 (Bionic): ``arm32``
+* Ubuntu 18.04（Bionic）：``arm32``
 
-Tier 3 platforms:
+第 3 层级平台：
 
-* Debian Stretch (9): ``amd64``, ``arm64`` and ``arm32``
-* OpenEmbedded Thud (2.6) / webOS OSE: ``arm32`` and ``x86``
+* Debian Stretch（9）：``amd64``、``arm64`` 和 ``arm32``
+* OpenEmbedded Thud（2.6） / webOS OSE：``arm32`` 和 ``x86``
 
-Targeted platforms:
+目标平台：
 
 +--------------+----------------------+----------------------+----------------------+-------------------+----------------+
-| Architecture | Ubuntu Bionic (18.04)| MacOS Mojave (10.14) | Windows 10 (VS2019)  | Debian Buster (10)| OpenEmbedded / |
+|     架构     | Ubuntu Bionic (18.04)| MacOS Mojave (10.14) | Windows 10 (VS2019)  | Debian Buster (10)| OpenEmbedded / |
 |              |                      |                      |                      |                   | webOS OSE      |
 +==============+======================+======================+======================+===================+================+
-| amd64        | Tier 1 [d][a][s]     | Tier 1 [a][s]        | Tier 1 [a][s]        | Tier 3 [s]        |                |
+| amd64        | 第 1 层级 [d][a][s]  |   第 1 层级 [a][s]   |   第 1 层级 [a][s]   |   第 3 层级 [s]   |                |
 +--------------+----------------------+----------------------+----------------------+-------------------+----------------+
-| arm64        | Tier 1 [d][a][s]     |                      |                      | Tier 3 [s]        | Tier 3 [s]     |
+| arm64        | 第 1 层级 [d][a][s]  |                      |                      |   第 3 层级 [s]   | 第 3 层级 [s]  |
 +--------------+----------------------+----------------------+----------------------+-------------------+----------------+
-| arm32        | Tier 2 [a][s]        |                      |                      | Tier 3 [s]        | Tier 3 [s]     |
+| arm32        |   第 2 层级 [a][s]   |                      |                      |   第 3 层级 [s]   | 第 3 层级 [s]  |
 +--------------+----------------------+----------------------+----------------------+-------------------+----------------+
 
 
-The following indicators show what delivery mechanisms are available for
-each platform.
+以下指标说明了每个平台可用的交付机制。
 
-\" \[d\] \" Debian packages will be provided for this platform for
-packages submitted to the rosdistro.
+\" \[d\] \" 对于提交到 rosdistro 的软件包，将为此平台提供
+Debian 软件包。
 
-\" \[a\] \" Binary releases are provided as a single archive per
-platform containing all packages in the Eloquent ROS 2 repos file[^7].
+\" \[a\] \" 以每个平台一个压缩包的形式提供二进制发行版，其中包含
+Eloquent ROS 2 repos 文件[^7]中的所有软件包。
 
-\" \[s\] \" Compilation from source.
+\" \[s\] \" 从源码编译。
 
-Middleware Implementation Support:
+中间件实现支持：
 
 +--------------------------+---------------------+---------------+-----------------------------------+-----------------------------------+
-| Middleware Library       | Middleware Provider | Support Level | Platforms                         | Architectures                     |
+|         中间件库         |    中间件供应商     |   支持层级    |               平台                |               架构                |
 +==========================+=====================+===============+===================================+===================================+
-| rmw_fastrtps_cpp*        | eProsima Fast-RTPS  | Tier 1        | All Platforms                     | All Architectures                 |
+| rmw_fastrtps_cpp*        | eProsima Fast-RTPS  |   第 1 层级   |             所有平台              |             所有架构              |
 +--------------------------+---------------------+---------------+-----------------------------------+-----------------------------------+
-| rmw_connext_cpp          | RTI Connext         | Tier 1        | All Platforms except Debian and   | All Architectures except          |
-|                          |                     |               | OpenEmbedded                      | arm64/arm32                       |
+| rmw_connext_cpp          | RTI Connext         |   第 1 层级   | 除 Debian 和 OpenEmbedded         |    除 arm64/arm32 外的所有架构    |
+|                          |                     |               | 外的所有平台                      |                                   |
 +--------------------------+---------------------+---------------+-----------------------------------+-----------------------------------+
-| rmw_cyclonedds_cpp       | Eclipse Cyclone DDS | Tier 2        | All Platforms                     | All Architectures                 |
+| rmw_cyclonedds_cpp       | Eclipse Cyclone DDS |   第 2 层级   |             所有平台              |             所有架构              |
 +--------------------------+---------------------+---------------+-----------------------------------+-----------------------------------+
-| rmw_opensplice_cpp       | ADLINK OpenSplice   | Tier 2        | All Platforms except Debian and   | All Architectures                 |
-|                          |                     |               | OpenEmbedded                      |                                   |
+| rmw_opensplice_cpp       | ADLINK OpenSplice   |   第 2 层级   | 除 Debian 和 OpenEmbedded         |             所有架构              |
+|                          |                     |               | 外的所有平台                      |                                   |
 +--------------------------+---------------------+---------------+-----------------------------------+-----------------------------------+
-| rmw_fastrtps_dynamic_cpp | eProsima Fast-RTPS  | Tier 2        | All Platforms                     | All Architectures                 |
+| rmw_fastrtps_dynamic_cpp | eProsima Fast-RTPS  |   第 2 层级   |             所有平台              |             所有架构              |
 +--------------------------+---------------------+---------------+-----------------------------------+-----------------------------------+
 
-\" \* \" means default RMW implementation.
+\" \* \" 表示默认的 RMW 实现。
 
-Middleware implementation support is dependent upon the platform support
-tier. For example a Tier 1 middleware implementation on a Tier 2
-platform can only receive Tier 2 support.
+中间件实现支持取决于平台支持层级。例如，第 1 层级中间件实现运行在
+第 2 层级平台上时，只能获得第 2 层级支持。
 
-Minimum language requirements:
+最低语言要求：
 
 - C++14
 - Python 3.6
 
-Dependency Requirements:
+依赖项要求：
 
 +--------------+-------------------+----------------+----------------+----------------+-----------------------+
-|              | Required Support                                    | Recommended Support                    |
+|              |                      必需支持                       |                推荐支持                |
 +--------------+-------------------+----------------+----------------+----------------+-----------------------+
-| Package      | Ubuntu Bionic     | MacOS**        | Windows 10**   | Debian Buster  | OpenEmbedded**        |
+|    软件包    | Ubuntu Bionic     | MacOS**        | Windows 10**   | Debian Buster  | OpenEmbedded**        |
 +==============+===================+================+================+================+=======================+
 | CMake        | 3.10.2            | 3.14.4         | 3.14.4         | 3.13.4         | 3.16.1 / 3.12.2****   |
 +--------------+-------------------+----------------+----------------+----------------+-----------------------+
@@ -106,11 +104,11 @@ Dependency Requirements:
 +--------------+-------------------+----------------+----------------+----------------+-----------------------+
 | Qt           | 5.9.5             | 5.12.3         | 5.10.0         | 5.11.3         | 5.14.1 / 5.12.5****   |
 +--------------+-------------------+----------------+----------------+----------------+-----------------------+
-|                                  | **Linux only**                                                           |
+|                                  |                            **仅 Linux 平台**                             |
 +--------------+-------------------+----------------+----------------+----------------+-----------------------+
 | PCL          | 1.8.1             | N/A            | N/A            | 1.9.1          | 1.8.1                 |
 +--------------+-------------------+----------------+----------------+----------------+-----------------------+
-| **RMW DDS Middleware Providers**                                                                            |
+|                                          **RMW DDS 中间件供应商**                                           |
 +--------------+-------------------+----------------+----------------+----------------+-----------------------+
 | Connext DDS  | 5.3.1***                                            | N/A                                    |
 +--------------+-------------------+----------------+----------------+----------------+-----------------------+
@@ -122,85 +120,79 @@ Dependency Requirements:
 +--------------+-------------------+----------------+----------------+----------------+-----------------------+
 
 
-\" \* \" means that this is not the upstream version (available on the
-official Operating System repositories) but a package distributed by
-OSRF or the community (package built and distributed on custom
-repositories).
+\" \* \" 表示这不是上游版本（即可以在官方操作系统软件仓库中获取的
+版本），而是由 OSRF 或社区构建并分发的软件包（构建并分发在
+自定义软件仓库中的软件包）。
 
-\" \*\* \" Rolling distributions will see multiple version changes of
-these dependencies during their lifetime. The versions shown for
-OpenEmbedded are those provided by the 3.1 Dunfell release series; the
-versions provided by the other supported release series are listed here:
-<https://github.com/ros/meta-ros/wiki/Package-Version-Differences> .
-Note that the OpenEmbedded releases series for which a ROS distro has
-support will change during its support time frame, as per the
-OpenEmbedded support policy shown here:
+\" \*\* \" 滚动发行版在其生命周期内会经历这些依赖项的多次版本变更。
+此处给出的 OpenEmbedded 版本来自 3.1 Dunfell 发行系列；其他受支持的
+发行系列所提供的版本列在此处：
+<https://github.com/ros/meta-ros/wiki/Package-Version-Differences> 。
+注意，某个 ROS 发行版所支持的 OpenEmbedded 发行系列会在其支持时间
+范围内发生变化，依据的是此处所示的 OpenEmbedded 支持策略：
 <https://github.com/ros/meta-ros/wiki/Policies#openembedded-release-series-support>
-. However, it will always be supported by least one stable OpenEmbedded
-release series.
+。不过，它始终会至少由一个稳定的 OpenEmbedded 发行系列提供支持。
 
-\" \*\*\* \" It is anticipated that this will be increased to Connext
-DDS 6.0.0 pending migration patches[^8].
+\" \*\*\* \" 预计在迁移补丁[^8]就绪后，将升级到 Connext DDS 6.0.0。
 
-\" \*\*\*\* \" webOS OSE provides this different version.
+\" \*\*\*\* \" webOS OSE 提供了这一不同版本。
 
-This document only captures the version at the first release of a ROS
-distribution and will not be updated as the dependencies move forward.
-These versions are thus a low watermark.
+本文档仅记录某个 ROS 发行版首次发布时的版本，不会随依赖项的
+发展而更新。因此这些版本是一个下限值。
 
-Package manager use for dependencies:
+依赖项使用的软件包管理器：
 
-- Ubuntu, Debian: apt
-- MacOS: Homebrew, pip
-- Windows: Chocolatey, pip
-- OpenEmbedded: opkg
+- Ubuntu、Debian：apt
+- MacOS：Homebrew、pip
+- Windows：Chocolatey、pip
+- OpenEmbedded：opkg
 
-Build System Support:
+构建系统支持：
 
 - ament_cmake
 - cmake
 - setuptools
 
-Installation
-------------
+安装
+----
 
-`Install Eloquent Elusor <../../eloquent/Installation.html>`__
+`安装 Eloquent Elusor <../../eloquent/Installation.html>`__
 
-New features in this ROS 2 release
-----------------------------------
+本发行版新增功能
+----------------
 
-A few features and improvements we would like to highlight:
+我们想重点介绍以下功能与改进：
 
-* `Support for markup-based launch files (XML/YAML) <https://github.com/ros2/launch/pull/226>`__
-* `Improved launch-based testing <https://github.com/ros2/ros2/issues/739#issuecomment-555743540>`__
-* `Passing key-value parameters on CLI <https://github.com/ros2/design/pull/245>`__
-* `Support stream logging macros <https://github.com/ros2/rclcpp/pull/926>`__
-* `Per-node logging <https://github.com/ros2/ros2/issues/789>`__ - All stdout/stderr output from nodes are logged in ~/.ros
+* `支持基于标记的启动文件（XML/YAML） <https://github.com/ros2/launch/pull/226>`__
+* `改进基于 launch 的测试 <https://github.com/ros2/ros2/issues/739#issuecomment-555743540>`__
+* `在 CLI 上传递键值参数 <https://github.com/ros2/design/pull/245>`__
+* `支持流式日志宏 <https://github.com/ros2/rclcpp/pull/926>`__
+* `按节点日志记录 <https://github.com/ros2/ros2/issues/789>`__ - 节点的所有 stdout/stderr 输出都会记录到 ~/.ros 中
 * `ros2doctor <https://index.ros.org/doc/ros2/Tutorials/Getting-Started-With-Ros2doctor/>`__
-* `Improved performance of sourcing setup files <https://github.com/ros2/ros2/issues/764>`__
-* rviz: `interactive markers <https://github.com/ros2/rviz/pull/457>`__, `torque ring <https://github.com/ros2/rviz/pull/396>`__, `tf message filters <https://github.com/ros2/rviz/pull/375>`__
-* rqt: `parameter plugin <https://github.com/ros-visualization/rqt_reconfigure/pull/31>`__, `tf tree plugin <https://github.com/ros-visualization/rqt_tf_tree/pull/13>`__, `robot steering plugin <https://github.com/ros-visualization/rqt_robot_steering/pull/7>`__ (also backported to Dashing)
-* `turtlesim <https://github.com/ros/ros_tutorials/pull/53>`__ (also backported to Dashing)
-* RMW implementations:
+* `改进 setup 文件的 source 性能 <https://github.com/ros2/ros2/issues/764>`__
+* rviz：`交互式标记 <https://github.com/ros2/rviz/pull/457>`__、`力矩环 <https://github.com/ros2/rviz/pull/396>`__、`tf 消息过滤器 <https://github.com/ros2/rviz/pull/375>`__
+* rqt：`参数插件 <https://github.com/ros-visualization/rqt_reconfigure/pull/31>`__、`tf 树插件 <https://github.com/ros-visualization/rqt_tf_tree/pull/13>`__、`机器人转向插件 <https://github.com/ros-visualization/rqt_robot_steering/pull/7>`__ （也已向后移植到 Dashing）
+* `turtlesim <https://github.com/ros/ros_tutorials/pull/53>`__ （也已向后移植到 Dashing）
+* RMW 实现：
 
-  * `API to loan message for zero copy <https://github.com/ros2/design/pull/256>`__, used by `rmw_iceoryx <https://github.com/ros2/rmw_iceoryx>`__
+  * `用于零拷贝的消息借出 API <https://github.com/ros2/design/pull/256>`__，由 `rmw_iceoryx <https://github.com/ros2/rmw_iceoryx>`__ 使用
   * `Fast RTPS 1.9.3 <https://github.com/ros2/ros2/issues/734#issuecomment-518018479>`__
-  * New Tier-2 implementation: `rmw_cyclonedds <https://github.com/ros2/rmw_cyclonedds>`__ (also backported to Dashing)
+  * 新增第 2 层级实现：`rmw_cyclonedds <https://github.com/ros2/rmw_cyclonedds>`__ （也已向后移植到 Dashing）
 
-* Environment variable `ROS_LOCALHOST_ONLY <https://github.com/ros2/ros2/issues/798>`__ to limit communication to localhost
-* MacOS Mojave Support
-* `Tracing instrumentation <https://github.com/ros2/ros2/pull/748>`__ for rcl and rclcpp
+* 环境变量 `ROS_LOCALHOST_ONLY <https://github.com/ros2/ros2/issues/798>`__，用于将通信限制在本机
+* MacOS Mojave 支持
+* 针对 rcl 和 rclcpp 的 `跟踪插桩 <https://github.com/ros2/ros2/pull/748>`__
 
 
-During the development the `Eloquent meta ticket <https://github.com/ros2/ros2/issues/734>`__ on GitHub contains an up-to-date state of the ongoing high level tasks as well as references specific tickets with more details.
+在开发过程中，GitHub 上的 `Eloquent meta ticket <https://github.com/ros2/ros2/issues/734>`__ 包含了正在进行的高层任务的最新状态，以及包含更多细节的具体 issue 引用。
 
-Changes since the Dashing release
----------------------------------
+自 Dashing 发行版以来的变更
+---------------------------
 
 geometry_msgs
 ^^^^^^^^^^^^^
 
-The ``geometry_msgs/msg/Quaternion.msg`` interface now default initializes to a valid quaternion, with the following values:
+``geometry_msgs/msg/Quaternion.msg`` 接口现在默认初始化为一个有效的四元数，其取值如下：
 
 .. math::
 
@@ -209,25 +201,25 @@ The ``geometry_msgs/msg/Quaternion.msg`` interface now default initializes to a 
     z = 0 \\
     w = 1
 
-Here is the pull request for more detail: `https://github.com/ros2/common_interfaces/pull/74 <https://github.com/ros2/common_interfaces/pull/74>`_
+相关 pull request 详见：`https://github.com/ros2/common_interfaces/pull/74 <https://github.com/ros2/common_interfaces/pull/74>`_
 
-Static transform broadcasters and listeners now use QoS durability ``transient_local`` on the ``/tf_static`` topic.
-Similar to the latched setting in ROS 1, static transforms only need to be published once.
-New listeners will receive transforms from all static broadcasters that are alive and have published before.
-All publishers must be updated to use this durability setting or their messages won't be received by transform listeners.
-See this pull request for more detail: `https://github.com/ros2/geometry2/pull/160 <https://github.com/ros2/geometry2/pull/160>`_
+静态变换的广播者和监听者现在在 ``/tf_static`` 主题上使用 QoS 持久性 ``transient_local``。
+与 ROS 1 中的 latched 设置类似，静态变换只需发布一次。
+新的监听者会收到所有仍然存活且此前已发布过数据的静态广播者所发布的变换。
+所有发布者都必须更新为使用这一持久性设置，否则它们的消息不会被变换监听者接收。
+更多详情请参见此 pull request：`https://github.com/ros2/geometry2/pull/160 <https://github.com/ros2/geometry2/pull/160>`_
 
 rclcpp
 ^^^^^^
 
-API Break with ``get_actual_qos()``
-"""""""""""""""""""""""""""""""""""
+与 ``get_actual_qos()`` 的 API 破坏性变更
+"""""""""""""""""""""""""""""""""""""""""
 
-Introduced in Dashing, the ``get_actual_qos()`` method on the ``PublisherBase`` and ``SubscriptionBase`` previously returned an rmw type, ``rmw_qos_profile_t``, but that made it awkward to reuse with the creation of other entities.
-Therefore it was updated to return a ``rclcpp::QoS`` instead.
+在 Dashing 中引入的 ``PublisherBase`` 和 ``SubscriptionBase`` 上的 ``get_actual_qos()`` 方法此前返回的是 rmw 类型 ``rmw_qos_profile_t``，但这使其难以在创建其他实体时复用。
+因此，它被改为返回 ``rclcpp::QoS``。
 
-Existing code will need to use the ``rclcpp::QoS::get_rmw_qos_profile()`` method if the rmw profile is still required.
-For example:
+如果仍然需要 rmw profile，现有代码需要使用 ``rclcpp::QoS::get_rmw_qos_profile()`` 方法。
+例如：
 
 .. code-block:: cpp
 
@@ -238,87 +230,87 @@ For example:
     /* Now: */
     my_func(some_pub->get_actual_qos()->get_rmw_qos_profile());
 
-The rationale for breaking this directly rather than doing a tick-tock is that it is a new function and is expected to be used infrequently by users.
-Also, since only the return type is changing, adding a new function with a different would be to only way to do a deprecation cycle and ``get_actual_qos()`` is the most appropriate name, so we would be forced to pick a less obvious name for the method.
+之所以直接做这种破坏性变更而不采用 tick-tock 方式，是因为这是一个新函数，预计用户很少使用它。
+此外，由于只有返回类型发生变化，若要执行弃用周期，就只能新增一个名称不同的函数，而 ``get_actual_qos()`` 是最合适的名称，因此我们只能为该方法另选一个不够直观的名称。
 
-API Break with Publisher and Subscription Classes
-"""""""""""""""""""""""""""""""""""""""""""""""""
+Publisher 和 Subscription 类的 API 破坏性变更
+"""""""""""""""""""""""""""""""""""""""""""""
 
-In an effort to streamline the construction of Publishers and Subscriptions, the API of the constructors were changed.
+为了简化 Publisher 和 Subscription 的构造过程，我们更改了构造函数的 API。
 
-It would be impossible to support a deprecation cycle, because the old signature takes an rcl type and the new one takes the ``NodeBaseInterface`` type so that it can get additional information it now needs, and there's no way to get the additional information needed from just the rcl type.
-The new signature could possibly be backported if that would help contributors, but since the publishers and subscriptions are almost always created using the factory functions or some other higher level API, we do not expect this to be a problem for most users.
+无法支持弃用周期，因为旧签名接受 rcl 类型，而新签名接受 ``NodeBaseInterface`` 类型，以便获取它现在所需的额外信息，而仅凭 rcl 类型无法获得这些额外信息。
+如果有助益于贡献者，新签名也许可以向后移植；但由于 publisher 和 subscription 几乎总是通过工厂函数或其他更高层 API 创建，我们认为这对大多数用户不会造成问题。
 
-Please see the original pr for more detail and comment there if this causes issues:
+更多详情请查看原始 PR，如果这带来了问题，请在那里发表评论：
 
 `https://github.com/ros2/rclcpp/pull/867 <https://github.com/ros2/rclcpp/pull/867>`_
 
-Compiler warning about unused result of ``add_on_set_parameters_callback``
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+关于 ``add_on_set_parameters_callback`` 返回值未被使用的编译器警告
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-*Since Eloquent Patch Release 2 (2020-12-04)*
+*自 Eloquent 补丁版本 2（2020-12-04）起*
 
-Users should retain the  handle returned by ``rclcpp::Node::add_on_set_parameters_callback``, otherwise their callback may be unregistered.
-A warning has been added to help identify bugs where the returned handle is not used.
+用户应保留 ``rclcpp::Node::add_on_set_parameters_callback`` 返回的句柄，否则他们的回调可能会被注销。
+我们添加了一条警告，以帮助识别返回的句柄未被使用的缺陷。
 
 `https://github.com/ros2/rclcpp/pull/1243 <https://github.com/ros2/rclcpp/pull/1243>`_
 
 rmw
 ^^^
 
-API Break Due to Addition of Publisher and Subscription Options
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+由于新增 Publisher 和 Subscription 选项而导致的 API 破坏性变更
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-The ``rmw_create_publisher()`` method had a new argument added of type ``const rmw_publisher_options_t *``.
-This new structure holds options (beyond the typesupport, topic name, and QoS) for new publishers.
+``rmw_create_publisher()`` 方法新增了一个 ``const rmw_publisher_options_t *`` 类型的参数。
+这个新结构体保存了新建 publisher 的选项（typesupport、主题名和 QoS 之外的选项）。
 
-The ``rmw_create_subscription()`` method had one argument removed, ``bool ignore_local_publications``, and replaced by the new options of type ``const rmw_subscription_options_t *``.
-The ``ignore_local_publications`` option was moved into the new ``rmw_subscription_options_t`` type.
+``rmw_create_subscription()`` 方法移除了一个参数 ``bool ignore_local_publications``，并用 ``const rmw_subscription_options_t *`` 类型的新选项取代了它。
+``ignore_local_publications`` 选项被移入新的 ``rmw_subscription_options_t`` 类型中。
 
-In both cases the new argument, which are pointers, may never be null, and so the rmw implementations should check to make sure the options are not null.
-Additionally, the options should be copied into the corresponding rmw structure.
+在这两种情况下，新参数都是指针，且绝不能为 null，因此 rmw 实现应检查以确保选项不为 null。
+此外，还应将这些选项复制到对应的 rmw 结构体中。
 
-See this pull request, and the associated pull requests for more details:
+更多详情请参见此 pull request 以及相关的 pull request：
 
 `https://github.com/ros2/rmw/pull/187 <https://github.com/ros2/rmw/pull/187>`_
 
 ros2cli
 ^^^^^^^
 
-ros2msg and ros2srv deprecated
-""""""""""""""""""""""""""""""
+ros2msg 和 ros2srv 已弃用
+"""""""""""""""""""""""""
 
-The CLI tools ``ros2msg`` and ``ros2srv`` are deprecated.
-They have been replaced by the tool ``ros2interface``, which also supports action and IDL interfaces.
-You can run ``ros2 interface --help`` for usage.
+CLI 工具 ``ros2msg`` 和 ``ros2srv`` 已弃用。
+它们已被 ``ros2interface`` 工具取代，该工具还支持 action 和 IDL 接口。
+你可以运行 ``ros2 interface --help`` 查看用法。
 
 ros2node
 """"""""
 
-Service clients have been added to ros2node info.
-As part of that change the Python function ``ros2node.api.get_service_info``
-has been renamed to ``ros2node.api.get_service_server_info``.
+ros2node info 中新增了服务客户端。
+作为该变更的一部分，Python 函数 ``ros2node.api.get_service_info``
+已被重命名为 ``ros2node.api.get_service_server_info``。
 
 rviz
 ^^^^
 
-Renamed '2D Nav Goal' tool
-""""""""""""""""""""""""""
+重命名 “2D Nav Goal” 工具
+"""""""""""""""""""""""""
 
-The tool was renamed to '2D Goal Pose' and the default topic was changed from ``/move_base_simple/goal`` to ``/goal_pose``.
+该工具被重命名为 “2D Goal Pose”，且默认主题从 ``/move_base_simple/goal`` 改为 ``/goal_pose``。
 
-Here is the related pull request:
+相关 pull request 如下：
 
 `https://github.com/ros2/rviz/pull/455 <https://github.com/ros2/rviz/pull/455>`_
 
 TF2 Buffer
 ^^^^^^^^^^
 
-TF2 buffers now have to be given a timer interface.
+现在必须为 TF2 buffer 提供计时器接口。
 
-If a timer interface is not given, an exception will be thrown.
+如果未提供计时器接口，将抛出异常。
 
-For example:
+例如：
 
 .. code-block:: cpp
 
@@ -334,57 +326,57 @@ For example:
 rcl
 ^^^
 
-ROS command line argument changes
-"""""""""""""""""""""""""""""""""
+ROS 命令行参数变更
+""""""""""""""""""
 
-To cope with an increasingly complex interface, with a now extended set of configuration options, ROS CLI syntax has been changed.
-As an example, a command line using Dashing syntax like:
+为了应对日益复杂的接口以及如今扩展后的配置选项集合，ROS CLI 语法已发生变化。
+例如，使用 Dashing 语法的命令行如下：
 
 .. code-block:: console
 
     $ ros2 run some_package some_node foo:=bar __params:=/path/to/params.yaml __log_level:=WARN --user-flag
 
-is written using Eloquent (and onwards) syntax as:
+使用 Eloquent（及之后版本）语法的写法为：
 
 .. code-block:: console
 
     $ ros2 run some_package some_node --ros-args --remap foo:=bar --params-file /path/to/params.yaml --log-level WARN -- --user-flag
 
-This explicit syntax affords new features, like single parameter assignment ``--param name:=value``.
-For further reference and rationale, check the `ROS command line arguments design document <https://design.ros2.org/articles/ros_command_line_arguments.html>`__.
+这种显式语法带来了新功能，例如单参数赋值 ``--param name:=value``。
+更多参考与理由，请查阅 `ROS 命令行参数设计文档 <https://design.ros2.org/articles/ros_command_line_arguments.html>`__。
 
 .. warning::
 
-   Former syntax has been deprecated and is due for removal in the next release.
+   旧语法已被弃用，并将在下一个发行版中移除。
 
-Known Issues
-------------
+已知问题
+--------
 
-* `[ros2/rosidl#402] <https://github.com/ros2/rosidl/issues/402>`_ ``find_package(PCL)`` interferes with ROS interface generation.
-  Workaround: invoke ``find_package(PCL)`` *after* ``rosidl_generate_interfaces()``.
-* `[ros2/rclcpp#893] <https://github.com/ros2/rclcpp/issues/893>`_ ``rclcpp::Context`` is not destroyed because of a reference cycle with ``rclcpp::GraphListener``. This causes a memory leak. A fix has not been backported because of the risk of breaking ABI.
+* `[ros2/rosidl#402] <https://github.com/ros2/rosidl/issues/402>`_ ``find_package(PCL)`` 会干扰 ROS 接口生成。
+  变通方法：在 ``rosidl_generate_interfaces()`` *之后* 调用 ``find_package(PCL)``。
+* `[ros2/rclcpp#893] <https://github.com/ros2/rclcpp/issues/893>`_ ``rclcpp::Context`` 由于与 ``rclcpp::GraphListener`` 之间存在引用循环而不会被析构。这会导致内存泄漏。由于存在破坏 ABI 的风险，该修复尚未向后移植。
 
-Timeline before the release
----------------------------
+发行前的时间线
+--------------
 
-A few milestones leading up to the release:
+以下是发行前的一些里程碑：
 
-    Mon. Sep 30th (alpha)
-        First releases of core packages available.
-        Testing can happen from now on (some features might not have landed yet).
+    周一 9 月 30 日（alpha）
+        核心软件包的首次发行版可供使用。
+        从现在起可以开始测试（部分功能可能尚未合入）。
 
-    Fri. Oct 18th
-        API and feature freeze for core packages
-        Only bug fix releases should be made after this point.
-        New packages can be released independently.
+    周五 10 月 18 日
+        核心软件包的 API 与功能冻结
+        此后只应发布缺陷修复版本。
+        新软件包可以独立发布。
 
-    Thu. Oct 24th (beta)
-        Updated releases of core packages available.
-        Additional testing of the latest features.
+    周四 10 月 24 日（beta）
+        核心软件包的更新版本可供使用。
+        对最新功能进行额外测试。
 
-    Wed. Nov 13th (release candidate)
-        Updated releases of core packages available.
+    周三 11 月 13 日（release candidate）
+        核心软件包的更新版本可供使用。
 
-    Tue. Nov 19th
-        Freeze rosdistro.
-        No PRs for Eloquent on the rosdistro repo will be merged (reopens after the release announcement).
+    周二 11 月 19 日
+        冻结 rosdistro。
+        rosdistro 仓库中针对 Eloquent 的 PR 将不会被合并（发行公告后重新开放）。

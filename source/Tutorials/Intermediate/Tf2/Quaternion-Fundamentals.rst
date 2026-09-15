@@ -4,45 +4,45 @@
 
 .. _QuaternionFundamentals:
 
-Quaternion fundamentals
-=======================
+四元数基础
+==========
 
-**Goal:** Learn the basics of quaternion usage in ROS 2.
+**目标：** 学习 ROS 2 中四元数使用的基础知识。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 10 minutes
+**时间：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-A quaternion is a 4-tuple representation of orientation, which is more concise than a rotation matrix.
-Quaternions are very efficient for analyzing situations where rotations in three dimensions are involved.
-Quaternions are used widely in robotics, quantum mechanics, computer vision, and 3D animation.
+四元数是方向的 4 元组表示，它比旋转矩阵更简洁。
+四元数在分析涉及三维旋转的情况时非常高效。
+四元数被广泛用于机器人学、量子力学、计算机视觉和 3D 动画。
 
-You can learn more about the underlying mathematical concept on `Wikipedia <https://en.wikipedia.org/wiki/Quaternion>`_.
-You can also take a look at an explorable video series `Visualizing quaternions <https://eater.net/quaternions>`_ made by `3blue1brown <https://www.youtube.com/3blue1brown>`_.
+你可以在 `Wikipedia <https://en.wikipedia.org/wiki/Quaternion>`_ 上了解更多关于其底层数学概念的内容。
+你也可以看看由 `3blue1brown <https://www.youtube.com/3blue1brown>`_ 制作的可探索视频系列 `Visualizing quaternions <https://eater.net/quaternions>`_。
 
-In this tutorial, you will learn how quaternions and conversion methods work in ROS 2.
+在本教程中，你将学习四元数及其转换方法在 ROS 2 中是如何工作的。
 
-Prerequisites
--------------
+先决条件
+--------
 
-You can take a look at libraries like `transforms3d <https://github.com/matthew-brett/transforms3d>`_, `scipy.spatial.transform <https://github.com/scipy/scipy/tree/master/scipy/spatial/transform>`_, `pytransform3d <https://github.com/rock-learning/pytransform3d>`_, `numpy-quaternion <https://github.com/moble/quaternion>`_ or `blender.mathutils <https://docs.blender.org/api/master/mathutils.html>`_.
+你可以看看像 `transforms3d <https://github.com/matthew-brett/transforms3d>`_、`scipy.spatial.transform <https://github.com/scipy/scipy/tree/master/scipy/spatial/transform>`_、`pytransform3d <https://github.com/rock-learning/pytransform3d>`_、`numpy-quaternion <https://github.com/moble/quaternion>`_ 或 `blender.mathutils <https://docs.blender.org/api/master/mathutils.html>`_ 这样的库。
 
-However, this is not a hard requirement and you can stick to any other geometric transformation library that suit you best.
+不过，这不是硬性要求，你可以使用任何最适合你的其他几何变换库。
 
-Components of a quaternion
---------------------------
+四元数的组成
+------------
 
-ROS 2 uses quaternions to track and apply rotations.
-A quaternion has 4 components ``(x, y, z, w)``.
-In ROS 2, ``w`` is last, but in some libraries like Eigen, ``w`` can be placed at the first position.
-The commonly-used unit quaternion that yields no rotation about the x/y/z axes is ``(0, 0, 0, 1)``, and can be created in a following way:
+ROS 2 使用四元数来追踪和应用旋转。
+四元数有 4 个分量 ``(x, y, z, w)``。
+在 ROS 2 中，``w`` 在最后，但在 Eigen 等一些库中，``w`` 可以放在第一个位置。
+常用的不产生绕 x/y/z 轴旋转的单位四元数是 ``(0, 0, 0, 1)``，可以通过以下方式创建：
 
 .. code-block:: C++
 
@@ -56,19 +56,19 @@ The commonly-used unit quaternion that yields no rotation about the x/y/z axes i
    RCLCPP_INFO(this->get_logger(), "%f %f %f %f",
                q.x(), q.y(), q.z(), q.w());
 
-The magnitude of a quaternion should always be one.
-If numerical errors cause a quaternion magnitude other than one, ROS 2 will print warnings.
-To avoid these warnings, normalize the quaternion:
+四元数的模长应该始终为 1。
+如果数值误差导致四元数的模长不为 1，ROS 2 会打印警告。
+为避免这些警告，请对四元数进行归一化：
 
 .. code-block:: C++
 
    q.normalize();
 
-Quaternion types in ROS 2
--------------------------
+ROS 2 中的四元数类型
+--------------------
 
-ROS 2 uses two quaternion datatypes: ``tf2::Quaternion`` and its equivalent ``geometry_msgs::msg::Quaternion``.
-To convert between them in C++, use the methods of ``tf2_geometry_msgs``.
+ROS 2 使用两种四元数数据类型：``tf2::Quaternion`` 及其等价的 ``geometry_msgs::msg::Quaternion``。
+要在 C++ 中在它们之间转换，请使用 ``tf2_geometry_msgs`` 的方法。
 
 .. code-block:: C++
 
@@ -85,8 +85,8 @@ To convert between them in C++, use the methods of ``tf2_geometry_msgs``.
    // or
    tf2::fromMsg(msg_quat, tf2_quat_from_msg);
 
-There is no ``tf2::Quaternion`` equivalent in Python.
-Instead, the builtin ``list`` is used.
+Python 中没有 ``tf2::Quaternion`` 的等价物。
+而是使用内建的 ``list``。
 
 .. code-block:: python
 
@@ -100,14 +100,14 @@ Instead, the builtin ``list`` is used.
    # Convert a list to geometry_msgs.msg.Quaternion
    msg_quat = Quaternion(x=quat_tf[0], y=quat_tf[1], z=quat_tf[2], w=quat_tf[3])
 
-Quaternion operations
----------------------
+四元数运算
+----------
 
-1 Think in RPY then convert to quaternion
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 先用 RPY 思考，再转换为四元数
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-It's easy for us to think of rotations about axes, but hard to think in terms of quaternions.
-A suggestion is to calculate target rotations in terms of the three individual rotations *roll* (about an X-axis), *pitch* (about the Y-axis), and *yaw* (about the Z-axis), and then convert to a quaternion.
+我们很容易思考绕轴的旋转，但很难用四元数来思考。
+一个建议是，用三个独立的旋转 *roll* （绕 X 轴）、*pitch* （绕 Y 轴）和 *yaw* （绕 Z 轴）来计算目标旋转，然后转换为四元数。
 
 .. code-block:: python
 
@@ -115,18 +115,18 @@ A suggestion is to calculate target rotations in terms of the three individual r
    q = quaternion_from_euler(1.5707, 0, -1.5707)
    print(f'The quaternion representation is x: {q[0]} y: {q[1]} z: {q[2]} w: {q[3]}.')
 
-This method relates to `Euler angles <https://en.wikipedia.org/wiki/Euler_angles>`_.
-There are several ways of applying Euler angles.
-The one described above, which ROS 2 adopts, is called *fixed (or static) frame* RPY.
-This means that the three individual rotations are applied to the original, unmoving coordinate axes.
-This is contrary to *relative frame*, where rotations are applied to the coordinate axes that get transformed by preceding rotations.
+这个方法与 `欧拉角 <https://en.wikipedia.org/wiki/Euler_angles>`_ 相关。
+有几种应用欧拉角的方式。
+上面描述的、ROS 2 所采用的方式被称为 *固定（或静态）坐标系* RPY。
+这意味着三个独立的旋转被应用到原始的、不移动的坐标轴上。
+这与 *相对坐标系* 相反，相对坐标系中的旋转被应用到被先前旋转变换过的坐标轴上。
 
 
-2 Applying a quaternion rotation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 应用四元数旋转
+^^^^^^^^^^^^^^^^
 
-To apply the rotation of one quaternion to a pose, simply multiply the previous quaternion of the pose by the quaternion representing the desired rotation.
-The order of this multiplication matters.
+要将一个四元数的旋转应用到位姿上，只需将位姿之前的四元数乘以表示所需旋转的四元数。
+这个乘法的顺序很重要。
 
 C++
 
@@ -153,10 +153,10 @@ Python
    q_new = quaternion_multiply(q_rot, q_orig)
 
 
-3 Inverting a quaternion
-^^^^^^^^^^^^^^^^^^^^^^^^
+3 四元数求逆
+^^^^^^^^^^^^
 
-An easy way to invert a quaternion is to negate the x-, y-, and z-components:
+求四元数逆的一个简单方法是对 x、y 和 z 分量取负：
 
 .. code-block:: python
 
@@ -166,27 +166,27 @@ An easy way to invert a quaternion is to negate the x-, y-, and z-components:
 
 .. note::
 
-   This should not be confused with negating *all* elements of the quaternion.
+   这不应与对四元数的 *所有* 元素取负相混淆。
 
-4 Relative rotations
-^^^^^^^^^^^^^^^^^^^^
+4 相对旋转
+^^^^^^^^^^
 
-Say you have two quaternions from the same frame, ``q_1`` and ``q_2``.
-You want to find the relative rotation, ``q_r``, that converts ``q_1`` to ``q_2`` in a following manner:
+假设你有同一坐标系下的两个四元数 ``q_1`` 和 ``q_2``。
+你想找到相对旋转 ``q_r``，它以如下方式将 ``q_1`` 转换为 ``q_2``：
 
 .. code-block:: C++
 
    q_2 = q_r * q_1
 
-You can solve for ``q_r`` similarly to solving a matrix equation.
-Invert ``q_1`` and right-multiply both sides.
-Again, the order of multiplication is important:
+你可以像求解矩阵方程一样求解 ``q_r``。
+对 ``q_1`` 求逆并右乘两边。
+同样，乘法的顺序很重要：
 
 .. code-block:: C++
 
    q_r = q_2 * q_1_inverse
 
-Here's an example to get the relative rotation from the previous robot pose to the current robot pose in python:
+下面是一个用 python 获取从上一个机器人位姿到当前机器人位姿的相对旋转的示例：
 
 .. code-block:: python
 
@@ -238,8 +238,8 @@ Here's an example to get the relative rotation from the previous robot pose to t
 
   qr = quaternion_multiply(q2, q1_inv)
 
-Summary
--------
+总结
+----
 
-In this tutorial, you learned about the fundamental concepts of a quaternion and its related mathematical operations, like inversion and rotation.
-You also learned about its usage examples in ROS 2 and conversion methods between two separate Quaternion classes.
+在本教程中，你学习了四元数的基本概念及其相关的数学运算，如求逆和旋转。
+你还学习了它在 ROS 2 中的使用示例，以及两个独立 Quaternion 类之间的转换方法。

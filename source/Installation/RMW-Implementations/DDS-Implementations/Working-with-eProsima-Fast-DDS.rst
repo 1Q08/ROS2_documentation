@@ -1,30 +1,30 @@
 eProsima Fast DDS
 =================
 
-eProsima Fast DDS is a complete open-source DDS implementation for real time embedded architectures and operating systems.
-See also: https://www.eprosima.com/index.php/products-all/eprosima-fast-dds
+eProsima Fast DDS 是一个完整的开源 DDS 实现，面向实时嵌入式架构和操作系统。
+另请参见：https://www.eprosima.com/index.php/products-all/eprosima-fast-dds
 
 
-Prerequisites
--------------
+前置条件
+--------
 
-Have :doc:`rosdep installed <../../../Tutorials/Intermediate/Rosdep>`.
+已安装 :doc:`rosdep <../../../Tutorials/Intermediate/Rosdep>`。
 
-Install packages
-----------------
+安装软件包
+----------
 
-The easiest way is to install from ROS 2 apt repository.
+最简单的方式是从 ROS 2 apt 仓库安装。
 
 .. code-block:: console
 
    $ sudo apt install ros-{DISTRO}-rmw-fastrtps-cpp
 
-Build from source code
-----------------------
+从源码构建
+----------
 
-Building from source code is also another way to install.
+从源码构建也是另一种安装方式。
 
-First, clone Fast DDS and rmw_fastrtps in the ROS 2 workspace source directory.
+首先，将 Fast DDS 和 rmw_fastrtps 克隆到 ROS 2 工作空间的源码目录中。
 
 .. code-block:: console
 
@@ -32,34 +32,34 @@ First, clone Fast DDS and rmw_fastrtps in the ROS 2 workspace source directory.
    $ git clone https://github.com/ros2/rmw_fastrtps ros2/rmw_fastrtps -b {REPOS_FILE_BRANCH}
    $ git clone https://github.com/eProsima/Fast-DDS eProsima/fastrtps
 
-Then, install necessary packages for Fast DDS.
+然后，安装 Fast DDS 所需的软件包。
 
 .. code-block:: console
 
    $ cd ..
    $ rosdep install --from src -i
 
-Finally, run colcon build.
+最后，运行 colcon build。
 
 .. code-block:: console
 
    $ colcon build --symlink-install
 
-Switch to rmw_fastrtps
-----------------------
+切换到 rmw_fastrtps
+-------------------
 
-The eProsima Fast DDS RMW can be selected by specifying the environment variable:
+可以通过指定以下环境变量来选择 eProsima Fast DDS RMW：
 
 .. code-block:: console
 
    $ export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 
-See also: :doc:`Working with multiple RMW implementations <../../../How-To-Guides/Working-with-multiple-RMW-implementations>`
+另请参见：:doc:`使用多个 RMW 实现 <../../../How-To-Guides/Working-with-multiple-RMW-implementations>`
 
-Run the talker and listener
----------------------------
+运行 talker 和 listener
+-----------------------
 
-Now run ``talker`` and ``listener`` to test Fast DDS.
+现在运行 ``talker`` 和 ``listener`` 来测试 Fast DDS。
 
 .. code-block:: console
 

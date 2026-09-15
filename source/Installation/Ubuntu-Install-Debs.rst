@@ -3,44 +3,44 @@
    Installation/Linux-Install-Debians
    Installation/Ubuntu-Install-Debians
 
-Ubuntu (deb packages)
-=====================
+Ubuntu（deb 软件包）
+====================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Deb packages for ROS 2 {DISTRO_TITLE_FULL} are currently available for Ubuntu Jammy (22.04).
-The target platforms are defined in `REP 2000 <https://reps.openrobotics.org/rep-2000/>`__.
+ROS 2 {DISTRO_TITLE_FULL} 的 deb 软件包目前可用于 Ubuntu Jammy（22.04）。
+目标平台在 `REP 2000 <https://reps.openrobotics.org/rep-2000/>`__ 中定义。
 
-Resources
----------
+资源
+----
 
-* Status Page:
+* 状态页面：
 
-  * ROS 2 {DISTRO_TITLE} (Ubuntu Jammy): `amd64 <http://repo.ros2.org/status_page/ros_{DISTRO}_default.html>`__\ , `arm64 <http://repo.ros2.org/status_page/ros_{DISTRO}_ujv8.html>`__
-* `Jenkins Instance <http://build.ros2.org/>`__
-* `Repositories <http://repo.ros2.org>`__
+  * ROS 2 {DISTRO_TITLE}（Ubuntu Jammy）：`amd64 <http://repo.ros2.org/status_page/ros_{DISTRO}_default.html>`__\ 、`arm64 <http://repo.ros2.org/status_page/ros_{DISTRO}_ujv8.html>`__
+* `Jenkins 实例 <http://build.ros2.org/>`__
+* `仓库 <http://repo.ros2.org>`__
 
 
-Set locale
-----------
+设置 locale
+-----------
 
 .. include:: _Ubuntu-Set-Locale.rst
 
 .. _linux-install-debians-setup-sources:
 
-Setup Sources
--------------
+配置软件源
+----------
 
 .. include:: _Apt-Repositories.rst
 
 .. _linux-install-debs-install-ros-2-packages:
 
-Install ROS 2 packages
-----------------------
+安装 ROS 2 软件包
+-----------------
 
-Update your apt repository caches after setting up the repositories.
+配置好仓库后，更新你的 apt 仓库缓存。
 
 .. code-block:: console
 
@@ -50,37 +50,37 @@ Update your apt repository caches after setting up the repositories.
 
 .. warning::
 
-   Due to early updates in Ubuntu 22.04 it is important that ``systemd`` and ``udev``-related packages are updated before installing ROS 2.
-   The installation of ROS 2's dependencies on a freshly installed system without upgrading can trigger the **removal of critical system packages**.
+   由于 Ubuntu 22.04 的早期更新，务必在安装 ROS 2 之前先更新 ``systemd`` 和 ``udev`` 相关的软件包。
+   在未升级的全新安装系统上安装 ROS 2 的依赖项，可能会触发 **关键系统软件包被移除**。
 
-   Please refer to `ros2/ros2#1272 <https://github.com/ros2/ros2/issues/1272>`_ and `Launchpad #1974196 <https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/1974196>`_ for more information.
+   更多信息请参阅 `ros2/ros2#1272 <https://github.com/ros2/ros2/issues/1272>`_ 和 `Launchpad #1974196 <https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/1974196>`_。
 
-Desktop Install (Recommended): ROS, RViz, demos, tutorials.
+桌面版安装（推荐）：ROS、RViz、演示程序和教程。
 
 .. code-block:: console
 
    $ sudo apt install ros-{DISTRO}-desktop
 
-ROS-Base Install (Bare Bones): Communication libraries, message packages, command line tools.
-No GUI tools.
+ROS-Base 安装（精简版）：通信库、消息包、命令行工具。
+不包含 GUI 工具。
 
 .. code-block:: console
 
    $ sudo apt install ros-{DISTRO}-ros-base
 
-Development tools: Compilers and other tools to build ROS packages
+开发工具：用于构建 ROS 软件包的编译器和其他工具
 
 .. code-block:: console
 
    $ sudo apt install ros-dev-tools
 
-Environment setup
------------------
+环境配置
+--------
 
-Sourcing the setup script
-^^^^^^^^^^^^^^^^^^^^^^^^^
+加载安装脚本
+^^^^^^^^^^^^
 
-Set up your environment by sourcing the following file.
+通过加载以下文件来配置你的环境。
 
 .. code-block:: console
 
@@ -88,67 +88,66 @@ Set up your environment by sourcing the following file.
 
 .. note::
 
-   Replace ``.bash`` with your shell if you're not using bash.
-   Possible values are: ``setup.bash``, ``setup.sh``, ``setup.zsh``.
+   如果你不使用 bash，请将 ``.bash`` 替换为你所用的 shell。
+   可选值包括：``setup.bash``、``setup.sh``、``setup.zsh``。
 
-Try some examples
------------------
+尝试一些示例
+------------
 
-Talker-listener
+talker-listener
 ^^^^^^^^^^^^^^^
 
-If you installed ``ros-{DISTRO}-desktop`` above you can try some examples.
+如果你在上面安装了 ``ros-{DISTRO}-desktop``，可以尝试一些示例。
 
-In one terminal, source the setup file and then run a C++ ``talker``\ :
+在一个终端中，加载安装脚本，然后运行 C++ 的 ``talker``\ ：
 
 .. code-block:: console
 
    $ source /opt/ros/{DISTRO}/setup.bash
    $ ros2 run demo_nodes_cpp talker
 
-In another terminal source the setup file and then run a Python ``listener``\ :
+在另一个终端中加载安装脚本，然后运行 Python 的 ``listener``\ ：
 
 .. code-block:: console
 
    $ source /opt/ros/{DISTRO}/setup.bash
    $ ros2 run demo_nodes_py listener
 
-You should see the ``talker`` saying that it's ``Publishing`` messages and the ``listener`` saying ``I heard`` those messages.
-This verifies both the C++ and Python APIs are working properly.
-Hooray!
+你应该会看到 ``talker`` 输出 ``Publishing`` 消息，而 ``listener`` 输出 ``I heard`` 这些消息。
+这验证了 C++ 和 Python API 都能正常工作。
+太棒了！
 
-If you want to use other RMW implementations, you can check the :doc:`guide <./RMW-Implementations>`.
+如果你想使用其他 RMW 实现，可以查看 :doc:`指南 <./RMW-Implementations>`。
 
-Next steps after installing
----------------------------
-Continue with the :doc:`tutorials and demos <../../Tutorials>` to configure your environment, create your own workspace and packages, and learn ROS 2 core concepts.
+安装后的后续步骤
+----------------
+继续学习 :doc:`教程和演示 <../../Tutorials>`，以配置你的环境、创建自己的工作空间和软件包，并了解 ROS 2 的核心概念。
 
-Using the ROS 1 bridge
-----------------------
-The ROS 1 bridge can connect topics from ROS 1 to ROS 2 and vice-versa.
-See the dedicated `documentation <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__ on how to build and use the ROS 1 bridge.
-
-Additional RMW implementations (optional)
------------------------------------------
-The default middleware that ROS 2 uses is ``Fast DDS``, but the middleware (RMW) can be replaced at runtime.
-See the :doc:`guide <../How-To-Guides/Working-with-multiple-RMW-implementations>` on how to work with multiple RMWs.
-
-Troubleshooting
+使用 ROS 1 桥接
 ---------------
+ROS 1 桥接可以将话题从 ROS 1 连接到 ROS 2，反之亦然。
+有关如何构建和使用 ROS 1 桥接的专门说明，请参阅 `文档 <https://github.com/ros2/ros1_bridge/blob/master/README.md>`__。
 
-Troubleshooting techniques can be found :doc:`here <../How-To-Guides/Installation-Troubleshooting>`.
+其他 RMW 实现（可选）
+---------------------
+ROS 2 使用的默认中间件是 ``Fast DDS``，但中间件（RMW）可以在运行时替换。
+请参阅关于如何使用多个 RMW 的 :doc:`指南 <../How-To-Guides/Working-with-multiple-RMW-implementations>`。
 
-Uninstall
----------
+故障排查
+--------
 
-If you need to uninstall ROS 2 or switch to a source-based install once you
-have already installed from binaries, run the following command:
+故障排查技巧可以在 :doc:`这里 <../How-To-Guides/Installation-Troubleshooting>` 找到。
+
+卸载
+----
+
+如果你已经通过二进制包安装了 ROS 2，之后需要卸载或切换到基于源码的安装，请运行以下命令：
 
 .. code-block:: console
 
    $ sudo apt remove '~nros-{DISTRO}-*' && sudo apt autoremove
 
-You may also want to remove the repository:
+你可能还需要移除该仓库：
 
 .. code-block:: console
 

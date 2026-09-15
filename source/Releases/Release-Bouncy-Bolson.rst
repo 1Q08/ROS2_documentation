@@ -2,61 +2,60 @@
 
   Release-Bouncy-Bolson
 
-Bouncy Bolson (``bouncy``)
-==========================
+Bouncy Bolson（``bouncy``）
+===========================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-*Bouncy Bolson* is the second release of ROS 2.
+*Bouncy Bolson* 是 ROS 2 的第二个发行版。
 
-Supported Platforms
--------------------
+支持的平台
+----------
 
-This version of ROS 2 is supported on four platforms (see `REP 2000 <https://reps.openrobotics.org/rep-2000/#bouncy-bolson-june-2018-june-2019>`__ for full details):
+此版本的 ROS 2 支持四个平台（详情请参见 `REP 2000 <https://reps.openrobotics.org/rep-2000/#bouncy-bolson-june-2018-june-2019>`__）：
 
 
-* Ubuntu 18.04 (Bionic)
+* Ubuntu 18.04（Bionic）
 
-  * Debian packages for amd64 as well as arm64
+  * 适用于 amd64 以及 arm64 的 Debian 软件包
 
-* Ubuntu 16.04 (Xenial)
+* Ubuntu 16.04（Xenial）
 
-  * no Debian packages but building from source is supported
+  * 没有 Debian 软件包，但支持从源代码编译
 
-* Mac macOS 10.12 (Sierra)
-* Windows 10 with Visual Studio 2017
+* Mac macOS 10.12（Sierra）
+* Windows 10（使用 Visual Studio 2017）
 
-Binary packages as well as instructions for how to compile from source are provided (see `install instructions <../../Installation>` as well as `documentation <https://docs.ros2.org/bouncy/>`__).
+提供了二进制软件包以及如何从源代码编译的说明（参见 `安装说明 <../../Installation>` 以及 `文档 <https://docs.ros2.org/bouncy/>`__）。
 
-Targeted platforms:
+目标平台：
 
 +--------------+------------------------------------------------------------------------------------------------+------------------------+
-|              | Required Support                                                                               | Recommended Support    |
+|              |                                           必需的支持                                           |       推荐的支持       |
 +--------------+-----------------------+----------------------+---------------------+---------------------------+------------------------+
-| Architecture | Ubuntu Bionic (18.04) | MacOS Sierra (10.12) | Windows 10 (VS2017) | Ubuntu Xenial (16.04) [s] | Debian Stretch (9) [s] |
+|     架构     | Ubuntu Bionic (18.04) | MacOS Sierra (10.12) | Windows 10 (VS2017) | Ubuntu Xenial (16.04) [s] | Debian Stretch (9) [s] |
 +==============+=======================+======================+=====================+===========================+========================+
 | amd64        | X                     | X                    | X                   | X [s]                     | X [s]                  |
 +--------------+-----------------------+----------------------+---------------------+---------------------------+------------------------+
 | arm64        | X                     |                      |                     | X [s]                     | X [s]                  |
 +--------------+-----------------------+----------------------+---------------------+---------------------------+------------------------+
 
-\" \[s\] \" Compilation from source, the ROS buildfarm will not produce
-any binary packages for these platforms.
+\" \[s\] \" 表示从源代码编译，ROS 构建农场不会为这些平台生成任何二进制软件包。
 
-Minimum language requirements:
+最低语言要求：
 
 - C11[^3]
 - C++14
 - Python 3.5
 
-Dependency Requirements:
+依赖项要求：
 
 +---------+-------------------------------------------------------+---------------------+
-|         | Required Support                                      | Recommended Support |
+|         |                      必需的支持                       |     推荐的支持      |
 +---------+---------------+-----------+------------+--------------+---------------------+
-| Package | Ubuntu Bionic | MacOS**   | Windows 10 | Ubuntu       | Debian              |
+| 软件包  | Ubuntu Bionic | MacOS**   | Windows 10 | Ubuntu       | Debian              |
 |         |               |           | **         | Xenial [s]   | Stretch [s]         |
 +=========+===============+===========+============+==============+=====================+
 | CMake   | 3.10.2        | 3.11.0    | 3.10.2     | 3.5.1        | 3.7.2               |
@@ -73,87 +72,82 @@ Dependency Requirements:
 +---------+---------------+-----------+------------+--------------+---------------------+
 | Qt      | 5.9.5         | 5.10.0    | 5.10.0     | 5.5.1        | 5.7.1               |
 +---------+---------------+-----------+------------+--------------+---------------------+
-| **Linux only (used for turtlebot demo)**                                              |
+|                          **仅 Linux（用于 turtlebot 演示）**                          |
 +---------+---------------+-----------+------------+--------------+---------------------+
 | PCL     | 1.8.1         | N/A       | N/A        | 1.7.2        | 1.8.0               |
 +---------+---------------+-----------+------------+--------------+---------------------+
 
-\" \* \" means that this is not the upstream version (available on the
-official Operating System repositories) but a package distributed by
-OSRF or the community (package built and distributed on custom
-repositories).
+\" \* \" 表示这不是上游版本（即官方操作系统软件仓库中提供的版本），而是由
+OSRF 或社区分发的软件包（在自定义仓库中构建并分发）。
 
-\" \*\* \" Rolling distributions will see multiple version changes of
-these dependencies during their lifetime.
+\" \*\* \" 滚动发行版在其生命周期内会看到这些依赖项的多个版本变化。
 
-\" \[s\] \" Compilation from source, the ROS buildfarm will not produce
-any binary packages for these platforms.
+\" \[s\] \" 表示从源代码编译，ROS 构建农场不会为这些平台生成任何二进制软件包。
 
-This document only captures the version at the first release of a ROS
-distribution and will not be updated as the dependencies move forward.
-These versions are thus a low watermark.
+本文档仅记录某个 ROS 发行版首次发布时的版本，随着依赖项向前演进，本文档不会更新。
+因此这些版本是一个最低基准。
 
-Package manager use for dependencies:
+依赖项使用的软件包管理器：
 
-- Ubuntu Bionic: apt
-- MacOS: Homebrew, pip
-- Windows: Chocolatey, pip
-- Ubuntu Xenial, Debian Stretch: apt
+- Ubuntu Bionic：apt
+- MacOS：Homebrew、pip
+- Windows：Chocolatey、pip
+- Ubuntu Xenial、Debian Stretch：apt
 
-Build System Support:
+构建系统支持：
 
 - ament_cmake
 - cmake
 - setuptools
 
-Middleware Implementation Support:
+中间件实现支持：
 
 - eProsima Fast-RTPS
 - RTI Connext
 - ADLINK OpenSplice
 
-Features
+功能
+----
+
+此 ROS 2 发行版中的新功能
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+* `新的启动系统 <../Tutorials/Intermediate/Launch/Launch-system>`，它具有功能更强大且更灵活的 Python API。
+* 可以将参数作为 `命令行参数 <../How-To-Guides/Node-arguments>` 传递给 C++ 可执行文件。
+* 通过 `命令行参数 <../How-To-Guides/Node-arguments>` 进行静态重映射。
+* 对 Python 客户端库的各种改进。
+* 支持发布和订阅序列化数据。
+  这是即将开展的原生 rosbag 实现工作的基础。
+* 更多 `命令行工具 <../../Concepts/Basic/About-Command-Line-Tools>`\ ，例如用于处理参数和生命周期状态。
+* 二进制软件包 / fat archive 默认支持三种 RMW 实现（无需从源代码构建）：
+
+  * eProsima 的 Fast RTPS（默认）
+  * RTI 的 Connext
+  * ADLINK 的 OpenSplice
+
+有关所有可用功能（包括早期发行版中的功能）的概述，请参见 `功能 <../../The-ROS2-Project/Features>` 页面。
+
+自 Ardent 发行版以来的变更
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+自 `Ardent Apalone <Release-Ardent-Apalone>` 发行版以来的变更：
+
+
+* Python 软件包 ``launch`` 已重新设计。
+  先前的 Python API 已移至子模块 ``launch.legacy`` 中。
+  如果不希望迁移到新的 Python API，你可以更新现有的启动文件以继续使用旧版 API。
+* 包含命名空间的 ROS 话题名称会映射到包含其命名空间的 DDS 话题。
+  为此不再使用 DDS 分区。
+* 推荐的构建工具现在是 ``colcon``，而不再是 ``ament_tools``。
+  这一切换对每个 ROS 2 软件包中的代码没有 `影响 <https://design.ros2.org/articles/build_tool.html#implications>`__。
+  安装说明已更新，`read-the-docs 页面 <https://colcon.readthedocs.io/en/main/migration/ament_tools.html>`__ 描述了如何将现有的 ``ament_tools`` 调用映射到 ``colcon``。
+* `此 rclcpp::Node::create_subscription() 签名 <https://docs.ros2.org/bouncy/api/rclcpp/classrclcpp_1_1_node.html#a283fb006c46470cf43a4ae5ef4a16ccd>`__ 的参数顺序已被修改。
+
+已知问题
 --------
 
-New features in this ROS 2 release
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-* `New launch system <../Tutorials/Intermediate/Launch/Launch-system>` featuring a much more capable and flexible Python API.
-* Parameters can be passed as `command line arguments <../How-To-Guides/Node-arguments>` to C++ executables.
-* Static remapping via `command line arguments <../How-To-Guides/Node-arguments>`.
-* Various improvements to the Python client library.
-* Support for publishing and subscribing to serialized data.
-  This is the foundation for the upcoming work towards a native rosbag implementation.
-* More `command line tools <../../Concepts/Basic/About-Command-Line-Tools>`\ , e.g. for working with parameters and lifecycle states.
-* Binary packages / fat archives support three RMW implementations by default (without the need to build from source):
-
-  * eProsima's Fast RTPS (default)
-  * RTI's Connext
-  * ADLINK's OpenSplice
-
-For an overview of all features available, including those from earlier releases, please see the `Features <../../The-ROS2-Project/Features>` page.
-
-Changes since the Ardent release
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Changes since the `Ardent Apalone <Release-Ardent-Apalone>` release:
-
-
-* The Python package ``launch`` has been redesigned.
-  The previous Python API has been moved into a submodule ``launch.legacy``.
-  You can update existing launch files to continue to use the legacy API if a transition to the new Python API is not desired.
-* The ROS topic names containing namespaces are mapped to DDS topics including their namespaces.
-  DDS partitions are not being used anymore for this.
-* The recommended build tool is now ``colcon`` instead of ``ament_tools``.
-  This switch has no `implications <https://design.ros2.org/articles/build_tool.html#implications>`__ for the code in each ROS 2 package.
-  The install instructions have been updated and the `read-the-docs page <https://colcon.readthedocs.io/en/main/migration/ament_tools.html>`__ describes how to map an existing ``ament_tools`` call to ``colcon``.
-* The argument order of `this rclcpp::Node::create_subscription() signature <https://docs.ros2.org/bouncy/api/rclcpp/classrclcpp_1_1_node.html#a283fb006c46470cf43a4ae5ef4a16ccd>`__ has been modified.
-
-Known Issues
-------------
-
-
-* New-style launch files `may hang on shutdown <https://github.com/ros2/launch/issues/89>`__ for some combinations of platform and RMW implementation.
-* Static remapping of namespaces `not working correctly <https://github.com/ros2/rcl/issues/262>`__ when addressed to a particular node.
-* `Opensplice error messages may be printed <https://github.com/ros2/rmw_opensplice/issues/237>`__ when using ``ros2 param`` and ``ros2 lifecycle`` command-line tools.
+* 对于某些平台与 RMW 实现的组合，新式启动文件 `在关闭时可能会挂起 <https://github.com/ros2/launch/issues/89>`__。
+* 当针对特定节点时，命名空间的静态重映射 `无法正常工作 <https://github.com/ros2/rcl/issues/262>`__。
+* 在使用 ``ros2 param`` 和 ``ros2 lifecycle`` 命令行工具时，`可能会打印 Opensplice 错误消息 <https://github.com/ros2/rmw_opensplice/issues/237>`__。

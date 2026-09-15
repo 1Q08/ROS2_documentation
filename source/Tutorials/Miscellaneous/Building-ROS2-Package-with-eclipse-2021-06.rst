@@ -2,25 +2,25 @@
 
     Tutorials/Building-ROS2-Package-with-eclipse-2021-06
 
-Building a package with Eclipse 2021-06
-=======================================
+使用 Eclipse 2021-06 构建软件包
+===============================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-You cannot create a ROS 2 package with eclipse, you need to create it with commandline tools.
-Follow the :doc:`Create a package <../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>` tutorial.
+你无法使用 eclipse 创建 ROS 2 软件包，需要使用命令行工具来创建。
+请按照 :doc:`创建软件包 <../Beginner-Client-Libraries/Creating-Your-First-ROS2-Package>` 教程操作。
 
-After you created your project, you can edit the source code and build it with eclipse.
+创建好项目后，你就可以编辑源代码并使用 eclipse 构建它。
 
-We start eclipse and select a eclipse-workspace.
+我们启动 eclipse 并选择一个 eclipse-workspace。
 
 .. image:: images/eclipse_work_dir.png
    :target: ../../_images/eclipse_work_dir.png
    :alt: eclipse_work_dir
 
-We create a C++ project
+我们创建一个 C++ 项目
 
 .. image:: images/eclipse_create_c++_project.png
    :target: ../../_images/eclipse_create_c++_project.png
@@ -31,15 +31,15 @@ We create a C++ project
    :target: ../../_images/eclipse_c++_project_select_type.png
    :alt: eclipse_c++_project_select_type
 
-We see that we got C++ includes.
+可以看到我们已经有了 C++ 的 include 路径。
 
 .. image:: images/eclipse_c++_project_includes.png
    :target: ../../_images/eclipse_c++_project_includes.png
    :alt: eclipse_c++_project_includes
 
 
-We now import our ROS 2 project.
-The code is still in the old place.
+现在我们导入自己的 ROS 2 项目。
+代码仍然留在原来的位置。
 
 .. image:: images/eclipse_import_project.png
    :target: ../../_images/eclipse_import_project.png
@@ -56,7 +56,7 @@ The code is still in the old place.
 
 
 
-We see in the source code that the C++ includes got resolved but not the ROS 2 ones.
+我们在源代码中可以看到，C++ 的 include 已经解析成功，但 ROS 2 的还没有。
 
 .. image:: images/eclipse_c++_wo_ros_includes.png
    :target: ../../_images/eclipse_c++_wo_ros_includes.png
@@ -73,14 +73,14 @@ We see in the source code that the C++ includes got resolved but not the ROS 2 o
    :alt: eclipse_c++_add_directory_path
 
 
-We now see that the ROS 2 includes got resolved too.
+现在我们看到 ROS 2 的 include 也已经解析成功。
 
 .. image:: images/eclipse_c++_indexer_ok.png
    :target: ../../_images/eclipse_c++_indexer_ok.png
    :alt: eclipse_c++_indexer_ok
 
 
-Adding Builder colcon, so that we can build with right-click on project and "Build project".
+添加 Builder colcon，这样我们就可以通过右键单击项目并选择 "Build project" 来构建。
 
 .. image:: images/eclipse_c++_properties_builders.png
    :target: ../../_images/eclipse_c++_properties_builders.png
@@ -92,7 +92,7 @@ Adding Builder colcon, so that we can build with right-click on project and "Bui
    :alt: eclipse_c++_builder_main
 
 
-With PYTHONPATH you can also build python projects.
+借助 PYTHONPATH，你也可以构建 Python 项目。
 
 .. image:: images/eclipse_c++_builder_env.png
    :target: ../../_images/eclipse_c++_builder_env.png
@@ -104,7 +104,7 @@ With PYTHONPATH you can also build python projects.
    :alt: eclipse_c++_properties_builders_with_colcon
 
 
-Right-click on the project and select "Build Project".
+右键单击该项目并选择 "Build Project"。
 
 .. image:: images/eclipse_c++_build_project_with_colcon.png
    :target: ../../_images/eclipse_c++_build_project_with_colcon.png

@@ -1,9 +1,9 @@
 .. _citation:
 
-Citations
-=========
+引用文献
+========
 
-If you use ROS 2 in your work please cite the 2022 Science Robotics paper `Robot Operating System 2: Design, architecture, and uses in the wild <https://www.science.org/doi/10.1126/scirobotics.abm6074>`_.
+如果您在研究中使用了 ROS 2，请引用 2022 年 Science Robotics 论文 `Robot Operating System 2: Design, architecture, and uses in the wild <https://www.science.org/doi/10.1126/scirobotics.abm6074>`_。
 
     | S. Macenski, T. Foote, B. Gerkey, C. Lalancette, W. Woodall, "Robot Operating System 2: Design, architecture, and uses in the wild," Science Robotics vol. 7, May 2022.
 
@@ -22,7 +22,7 @@ If you use ROS 2 in your work please cite the 2022 Science Robotics paper `Robot
     }
 
 
-If you use ROS 2 Composition in your work, please cite the 2023 IEEE RA-L paper `Impact of ROS 2 Node Composition in Robotic Systems <https://arxiv.org/abs/2305.09933>`_.
+如果您在研究中使用了 ROS 2 Composition（组合），请引用 2023 年 IEEE RA-L 论文 `Impact of ROS 2 Node Composition in Robotic Systems <https://arxiv.org/abs/2305.09933>`_。
 
     | S. Macenski, A. Soragna, M. Carroll, Z. Ge, "Impact of ROS 2 Node Composition in Robotic Systems", IEEE Robotics and Autonomous Letters (RA-L), 2023.
 

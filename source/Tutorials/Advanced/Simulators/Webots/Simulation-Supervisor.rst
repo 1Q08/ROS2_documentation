@@ -1,45 +1,45 @@
-The Ros2Supervisor Node
-=======================
+Ros2Supervisor 节点
+===================
 
-**Goal:** Extend the interface with a default Supervisor robot, named ``Ros2Supervisor``.
+**目标：** 使用默认的 Supervisor 机器人（名为 ``Ros2Supervisor``）扩展该接口。
 
-**Tutorial level:** Advanced
+**教程级别：** 高级
 
-**Time:** 10 minutes
+**时长：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-Background
-----------
+背景
+----
 
-In this tutorial, you will learn how to enable the ``Ros2Supervisor`` node which enhances the interface by creating additional services and topics to interact with the simulation.
-You can, for example, record animations or spawn Webots nodes directly from the ROS 2 interface while the simulation is running.
-These instructions list in detail the current implemented features and how to use them.
+在本教程中，你将学习如何启用 ``Ros2Supervisor`` 节点，它通过创建额外的服务和话题来与该仿真交互，从而增强接口能力。
+例如，你可以在仿真运行期间直接从 ROS 2 接口录制动画或生成 Webots 节点。
+以下说明详细列出了当前已实现的功能及其使用方法。
 
-Prerequisites
--------------
+前提条件
+--------
 
-Before proceeding with this tutorial, make sure you have completed the following:
+在继续本教程之前，请确保你已完成以下内容：
 
-- Understanding of ROS 2 nodes and topics covered in the beginner :doc:`../../../../Tutorials`.
-- Knowledge of Webots and ROS 2 and its interface package.
-- Familiarity with :doc:`./Setting-Up-Simulation-Webots-Basic`.
+- 了解初学者 :doc:`../../../../Tutorials` 中涵盖的 ROS 2 节点和话题。
+- 了解 Webots、ROS 2 及其接口软件包。
+- 熟悉 :doc:`./Setting-Up-Simulation-Webots-Basic` 。
 
-The ``Ros2Supervisor``
-----------------------
+``Ros2Supervisor`` 节点
+-----------------------
 
-The ``Ros2Supervisor`` is made of two main parts:
+``Ros2Supervisor`` 由两个主要部分组成：
 
-* A Webots Robot node added to the simulation world.
-  Its ``supervisor`` field is set to TRUE.
-* A ROS 2 node that connects to the Webots Robot as an external controller (in a similar way to your own robot plugin).
+* 添加到仿真世界中的 Webots Robot 节点。
+  其 ``supervisor`` 字段被设置为 TRUE。
+* 一个 ROS 2 节点，它以外部控制器的方式连接到该 Webots Robot（与你自己的机器人插件类似）。
 
-The ROS 2 node acts as a controller that calls Supervisor API functions to control or interact with the simulation world.
-User interactions with the ROS 2 node are mainly performed through services and topics.
+该 ROS 2 节点充当控制器，调用 Supervisor API 函数来控制或与仿真世界交互。
+用户与该 ROS 2 节点的交互主要通过服务和话题进行。
 
-These nodes can be automatically created at the Webots launch using the ``ros2_supervisor`` parameter in the ``WebotsLauncher``.
+这些节点可以在启动 Webots 时通过 ``WebotsLauncher`` 中的 ``ros2_supervisor`` 参数自动创建。
 
 .. code-block:: python
 
@@ -49,7 +49,7 @@ These nodes can be automatically created at the Webots launch using the ``ros2_s
         ros2_supervisor=True
     )
 
-The ``webots._supervisor`` object must also be included in the ``LaunchDescription`` returned by the launch file.
+还必须将 ``webots._supervisor`` 对象包含在 launch 文件返回的 ``LaunchDescription`` 中。
 
 .. code-block:: python
 
@@ -68,78 +68,78 @@ The ``webots._supervisor`` object must also be included in the ``LaunchDescripti
         )
     ])
 
-More information about launch files for ``webots_ros2`` projects can be found in :doc:`./Setting-Up-Simulation-Webots-Basic`.
+有关 ``webots_ros2`` 项目 launch 文件的更多信息，请参阅 :doc:`./Setting-Up-Simulation-Webots-Basic` 。
 
-Clock topic
------------
+时钟话题
+--------
 
-The ``Ros2Supervisor`` node is responsible to get the time of the Webots simulation and publish it to the ``/clock`` topic.
-This means that it is mandatory to spawn the ``Ros2Supervisor`` if some other nodes have their ``use_sim_time`` parameter set to ``true``.
-More information about the ``/clock`` topic can be found in the `ROS wiki <http://wiki.ros.org/Clock>`_.
+``Ros2Supervisor`` 节点负责获取 Webots 仿真的时间并将其发布到 ``/clock`` 话题。
+这意味着，如果其他一些节点的 ``use_sim_time`` 参数被设置为 ``true`` ，则必须生成 ``Ros2Supervisor``。
+有关 ``/clock`` 话题的更多信息，请参阅 `ROS wiki <http://wiki.ros.org/Clock>`_。
 
-Import a Webots node
---------------------
+导入 Webots 节点
+----------------
 
-The ``Ros2Supervisor`` node also allows you to spawn Webots nodes from strings through a service.
+``Ros2Supervisor`` 节点还允许你通过一个服务从字符串生成 Webots 节点。
 
-The service is named ``/Ros2Supervisor/spawn_node_from_string`` and is of type ``webots_ros2_msgs/srv/SpawnNodeFromString``.
-The ``SpawnNodeFromString`` type expects a ``data`` string as input and returns a ``success`` boolean.
+该服务名为 ``/Ros2Supervisor/spawn_node_from_string``，类型为 ``webots_ros2_msgs/srv/SpawnNodeFromString``。
+``SpawnNodeFromString`` 类型期望输入一个 ``data`` 字符串，并返回一个 ``success`` 布尔值。
 
-From the given string, the Supervisor node is getting the name of the imported node and adding it to an internal list for potential later removal (see :ref:`Remove a Webots imported node`).
+根据给定的字符串，Supervisor 节点会获取所导入节点的名称，并将其添加到一个内部列表中，以便之后可能删除（请参见 :ref:`移除 Webots 中导入的节点 <Remove a Webots imported node>` ）。
 
-The node is imported using the ``importMFNodeFromString(nodeString)`` `API function <https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_import_mf_node_from_string>`_.
+该节点通过 ``importMFNodeFromString(nodeString)`` `API 函数 <https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_import_mf_node_from_string>`_ 导入。
 
-Here is an example to import a simple Robot named ``imported_robot``:
+下面是一个导入名为 ``imported_robot`` 的简单 Robot 的示例：
 
 .. code-block:: console
 
     $ ros2 service call /Ros2Supervisor/spawn_node_from_string webots_ros2_msgs/srv/SpawnNodeFromString "data: Robot { name \"imported_robot\" }"
 
 .. note::
-    If you try to import some PROTOs in the node string, their respective URLs must be declared in the ``.wbt`` world file as EXTERNPROTO or as IMPORTABLE EXTERNPROTO.
+    如果你尝试在节点字符串中导入某些 PROTO，它们各自的 URL 必须在 ``.wbt`` 世界文件中声明为 EXTERNPROTO 或 IMPORTABLE EXTERNPROTO。
 
 .. _Remove a Webots imported node:
 
-Remove a Webots imported node
------------------------------
+移除 Webots 中导入的节点
+------------------------
 
-Once a node has been imported with the ``/Ros2Supervisor/spawn_node_from_string`` service, it can also be removed.
+一旦使用 ``/Ros2Supervisor/spawn_node_from_string`` 服务导入了某个节点，它也可以被移除。
 
-This can be achieved by sending the name of the node to the topic named ``/Ros2Supervisor/remove_node`` of type ``std_msgs/msg/String``.
+这可以通过将节点名称发送到名为 ``/Ros2Supervisor/remove_node`` 的话题（类型为 ``std_msgs/msg/String``）来实现。
 
-If the node is indeed in the imported list, it is removed with the ``remove()`` `API method <https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_remove>`_.
+如果该节点确实在已导入列表中，则会使用 ``remove()`` `API 方法 <https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_remove>`_ 将其移除。
 
-Here is an example on how to remove the ``imported_robot`` Robot:
+下面是一个移除 ``imported_robot`` Robot 的示例：
 
 .. code-block:: console
 
     $ ros2 topic pub --once /Ros2Supervisor/remove_node std_msgs/msg/String "{data: imported_robot}"
 
-Record animations
------------------
+录制动画
+--------
 
-The ``Ros2Supervisor`` node also creates two additional services to record HTML5 animations.
+``Ros2Supervisor`` 节点还会创建两个额外的服务，用于录制 HTML5 动画。
 
-The ``/Ros2Supervisor/animation_start_recording`` service is of type ``webots_ros2_msgs/srv/SetString`` and allows to start the animation.
-The ``SetString`` type expects a ``value`` string as input and returns a ``success`` boolean.
-The input ``value`` represents the absolute path to the directory where the animations files should be saved.
+``/Ros2Supervisor/animation_start_recording`` 服务的类型为 ``webots_ros2_msgs/srv/SetString``，用于开始录制动画。
+``SetString`` 类型期望输入一个 ``value`` 字符串，并返回一个 ``success`` 布尔值。
+输入的 ``value`` 表示所保存动画文件目录的绝对路径。
 
-Here is an example on how to start an animation:
+下面是一个开始录制动画的示例：
 
 .. code-block:: console
 
     $ ros2 service call /Ros2Supervisor/animation_start_recording webots_ros2_msgs/srv/SetString "{value: "<ABSOLUTE_PATH>/index.html"}"
 
 
-The ``/Ros2Supervisor/animation_stop_recording`` service is of type ``webots_ros2_msgs/srv/GetBool`` and allows to stop the animation.
+``/Ros2Supervisor/animation_stop_recording`` 服务的类型为 ``webots_ros2_msgs/srv/GetBool``，用于停止录制动画。
 
 .. code-block:: console
 
     $ ros2 service call /Ros2Supervisor/animation_stop_recording webots_ros2_msgs/srv/GetBool "{ask: True}"
 
 
-Summary
--------
+概述
+----
 
-In this tutorial, you learned how to enable the ``Ros2Supervisor`` and how to extend the interface with the Webots simulation.
-The node creates multiple services and topics to interact with and modify the simulation.
+在本教程中，你学习了如何启用 ``Ros2Supervisor``，以及如何用 Webots 仿真扩展该接口。
+该节点会创建多个服务和话题，用于与仿真交互并修改仿真。

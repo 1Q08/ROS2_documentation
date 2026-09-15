@@ -1,20 +1,20 @@
-Using a URDF in Gazebo
-======================
+在 Gazebo 中使用 URDF
+=====================
 
-**Goal:** Simulate your URDF in the Gazebo simulator
+**目标：** 在 Gazebo 仿真器中仿真你的 URDF
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 30 minutes
+**时间：** 30 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
 
-Based on `this ROS 1 tutorial <http://wiki.ros.org/urdf/Tutorials/Using%20a%20URDF%20in%20Gazebo>`_.
+本教程基于 `这个 ROS 1 教程 <http://wiki.ros.org/urdf/Tutorials/Using%20a%20URDF%20in%20Gazebo>`_。
 
-Let's start by installing the demo package and its dependencies.
+让我们从安装演示包及其依赖项开始。
 
 .. tabs::
 
@@ -36,44 +36,44 @@ Let's start by installing the demo package and its dependencies.
 
          git clone https://github.com/ros/urdf_sim_tutorial.git -b ros2
 
-Nonfunctional Gazebo Interface
-------------------------------
-We can spawn the model we already created into Gazebo using ``gazebo.launch.py``
+无法正常工作的 Gazebo 接口
+--------------------------
+我们可以使用 ``gazebo.launch.py`` 把我们之前已经创建好的模型生成到 Gazebo 中
 
 .. code-block:: console
 
   ros2 launch urdf_sim_tutorial gazebo.launch.py
 
-This launch file
+这个 launch 文件会
 
- * Loads the urdf from :doc:`the macro tutorial <Using-Xacro-to-Clean-Up-a-URDF-File>` and publishes it as a topic (``/robot_description``)
- * Launches an empty Gazebo world
- * Runs the script to read the urdf from the topic and spawn it in Gazebo.
- * By default, the Gazebo GUI will also be displayed, and look like this:
+ * 从 :doc:`宏教程 <Using-Xacro-to-Clean-Up-a-URDF-File>` 中加载 urdf，并将其作为话题发布（``/robot_description``）
+ * 启动一个空的 Gazebo 世界
+ * 运行脚本，从话题中读取 urdf 并将其生成到 Gazebo 中。
+ * 默认情况下，还会显示 Gazebo 的图形界面，其外观如下：
 
 .. image:: https://raw.githubusercontent.com/ros/urdf_sim_tutorial/ros2/doc/NonFunctional.png
   :alt: Nonfunctional robot in Gazebo
 
 
-However, it doesn't do anything, and is missing lots of key information that ROS would need to use this robot.
-In :doc:`other <Building-a-Visual-Robot-Model-with-URDF-from-Scratch>` :doc:`tutorials <Building-a-Movable-Robot-Model-with-URDF>` we used `joint_state_publisher <https://index.ros.org/p/joint_state_publisher/github-ros-joint_state_publisher/>`_ to specify the pose of each joint.
-However, the robot itself should provide that information in the real world or in Gazebo.
-Yet without specifying that, Gazebo doesn't know to publish that information.
+然而，它什么也不做，并且缺少 ROS 使用这个机器人所需的许多关键信息。
+在 :doc:`其他 <Building-a-Visual-Robot-Model-with-URDF-from-Scratch>` :doc:`教程 <Building-a-Movable-Robot-Model-with-URDF>` 中，我们使用 `joint_state_publisher <https://index.ros.org/p/joint_state_publisher/github-ros-joint_state_publisher/>`_ 来指定每个关节的位姿。
+然而，在现实世界或 Gazebo 中，机器人本身应当提供该信息。
+但在没有指定这些信息的情况下，Gazebo 并不知道要发布该信息。
 
-To get the robot to be interactive (with you and ROS), we need to specify two things: Plugins and Controllers.
+为了让机器人能够与你以及 ROS 进行交互，我们需要指定两样东西：插件和控制器。
 
-Side note: Configuring Meshes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+旁注：配置网格
+^^^^^^^^^^^^^^
 
 .. image:: https://raw.githubusercontent.com/ros/urdf_sim_tutorial/ros2/doc/NoMesh.png
   :alt: Robot with missing meshes
 
 
-If you are following along at home with your own robot, or something else is amiss, the meshes may be missing from your model in the Gazebo GUI (i.e. the gripper meshes are not there).
-This may also cause Gazebo to take several seconds to start up after the splash screen appears because it is checking the internet for missing models.
+如果你在家里用你自己的机器人或其他东西跟着做，那么你的模型在 Gazebo 图形界面中可能会缺少网格（也就是说，夹爪的网格不存在）。
+这也可能导致 Gazebo 在启动画面出现之后还需要几秒钟才能启动，因为它正在互联网上查找缺失的模型。
 
-This is because your URDF package needs to explicitly tell Gazebo where to load the meshes from.
-We do this by modifying the ``package.xml`` of the package where our URDF meshes live to include a new export.
+这是因为你的 URDF 包需要明确告诉 Gazebo 从哪里加载网格。
+为此，我们要修改存放 URDF 网格的软件包的 ``package.xml``，添加一个新的 export。
 
 .. code-block:: xml
 
@@ -82,20 +82,20 @@ We do this by modifying the ``package.xml`` of the package where our URDF meshes
       <gazebo_ros gazebo_model_path="${prefix}/.."/>
     </export>
 
-The reasoning behind the exact value of the ``gazebo_model_path`` attribute is `a separate issue <https://github.com/ros-simulation/gazebo_ros_pkgs/issues/1500>`_, but suffice to say, setting it to this value will work assuming:
+``gazebo_model_path`` 属性为什么恰好取这个值，是 `另一个 issue <https://github.com/ros-simulation/gazebo_ros_pkgs/issues/1500>`_ 的问题，但可以这么说，在满足以下假设的情况下，将其设为这个值是可行的：
 
- * Your mesh filenames are specified in the URDF using the ``package://package_name/possible_folder/filename.ext`` syntax.
- * The meshes are installed (via CMake) into the proper share folder.
+ * 你的网格文件名在 URDF 中使用 ``package://package_name/possible_folder/filename.ext`` 语法指定。
+ * 网格通过 CMake 安装到了正确的 share 文件夹中。
 
-Gazebo Plugin
--------------
-To get ROS 2 to interact with Gazebo, we have to dynamically link to the ROS library that will tell Gazebo what to do.
-Theoretically, this allows for other Robot Operating Systems to interact with Gazebo in a generic way.
-In practice, its just ROS.
+Gazebo 插件
+-----------
+要让 ROS 2 与 Gazebo 交互，我们必须动态链接到 ROS 库，由它来告诉 Gazebo 该做什么。
+理论上，这允许其他机器人操作系统以通用方式与 Gazebo 交互。
+实际上，那就是 ROS。
 
-Specifically, Gazebo / ROS 2 interaction all happens by linking to a ROS 2 Control library, with new URDF tags.
+具体来说，Gazebo / ROS 2 之间的交互全部通过链接到 ROS 2 Control 库并使用新的 URDF 标签来实现。
 
-We specify the following in the URDF, right before the closing ``</robot>`` tag:
+我们在 URDF 中 ``</robot>`` 结束标签之前指定以下内容：
 
 .. code-block:: xml
 
@@ -114,10 +114,10 @@ We specify the following in the URDF, right before the closing ``</robot>`` tag:
 
 .. note::
 
- * The ``<gazebo>`` and ``<plugin>`` tags work the same way they did in ROS 1.
- * We must specify at least one joint for the minimal example to work, but we'll add more later.
+ * ``<gazebo>`` 和 ``<plugin>`` 标签的工作方式与它们在 ROS 1 中相同。
+ * 为了让最小示例能够工作，我们必须至少指定一个关节，但稍后我们会添加更多。
 
-The minimal configuration file is:
+最小配置文件是：
 
 .. code-block:: yaml
 
@@ -126,19 +126,19 @@ The minimal configuration file is:
       update_rate: 100
 
 
-You can see this in `09a-minimal.urdf.xacro <https://github.com/ros/urdf_sim_tutorial/blob/ros2/urdf/09a-minimal.urdf.xacro>`_ and by running
+你可以在 `09a-minimal.urdf.xacro <https://github.com/ros/urdf_sim_tutorial/blob/ros2/urdf/09a-minimal.urdf.xacro>`_ 中看到它，也可以通过运行以下命令来查看
 
 .. code-block:: console
 
   ros2 launch urdf_sim_tutorial 09a-minimal.launch.py
 
-This starts up a ``/controller_manager`` node and with the ``load_controller`` service, but doesn't add any immediately useful interaction with the robot.
-For that we need to specify more information in the controller yaml.
+这会启动一个带有 ``load_controller`` 服务的 ``/controller_manager`` 节点，但不会为机器人添加任何立刻有用的交互。
+为此，我们需要在控制器 yaml 中指定更多信息。
 
-Spawning Controllers
---------------------
-Now that we've linked ROS and Gazebo, we need to specify some bits of ROS code that we want to run within Gazebo, which we generically call controllers.
-Now we can look at a larger example based on `this yaml file <https://github.com/ros/urdf_sim_tutorial/blob/ros2/config/joints.yaml>`_ that specifies our first controller.
+生成控制器
+----------
+现在我们已经把 ROS 和 Gazebo 链接起来了，接下来需要指定一些我们希望在 Gazebo 内运行的 ROS 代码，我们统称它们为控制器。
+现在我们可以看一个基于 `这个 yaml 文件 <https://github.com/ros/urdf_sim_tutorial/blob/ros2/config/joints.yaml>`_ 的更大示例，它指定了我们的第一个控制器。
 
 .. code-block:: yaml
 
@@ -150,17 +150,17 @@ Now we can look at a larger example based on `this yaml file <https://github.com
         joint_state_broadcaster:
           type: joint_state_broadcaster/JointStateBroadcaster
 
-This controller is found in the ``joint_state_broadcaster`` package and publishes the state of the robot's joints into ROS directly from Gazebo.
+这个控制器位于 ``joint_state_broadcaster`` 包中，它直接从 Gazebo 把机器人关节的状态发布到 ROS 中。
 
-In `09-joints.launch.py <https://github.com/ros/urdf_sim_tutorial/blob/ros2/launch/09-joints.launch.py>`_ we also add a ``ros2_control`` command via ``ExecuteProcess`` to start this specific controller.
+在 `09-joints.launch.py <https://github.com/ros/urdf_sim_tutorial/blob/ros2/launch/09-joints.launch.py>`_ 中，我们还通过 ``ExecuteProcess`` 添加了一条 ``ros2_control`` 命令来启动这个特定的控制器。
 
-You can launch this, but its still not quite there.
+你可以启动它，但仍然还差一点。
 
 .. code-block:: console
 
   ros2 launch urdf_sim_tutorial 09-joints.launch.py
 
-This will run the controller and in fact publish on the ``/joint_states`` topic, but with nothing in them.
+这会运行控制器，并且确实会在 ``/joint_states`` 话题上发布，但其中什么都没有。
 
 .. code-block:: yaml
 
@@ -174,14 +174,14 @@ This will run the controller and in fact publish on the ``/joint_states`` topic,
     velocity: []
     effort: []
 
-What else do you want Gazebo‽
-Well, it wants to know more information about the joints.
+你还想让 Gazebo 做什么‽
+嗯，它想要了解关于关节的更多信息。
 
-ROS 2 Control Joint Definitions
--------------------------------
-For every non-fixed joint, we need to add information about the joint in the ``ros2_control`` tag which tells it what interfaces are supported.
-Let's start with the head joint.
-Modify the joint tag in your `URDF <https://github.com/ros/urdf_sim_tutorial/blob/ros2/urdf/10-firsttransmission.urdf.xacro#L241>`_ to be the following:
+ROS 2 Control 关节定义
+----------------------
+对于每一个非固定关节，我们需要在 ``ros2_control`` 标签中添加关于该关节的信息，告诉它支持哪些接口。
+让我们从头部关节开始。
+把 `URDF <https://github.com/ros/urdf_sim_tutorial/blob/ros2/urdf/10-firsttransmission.urdf.xacro#L241>`_ 中的关节标签修改为以下内容：
 
 .. code-block:: xml
 
@@ -192,16 +192,16 @@ Modify the joint tag in your `URDF <https://github.com/ros/urdf_sim_tutorial/blo
       <state_interface name="velocity"/>
     </joint>
 
- * Note that the joint name here matches the joint name from the standard URDF ``<joint>`` tag.
- * For the moment, let us focus on the ``state_interface``s, in which we specify that we want to publish both position and velocity of this joint.
+ * 注意这里的关节名称与标准 URDF ``<joint>`` 标签中的关节名称一致。
+ * 目前，让我们先关注 ``state_interface``，我们在其中指定要发布该关节的位置和速度。
 
-You can run this URDF with our previous launch configuration.
+你可以用之前的 launch 配置运行这个 URDF。
 
 .. code-block:: console
 
   ros2 launch urdf_sim_tutorial 09-joints.launch.py urdf_package_path:=urdf/10-firsttransmission.urdf.xacro
 
-Now, the head is displayed properly in RViz because the head joint is listed in the ``joint_states`` messages.
+现在，头部在 RViz 中显示正常了，因为头部关节已经列在 ``joint_states`` 消息中。
 
 .. code-block:: yaml
 
@@ -220,14 +220,14 @@ Now, the head is displayed properly in RViz because the head joint is listed in 
     - .nan
 
 
-We could continue adding joint definitions for all the non-fixed joints (and we will) so that all the joints are properly published.
-But, there's more to life than just looking at robots.
-We want to control them.
-So, let's get another controller in here.
+我们可以继续为所有非固定关节添加关节定义（我们也会这样做），以便所有关节都能被正确发布。
+但是，生活不只是看着机器人。
+我们还想要控制它们。
+所以，让我们再引入一个控制器。
 
-Joint Control
--------------
-`Here's <https://github.com/ros/urdf_sim_tutorial/blob/ros2/config/head.yaml>`_ the next controller config we're adding.
+关节控制
+--------
+`这里是 <https://github.com/ros/urdf_sim_tutorial/blob/ros2/config/head.yaml>`_ 我们接下来要添加的控制器配置。
 
 .. code-block:: yaml
 
@@ -245,84 +245,84 @@ Joint Control
         interface_name: position
 
 
-In English, this is saying to add a new ``JointGroupPositionController`` called ``head_controller``, and then, in a new parameter namespace, specify which joints are included and that we are publishing positions.
-We can do this because we specified ``<command_interface name="position" />`` in the joint tag.
+用通俗的话说，这是要添加一个名为 ``head_controller`` 的新 ``JointGroupPositionController``，然后在一个新的参数命名空间中指定包含哪些关节，以及我们发布的是位置。
+我们能够这样做，是因为我们在关节标签中指定了 ``<command_interface name="position" />``。
 
-Now we can launch this with the added config and another ``ros2 control`` command as before
+现在我们可以像之前一样，用添加的配置和另一条 ``ros2 control`` 命令来启动它
 
 .. code-block:: console
 
   ros2 launch urdf_sim_tutorial 10-head.launch.py
 
-Now Gazebo is subscribed to a new topic, and you can then control the position of the head by publishing a value in ROS.
+现在 Gazebo 订阅了一个新话题，之后你可以在 ROS 中发布一个值来控制头部的位置。
 
 .. code-block:: console
 
   ros2 topic pub /head_controller/commands std_msgs/msg/Float64MultiArray "data: [-0.707]"
 
-When this command is published, the position will immediately change to the specified value.
+当这条命令发布后，位置会立即变为指定的值。
 
-Controlling Multiple Joints and Mimicking
------------------------------------------
-We can change the URDF for the Gripper joints in a similar way, but in this case, we'll associate multiple joints with one controller.
-The updated `ROS parameters are here <https://github.com/ros/urdf_sim_tutorial/blob/ros2/config/gripper.yaml>`_.
-We also must update `the URDF to include three additional joint interfaces <https://github.com/ros/urdf_sim_tutorial/blob/ros2/urdf/12-gripper.urdf.xacro>`_.
+控制多个关节与模仿
+------------------
+我们可以用类似的方式修改夹爪关节的 URDF，但在这种情况下，我们会把多个关节关联到一个控制器上。
+更新后的 `ROS 参数在这里 <https://github.com/ros/urdf_sim_tutorial/blob/ros2/config/gripper.yaml>`_。
+我们还必须 `更新 URDF 以包含三个额外的关节接口 <https://github.com/ros/urdf_sim_tutorial/blob/ros2/urdf/12-gripper.urdf.xacro>`_。
 
-To launch this,
+要启动它，
 
 .. code-block:: console
 
   ros2 launch urdf_sim_tutorial 12-gripper.launch.py
 
-We can now move the gripper with an array of three floats.
-Open and out:
+现在我们可以用一个包含三个浮点数的数组来移动夹爪。
+张开并伸出：
 
 .. code-block:: console
 
   ros2 topic pub /gripper_controller/commands std_msgs/msg/Float64MultiArray "data: [0.0, 0.5, 0.5]"
 
-Closed and retracted:
+闭合并收回：
 
 .. code-block:: console
 
   ros2 topic pub /gripper_controller/commands std_msgs/msg/Float64MultiArray "data: [-0.4, 0.0, 0.0]"
 
-This gripper is actually set up in a way that we ALWAYS want the left gripper joint to have the same value as the right gripper joint.
-We can code this into the URDF and controllers with a few steps.
+这个夹爪在设置上实际上是：我们始终希望左夹爪关节与右夹爪关节具有相同的值。
+我们可以通过几个步骤把这一点写进 URDF 和控制器中。
 
- * Insert ``<mimic joint="left_gripper_joint"/>`` into the URDF definition of the ``right_gripper_joint`` (which is done a bit hackily in `the xacro here <https://github.com/ros/urdf_sim_tutorial/blob/ros2/urdf/12a-mimic-gripper.urdf.xacro>`_
- * Insert ``<param name="mimic">left_gripper_joint</param>`` into the ``ros2_control`` joint interface for ``right_gripper_joint``.
- * In our new `control parameters <https://github.com/ros/urdf_sim_tutorial/blob/ros2/config/mimic-gripper.urdf>`_, we only list the two joints for the gripper controller, leaving out ``right_gripper_joint``.
+ * 把 ``<mimic joint="left_gripper_joint"/>`` 插入到 ``right_gripper_joint`` 的 URDF 定义中（在 `这里的 xacro <https://github.com/ros/urdf_sim_tutorial/blob/ros2/urdf/12a-mimic-gripper.urdf.xacro>`_ 中做得有点取巧
+ * 把 ``<param name="mimic">left_gripper_joint</param>`` 插入到 ``right_gripper_joint`` 的 ``ros2_control`` 关节接口中。
+ * 在我们新的 `控制参数 <https://github.com/ros/urdf_sim_tutorial/blob/ros2/config/mimic-gripper.urdf>`_ 中，只为夹爪控制器列出这两个关节，省略 ``right_gripper_joint``。
 
-We can launch this with
+我们可以用以下命令启动它
 
 .. code-block:: console
 
   ros2 launch urdf_sim_tutorial 12-gripper.launch.py urdf_package_path:=urdf/12a-mimic-gripper.urdf.xacro
 
-and now we can control it with just two values, e.g.
+现在我们可以仅用两个值来控制它，例如
 
 .. code-block:: console
 
   ros2 topic pub /gripper_controller/commands std_msgs/msg/Float64MultiArray "data: [0.0, 0.5]"
 
-The Wheels on the Droid Go Round and Round
-------------------------------------------
-To drive the robot around, we first must specify more interfaces in the ``ros2_control`` tag of `the URDF for each of the four wheels <https://github.com/ros/urdf_sim_tutorial/blob/ros2/urdf/13-diffdrive.urdf.xacro>`_, however, now only the velocity command interface is required.
+机器人的轮子转啊转
+------------------
+要驱动机器人四处移动，我们首先必须在 `四个轮子各自的 URDF <https://github.com/ros/urdf_sim_tutorial/blob/ros2/urdf/13-diffdrive.urdf.xacro>`_ 的 ``ros2_control`` 标签中指定更多接口，不过现在只需要速度命令接口。
 
-We could specify controllers for each of the individual wheels, but where's the fun in that?
-Instead we want to control all the wheels together.
-For that, we're going to need `a lot more ROS parameters <https://github.com/ros/urdf_sim_tutorial/blob/ros2/config/diffdrive.yaml>`_ to make use of the ``DiffDriveController`` which subscribes to a standard Twist ``cmd_vel`` message and moves the robot accordingly.
+我们可以为每个单独的轮子各自指定控制器，但那有什么意思呢？
+相反，我们想要一起控制所有轮子。
+为此，我们需要 `更多的 ROS 参数 <https://github.com/ros/urdf_sim_tutorial/blob/ros2/config/diffdrive.yaml>`_ 来使用 ``DiffDriveController``，它订阅标准的 Twist ``cmd_vel`` 消息并相应地移动机器人。
 
 .. code-block:: console
 
   ros2 launch urdf_sim_tutorial 13-diffdrive.launch.py
 
-In addition to loading the above configuration, this also opens the ``RobotSteering`` panel, allowing you to drive the R2D2 robot around, while also observing its actual behavior (in Gazebo) and it's visualized behavior (in RViz):
+除了加载上面的配置之外，这还会打开 ``RobotSteering`` 面板，让你可以驱动 R2D2 机器人四处移动，同时观察它在 Gazebo 中的实际行为以及它在 RViz 中的可视化行为：
 
 .. image:: https://raw.githubusercontent.com/ros/urdf_sim_tutorial/ros2/doc/DrivingInterface.png
   :alt: Gazebo with Driving Interface
 
 
-Congrats!
-Now you're simulating robots with URDF.
+恭喜！
+现在你已经在用 URDF 仿真机器人了。

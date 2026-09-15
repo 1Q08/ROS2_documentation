@@ -2,7 +2,7 @@
 
 .. _makoa-release:
 
-Makoa Mata-mata (codename ``makoa``; May, 2027)
+Makoa Mata-mata（代号 ``makoa``；2027 年 5 月）
 ===============================================
 
 .. toctree::
@@ -11,14 +11,14 @@ Makoa Mata-mata (codename ``makoa``; May, 2027)
    makoa/release-timeline.rst
    makoa/supported-platforms.rst
 
-*Makoa Mata-mata* is the thirtienth release of ROS 2.
-It is a regular release, and is supported until December 2028.
+*Makoa Mata-mata* 是 ROS 2 的第十三个发行版。
+它是一个常规发行版，支持期至 2028 年 12 月。
 
-* TODO - link installation docs
+* TODO - 链接安装文档
 * :doc:`makoa/release-timeline`
 * :doc:`makoa/supported-platforms`
 
-New Features in Makoa
----------------------
+Makoa 中的新功能
+----------------
 
 TODO

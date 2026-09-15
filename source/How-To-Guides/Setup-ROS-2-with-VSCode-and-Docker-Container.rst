@@ -1,25 +1,25 @@
-Setup ROS 2 with VSCode and Docker [community-contributed]
-==========================================================
+使用 VSCode 和 Docker 搭建 ROS 2 [社区贡献]
+===========================================
 
 
-.. contents:: Contents
+.. contents:: 目录
     :depth: 2
     :local:
 
 
-Install VS Code and Docker
---------------------------
+安装 VS Code 和 Docker
+----------------------
 
 
-Using Visual Studio Code and Docker Containers will enable you to run your favorite ROS 2 Distribution without the necessity to change your operating system or use a virtual machine.
-With this tutorial you can set up a docker container, which can be used for your future ROS 2 projects.
+使用 Visual Studio Code 和 Docker 容器，你无需更换操作系统或使用虚拟机，就能运行你喜欢的 ROS 2 发行版。
+借助本教程，你可以搭建一个 docker 容器，用于你今后的 ROS 2 项目。
 
 
-Install Docker
-^^^^^^^^^^^^^^
+安装 Docker
+^^^^^^^^^^^
 
 
-To install docker and set the correct user rights please use the following commands.
+要安装 docker 并设置正确的用户权限，请使用以下命令。
 
 .. code-block:: console
 
@@ -31,22 +31,22 @@ To install docker and set the correct user rights please use the following comma
     $ sudo usermod -aG docker $USER
     $ newgrp docker
 
-Now you can check if the installation was successful by running the following command:
+现在你可以通过运行以下命令来检查安装是否成功：
 
 .. code-block:: console
 
     $ docker run hello-world
 
-You might need to start the Docker Daemon first, if you cannot run hello-world out of the box:
+如果你无法直接运行 hello-world，可能需要先启动 Docker 守护进程：
 
 .. code-block:: console
 
     $ sudo systemctl start docker
 
-Install VS Code
-^^^^^^^^^^^^^^^
+安装 VS Code
+^^^^^^^^^^^^
 
-To install VS Code please use the following commands:
+要安装 VS Code，请使用以下命令：
 
 .. code-block:: console
 
@@ -57,24 +57,24 @@ To install VS Code please use the following commands:
     $ sudo apt install code
 
 
-You can run VS Code by typing ``code`` in a terminal.
+你可以在终端中输入 ``code`` 来运行 VS Code。
 
 
-Install Remote Development Extension
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+安装 Remote Development 扩展
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-Within VS Code search in Extensions (CTRL+SHIFT+X) for the "Remote Development" Extension and install it.
+在 VS Code 中，于扩展面板（CTRL+SHIFT+X）搜索“Remote Development”扩展并安装它。
 
 
-Configure workspace in Docker and VS Code
------------------------------------------
+在 Docker 和 VS Code 中配置工作空间
+-----------------------------------
 
-Add your ROS 2 workspace
-^^^^^^^^^^^^^^^^^^^^^^^^
+添加你的 ROS 2 工作空间
+^^^^^^^^^^^^^^^^^^^^^^^
 
 
-Add a workspace in order to build and open them in a container, e.g.:
+添加一个工作空间，以便在容器中构建并打开它们，例如：
 
 .. code-block:: console
 
@@ -83,8 +83,8 @@ Add a workspace in order to build and open them in a container, e.g.:
     $ cd ws
     $ mkdir src
 
-Now create a ``.devcontainer`` folder in the root of your workspace and add a ``devcontainer.json`` and ``Dockerfile`` to this ``.devcontainer`` folder.
-The workspace structure should look like this:
+现在在你的工作空间根目录下创建 ``.devcontainer`` 文件夹，并向该 ``.devcontainer`` 文件夹中添加 ``devcontainer.json`` 和 ``Dockerfile``。
+工作空间结构应如下所示：
 
 ::
 
@@ -97,13 +97,13 @@ The workspace structure should look like this:
         └── package2
 
 
-With ``File->Open Folder...`` or ``Ctrl+K Ctrl+O``, open the ``ws`` folder of your workspace in VS Code.
+使用 ``File->Open Folder...`` 或 ``Ctrl+K Ctrl+O``，在 VS Code 中打开工作空间的 ``ws`` 文件夹。
 
-Edit ``devcontainer.json`` for your environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+为你的环境编辑 ``devcontainer.json``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For the Dev Container to function properly, we have to build it with the correct user.
-Therefore add the following to ``.devcontainer/devcontainer.json``:
+要让 Dev Container 正常工作，我们必须使用正确的用户来构建它。
+因此，向 ``.devcontainer/devcontainer.json`` 中添加以下内容：
 
 .. code-block:: json
 
@@ -151,15 +151,15 @@ Therefore add the following to ``.devcontainer/devcontainer.json``:
 
 
 
-Use ``Ctrl+F`` to open the search and replace menu.
-Search for ``YOUR_USERNAME`` and replace it with your ``Linux username``.
-If you do not know your username, you can find it by running ``echo $USERNAME`` in the terminal.
+使用 ``Ctrl+F`` 打开搜索和替换菜单。
+搜索 ``YOUR_USERNAME`` 并将其替换为你的 ``Linux username``。
+如果你不知道自己的用户名，可以在终端中运行 ``echo $USERNAME`` 来查看。
 
 
-Edit ``Dockerfile``
+编辑 ``Dockerfile``
 ^^^^^^^^^^^^^^^^^^^
 
-Open the Dockerfile and add the following contents:
+打开 Dockerfile 并添加以下内容：
 
 
 .. code-block:: bash
@@ -193,23 +193,23 @@ Open the Dockerfile and add the following contents:
     USER $USERNAME
     CMD ["/bin/bash"]
 
-Replace ``ROS_DISTRO`` with the ROS 2 distribution you wish to use as base image above, for example ``rolling``.
+把上面的 ``ROS_DISTRO`` 替换为你希望用作基础镜像的 ROS 2 发行版，例如 ``rolling``。
 
 
-Open and Build Development Container
-------------------------------------
+打开并构建开发容器
+------------------
 
-Use ``View->Command Palette...`` or ``Ctrl+Shift+P`` to open the command palette.
-Search for the command ``Dev Containers: Reopen in Container`` and execute it.
-This will build your development docker container for your.
-It will take a while - sit back or go for a coffee.
+使用 ``View->Command Palette...`` 或 ``Ctrl+Shift+P`` 打开命令面板。
+搜索命令 ``Dev Containers: Reopen in Container`` 并执行它。
+这将为你构建开发用的 docker 容器。
+这需要一段时间 —— 请稍安勿躁，或者去喝杯咖啡。
 
 
-Test Container
-^^^^^^^^^^^^^^
+测试容器
+^^^^^^^^
 
-To test if everything worked correctly, open a terminal in the container using ``View->Terminal`` or ``Ctrl+Shift+``` and ``New Terminal`` in VS Code.
-Inside the terminal do the following:
+要测试一切是否正常，请使用 ``View->Terminal`` 或 ``Ctrl+Shift+``` 以及 VS Code 中的 ``New Terminal`` 在容器中打开一个终端。
+在终端中执行以下操作：
 
 .. code-block:: console
 
@@ -217,7 +217,7 @@ Inside the terminal do the following:
     $ source /opt/ros/$ROS_DISTRO/setup.bash
     $ rviz2
 
-.. Note:: There might be a problem with displaying RVIZ.
-          Please make sure to allow the user to access X window system with ``xhost +local:<USERNAME>``.
-          If no window still pops up, then check the value of ``echo $DISPLAY`` - if the output is 1, you can fix this problem with ``echo "export DISPLAY=unix:1" >> /etc/bash.bashrc`` and then test it again.
-          You can also change the DISPLAY value in the devcontainer.json and rebuild it.
+.. Note:: 显示 RVIZ 时可能会出现问题。
+          请确保用 ``xhost +local:<USERNAME>`` 允许用户访问 X 窗口系统。
+          如果仍然没有窗口弹出，那么检查 ``echo $DISPLAY`` 的值 —— 如果输出为 1，你可以用 ``echo "export DISPLAY=unix:1" >> /etc/bash.bashrc`` 修复该问题，然后再次测试。
+          你也可以在 devcontainer.json 中修改 DISPLAY 的值并重新构建。

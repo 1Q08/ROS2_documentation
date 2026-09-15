@@ -1,44 +1,44 @@
-Lyrical Luth Release Timeline
-=============================
+Lyrical Luth 发行时间表
+=======================
 
-For progress on the development of Lyrical Luth, see `this project board <https://github.com/orgs/ros2/projects/70>`__.
-For the broad process followed by Lyrical Luth, see the :doc:`process description page <../Release-Process>`.
+关于 Lyrical Luth 的开发进展，请参阅 `此项目看板 <https://github.com/orgs/ros2/projects/70>`__。
+关于 Lyrical Luth 遵循的整体流程，请参阅 :doc:`流程说明页面 <../Release-Process>`。
 
-**As soon as possible** - Migrate ROS Rolling to ROS Lyrical's target platforms
-    * RHEL 10 + Ubuntu 26.04: Migrate as soon as core packages successfully build on both platforms.
-    * Windows 11: Migrate as soon as we have a green build
+**尽快** - 将 ROS Rolling 迁移到 ROS Lyrical 的目标平台
+    * RHEL 10 + Ubuntu 26.04：一旦核心软件包在两个平台上都能成功构建，就进行迁移。
+    * Windows 11：一旦构建通过（green build）就进行迁移
 
-**Mon. April 13, 2026** - Alpha + RMW freeze (*Delayed; was originally April 6th*)
-    * Preliminary testing of ROS Base packages
-    * API and feature freeze for RMW provider packages.
+**2026 年 4 月 13 日（周一）** - Alpha + RMW 冻结（*已延期；原定 4 月 6 日*）
+    * ROS Base 软件包的初步测试
+    * RMW 供应商软件包的 API 与特性冻结。
 
-**Mon. April 20, 2026** - Freeze (*Delayed; was originally April 13th*)
-    * API and feature freeze for ROS Base packages in Rolling Ridley.
-    * Only bug fix releases should be made after this point.
-    * New packages can be released.
+**2026 年 4 月 20 日（周一）** - 冻结（*已延期；原定 4 月 13 日*）
+    * Rolling Ridley 中 ROS Base 软件包的 API 与特性冻结。
+    * 在此之后只应发布缺陷修复版本。
+    * 可以发布新软件包。
 
-**Mon. April 21, 2026** - Branch (*Delayed; was originally April 20th*)
-    * Branch from Rolling Ridley
-    * ``rosdistro`` is reopened for Rolling PRs for ROS Base packages.
-    * Lyrical development shifts from ``ros-rolling-*`` packages to ``ros-lyrical-*`` packages.
+**2026 年 4 月 21 日（周二）** - 分支创建（*已延期；原定 4 月 20 日*）
+    * 从 Rolling Ridley 创建分支
+    * ``rosdistro`` 重新开放，以接收针对 ROS Base 软件包的 Rolling PR。
+    * Lyrical 的开发从 ``ros-rolling-*`` 软件包转向 ``ros-lyrical-*`` 软件包。
 
-**Mon. April 27, 2026** - Beta
-    * Updated releases of ROS Desktop packages available.
-    * Call for general testing.
+**2026 年 4 月 27 日（周一）** - beta
+    * ROS 桌面版软件包的更新版本可用。
+    * 征集公开测试。
 
-**Thu, April 30, 2026** - Kick off Tutorial Party
-    * Open up tutorials for community testing.
+**2026 年 4 月 30 日（周四）** - 启动教程派对（Tutorial Party）
+    * 开放教程以供社区测试。
 
-**Mon. May 11, 2026** - Release Candidate
-    * Build release candidate packages up to ROS Desktop
+**2026 年 5 月 11 日（周一）** - release candidate
+    * 构建到 ROS 桌面版为止的 release candidate 软件包
 
-**Mon. May 18, 2026** - Distro Freeze
-    * Freeze all Lyrical branches on all ROS desktop packages
-    * No pull requests for any Lyrical branch or targeting ``lyrical/distribution.yaml`` in ``rosdistro`` repo will be merged.
+**2026 年 5 月 18 日（周一）** - 发行版冻结
+    * 冻结所有 ROS 桌面版软件包上的所有 Lyrical 分支
+    * 不会合并任何 Lyrical 分支的 pull request，也不会合并 ``rosdistro`` 仓库中针对 ``lyrical/distribution.yaml`` 的 pull request。
 
-**Friday May 22nd, 2026** - General Availability
-    * Release announcement.
-    * ROS desktop packages source freeze is lifted and ``rosdistro`` is reopened for Lyrical pull requests.
+**2026 年 5 月 22 日（周五）** - 正式发布
+    * 发行公告。
+    * ROS 桌面版软件包的源码冻结解除，``rosdistro`` 重新开放以接收 Lyrical 的 pull request。
 
-**May, 2031** - End-of-life
-    * ROS Lyrical will stop receiving updates - including security updates
+**2031 年 5 月** - 生命周期终止
+    * ROS Lyrical 将停止接收更新，包括安全更新

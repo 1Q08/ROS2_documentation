@@ -4,32 +4,32 @@
     Tutorials/Run-2-nodes-in-two-separate-docker-containers
     Guides/Run-2-nodes-in-two-separate-docker-containers
 
-Running ROS 2 nodes in Docker [community-contributed]
-=====================================================
+在 Docker 中运行 ROS 2 节点 [社区贡献]
+======================================
 
-Run two nodes in a single docker container
-------------------------------------------
+在单个 docker 容器中运行两个节点
+--------------------------------
 
-Pull the ROS docker image with tag "{DISTRO}-desktop".
+拉取标签为 "{DISTRO}-desktop" 的 ROS docker 镜像。
 
 .. code-block:: console
 
    $ docker pull osrf/ros:{DISTRO}-desktop
 
 
-Run the image in a container in interactive mode.
+以交互模式在容器中运行该镜像。
 
 .. code-block:: console
 
    $ docker run -it osrf/ros:{DISTRO}-desktop
 
-Your best friend is the ``ros2`` command line help now.
+现在 ``ros2`` 命令行帮助就是你最好的朋友。
 
 .. code-block:: console
 
    $ ros2 --help
 
-E.g. list all installed packages.
+例如，列出所有已安装的软件包。
 
 .. code-block:: console
 
@@ -37,7 +37,7 @@ E.g. list all installed packages.
    (you will see a list of packages)
 
 
-E.g. list all executables:
+例如，列出所有可执行文件：
 
 .. code-block:: console
 
@@ -45,31 +45,31 @@ E.g. list all executables:
    (you will see a list of <package> <executable>)
 
 
-Run a minimal example of 2 C++ nodes (1 topic subscriber ``listener``, 1 topic publisher ``talker``) from the package ``demo_nodes_cpp`` in this container:
+在此容器中运行一个由 2 个 C++ 节点组成的最小示例（1 个话题订阅者 ``listener``、1 个话题发布者 ``talker``），它们来自软件包 ``demo_nodes_cpp``：
 
 .. code-block:: console
 
    $ ros2 run demo_nodes_cpp listener &
    $ ros2 run demo_nodes_cpp talker
 
-Run two nodes in two separate docker containers
------------------------------------------------
+在两个独立的 docker 容器中运行两个节点
+--------------------------------------
 
-Open a terminal.
-Run the image in a container in interactive mode and launch a topic publisher (executable ``talker`` from the package ``demo_nodes_cpp``) with ``ros2 run``:
+打开一个终端。
+以交互模式在容器中运行该镜像，并使用 ``ros2 run`` 启动一个话题发布者（来自软件包 ``demo_nodes_cpp`` 的可执行文件 ``talker``）：
 
 .. code-block:: console
 
    $ docker run -it --rm osrf/ros:{DISTRO}-desktop ros2 run demo_nodes_cpp talker
 
-Open a second terminal.
-Run the image in a container in interactive mode and launch a topic subscriber (executable ``listener`` from the package ``demo_nodes_cpp``)  with ``ros2 run``:
+打开第二个终端。
+以交互模式在容器中运行该镜像，并使用 ``ros2 run`` 启动一个话题订阅者（来自软件包 ``demo_nodes_cpp`` 的可执行文件 ``listener``）：
 
 .. code-block:: console
 
    $ docker run -it --rm osrf/ros:{DISTRO}-desktop ros2 run demo_nodes_cpp listener
 
-As an alternative to the command line invocation, you can create a ``docker-compose.yml`` file (here version 2) with the following (minimal) content:
+除了命令行调用之外，你还可以创建一个 ``docker-compose.yml`` 文件（此处为版本 2），内容如下（最小配置）：
 
 .. code-block:: yaml
 
@@ -85,5 +85,5 @@ As an alternative to the command line invocation, you can create a ``docker-comp
        depends_on:
          - talker
 
-To run the containers call ``docker compose up`` in the same directory.
-You can close the containers with ``Ctrl+C``.
+要运行这些容器，请在同一目录下调用 ``docker compose up``。
+你可以使用 ``Ctrl+C`` 关闭容器。

@@ -4,41 +4,41 @@
 
 .. _UsingStampedDatatypesWithTf2RosMessageFilter:
 
-Using stamped datatypes with ``tf2_ros::MessageFilter``
-=======================================================
+使用带时间戳的数据类型与 ``tf2_ros::MessageFilter``
+===================================================
 
-**Goal:** Learn how to use ``tf2_ros::MessageFilter`` to process stamped datatypes.
+**目标：** 学习如何使用 ``tf2_ros::MessageFilter`` 来处理带时间戳的数据类型。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 10 minutes
+**时间：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 3
    :local:
 
-Background
-----------
+背景
+----
 
-This tutorial explains how to use sensor data with tf2.
-Some real-world examples of sensor data are:
+本教程解释了如何将传感器数据与 tf2 一起使用。
+传感器数据的一些真实世界示例有：
 
-    * cameras, both mono and stereo
+    * 相机，无论是单目还是双目
 
-    * laser scans
+    * 激光扫描
 
-Suppose that a new turtle named ``turtle3`` is created and it doesn't have good odometry, but there is an overhead camera tracking its position and publishing it as a ``PointStamped`` message in relation to the ``world`` frame.
+假设创建了一只名为 ``turtle3`` 的新 turtle，它没有良好的里程计，但有一个顶部相机追踪它的位置，并将该位置作为 ``PointStamped`` 消息相对于 ``world`` 坐标系发布。
 
-``turtle1`` wants to know where ``turtle3`` is compared to itself.
+``turtle1`` 想知道 ``turtle3`` 相对于它自己在什么位置。
 
-To do this ``turtle1`` must listen to the topic where ``turtle3``'s pose is being published, wait until transforms into the desired frame are ready, and then do its operations.
-To make this easier the ``tf2_ros::MessageFilter`` is very useful.
-The ``tf2_ros::MessageFilter`` will take a subscription to any ROS 2 message with a header and cache it until it is possible to transform it into the target frame.
+为此，``turtle1`` 必须监听 ``turtle3`` 位姿发布的话题，等待到目标坐标系的变换准备好，然后再执行它的操作。
+为了让这更容易，``tf2_ros::MessageFilter`` 非常有用。
+``tf2_ros::MessageFilter`` 会订阅任何带消息头的 ROS 2 消息并将其缓存，直到可以将它变换到目标坐标系。
 
-Prerequisites
--------------
+先决条件
+--------
 
-This tutorial expects you to have ``turtle_tf2_py`` package installed.
+本教程希望你已安装 ``turtle_tf2_py`` 包。
 
 .. tabs::
 
@@ -63,18 +63,18 @@ This tutorial expects you to have ``turtle_tf2_py`` package installed.
         # Build the required package
         $ colcon build --packages-select turtle_tf2_py
 
-Tasks
------
+任务
+----
 
-1 Write the broadcaster node of PointStamped messages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 编写 PointStamped 消息的广播器节点
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For this tutorial we will set up a demo application which has a node (in Python) to broadcast the ``PointStamped`` position messages of ``turtle3``.
+在本教程中，我们将搭建一个演示应用程序，其中有一个节点（用 Python 编写）来广播 ``turtle3`` 的 ``PointStamped`` 位置消息。
 
-First, let's create the source file.
+首先，让我们创建源文件。
 
-Go to the ``learning_tf2_py`` :doc:`package <./Writing-A-Tf2-Static-Broadcaster-Py>` we created in the previous tutorial.
-Inside the ``src/learning_tf2_py/learning_tf2_py`` directory download the example sensor message broadcaster code by entering the following command:
+进入我们在上一个教程中创建的 ``learning_tf2_py`` :doc:`包 <./Writing-A-Tf2-Static-Broadcaster-Py>`。
+在 ``src/learning_tf2_py/learning_tf2_py`` 目录中，通过输入以下命令下载示例传感器消息广播器代码：
 
 .. tabs::
 
@@ -92,19 +92,19 @@ Inside the ``src/learning_tf2_py/learning_tf2_py`` directory download the exampl
 
   .. group-tab:: Windows
 
-    In a Windows command line prompt:
+    在 Windows 命令行提示符中：
 
     .. code-block:: console
 
         $ curl -sk https://raw.githubusercontent.com/ros/geometry_tutorials/{DISTRO}/turtle_tf2_py/turtle_tf2_py/turtle_tf2_message_broadcaster.py -o turtle_tf2_message_broadcaster.py
 
-    Or in powershell:
+    或在 powershell 中：
 
     .. code-block:: console
 
         $ curl https://raw.githubusercontent.com/ros/geometry_tutorials/{DISTRO}/turtle_tf2_py/turtle_tf2_py/turtle_tf2_message_broadcaster.py -o turtle_tf2_message_broadcaster.py
 
-Open the file using your preferred text editor.
+使用你喜欢的文本编辑器打开该文件。
 
 .. code-block:: python
 
@@ -193,11 +193,11 @@ Open the file using your preferred text editor.
         rclpy.shutdown()
 
 
-1.1 Examine the code
-~~~~~~~~~~~~~~~~~~~~
+1.1 检查代码
+~~~~~~~~~~~~
 
-Now let's take a look at the code.
-First, in the ``on_timer`` callback function, we spawn the ``turtle3`` by asynchronously calling the ``Spawn`` service of ``turtlesim``, and initialize its position at (4, 2, 0), when the turtle spawning service is ready.
+现在让我们看看代码。
+首先，在 ``on_timer`` 回调函数中，当 turtle 生成服务就绪时，我们通过异步调用 ``turtlesim`` 的 ``Spawn`` 服务来生成 ``turtle3``，并将其位置初始化为 (4, 2, 0)。
 
 .. code-block:: python
 
@@ -211,7 +211,7 @@ First, in the ``on_timer`` callback function, we spawn the ``turtle3`` by asynch
     # Call request
     self.result = self.spawner.call_async(request)
 
-Afterward, the node publishes the topic ``turtle3/cmd_vel``, topic ``turtle3/turtle_point_stamped``, and subscribes to topic ``turtle3/pose`` and runs callback function ``handle_turtle_pose`` on every incoming message.
+之后，节点发布话题 ``turtle3/cmd_vel``、话题 ``turtle3/turtle_point_stamped``，并订阅话题 ``turtle3/pose``，在每一条传入的消息上运行回调函数 ``handle_turtle_pose``。
 
 .. code-block:: python
 
@@ -219,8 +219,8 @@ Afterward, the node publishes the topic ``turtle3/cmd_vel``, topic ``turtle3/tur
     self.sub = self.create_subscription(Pose, '/turtle3/pose', self.handle_turtle_pose, 10)
     self.pub = self.create_publisher(PointStamped, '/turtle3/turtle_point_stamped', 10)
 
-Finally, in the callback function ``handle_turtle_pose``, we initialize the ``Twist`` messages of ``turtle3`` and publish them, which will make the ``turtle3`` move along a circle.
-Then we fill up the ``PointStamped`` messages of ``turtle3`` with incoming ``Pose`` messages and publish them.
+最后，在回调函数 ``handle_turtle_pose`` 中，我们初始化 ``turtle3`` 的 ``Twist`` 消息并发布它们，这将使 ``turtle3`` 沿圆形移动。
+然后我们用传入的 ``Pose`` 消息填充 ``turtle3`` 的 ``PointStamped`` 消息并发布它们。
 
 .. code-block:: python
 
@@ -237,10 +237,10 @@ Then we fill up the ``PointStamped`` messages of ``turtle3`` with incoming ``Pos
     ps.point.z = 0.0
     self.pub.publish(ps)
 
-1.2 Write the launch file
-~~~~~~~~~~~~~~~~~~~~~~~~~
+1.2 编写启动文件
+~~~~~~~~~~~~~~~~
 
-In order to run this demo, we need to create a launch file ``turtle_tf2_sensor_message_launch`` with extension ``.py``, ``.xml``, or ``.yaml`` in the ``launch`` subdirectory of package ``learning_tf2_py``:
+为了运行这个演示，我们需要在 ``learning_tf2_py`` 包的 ``launch`` 子目录中创建一个名为 ``turtle_tf2_sensor_message_launch``、扩展名为 ``.py``、``.xml`` 或 ``.yaml`` 的启动文件：
 
 .. tabs::
 
@@ -260,23 +260,23 @@ In order to run this demo, we need to create a launch file ``turtle_tf2_sensor_m
         :language: yaml
 
 
-1.3 Add an entry point
-~~~~~~~~~~~~~~~~~~~~~~
+1.3 添加入口点
+~~~~~~~~~~~~~~
 
-To allow the ``ros2 run`` command to run your node, you must add the entry point to ``setup.py`` (located in the ``src/learning_tf2_py`` directory).
+要让 ``ros2 run`` 命令能够运行你的节点，你必须将入口点添加到 ``setup.py`` （位于 ``src/learning_tf2_py`` 目录中）。
 
-Add the following line between the ``'console_scripts':`` brackets:
+在 ``'console_scripts':`` 括号之间添加以下行：
 
 .. code-block:: python
 
     'turtle_tf2_message_broadcaster = learning_tf2_py.turtle_tf2_message_broadcaster:main',
 
-1.4 Add an data file
-~~~~~~~~~~~~~~~~~~~~~~
+1.4 添加数据文件
+~~~~~~~~~~~~~~~~
 
-To allow the ``ros2 launch`` command to launch your launch file, you must add the data file to ``setup.py`` (located in the ``src/learning_tf2_py`` directory).
+要让 ``ros2 launch`` 命令能够启动你的启动文件，你必须将数据文件添加到 ``setup.py`` （位于 ``src/learning_tf2_py`` 目录中）。
 
-Import the following libraries at the top, in ``setup.py``:
+在 ``setup.py`` 顶部导入以下库：
 
 .. code-block:: python
 
@@ -285,7 +285,7 @@ Import the following libraries at the top, in ``setup.py``:
     from glob import glob
 
 
-Add the following line between the ``'data_files':`` brackets:
+在 ``'data_files':`` 括号之间添加以下行：
 
 .. code-block:: python
 
@@ -294,10 +294,10 @@ Add the following line between the ``'data_files':`` brackets:
         (os.path.join('share', package_name, 'launch'), glob('launch/*')),
     ],
 
-1.5 Build
-~~~~~~~~~
+1.5 构建
+~~~~~~~~
 
-Run ``rosdep`` in the root of your workspace to check for missing dependencies.
+在你的工作区根目录运行 ``rosdep`` 来检查缺失的依赖。
 
 .. tabs::
 
@@ -309,13 +309,13 @@ Run ``rosdep`` in the root of your workspace to check for missing dependencies.
 
    .. group-tab:: macOS
 
-        rosdep only runs on Linux, so you will need to install ``geometry_msgs`` and ``turtlesim`` dependencies yourself
+        rosdep 只在 Linux 上运行，因此你需要自己安装 ``geometry_msgs`` 和 ``turtlesim`` 依赖
 
    .. group-tab:: Windows
 
-        rosdep only runs on Linux, so you will need to install ``geometry_msgs`` and ``turtlesim`` dependencies yourself
+        rosdep 只在 Linux 上运行，因此你需要自己安装 ``geometry_msgs`` 和 ``turtlesim`` 依赖
 
-And then we can build the package:
+然后我们可以构建该包：
 
 .. tabs::
 
@@ -338,13 +338,13 @@ And then we can build the package:
         $ colcon build --merge-install --packages-select learning_tf2_py
 
 
-2 Writing the message filter/listener node
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 编写消息过滤器/监听器节点
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now, to get the streaming ``PointStamped`` data of ``turtle3`` in the frame of ``turtle1`` reliably, we will create the source file of the message filter/listener node.
+现在，为了可靠地获取 ``turtle1`` 坐标系中 ``turtle3`` 的流式 ``PointStamped`` 数据，我们将创建消息过滤器/监听器节点的源文件。
 
-Go to the ``learning_tf2_cpp`` :doc:`package <./Writing-A-Tf2-Static-Broadcaster-Cpp>` we created in the previous tutorial.
-Inside the ``src/learning_tf2_cpp/src`` directory download file ``turtle_tf2_message_filter.cpp`` by entering the following command:
+进入我们在上一个教程中创建的 ``learning_tf2_cpp`` :doc:`包 <./Writing-A-Tf2-Static-Broadcaster-Cpp>`。
+在 ``src/learning_tf2_cpp/src`` 目录中，通过输入以下命令下载文件 ``turtle_tf2_message_filter.cpp``：
 
 .. tabs::
 
@@ -362,19 +362,19 @@ Inside the ``src/learning_tf2_cpp/src`` directory download file ``turtle_tf2_mes
 
   .. group-tab:: Windows
 
-    In a Windows command line prompt:
+    在 Windows 命令行提示符中：
 
     .. code-block:: console
 
         $ curl -sk https://raw.githubusercontent.com/ros/geometry_tutorials/{DISTRO}/turtle_tf2_cpp/src/turtle_tf2_message_filter.cpp -o turtle_tf2_message_filter.cpp
 
-    Or in powershell:
+    或在 powershell 中：
 
     .. code-block:: console
 
         $ curl https://raw.githubusercontent.com/ros/geometry_tutorials/{DISTRO}/turtle_tf2_cpp/src/turtle_tf2_message_filter.cpp -o turtle_tf2_message_filter.cpp
 
-Open the file using your preferred text editor.
+使用你喜欢的文本编辑器打开该文件。
 
 .. code-block:: C++
 
@@ -383,17 +383,13 @@ Open the file using your preferred text editor.
     #include <string>
 
     #include "geometry_msgs/msg/point_stamped.hpp"
-    #include "message_filters/subscriber.h"
+    #include "message_filters/subscriber.hpp"
     #include "rclcpp/rclcpp.hpp"
-    #include "tf2_ros/buffer.h"
-    #include "tf2_ros/create_timer_ros.h"
-    #include "tf2_ros/message_filter.h"
-    #include "tf2_ros/transform_listener.h"
-    #ifdef TF2_CPP_HEADERS
-      #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
-    #else
-      #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
-    #endif
+    #include "tf2_ros/buffer.hpp"
+    #include "tf2_ros/create_timer_ros.hpp"
+    #include "tf2_ros/message_filter.hpp"
+    #include "tf2_ros/transform_listener.hpp"
+    #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
     using namespace std::chrono_literals;
 
@@ -460,28 +456,24 @@ Open the file using your preferred text editor.
     }
 
 
-2.1 Examine the code
-~~~~~~~~~~~~~~~~~~~~
+2.1 检查代码
+~~~~~~~~~~~~
 
-First, you must include the ``tf2_ros::MessageFilter`` headers from the ``tf2_ros`` package, as well as the previously used ``tf2`` and ``ros2`` related headers.
+首先，你必须包含来自 ``tf2_ros`` 包的 ``tf2_ros::MessageFilter`` 头文件，以及之前使用过的 ``tf2`` 和 ``ros2`` 相关头文件。
 
 .. code-block:: C++
 
     #include "geometry_msgs/msg/point_stamped.hpp"
-    #include "message_filters/subscriber.h"
+    #include "message_filters/subscriber.hpp"
     #include "rclcpp/rclcpp.hpp"
-    #include "tf2_ros/buffer.h"
-    #include "tf2_ros/create_timer_ros.h"
-    #include "tf2_ros/message_filter.h"
-    #include "tf2_ros/transform_listener.h"
-    #ifdef TF2_CPP_HEADERS
-      #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
-    #else
-      #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
-    #endif
+    #include "tf2_ros/buffer.hpp"
+    #include "tf2_ros/create_timer_ros.hpp"
+    #include "tf2_ros/message_filter.hpp"
+    #include "tf2_ros/transform_listener.hpp"
+    #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 
-Second, there needs to be persistent instances of ``tf2_ros::Buffer``, ``tf2_ros::TransformListener`` and ``tf2_ros::MessageFilter``.
+其次，需要有 ``tf2_ros::Buffer``、``tf2_ros::TransformListener`` 和 ``tf2_ros::MessageFilter`` 的持久实例。
 
 .. code-block:: C++
 
@@ -492,11 +484,11 @@ Second, there needs to be persistent instances of ``tf2_ros::Buffer``, ``tf2_ros
     std::shared_ptr<tf2_ros::MessageFilter<geometry_msgs::msg::PointStamped>> tf2_filter_;
 
 
-Third, the ROS 2 ``message_filters::Subscriber`` must be initialized with the topic.
-And the ``tf2_ros::MessageFilter`` must be initialized with that ``Subscriber`` object.
-The other arguments of note in the ``MessageFilter`` constructor are the ``target_frame`` and the callback function.
-The target frame is the frame into which it will make sure ``canTransform`` will succeed.
-And the callback function is the function that will be called when the data is ready.
+第三，必须用话题初始化 ROS 2 的 ``message_filters::Subscriber``。
+而 ``tf2_ros::MessageFilter`` 必须用那个 ``Subscriber`` 对象初始化。
+``MessageFilter`` 构造函数中值得注意的其他参数是 ``target_frame`` 和回调函数。
+目标坐标系是它将确保 ``canTransform`` 能够成功的坐标系。
+而回调函数是数据准备好时将被调用的函数。
 
 .. code-block:: C++
 
@@ -527,7 +519,7 @@ And the callback function is the function that will be called when the data is r
     }
 
 
-And last, the callback method will call ``tf2_buffer_->transform`` when the data is ready and print output to the console.
+最后，回调方法会在数据准备好时调用 ``tf2_buffer_->transform`` 并将输出打印到控制台。
 
 .. code-block:: C++
 
@@ -550,10 +542,10 @@ And last, the callback method will call ``tf2_buffer_->transform`` when the data
       }
 
 
-2.2 Add dependencies
-~~~~~~~~~~~~~~~~~~~~
+2.2 添加依赖
+~~~~~~~~~~~~
 
-Before building the package ``learning_tf2_cpp``, please add two another dependencies in the ``package.xml`` file of this package:
+在构建包 ``learning_tf2_cpp`` 之前，请在该包的 ``package.xml`` 文件中添加另外两个依赖：
 
 .. code-block:: xml
 
@@ -563,14 +555,14 @@ Before building the package ``learning_tf2_cpp``, please add two another depende
 2.3 CMakeLists.txt
 ~~~~~~~~~~~~~~~~~~
 
-And in the ``CMakeLists.txt`` file, add two lines below the existing dependencies:
+而在 ``CMakeLists.txt`` 文件中，在现有依赖下方添加两行：
 
 .. code-block:: console
 
     find_package(message_filters REQUIRED)
     find_package(tf2_geometry_msgs REQUIRED)
 
-The lines below will deal with differences between ROS distributions:
+下面这些行将处理 ROS 发行版之间的差异：
 
 .. code-block:: console
 
@@ -587,7 +579,7 @@ The lines below will deal with differences between ROS distributions:
       PATH_SUFFIXES tf2_geometry_msgs
     )
 
-After that, add the executable and name it ``turtle_tf2_message_filter``, which you'll use later with ``ros2 run``.
+之后，添加可执行文件并将其命名为 ``turtle_tf2_message_filter``，你稍后会配合 ``ros2 run`` 使用它。
 
 .. code-block:: console
 
@@ -606,7 +598,7 @@ After that, add the executable and name it ``turtle_tf2_message_filter``, which 
       target_compile_definitions(turtle_tf2_message_filter PUBLIC -DTF2_CPP_HEADERS)
     endif()
 
-Finally, add the ``install(TARGETS…)`` section (below other existing nodes) so ``ros2 run`` can find your executable:
+最后，添加 ``install(TARGETS…)`` 部分（在其他现有节点下方），以便 ``ros2 run`` 能找到你的可执行文件：
 
 .. code-block:: console
 
@@ -614,10 +606,10 @@ Finally, add the ``install(TARGETS…)`` section (below other existing nodes) so
       turtle_tf2_message_filter
       DESTINATION lib/${PROJECT_NAME})
 
-2.4 Build
-~~~~~~~~~
+2.4 构建
+~~~~~~~~
 
-Run ``rosdep`` in the root of your workspace to check for missing dependencies.
+在你的工作区根目录运行 ``rosdep`` 来检查缺失的依赖。
 
 .. tabs::
 
@@ -629,13 +621,13 @@ Run ``rosdep`` in the root of your workspace to check for missing dependencies.
 
    .. group-tab:: macOS
 
-        rosdep only runs on Linux, so you will need to install ``geometry_msgs`` and ``turtlesim`` dependencies yourself
+        rosdep 只在 Linux 上运行，因此你需要自己安装 ``geometry_msgs`` 和 ``turtlesim`` 依赖
 
    .. group-tab:: Windows
 
-        rosdep only runs on Linux, so you will need to install ``geometry_msgs`` and ``turtlesim`` dependencies yourself
+        rosdep 只在 Linux 上运行，因此你需要自己安装 ``geometry_msgs`` 和 ``turtlesim`` 依赖
 
-Now open a new terminal, navigate to the root of your workspace, and rebuild the package with command:
+现在打开一个新终端，导航到你的工作区根目录，并用以下命令重建该包：
 
 .. tabs::
 
@@ -657,7 +649,7 @@ Now open a new terminal, navigate to the root of your workspace, and rebuild the
 
         $ colcon build --merge-install --packages-select learning_tf2_cpp
 
-Open a new terminal, navigate to the root of your workspace, and source the setup files:
+打开一个新终端，导航到你的工作区根目录，并 source 安装文件：
 
 .. tabs::
 
@@ -675,22 +667,22 @@ Open a new terminal, navigate to the root of your workspace, and source the setu
 
    .. group-tab:: Windows
 
-      In a windows command line prompt:
+      在 Windows 命令行提示符中：
 
       .. code-block:: console
 
           $ call install\setup.bat
 
-      Or in powershell:
+      或在 powershell 中：
 
       .. code-block:: console
 
           $ .\install\setup.ps1
 
-3 Run
-^^^^^
+3 运行
+^^^^^^
 
-First we need to run several nodes (including the broadcaster node of PointStamped messages) by launching the launch file ``turtle_tf2_sensor_message_launch``:
+首先我们需要通过启动启动文件 ``turtle_tf2_sensor_message_launch`` 来运行几个节点（包括 PointStamped 消息的广播器节点）：
 
 .. tabs::
 
@@ -712,8 +704,8 @@ First we need to run several nodes (including the broadcaster node of PointStamp
 
         $ ros2 launch learning_tf2_py turtle_tf2_sensor_message_launch.py
 
-This will bring up the ``turtlesim`` window with two turtles, where ``turtle3`` is moving along a circle, while ``turtle1`` isn't moving at first.
-But you can run the ``turtle_teleop_key`` node in another terminal to drive ``turtle1`` to move:
+这将带出带有两只 turtle 的 ``turtlesim`` 窗口，其中 ``turtle3`` 正沿圆形移动，而 ``turtle1`` 起初不动。
+但你可以在另一个终端运行 ``turtle_teleop_key`` 节点来驱动 ``turtle1`` 移动：
 
 .. code-block:: console
 
@@ -721,7 +713,7 @@ But you can run the ``turtle_teleop_key`` node in another terminal to drive ``tu
 
 .. image:: images/turtlesim_messagefilter.png
 
-Now if you echo the topic ``turtle3/turtle_point_stamped``:
+现在如果你回显话题 ``turtle3/turtle_point_stamped``：
 
 .. code-block:: console
 
@@ -757,7 +749,7 @@ Now if you echo the topic ``turtle3/turtle_point_stamped``:
       z: 0.0
     ---
 
-When the demo is running, open another terminal and run the message filter/listener node:
+当演示运行时，打开另一个终端并运行消息过滤器/监听器节点：
 
 .. code-block:: console
 
@@ -771,8 +763,8 @@ When the demo is running, open another terminal and run the message filter/liste
     [INFO] [1630016162.006355644] [turtle_tf2_pose_drawer]: Point of turtle3 in frame of turtle1: x:-6.486441 y:-2.976102 z:0.000000
 
 
-Summary
--------
+总结
+----
 
-In this tutorial you learned how to use sensor data/messages in tf2.
-Specifically speaking, you learned how to publish ``PointStamped`` messages on a topic, and how to listen to the topic and transform the frame of ``PointStamped`` messages with ``tf2_ros::MessageFilter``.
+在本教程中，你学习了如何在 tf2 中使用传感器数据/消息。
+具体来说，你学习了如何在一个话题上发布 ``PointStamped`` 消息，以及如何监听该话题并用 ``tf2_ros::MessageFilter`` 变换 ``PointStamped`` 消息的坐标系。

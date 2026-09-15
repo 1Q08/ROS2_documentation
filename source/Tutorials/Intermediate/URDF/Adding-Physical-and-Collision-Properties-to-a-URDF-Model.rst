@@ -4,29 +4,29 @@
 
 .. _URDFProperties:
 
-Adding physical and collision properties
-========================================
+添加物理属性和碰撞属性
+======================
 
-**Goal:** Learn how to add collision and inertial properties to links, and how to add joint dynamics to joints.
+**目标：** 学习如何为 link 添加碰撞属性和惯性属性，以及如何为 joint 添加关节动力学。
 
-**Tutorial level:** Intermediate
+**教程级别：** 中级
 
-**Time:** 10 minutes
+**时长：** 10 分钟
 
-.. contents:: Contents
+.. contents:: 目录
    :depth: 2
    :local:
 
-In this tutorial, we'll look at how to add some basic physical properties to your URDF model and how to specify its collision properties.
+在本教程中，我们将了解如何为 URDF 模型添加一些基本的物理属性，以及如何指定其碰撞属性。
 
-Collision
----------
+碰撞
+----
 
-So far, we've only specified our links with a single sub-element, ``visual``, which defines (not surprisingly) what the robot looks like.
-However, in order to get collision detection to work or to simulate the robot, we need to define a ``collision`` element as well.
-`Here is the new urdf <https://raw.githubusercontent.com/ros/urdf_tutorial/ros2/urdf/07-physics.urdf>`_ with collision and physical properties.
+到目前为止，我们只为 link 指定了单个子元素 ``visual`` ，它定义了（一点也不意外）机器人看起来是什么样子。
+然而，为了让碰撞检测正常工作或对机器人进行仿真，我们还需要定义 ``collision`` 元素。
+`这里是新的 urdf <https://raw.githubusercontent.com/ros/urdf_tutorial/ros2/urdf/07-physics.urdf>`_，其中包含碰撞属性和物理属性。
 
-Here is the code for our new base link.
+下面是我们新的 base link 的代码。
 
 .. code-block:: xml
 
@@ -46,27 +46,27 @@ Here is the code for our new base link.
         </collision>
       </link>
 
-* The collision element is a direct subelement of the link object, at the same level as the visual tag.
-* The collision element defines its shape the same way the visual element does, with a geometry tag.
-  The format for the geometry tag is exactly the same here as with the visual.
-* You can also specify an origin in the same way as a subelement of the collision tag (as with the visual).
+* collision 元素是 link 对象的直接子元素，与 visual 标签处于同一层级。
+* collision 元素定义形状的方式与 visual 元素相同，都使用 geometry 标签。
+  此处 geometry 标签的格式与 visual 中完全相同。
+* 你也可以像 collision 标签的子元素那样指定 origin（与 visual 一样）。
 
-In many cases, you'll want the collision geometry and origin to be exactly the same as the visual geometry and origin.
-However, there are two main cases where you wouldn't:
+在很多情况下，你会希望碰撞几何体和原点与视觉几何体和原点完全一致。
+不过，有两种主要情况并非如此：
 
- * **Quicker Processing** Doing collision detection for two meshes is a lot more computational complex than for two simple geometries.
-   Hence, you may want to replace the meshes with simpler geometries in the collision element.
- * **Safe Zones** You may want to restrict movement close to sensitive equipment.
-   For instance, if we didn't want anything to collide with R2D2's head, we might define the collision geometry to be a cylinder encasing his head to prevent anything from getting too close to his head.
+ * **更快的处理速度** 对两个网格进行碰撞检测的计算复杂度远高于对两个简单几何体进行碰撞检测。
+   因此，你可能想在 collision 元素中用更简单的几何体替换网格。
+ * **安全区域** 你可能希望限制靠近敏感设备的运动。
+   例如，如果我们不想让任何东西与 R2D2 的头部发生碰撞，就可以把碰撞几何体定义为一个包裹其头部的圆柱体，以防任何东西过于靠近它的头部。
 
-Physical Properties
--------------------
-In order to get your model to simulate properly, you need to define several physical properties of your robot, i.e. the properties that a physics engine like Gazebo would need.
+物理属性
+--------
+为了让你的模型能正确仿真，你需要定义机器人的若干物理属性，即像 Gazebo 这样的物理引擎所需要的属性。
 
-Inertia
-^^^^^^^
-Every link element being simulated needs an inertial tag.
-Here is a simple one.
+惯性
+^^^^
+每个被仿真的 link 元素都需要一个 inertial 标签。
+下面是一个简单的示例。
 
 .. code-block:: xml
 
@@ -90,10 +90,10 @@ Here is a simple one.
     </inertial>
   </link>
 
-* This element is also a subelement of the link object.
-* The mass is defined in kilograms.
-* The 3x3 rotational inertia matrix is specified with the inertia element.
-  Since this is symmetrical, it can be represented by only 6 elements, as such.
+* 该元素同样是 link 对象的子元素。
+* 质量以千克为单位定义。
+* 3x3 旋转惯性矩阵由 inertia 元素指定。
+  由于它是对称的，因此可以只用 6 个元素表示，如下所示。
 
     +---------+---------+---------+
     | **ixx** | **ixy** | **ixz** |
@@ -103,45 +103,45 @@ Here is a simple one.
     |   ixz   |   iyz   | **izz** |
     +---------+---------+---------+
 
-* This information can be provided to you by modeling programs such as MeshLab.
-  The inertia of geometric primitives (cylinder, box, sphere) can be computed using Wikipedia's `list of moment of inertia tensors <https://en.wikipedia.org/wiki/List_of_moments_of_inertia#List_of_3D_inertia_tensors>`_ (and is used in the above example).
-* The inertia tensor depends on both the mass and the distribution of mass of the object.
-  A good first approximation is to assume equal distribution of mass in the volume of the object and compute the inertia tensor based on the object's shape, as outlined above.
-* If unsure what to put, a matrix with ixx/iyy/izz=1e-3 or smaller is often a reasonable default for a mid-sized link (it corresponds to a box of 0.1 m side length with a mass of 0.6 kg).
-  The identity matrix is a particularly bad choice, since it is often much too high.
-  (it corresponds to a box of 0.1 m side length with a mass of 600 kg!)
-* You can also specify an origin tag to specify the center of gravity and the inertial reference frame (relative to the link's reference frame).
-* When using realtime controllers, inertia elements of zero (or almost zero) can cause the robot model to collapse without warning, and all links will appear with their origins coinciding with the world origin.
+* 这些信息可以由 MeshLab 等建模程序提供。
+  几何基本体（圆柱体、长方体、球体）的惯性可以使用维基百科的 `转动惯量张量列表 <https://en.wikipedia.org/wiki/List_of_moments_of_inertia#List_of_3D_inertia_tensors>`_ 计算（上面的例子中就用到了它）。
+* 惯性张量同时取决于物体的质量和质量分布。
+  一个好的初步近似是假设质量在物体体积内均匀分布，并根据物体的形状计算惯性张量，如上所述。
+* 如果不确定该填什么，对于中等大小的 link，ixx/iyy/izz=1e-3 或更小的矩阵通常是一个合理的默认值（它对应于边长为 0.1 m、质量为 0.6 kg 的立方体）。
+  单位矩阵是特别糟糕的选择，因为它通常太大了。
+  （它对应于边长为 0.1 m、质量为 600 kg 的立方体！）
+* 你还可以指定 origin 标签来指定重心和惯性参考系（相对于 link 的参考系）。
+* 使用实时控制器时，为零（或几乎为零）的 inertia 元素会导致机器人模型在毫无警告的情况下坍塌，并且所有 link 的原点都会与世界原点重合。
 
-Contact Coefficients
-^^^^^^^^^^^^^^^^^^^^
-You can also define how the links behave when they are in contact with one another.
-This is done with a subelement of the collision tag called contact_coefficients.
-There are three attributes to specify:
+接触系数
+^^^^^^^^
+你还可以定义 link 在彼此接触时的行为。
+这通过 collision 标签中名为 contact_coefficients 的子元素来完成。
+需要指定三个属性：
 
- * mu - `Friction coefficient <https://simple.wikipedia.org/wiki/Coefficient_of_friction>`_
- * kp - `Stiffness coefficient <https://en.wikipedia.org/wiki/Stiffness>`_
- * kd - `Dampening coefficient <https://en.wikipedia.org/wiki/Damping_ratio#Damping_ratio_definition>`_
+ * mu - `摩擦系数 <https://simple.wikipedia.org/wiki/Coefficient_of_friction>`_
+ * kp - `刚度系数 <https://en.wikipedia.org/wiki/Stiffness>`_
+ * kd - `阻尼系数 <https://en.wikipedia.org/wiki/Damping_ratio#Damping_ratio_definition>`_
 
-Joint Dynamics
-^^^^^^^^^^^^^^
-How the joint moves is defined by the dynamics tag for the joint.
-There are two attributes here:
+关节动力学
+^^^^^^^^^^
+关节如何运动由该 joint 的 dynamics 标签定义。
+这里有两个属性：
 
- * ``friction`` - The physical static friction.
-   For prismatic joints, the units are Newtons.
-   For revolving joints, the units are Newton meters.
- * ``damping`` - The physical damping value.
-   For prismatic joints, the units are Newton seconds per meter.
-   For revolving joints, Newton meter seconds per radian.
+ * ``friction`` - 物理静摩擦力。
+   对于移动关节，单位是牛顿。
+   对于旋转关节，单位是牛顿米。
+ * ``damping`` - 物理阻尼值。
+   对于移动关节，单位是牛顿秒每米。
+   对于旋转关节，单位是牛顿米秒每弧度。
 
-If not specified, these coefficients default to zero.
+如果未指定，这些系数默认为零。
 
-Other Tags
-----------
-In the realm of pure URDF (i.e. excluding Gazebo-specific tags), there are two remaining tags to help define the joints: calibration and safety controller.
-Check out the `spec <https://wiki.ros.org/urdf/XML/joint>`_, as they are not included in this tutorial.
+其他标签
+--------
+在纯 URDF 的范畴内（即不包括 Gazebo 专用标签），还有两个有助于定义 joint 的标签：calibration 和 safety controller。
+请查看 `规范 <https://wiki.ros.org/urdf/XML/joint>`_，因为它们并未包含在本教程中。
 
-Next Steps
-----------
-Reduce the amount of code and annoying math you have to do by :doc:`using xacro <./Using-Xacro-to-Clean-Up-a-URDF-File>`.
+后续步骤
+--------
+通过 :doc:`使用 xacro <./Using-Xacro-to-Clean-Up-a-URDF-File>` 来减少你必须编写的代码量和烦人的数学计算。

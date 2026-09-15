@@ -3,153 +3,153 @@
     Logging
     Concepts/About-Logging
 
-Logging and logger configuration
-================================
+日志与日志器配置
+================
 
-.. contents:: Table of Contents
+.. contents:: 目录
    :local:
 
-Overview
---------
-
-The logging subsystem in ROS 2 aims to deliver logging messages to a variety of targets, including:
-
-* To the console (if one is attached)
-* To log files on disk (if local storage is available)
-* To the ``/rosout`` topic on the ROS 2 network
-
-By default, log messages in ROS 2 nodes will go out to the console (on stderr), to log files on disk, and to the ``/rosout`` topic on the ROS 2 network.
-All of the targets can be individually enabled or disabled on a per-node basis.
-
-The rest of this document will go over some of the ideas behind the logging subsystem.
-
-Severity level
---------------
-
-Log messages have a severity level associated with them: ``DEBUG``, ``INFO``, ``WARN``, ``ERROR`` or ``FATAL``, in ascending order.
-
-A logger will only process log messages with severity at or higher than a specified level chosen for the logger.
-
-Each node has a logger associated with it that automatically includes the node's name and namespace.
-If the node's name is externally remapped to something other than what is defined in the source code, it will be reflected in the logger name.
-Non-node loggers can also be created that use a specific name.
-
-Logger names represent a hierarchy.
-If the level of a logger named "abc.def" is unset, it will defer to the level of its parent named "abc", and if that level is also unset, the default logger level will be used.
-When the level of logger "abc" is changed, all of its descendants (e.g. "abc.def", "abc.ghi.jkl") will have their level impacted unless their level has been explicitly set.
-
-APIs
+概述
 ----
 
-These are the APIs that end users of the ROS 2 logging infrastructure should use, split up by client library.
+ROS 2 中的日志子系统旨在将日志消息发送到多种目标，包括：
+
+* 控制台（如果连接了控制台）
+* 磁盘日志文件（如果本地存储可用）
+* ROS 2 网络中的 ``/rosout`` 主题
+
+默认情况下，ROS 2 节点中的日志消息会同时输出到控制台（stderr）、磁盘日志文件，以及 ROS 2 网络中的 ``/rosout`` 主题。
+这些目标可以按节点逐个启用或禁用。
+
+本文档其余部分将介绍日志子系统背后的一些设计思路。
+
+严重级别
+--------
+
+日志消息都带有一个严重级别：``DEBUG``、``INFO``、``WARN``、``ERROR`` 或 ``FATAL``，按升序排列。
+
+日志器只会处理严重级别等于或高于其设置级别的日志消息。
+
+每个节点都有一个与之关联的日志器，日志器名会自动包含节点的名称和命名空间。
+如果节点名称被外部重映射为与源代码中定义不同的名称，那么日志器名称也会反映这一点。
+也可以创建非节点日志器，并为其指定特定名称。
+
+日志器名称表示层次结构。
+如果名为 "abc.def" 的日志器级别未设置，它会继承其父级日志器 "abc" 的级别；如果父级级别也未设置，则使用默认日志器级别。
+当日志器 "abc" 的级别发生变化时，所有其后代（例如 "abc.def"、"abc.ghi.jkl"）都会受到影响，除非它们已经显式设置了自己的级别。
+
+API
+---
+
+以下是 ROS 2 日志基础设施的终端用户应使用的 API，按客户端库分组。
 
 .. tabs::
 
   .. group-tab:: C++
 
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}`` - output the given printf-style message every time this line is hit
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_ONCE`` - output the given printf-style message only the first time this line is hit
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_EXPRESSION`` - output the given printf-style message only if the given expression is true
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_FUNCTION`` - output the given printf-style message only if the given function returns true
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_SKIPFIRST`` - output the given printf-style message all but the first time this line is hit
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_THROTTLE`` - output the given printf-style message no more than the given rate in integer milliseconds
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_SKIPFIRST_THROTTLE`` - output the given printf-style message no more than the given rate in integer milliseconds, but skip the first
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM`` - output the given C++ stream-style message every time this line is hit
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_ONCE`` - output the given C++ stream-style message only the first time this line is hit
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_EXPRESSION`` - output the given C++ stream-style message only if the given expression is true
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_FUNCTION`` - output the given C++ stream-style message only if the given function returns true
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_SKIPFIRST`` - output the given C++ stream-style message all but the first time this line is hit
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_THROTTLE`` - output the given C++ stream-style message no more than the given rate in integer milliseconds
-    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_SKIPFIRST_THROTTLE`` - output the given C++ stream-style message no more than the given rate in integer milliseconds, but skip the first
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}`` - 每当代码执行到该行时，输出给定的 printf 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_ONCE`` - 仅在第一时间输出给定的 printf 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_EXPRESSION`` - 仅在给定表达式为真时输出给定的 printf 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_FUNCTION`` - 仅在给定函数返回真时输出给定的 printf 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_SKIPFIRST`` - 除第一次外，输出给定的 printf 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_THROTTLE`` - 每隔给定速率（以整数毫秒为单位）最多输出一次给定的 printf 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_SKIPFIRST_THROTTLE`` - 除第一条外，每隔给定速率最多输出一次给定的 printf 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM`` - 每当代码执行到该行时，输出给定的 C++ stream 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_ONCE`` - 仅在第一次执行该行时输出给定的 C++ stream 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_EXPRESSION`` - 仅在给定表达式为真时输出给定的 C++ stream 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_FUNCTION`` - 仅在给定函数返回真时输出给定的 C++ stream 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_SKIPFIRST`` - 除第一次外，输出给定的 C++ stream 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_THROTTLE`` - 每隔给定速率（以整数毫秒为单位）最多输出一次给定的 C++ stream 风格消息
+    * ``RCLCPP_{DEBUG,INFO,WARN,ERROR,FATAL}_STREAM_SKIPFIRST_THROTTLE`` - 每隔给定速率最多输出一次给定的 C++ stream 风格消息，但跳过第一条
 
-    Each of the above APIs takes an ``rclcpp::Logger`` object as the first argument.
-    This can be pulled from the node API by calling ``node->get_logger()`` (recommended), or by constructing a stand-alone ``rclcpp::Logger`` object.
+    上述每个 API 都接受一个 ``rclcpp::Logger`` 对象作为第一个参数。
+    可以通过节点 API 调用 ``node->get_logger()`` 获取它（建议这样做），或者构造一个独立的 ``rclcpp::Logger`` 对象。
 
-    * ``rcutils_logging_set_logger_level`` - Set the logging level for a particular logger name to the given severity level
-    * ``rcutils_logging_get_logger_effective_level`` - Given a logger name, return the logger level (which may be unset)
+    * ``rcutils_logging_set_logger_level`` - 为特定日志器名称设置给定严重级别
+    * ``rcutils_logging_get_logger_effective_level`` - 给定日志器名称，返回该日志器级别（可能未设置）
 
   .. group-tab:: Python
 
-    * ``logger.{debug,info,warning,error,fatal}`` - output the given Python string to the logging infrastructure.
-      The calls accept the following keyword args to control behavior:
+    * ``logger.{debug,info,warning,error,fatal}`` - 向日志基础设施输出给定的 Python 字符串。
+      这些调用接受以下关键字参数来控制行为：
 
-      * ``throttle_duration_sec`` - if not None, the duration of the throttle interval in floating-point seconds
-      * ``skip_first`` - if True, output the message all but the first time this line is hit
-      * ``once`` - if True, only output the message the first time this line is hit
+      * ``throttle_duration_sec`` - 如果不是 ``None``，表示节流间隔的持续时间（浮点秒）
+      * ``skip_first`` - 如果为 ``True``，则除了第一次外输出消息
+      * ``once`` - 如果为 ``True``，则仅在第一次输出消息
 
-    * ``rclpy.logging.set_logger_level`` - Set the logging level for a particular logger name to the given severity level
-    * ``rclpy.logging.get_logger_effective_level`` - Given a logger name, return the logger level (which may be unset)
+    * ``rclpy.logging.set_logger_level`` - 为特定日志器名称设置给定严重级别
+    * ``rclpy.logging.get_logger_effective_level`` - 给定日志器名称，返回该日志器级别（可能未设置）
 
-Configuration
--------------
+配置
+----
 
-Since ``rclcpp`` and ``rclpy`` use the same underlying logging infrastructure, the configuration options are the same.
+由于 ``rclcpp`` 和 ``rclpy`` 使用相同的底层日志基础设施，因此配置选项也相同。
 
-Environment variables
-^^^^^^^^^^^^^^^^^^^^^
+环境变量
+^^^^^^^^
 
-The following environment variables control some aspects of the ROS 2 loggers.
-For each of the environment settings, note that this is a process-wide setting, so it applies to all nodes in that process.
+以下环境变量控制 ROS 2 日志器的部分行为。
+请注意，每个环境设置都是进程级设置，适用于该进程中的所有节点。
 
-* ``ROS_LOG_DIR`` - Control the logging directory that is used for writing logging messages to disk (if that is enabled).
-  If non-empty, use the exact directory as specified in this variable.
-  If empty, use the contents of the ``ROS_HOME`` environment variable to construct a path of the form ``$ROS_HOME/.log``.
-  In all cases, the ``~`` character is expanded to the user's HOME directory.
-* ``ROS_HOME`` - Control the home directory that is used for various ROS files, including logging and config files.
-  In the context of logging, this variable is used to construct a path to a directory for log files.
-  If non-empty, use the contents of this variable for the ROS_HOME path.
-  In all cases, the ``~`` character is expanded to the users's HOME directory.
-* ``RCUTILS_LOGGING_USE_STDOUT`` - Control what stream output messages go to.
-  If this is unset or 0, use stderr.
-  If this is 1, use stdout.
-* ``RCUTILS_LOGGING_BUFFERED_STREAM`` - Control whether the logging stream (as configured in ``RCUTILS_LOGGING_USE_STDOUT``) should be line buffered or unbuffered.
-  If this is unset, use the default of the stream (generally line buffered for stdout, and unbuffered for stderr).
-  If this is 0, force the stream to be unbuffered.
-  If this is 1, force the stream to be line buffered.
-* ``RCUTILS_COLORIZED_OUTPUT`` - Control whether colors are used when outputting messages.
-  If unset, automatically determine based on the platform and whether the console is a TTY.
-  If 0, force disable using colors for output.
-  If 1, force enable using colors for output.
-* ``RCUTILS_CONSOLE_OUTPUT_FORMAT`` - Control the fields that are output for each log message.
-  The available fields are:
+* ``ROS_LOG_DIR`` - 控制写入日志消息到磁盘时使用的日志目录（如果启用）。
+  若非空，使用该环境变量指定的目录。
+  若为空，则使用 ``ROS_HOME`` 环境变量构造路径 ``$ROS_HOME/.log``。
+  在所有情况下，``~`` 字符都会展开为用户的 HOME 目录。
+* ``ROS_HOME`` - 控制各种 ROS 文件（包括日志与配置文件）的主目录。
+  在日志上下文中，此变量用于构造日志文件目录路径。
+  若非空，使用该变量的内容作为 ``ROS_HOME`` 路径。
+  在所有情况下，``~`` 字符都会展开为用户的 HOME 目录。
+* ``RCUTILS_LOGGING_USE_STDOUT`` - 控制消息输出到哪个流。
+  若未设置或为 0，则使用 stderr。
+  若为 1，则使用 stdout。
+* ``RCUTILS_LOGGING_BUFFERED_STREAM`` - 控制日志流（由 ``RCUTILS_LOGGING_USE_STDOUT`` 配置）是按行缓冲还是无缓冲。
+  若未设置，使用流默认方式（通常 stdout 为行缓冲，stderr 为无缓冲）。
+  若为 0，则强制使用无缓冲。
+  若为 1，则强制使用行缓冲。
+* ``RCUTILS_COLORIZED_OUTPUT`` - 控制输出消息时是否使用颜色。
+  若未设置，则基于平台和终端是否为 TTY 自动判定。
+  若为 0，则强制禁用颜色输出。
+  若为 1，则强制启用颜色输出。
+* ``RCUTILS_CONSOLE_OUTPUT_FORMAT`` - 控制每条日志消息输出哪些字段。
+  可用字段包括：
 
-  * ``{severity}`` - The severity level.
-  * ``{name}`` - The name of the logger (may be empty).
-  * ``{message}`` - The log message (may be empty).
-  * ``{function_name}`` - The function name this was called from (may be empty).
-  * ``{file_name}`` - The file name this was called from (may be empty).
-  * ``{time}`` - The time in seconds since the epoch.
-  * ``{time_as_nanoseconds}`` - The time in nanoseconds since the epoch.
-  * ``{line_number}`` - The line number this was called from (may be empty).
+  * ``{severity}`` - 严重级别。
+  * ``{name}`` - 日志器名称（可能为空）。
+  * ``{message}`` - 日志消息（可能为空）。
+  * ``{function_name}`` - 调用此函数的函数名（可能为空）。
+  * ``{file_name}`` - 调用此函数的文件名（可能为空）。
+  * ``{time}`` - 自纪元以来的秒数。
+  * ``{time_as_nanoseconds}`` - 自纪元以来的纳秒数。
+  * ``{line_number}`` - 调用此行的行号（可能为空）。
 
-  If no format is given, a default of ``[{severity}] [{time}] [{name}]: {message}`` is used.
+  若未给出格式，默认值为 ``[{severity}] [{time}] [{name}]: {message}``。
 
 
-Node creation
-^^^^^^^^^^^^^
+节点创建
+^^^^^^^^
 
-When initializing a ROS 2 node, it is possible to control some aspects of the behavior via node options.
-Since these are per-node options, they can be set differently for different nodes even when the nodes are composed into a single process.
+在初始化 ROS 2 节点时，可以通过节点选项控制部分行为。
+由于这些配置是按节点选项设置的，因此即使多个节点组合在一个进程中，也可以分别设置。
 
-* ``log_levels`` - The log level to use for a component within this particular node.
-  This can be set with the following: ``ros2 run demo_nodes_cpp talker --ros-args --log-level talker:=DEBUG``
-* ``external_log_config_file`` - The external file to use to configure the backend logger.
-  If it is NULL, the default configuration will be used.
-  Note that the format of this file is backend-specific (and is currently unimplemented for the default backend logger of spdlog).
-  This can be set with the following: ``ros2 run demo_nodes_cpp talker --ros-args --log-config-file log-config.txt``
-* ``log_stdout_disabled`` - Whether to disable writing log messages to the console.
-  This can be done with the following: ``ros2 run demo_nodes_cpp talker --ros-args --disable-stdout-logs``
-* ``log_rosout_disabled`` - Whether to disable writing log messages out to ``/rosout``.
-  This can significantly save on network bandwidth, but external observers will not be able to monitor logging.
-  This can be done with the following: ``ros2 run demo_nodes_cpp talker --ros-args --disable-rosout-logs``
-* ``log_ext_lib_disabled`` - Whether to completely disable the use of an external logger.
-  This may be faster in some cases, but means that logs will not be written to disk.
-  This can be done with the following: ``ros2 run demo_nodes_cpp talker --ros-args --disable-external-lib-logs``
+* ``log_levels`` - 在特定节点中使用的组件日志级别。
+  可通过如下方式设置：``ros2 run demo_nodes_cpp talker --ros-args --log-level talker:=DEBUG``
+* ``external_log_config_file`` - 用于配置后端日志器的外部文件。
+  如果为 NULL，则使用默认配置。
+  请注意，此文件格式依赖后端日志器（当前默认后端日志器 spdlog 尚未实现）。
+  可通过以下方式设置：``ros2 run demo_nodes_cpp talker --ros-args --log-config-file log-config.txt``
+* ``log_stdout_disabled`` - 是否禁用将日志消息写入控制台。
+  可通过以下方式设置：``ros2 run demo_nodes_cpp talker --ros-args --disable-stdout-logs``
+* ``log_rosout_disabled`` - 是否禁用将日志消息写入 ``/rosout``。
+  这会显著节省网络带宽，但外部观察者将无法监控日志。
+  可通过以下方式设置：``ros2 run demo_nodes_cpp talker --ros-args --disable-rosout-logs``
+* ``log_ext_lib_disabled`` - 是否完全禁用外部日志器。
+  这有时会更快，但意味着日志将不会写入磁盘。
+  可通过以下方式设置：``ros2 run demo_nodes_cpp talker --ros-args --disable-external-lib-logs``
 
-Logging subsystem design
-------------------------
+日志子系统设计
+--------------
 
-The image below shows the five main pieces to the logging subsystem and how they interact.
+下图展示了日志子系统的五个主要组成部分以及它们之间的交互方式。
 
 .. figure:: ../images/ros2_logging_architecture.png
    :alt: ROS 2 logging architecture
@@ -159,60 +159,60 @@ The image below shows the five main pieces to the logging subsystem and how they
 rcutils
 ^^^^^^^
 
-``rcutils`` has a logging implementation that can format log messages according to a certain format (see ``Configuration`` above), and output those log messages to a console.
-``rcutils`` implements a complete logging solution, but allows higher-level components to insert themselves into the logging infrastructure in a dependency-injection model.
-This will become more evident when we talk about the ``rcl`` layer below.
+``rcutils`` 具有日志实现，可以按照某种格式（见上文 ``配置``）格式化日志消息，并将这些日志消息输出到控制台。
+``rcutils`` 实现了完整的日志解决方案，但允许高层组件以依赖注入模型插入日志基础设施。
+当我们谈论下面的 ``rcl`` 层时，这一点会更加明显。
 
-Note that this is a *per-process* logging implementation, so anything that is configured at this level will affect the entire process, not just individual nodes.
+请注意，这是一个 *进程级* 日志实现，因此在此层配置任何内容都会影响整个进程，而不只是单个节点。
 
 rcl_logging_spdlog
 ^^^^^^^^^^^^^^^^^^
 
-``rcl_logging_spdlog`` implements the ``rcl_logging_interface`` API, and thus provides external logging services to the ``rcl`` layer.
-In particular, the ``rcl_logging_spdlog`` implementation takes formatted log messages and writes them out to log files on disk using the ``spdlog`` library, typically within ``~/.ros/log`` (though this is configurable; see ``Configuration`` above).
+``rcl_logging_spdlog`` 实现了 ``rcl_logging_interface`` API，因此为 ``rcl`` 层提供外部日志服务。
+特别地，``rcl_logging_spdlog`` 实现会将格式化后的日志消息写入磁盘日志文件，使用 ``spdlog`` 库，默认路径通常位于 ``~/.ros/log`` （这可以配置；见上文 ``配置``）。
 
 rcl
 ^^^
 
-The logging subsystem in ``rcl`` uses ``rcutils`` and ``rcl_logging_spdlog`` to provide the bulk of the ROS 2 logging services.
-When log messages come in, ``rcl`` decides where to send them.
-There are 3 main places that logging messages can be delivered; an individual node may have any combination of them enabled:
+``rcl`` 中的日志子系统使用 ``rcutils`` 和 ``rcl_logging_spdlog`` 来提供 ROS 2 日志服务的主要部分。
+当日志消息传入时，``rcl`` 决定把日志消息发送到哪里。
+日志消息可以有 3 个主要投递位置；一个节点可以启用其任意组合：
 
-* To the console via the ``rcutils`` layer
-* To disk via the ``rcl_logging_spdlog`` layer
-* To the ``/rosout`` topic on the ROS 2 network via the RMW layer
+* 通过 ``rcutils`` 层发送到控制台
+* 通过 ``rcl_logging_spdlog`` 层写入磁盘
+* 通过 RMW 层发送到 ROS 2 网络中的 ``/rosout`` 主题
 
 rclcpp
 ^^^^^^
 
-This is the main ROS 2 C++ API which sits atop the ``rcl`` API.
-In the context of logging, ``rclcpp`` provides the ``RCLCPP_`` logging macros; see ``APIs`` above for a complete list.
-When one of the ``RCLCPP_`` macros runs, it checks the current severity level of the node against the severity level of the macro.
-If the severity level of the macro is greater than or equal to the node severity level, the message will be formatted and output to all of the places that are currently configured.
-Note that ``rclcpp`` uses a global mutex for log calls, so all logging calls within the same process end up being single-threaded.
+这是 ROS 2 的主要 C++ API，位于 ``rcl`` API 之上。
+在日志上下文中，``rclcpp`` 提供 ``RCLCPP_`` 日志宏；请参见上文 ``API`` 中的完整列表。
+当某个 ``RCLCPP_`` 宏执行时，会检查节点当前严重级别与宏严重级别的比较关系。
+若宏严重级别大于等于节点严重级别，消息会被格式化并输出到所有当前配置的目标位置。
+注意 ``rclcpp`` 在日志调用时使用全局互斥锁，因此同一进程中的所有日志调用都变成单线程方式。
 
 
 rclpy
 ^^^^^
 
-This is the main ROS 2 Python API which sits atop the ``rcl`` API.
-In the context of logging, ``rclpy`` provides the ``logger.debug``-style functions; see ``APIs`` above for a complete list.
-When one of the ``logger.debug`` functions runs, it checks the current severity level of the node against the severity level of the macro.
-If the severity level of the macro is greater than or equal to the node severity level, the message will be formatted and output to all of the places that are currently configured.
+这是 ROS 2 的主要 Python API，位于 ``rcl`` API 之上。
+在日志上下文中，``rclpy`` 提供 ``logger.debug`` 风格函数；请参见上文 ``API`` 中的完整列表。
+当某个 ``logger.debug`` 函数执行时，会检查节点当前严重级别与宏严重级别的比较关系。
+如果宏严重级别大于等于节点严重级别，消息会格式化并输出到所有当前配置的目标位置。
 
 
-Logging usage
--------------
+日志使用
+--------
 
 .. tabs::
 
   .. group-tab:: C++
 
-    * See the `rclcpp logging demo <https://github.com/ros2/demos/tree/{REPOS_FILE_BRANCH}/logging_demo>`_ for some simple examples.
-    * See the :doc:`logging demo <../../Tutorials/Demos/Logging-and-logger-configuration>` for example usage.
-    * See the `rclcpp documentation <https://docs.ros2.org/latest/api/rclcpp/logging_8hpp.html>`__ for an extensive list of functionality.
+    * 参考 `rclcpp logging demo <https://github.com/ros2/demos/tree/{REPOS_FILE_BRANCH}/logging_demo>`_ 获取简单示例。
+    * 参考 :doc:`logging demo <../../Tutorials/Demos/Logging-and-logger-configuration>` 获取用法示例。
+    * 参考 `rclcpp documentation <https://docs.ros2.org/latest/api/rclcpp/logging_8hpp.html>`__ 获取功能详尽列表。
 
   .. group-tab:: Python
 
-    * See the `rclpy examples <https://github.com/ros2/examples/blob/{REPOS_FILE_BRANCH}/rclpy/services/minimal_client/examples_rclpy_minimal_client/client.py>`__ for example usage of a node's logger.
-    * See the `rclpy tests <https://github.com/ros2/rclpy/blob/{REPOS_FILE_BRANCH}/rclpy/test/test_logging.py>`__ for example usage of keyword arguments (e.g. ``skip_first``, ``once``).
+    * 参考 `rclpy examples <https://github.com/ros2/examples/blob/{REPOS_FILE_BRANCH}/rclpy/services/minimal_client/examples_rclpy_minimal_client/client.py>`__，获取节点日志器的用法示例。
+    * 参考 `rclpy tests <https://github.com/ros2/rclpy/blob/{REPOS_FILE_BRANCH}/rclpy/test/test_logging.py>`__，获取关键字参数用法示例（例如 ``skip_first``、``once``）。
