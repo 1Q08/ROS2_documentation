@@ -109,7 +109,7 @@ Bouncy Bolson (``bouncy``)
 ----
 
 此 ROS 2 版本中的新功能
-^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
 
 
 * `新的 launch 系统 <../Tutorials/Intermediate/Launch/Launch-system>`，具有更强大、更灵活的 Python API。

@@ -21,7 +21,7 @@ Windows（二进制）
 .. _windows-install-binary-installing-prerequisites:
 
 为 ROS 2 安装创建位置
-----------------------
+---------------------
 
 该位置将同时包含已安装的二进制软件包以及 ROS 2 安装本身。
 

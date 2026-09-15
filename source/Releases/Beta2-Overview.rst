@@ -19,7 +19,7 @@ Beta 2 (``r2b2``)
 ----
 
 自 Beta 1 版本以来的改进
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 * DDS_Security 支持（又称 SROS2，参见 `sros2 <https://github.com/ros2/sros2>`__）
 * Ubuntu Xenial 的 Debian 软件包

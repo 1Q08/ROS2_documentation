@@ -19,7 +19,7 @@ Beta 3 (``r2b3``)
 ----
 
 自 Beta 2 版本以来的改进
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Python 中的执行模型，修复了 Python C 扩展中内存管理的许多问题
 * 实验性重写 `ros_control <https://github.com/ros2/ros2_control>`__

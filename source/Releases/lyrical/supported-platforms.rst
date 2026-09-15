@@ -1,5 +1,5 @@
 Lyrical Luth 支持的平台
-========================
+=======================
 
 根据 :doc:`平台支持等级 <../../The-ROS2-Project/Platform-Support-Tiers>`，ROS Lyrical 支持以下平台：
 

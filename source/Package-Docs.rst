@@ -32,7 +32,7 @@ API 文档
 * `rclcpp_action - C++ 动作库 <https://docs.ros.org/en/{DISTRO}/p/rclcpp_action/generated/index.html>`_
 
 将你的软件包添加到 docs.ros.org
---------------------------------
+-------------------------------
 
 所有已发布的 ROS 2 软件包都会自动添加到 docs.ros.org 和 `ROS Index <https://index.ros.org/>`_。
 如果你想为自己的软件包启用或配置文档，请参见：:doc:`./How-To-Guides/Documenting-a-ROS-2-Package`。
