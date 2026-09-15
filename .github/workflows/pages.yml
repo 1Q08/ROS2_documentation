@@ -1,8 +1,16 @@
 name: Deploy ROS 2 documentation to GitHub Pages
 
+# 说明：本站是 multiversion 单站点（build/html/{humble,jazzy}/），
+# `make multiversion` 会从 origin/humble 与 origin/jazzy 两个 ref 同时取源码构建，
+# 因此任何一次部署都会重建两个版本。只需由默认分支 jazzy 触发即可；
+# humble 分支上的提交会在下一次 jazzy 部署时一并生效。
+# 曾把 humble 也写进触发器，但它只会：
+#   1) 被随后跟进的 jazzy 运行取消（concurrency: cancel-in-progress）→ cancelled，白跑 CI；
+#   2) 或独自跑到 deploy 被 github-pages 环境保护规则拒绝（仅默认分支允许部署）→ failure，站点并不更新。
+# 需要手动发布时用 workflow_dispatch。
 on:
   push:
-    branches: [jazzy, humble]
+    branches: [jazzy]
   workflow_dispatch:
 
 permissions:
