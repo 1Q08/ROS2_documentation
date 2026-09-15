@@ -190,12 +190,21 @@ ogp_site_url = 'https://1Q08.github.io/ROS2_documentation/'
 ogp_site_name = 'ROS 2 Documentation'
 ogp_image = '_static/jazzy-small.png'
 
-# The sitemap_url_scheme is used by the sitemap generator to figure out how
-# to generate links.  Essentially, the sitemap generator uses the following:
-#
-# url = html_baseurl + '/' + sitemap_url_scheme
+# -- Options for the sitemap generator (plugins/sphinx_sitemap_ros.py) -----
 
-sitemap_url_scheme = '{version}/{link}'
+# The sitemap generator builds each URL as:
+#
+#   url = site_url + sitemap_url_scheme.format(lang=..., version=..., link=...)
+#
+# html_baseurl already carries the distribution name (see smv_rewrite_configs
+# below), so the scheme must only append the page link.  Anything else (e.g. the
+# plugin default "{lang}{version}{link}") duplicates the version segment and
+# produces URLs such as ".../ROS2_documentation/jazzyen/About-ROS.html".
+sitemap_url_scheme = '/{link}'
+
+# Only emit <loc> entries; skip the meaningless hreflang alternates that the
+# plugin would otherwise generate for the single "en" locale.
+sitemap_locales = [None]
 
 class RedirectFrom(Directive):
 
