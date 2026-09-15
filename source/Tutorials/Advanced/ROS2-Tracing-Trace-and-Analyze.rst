@@ -9,8 +9,9 @@
 
 本教程涵盖：
 
-1. 运行并追踪一次 ``performance_test`` 运行
-2. 使用 `tracetools_analysis <https://github.com/ros-tracing/tracetools_analysis>`_ 分析追踪数据，使用 `Jupyter Notebook <https://jupyter.org/>`_ 绘制回调耗时图
+1. 安装追踪相关工具，并构建启用了核心插桩的 ROS 2
+2. 运行并追踪一次 ``performance_test`` 运行
+3. 使用 `tracetools_analysis <https://github.com/ros-tracing/tracetools_analysis>`_ 分析追踪数据，使用 `Jupyter Notebook <https://jupyter.org/>`_ 绘制回调耗时图
 
 前置条件
 --------
@@ -22,36 +23,30 @@
 安装与构建
 ----------
 
-按照 :doc:`安装说明 <../../Installation>` 在 Linux 上安装 ROS 2。
-
 .. note::
 
   本教程通常应该适用于所有受支持的 Linux 发行版。
   但是，你可能需要调整一些命令。
 
-安装 ``babeltrace`` 和 ``ros2trace``。
+按照 :doc:`源码安装说明 <../../Installation/Alternatives/Ubuntu-Development-Setup>` 安装 Linux 上 ROS 2 的所有依赖。
+在 *在工作空间中构建代码* 一节之前停止。
+
+安装 `LTTng <https://lttng.org/docs/v2.13/>`_ 和 ``babeltrace``。
 
 .. code-block:: console
 
   $ sudo apt-get update
-  $ sudo apt-get install -y babeltrace ros-{DISTRO}-ros2trace ros-{DISTRO}-tracetools-analysis
+  $ sudo apt-get install -y lttng-tools liblttng-ust-dev python3-lttng python3-babeltrace babeltrace
 
-
-Source ROS 2 安装并验证追踪已启用：
-
-.. code-block:: console
-
-  $ source /opt/ros/{DISTRO}/setup.bash
-  $ ros2 run tracetools status
-  Tracing enabled
-
-然后创建一个工作空间，并克隆 ``performance_test`` 和 ``tracetools_analysis``。
+然后创建一个工作空间，导入 ROS 2 {DISTRO_TITLE} 代码，并克隆 ``performance_test`` 和 ``tracetools_analysis``。
 
 .. code-block:: console
 
   $ cd ~/
   $ mkdir -p tracing_ws/src
-  $ cd tracing_ws/src/
+  $ cd tracing_ws/
+  $ vcs import src/ --input https://raw.githubusercontent.com/ros2/ros2/{DISTRO}/ros2.repos
+  $ cd src/
   $ git clone https://gitlab.com/ApexAI/performance_test.git
   $ git clone https://github.com/ros-tracing/tracetools_analysis.git -b {DISTRO}
   $ cd ..
@@ -61,14 +56,25 @@ Source ROS 2 安装并验证追踪已启用：
 .. code-block:: console
 
   $ rosdep update
-  $ rosdep install --from-paths src --ignore-src -y --skip-keys test_tracetools
+  $ rosdep install --rosdistro {DISTRO} --from-paths src --ignore-src -y --skip-keys "fastcdr rti-connext-dds-6.0.1 urdfdom_headers"
 
-然后构建并配置用于 ROS 2 的 ``performance_test``。
+然后向上构建到 ``performance_test`` 并为其配置 ROS 2。
 请参阅其 `文档 <https://gitlab.com/ApexAI/performance_test/-/tree/master/performance_test#performance_test>`_。
+我们还需要构建 ``ros2trace``，以便使用 ``ros2 trace`` 命令设置追踪，并构建 ``tracetools_analysis`` 以分析数据。
 
 .. code-block:: console
 
-  $ colcon build --packages-select performance_test --cmake-args -DPERFORMANCE_TEST_RCLCPP_ENABLED=ON
+  $ colcon build --packages-up-to ros2trace ros2run tracetools_analysis performance_test --cmake-args -DPERFORMANCE_TEST_RCLCPP_ENABLED=ON
+
+source 安装环境并验证追踪已启用：
+
+.. code-block:: bash
+
+  $ source install/setup.bash
+  $ ros2 run tracetools status
+
+你应该会在输出中看到 ``Tracing enabled``。
+这确认了 LTTng 已被正确检测到，并且构建进 ROS 2 核心的插桩已启用。
 
 接下来，我们将运行一个 ``performance_test`` 实验并追踪它。
 
@@ -154,7 +160,7 @@ Source ROS 2 安装并验证追踪已启用：
 
 在本教程中，我们将绘制订阅者节点中订阅回调的耗时。
 
-安装 Jupyter notebook 和 bokeh，然后打开示例 notebook。
+安装 bokeh，然后打开示例 notebook。
 
 .. code-block:: console
 
@@ -175,7 +181,7 @@ Source ROS 2 安装并验证追踪已启用：
 你应该会得到一个与此类似的图：
 
 .. image:: ./images/ros2_tracing_guide_result_plot.png
-  :alt: callback durations result plot
+  :alt: 回调耗时结果图
   :align: center
 
 我们可以看到，大多数回调耗时不到 0.01 ms，但有一些离群值超过 0.02 或 0.03 ms。
@@ -183,8 +189,8 @@ Source ROS 2 安装并验证追踪已启用：
 结论
 ----
 
-本教程展示了如何安装追踪相关的工具。
+本教程展示了如何安装追踪相关的工具，并构建带有追踪插桩的 ROS 2。
 然后展示了如何使用 `ros2_tracing <https://github.com/ros2/ros2_tracing>`_ 追踪一个 `performance_test <https://gitlab.com/ApexAI/performance_test>`_ 实验，并使用 `tracetools_analysis <https://github.com/ros-tracing/tracetools_analysis>`_ 绘制回调耗时图。
 
-如需更多追踪分析，请查看 `其他示例 notebook <https://github.com/ros-tracing/tracetools_analysis/tree/{DISTRO}/tracetools_analysis/analysis>`_ 和 `tracetools_analysis API 文档 <https://docs.ros.org/en/{DISTRO}/p/tracetools_analysis/>`_。
+如需更多追踪分析，请查看 `其他示例 notebook <https://github.com/ros-tracing/tracetools_analysis/tree/{DISTRO}/tracetools_analysis/analysis>`_ 和 `tracetools_analysis API 文档 <https://ros-tracing.gitlab.io/tracetools_analysis-api/master/tracetools_analysis/>`_。
 `ros2_tracing 设计文档 <https://github.com/ros2/ros2_tracing/blob/{DISTRO}/doc/design_ros_2.md>`_ 也包含大量信息。
