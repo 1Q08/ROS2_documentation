@@ -21,7 +21,7 @@
      - `文章 <https://design.ros2.org/articles/ros_on_dds.html>`__
      -
    * - 支持 :doc:`多种 DDS 实现 <../Concepts/Intermediate/About-Different-Middleware-Vendors>`，在运行时选择
-     - :doc:`概念 <../Concepts/Intermediate/About-Different-Middleware-Vendors>`、:doc:`How-to 指南 <../How-To-Guides/Working-with-multiple-RMW-implementations>`
+     - :doc:`概念 <../Concepts/Intermediate/About-Different-Middleware-Vendors>`、:doc:`操作指南 <../How-To-Guides/Working-with-multiple-RMW-implementations>`
      - 目前 Eclipse Cyclone DDS、eProsima Fast DDS 和 RTI Connext DDS 均得到完全支持。
    * - 由语言特定库封装而成的公共核心客户端库
      - :doc:`详情 <../Concepts/Basic/About-Client-Libraries>`
@@ -66,7 +66,7 @@
      - `文章 <https://design.ros2.org/articles/topic_and_service_names.html>`__
      -
    * - ROS 名称的静态重映射
-     - :doc:`How-to 指南 <../How-To-Guides/Node-arguments>`
+     - :doc:`操作指南 <../How-To-Guides/Node-arguments>`
      -
    * - 全 ROS 2 移动机器人的演示
      - `演示 <https://github.com/ros2/turtlebot2_demo>`__
